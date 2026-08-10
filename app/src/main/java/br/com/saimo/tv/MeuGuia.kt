@@ -4,6 +4,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import java.util.Calendar
 import java.util.TimeZone
 
@@ -30,14 +32,20 @@ object MeuGuia {
         "Telecine Premium" to "TC1", "Universal TV" to "USA", "Warner" to "WBT",
     )
 
+    /// Seis por vez. Trinta e três downloads de uma vez roubam a banda do vídeo
+    /// que acabou de abrir, e o canal engasga logo nos primeiros segundos.
+    private val gate = Semaphore(6)
+
     suspend fun fetch(names: List<String>, from: Long, to: Long): Map<String, List<Programme>> =
         coroutineScope {
             names.mapNotNull { name -> CODES[name]?.let { name to it } }
                 .map { (name, code) ->
                     async(Dispatchers.IO) {
-                        val html = runCatching {
-                            Epg.download("https://meuguia.tv/programacao/canal/$code")
-                        }.getOrNull()
+                        val html = gate.withPermit {
+                            runCatching {
+                                Epg.download("https://meuguia.tv/programacao/canal/$code")
+                            }.getOrNull()
+                        }
                         name to (html?.let { parse(it) }?.filter { it.stop > from && it.start < to }
                             ?: emptyList())
                     }

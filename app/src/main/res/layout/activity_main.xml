@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Vídeo em tela cheia; tudo o mais é sobreposição que aparece por poucos
+     segundos. Nada fica permanentemente por cima da imagem. -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black">
+    android:background="@color/surface">
 
     <androidx.media3.ui.PlayerView
         android:id="@+id/player"
@@ -12,103 +14,191 @@
         app:resize_mode="fit"
         app:use_controller="false" />
 
-    <!-- Faixa do canal, aparece a qualquer toque no controle. -->
+    <!-- Cartão do que está no ar: canal, programa, quanto já passou. -->
     <LinearLayout
         android:id="@+id/banner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="top|start"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="32dp"
-        android:background="#A6000000"
+        android:layout_gravity="bottom|start"
+        android:layout_marginStart="48dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginBottom="48dp"
+        android:background="@drawable/bg_card"
         android:gravity="center_vertical"
+        android:minWidth="620dp"
         android:orientation="horizontal"
-        android:paddingStart="28dp"
-        android:paddingTop="18dp"
-        android:paddingEnd="36dp"
-        android:paddingBottom="18dp">
+        android:paddingStart="26dp"
+        android:paddingTop="22dp"
+        android:paddingEnd="34dp"
+        android:paddingBottom="22dp">
 
-        <View
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginEnd="14dp"
-            android:background="#FF3B30" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <FrameLayout
+            android:layout_width="76dp"
+            android:layout_height="76dp"
             android:layout_marginEnd="22dp"
-            android:text="@string/live"
-            android:textColor="@android:color/white"
-            android:textSize="22sp"
-            android:textStyle="bold" />
+            android:background="@drawable/bg_logo">
+
+            <ImageView
+                android:id="@+id/bannerLogo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@null"
+                android:padding="10dp"
+                android:scaleType="fitCenter" />
+        </FrameLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/bannerChannel"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
-                android:textSize="28sp"
-                android:textStyle="bold" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/bannerNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="14dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="@color/accent"
+                    android:textSize="26sp" />
+
+                <TextView
+                    android:id="@+id/bannerChannel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:fontFamily="sans-serif-medium"
+                    android:maxLines="1"
+                    android:textColor="@color/text_primary"
+                    android:textSize="28sp" />
+
+                <TextView
+                    android:id="@+id/bannerLive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/bg_chip"
+                    android:fontFamily="sans-serif-medium"
+                    android:paddingStart="14dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="14dp"
+                    android:paddingBottom="4dp"
+                    android:text="@string/live"
+                    android:textColor="@color/text_primary"
+                    android:textSize="15sp" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/bannerProgramme"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#D9FFFFFF"
-                android:textSize="18sp" />
+                android:layout_marginTop="8dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/text_primary"
+                android:textSize="21sp" />
+
+            <ProgressBar
+                android:id="@+id/bannerProgress"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:layout_marginTop="12dp"
+                android:max="1000"
+                android:progressDrawable="@drawable/progress_track" />
+
+            <TextView
+                android:id="@+id/bannerTimes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/text_secondary"
+                android:textSize="17sp" />
         </LinearLayout>
     </LinearLayout>
 
+    <!-- Estado do canal: ligando, reconectando, número digitado. -->
     <TextView
         android:id="@+id/status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="#BF000000"
-        android:paddingStart="40dp"
-        android:paddingTop="24dp"
-        android:paddingEnd="40dp"
-        android:paddingBottom="24dp"
-        android:textColor="@android:color/white"
-        android:textSize="30sp"
+        android:background="@drawable/bg_card"
+        android:fontFamily="sans-serif-medium"
+        android:paddingStart="46dp"
+        android:paddingTop="28dp"
+        android:paddingEnd="46dp"
+        android:paddingBottom="28dp"
+        android:textColor="@color/text_primary"
+        android:textSize="28sp"
         android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/hint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="40dp"
-        android:background="#A6000000"
-        android:paddingStart="26dp"
-        android:paddingTop="12dp"
-        android:paddingEnd="26dp"
-        android:paddingBottom="12dp"
-        android:text="@string/hint"
-        android:textColor="#E6FFFFFF"
-        android:textSize="18sp" />
-
     <!-- Lista de canais: entra pela esquerda, navegada no D-pad. -->
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/listPanel"
-        android:layout_width="420dp"
+        android:layout_width="480dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="#E6000000"
+        android:background="@drawable/bg_panel"
+        android:orientation="vertical"
         android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="30dp"
+            android:paddingTop="30dp"
+            android:paddingEnd="30dp"
+            android:paddingBottom="14dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/channels"
+                android:textColor="@color/text_primary"
+                android:textSize="26sp" />
+
+            <TextView
+                android:id="@+id/listCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_secondary"
+                android:textSize="17sp" />
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/channels"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:clipToPadding="false"
-            android:paddingTop="24dp"
-            android:paddingBottom="24dp" />
-    </FrameLayout>
+            android:paddingStart="16dp"
+            android:paddingTop="6dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="16dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="30dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="30dp"
+            android:paddingBottom="26dp"
+            android:text="@string/list_legend"
+            android:textColor="@color/text_faint"
+            android:textSize="15sp" />
+    </LinearLayout>
 </FrameLayout>

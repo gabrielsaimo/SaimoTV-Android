@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F2000000"
+    android:background="@color/surface"
     android:orientation="vertical">
 
     <LinearLayout
@@ -10,26 +10,35 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingStart="36dp"
-        android:paddingTop="24dp"
-        android:paddingEnd="36dp"
-        android:paddingBottom="16dp">
+        android:paddingStart="46dp"
+        android:paddingTop="30dp"
+        android:paddingEnd="46dp"
+        android:paddingBottom="18dp">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Programação"
-            android:textColor="@android:color/white"
-            android:textSize="30sp"
-            android:textStyle="bold" />
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/guide"
+            android:textColor="@color/text_primary"
+            android:textSize="32sp" />
+
+        <TextView
+            android:id="@+id/guideClock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="22dp"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="@color/accent"
+            android:textSize="24sp" />
 
         <TextView
             android:id="@+id/guideInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#B3FFFFFF"
-            android:textSize="18sp" />
+            android:textColor="@color/text_secondary"
+            android:textSize="17sp" />
     </LinearLayout>
 
     <!-- Canal focado à esquerda, programação dele à direita: numa TV isso lê
@@ -38,22 +47,31 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingStart="30dp"
+        android:paddingEnd="30dp"
+        android:paddingBottom="24dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/guideChannels"
-            android:layout_width="380dp"
+            android:layout_width="430dp"
             android:layout_height="match_parent"
-            android:background="#26FFFFFF"
-            android:paddingBottom="20dp" />
+            android:clipToPadding="false"
+            android:paddingStart="8dp"
+            android:paddingEnd="16dp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="20dp"
+            android:background="@color/surface_raised" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/guideProgrammes"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:paddingStart="24dp"
-            android:paddingEnd="24dp"
-            android:paddingBottom="20dp" />
+            android:clipToPadding="false"
+            android:paddingEnd="10dp" />
     </LinearLayout>
 </LinearLayout>

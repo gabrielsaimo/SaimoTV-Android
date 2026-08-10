@@ -12,8 +12,8 @@ android {
         // Alcança os TV Box antigos ainda em uso.
         minSdk = 21
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
     }
 
     buildTypes {
@@ -29,6 +29,9 @@ android {
     }
     kotlinOptions { jvmTarget = "17" }
     buildFeatures { viewBinding = true }
+    // O parser do guia é Kotlin puro, então roda em teste de JVM contra os
+    // feeds de verdade — sem isso a única forma de validá-lo seria no aparelho.
+    testOptions { unitTests.isReturnDefaultValues = true }
 }
 
 dependencies {
@@ -49,4 +52,5 @@ dependencies {
     implementation("androidx.media3:media3-datasource-okhttp:$media3")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.squareup.okhttp3:okhttp-dnsoverhttps:4.12.0")
+    testImplementation("junit:junit:4.13.2")
 }

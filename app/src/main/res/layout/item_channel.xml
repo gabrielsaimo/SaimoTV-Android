@@ -2,22 +2,41 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="4dp"
     android:background="@drawable/row_focus"
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:gravity="center_vertical"
-    android:minHeight="78dp"
+    android:minHeight="84dp"
     android:orientation="horizontal"
-    android:paddingStart="18dp"
-    android:paddingEnd="18dp">
+    android:paddingStart="16dp"
+    android:paddingTop="10dp"
+    android:paddingEnd="18dp"
+    android:paddingBottom="10dp">
 
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="54dp"
-        android:layout_height="54dp"
+    <TextView
+        android:id="@+id/number"
+        android:layout_width="42dp"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:layout_marginEnd="14dp"
+        android:textColor="@color/text_faint"
+        android:textSize="18sp" />
+
+    <FrameLayout
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:layout_marginEnd="16dp"
-        android:contentDescription="@null"
-        android:scaleType="fitCenter" />
+        android:background="@drawable/bg_logo">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@null"
+            android:padding="7dp"
+            android:scaleType="fitCenter" />
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="0dp"
@@ -29,19 +48,41 @@
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="1"
             android:ellipsize="end"
-            android:textColor="@android:color/white"
-            android:textSize="22sp"
-            android:textStyle="bold" />
+            android:fontFamily="sans-serif-medium"
+            android:maxLines="1"
+            android:textColor="@color/text_primary"
+            android:textSize="21sp" />
 
         <TextView
             android:id="@+id/programme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="1"
+            android:layout_marginTop="3dp"
             android:ellipsize="end"
-            android:textColor="#CCFFFFFF"
-            android:textSize="17sp" />
+            android:maxLines="1"
+            android:textColor="@color/text_secondary"
+            android:textSize="16sp" />
+
+        <ProgressBar
+            android:id="@+id/rowProgress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="12dp"
+            android:max="1000"
+            android:progressDrawable="@drawable/progress_track"
+            android:visibility="gone" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/star"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="@string/star"
+        android:textColor="@color/accent"
+        android:textSize="18sp"
+        android:visibility="gone" />
 </LinearLayout>

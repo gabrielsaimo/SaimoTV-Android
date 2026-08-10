@@ -2,27 +2,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="4dp"
     android:background="@drawable/row_focus"
     android:focusable="true"
     android:gravity="center_vertical"
-    android:minHeight="76dp"
+    android:minHeight="92dp"
     android:orientation="horizontal"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp">
+    android:paddingStart="18dp"
+    android:paddingTop="10dp"
+    android:paddingEnd="20dp"
+    android:paddingBottom="10dp">
 
     <TextView
         android:id="@+id/time"
-        android:layout_width="86dp"
+        android:layout_width="92dp"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:textSize="22sp"
-        android:textStyle="bold" />
+        android:fontFamily="sans-serif-medium"
+        android:textColor="@color/text_primary"
+        android:textSize="22sp" />
 
+    <!-- Os pôsteres dos feeds vêm em panorama, então a moldura é panorâmica. -->
     <ImageView
         android:id="@+id/poster"
-        android:layout_width="96dp"
+        android:layout_width="118dp"
         android:layout_height="66dp"
-        android:layout_marginEnd="14dp"
+        android:layout_marginEnd="18dp"
+        android:background="@drawable/bg_logo"
         android:contentDescription="@null"
         android:scaleType="centerCrop" />
 
@@ -37,32 +42,46 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
+            android:fontFamily="sans-serif-medium"
             android:maxLines="1"
-            android:textColor="@android:color/white"
+            android:textColor="@color/text_primary"
             android:textSize="21sp" />
 
         <TextView
             android:id="@+id/programmeDetail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="#B3FFFFFF"
+            android:textColor="@color/text_secondary"
             android:textSize="16sp" />
+
+        <ProgressBar
+            android:id="@+id/programmeProgress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginEnd="16dp"
+            android:max="1000"
+            android:progressDrawable="@drawable/progress_track"
+            android:visibility="gone" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/onAir"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#FF3B30"
-        android:paddingStart="10dp"
+        android:layout_marginStart="12dp"
+        android:background="@drawable/bg_chip"
+        android:fontFamily="sans-serif-medium"
+        android:paddingStart="13dp"
         android:paddingTop="4dp"
-        android:paddingEnd="10dp"
+        android:paddingEnd="13dp"
         android:paddingBottom="4dp"
         android:text="@string/live"
-        android:textColor="@android:color/white"
-        android:textSize="13sp"
-        android:textStyle="bold"
+        android:textColor="@color/text_primary"
+        android:textSize="14sp"
         android:visibility="gone" />
 </LinearLayout>

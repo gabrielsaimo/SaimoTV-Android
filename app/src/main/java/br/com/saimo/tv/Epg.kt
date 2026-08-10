@@ -2,12 +2,11 @@ package br.com.saimo.tv
 
 import android.content.Context
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
+import java.io.Reader
 import java.net.HttpURLConnection
 import java.net.URL
 import java.text.Normalizer
@@ -111,41 +110,48 @@ object Epg {
         val stale = cacheAge(context) > CACHE_TTL_MS || byChannel.isEmpty()
         if (!stale) return@withContext
 
-        val merged = fetchAll()
-        if (merged.isNotEmpty()) {
-            byChannel = merged
-            writeCache(context, merged)
-            withContext(Dispatchers.Main) { onReady() }
-        }
-    }
-
-    private suspend fun fetchAll(): Map<String, List<Programme>> = coroutineScope {
         val names = CATALOG.map { it.name }
         val from = System.currentTimeMillis() - PAST_WINDOW_MS
         val to = System.currentTimeMillis() + FUTURE_WINDOW_MS
+        val merged = LinkedHashMap<String, List<Programme>>()
 
-        val guia = async(Dispatchers.IO) { MeuGuia.fetch(names, from, to) }
-        val feeds = FEEDS.map { url -> async(Dispatchers.IO) { runCatching { download(url) }.getOrNull() } }
+        suspend fun publish() {
+            byChannel = LinkedHashMap(merged)
+            withContext(Dispatchers.Main) { onReady() }
+        }
 
-        val merged = LinkedHashMap<String, List<Programme>>(guia.await())
+        // meuguia primeiro: são 33 páginas pequenas, chegam em segundos e a
+        // grade já aparece, em vez de a tela ficar vazia até os feeds baixarem.
+        merged.putAll(MeuGuia.fetch(names, from, to))
+        if (merged.isNotEmpty()) publish()
+
+        // Os feeds vêm um de cada vez e são lidos em fluxo. Um deles tem 15 MB:
+        // virar String de uma vez custa uns 90 MB transitórios de char[] — num
+        // TV Box isso é OutOfMemoryError engolido pelo runCatching, ou seja, o
+        // guia simplesmente não aparecia.
+        val byTitle = HashMap<String, Programme>()
+        for (url in FEEDS) {
+            val parsed = runCatching { parseFeed(url, names, from, to, byTitle) }
+                .getOrNull() ?: continue
+            var added = false
+            for ((channel, programmes) in parsed) {
+                if (merged[channel] == null) {
+                    merged[channel] = programmes
+                    added = true
+                }
+            }
+            if (added) publish()
+        }
+
         // meuguia publica só título e gênero, então suas entradas são
         // enriquecidas pelos feeds casando por título: a grade continua certa e
         // o pôster, o episódio e o ano vêm junto.
-        val byTitle = HashMap<String, Programme>()
-        for (deferred in feeds) {
-            val xml = deferred.await() ?: continue
-            for ((channel, programmes) in parseXmltv(xml, names, from, to)) {
-                for (programme in programmes) {
-                    val key = normalise(programme.title)
-                    if (key.isNotEmpty() && byTitle[key]?.poster == null) byTitle[key] = programme
-                }
-                if (merged[channel] == null) merged[channel] = programmes
-            }
-        }
+        var enriched = false
         for ((channel, programmes) in merged.toList()) {
             merged[channel] = programmes.map { programme ->
                 if (programme.poster != null) programme
                 else byTitle[normalise(programme.title)]?.let {
+                    enriched = true
                     programme.copy(
                         poster = it.poster,
                         episode = programme.episode ?: it.episode,
@@ -154,27 +160,62 @@ object Epg {
                 } ?: programme
             }
         }
-        merged
+        if (merged.isEmpty()) return@withContext
+        if (enriched) publish() else byChannel = LinkedHashMap(merged)
+        writeCache(context, merged)
     }
 
     // MARK: - XMLTV
 
-    private fun parseXmltv(
-        xml: String, wanted: List<String>, from: Long, to: Long,
+    /**
+     * Reads one XMLTV feed straight off the socket.
+     *
+     * XMLTV writes every `<channel>` before the first `<programme>`, so a single
+     * forward pass is enough: the id map is resolved the moment programmes
+     * start, and only elements inside the window are ever kept.
+     */
+    internal fun parseFeed(
+        url: String, wanted: List<String>, from: Long, to: Long,
+        byTitle: MutableMap<String, Programme>,
     ): Map<String, List<Programme>> {
         // display-name -> every id carrying it. Feeds repeat a channel under
         // names that normalise alike, and keeping only the first id binds to
         // whichever copy came first — sometimes the one with no programmes.
         val nameToIds = HashMap<String, MutableList<String>>()
-        val channelRegex = Regex("""<channel id="([^"]+)">(.*?)</channel>""", RegexOption.DOT_MATCHES_ALL)
-        val displayRegex = Regex("""<display-name[^>]*>([^<]+)</display-name>""")
-        for (match in channelRegex.findAll(xml)) {
-            val display = displayRegex.find(match.groupValues[2])?.groupValues?.get(1) ?: continue
-            nameToIds.getOrPut(normalise(display)) { mutableListOf() }.add(match.groupValues[1])
-        }
+        var idToChannel: Map<String, String>? = null
+        val out = HashMap<String, MutableList<Programme>>()
 
-        // Exact and alias first, marking ids as taken; the loose prefix rule only
-        // runs afterwards, and never over an id already claimed.
+        openStream(url).use { reader ->
+            scanElements(reader) { tag, element ->
+                if (tag == CHANNEL) {
+                    if (idToChannel != null) return@scanElements
+                    val id = attribute(element, "id") ?: return@scanElements
+                    val display = between(element, "<display-name", "</display-name>")
+                        ?.substringAfter('>', "") ?: return@scanElements
+                    if (display.isNotBlank()) {
+                        nameToIds.getOrPut(normalise(display)) { mutableListOf() }.add(id)
+                    }
+                    return@scanElements
+                }
+                val map = idToChannel ?: resolveIds(nameToIds, wanted).also { idToChannel = it }
+                if (map.isEmpty()) return@scanElements
+                val programme = parseProgramme(element, map, from, to) ?: return@scanElements
+                val key = normalise(programme.second.title)
+                if (key.isNotEmpty() && byTitle[key]?.poster == null) byTitle[key] = programme.second
+                out.getOrPut(programme.first) { mutableListOf() } += programme.second
+            }
+        }
+        return out.mapValues { it.value.sortedBy { p -> p.start } }
+    }
+
+    /**
+     * Exact and alias matches first, marking ids as taken; the loose prefix rule
+     * only runs afterwards, and never over an id already claimed — otherwise
+     * "HBO2" swallows the id belonging to "HBO 2".
+     */
+    private fun resolveIds(
+        nameToIds: Map<String, MutableList<String>>, wanted: List<String>,
+    ): Map<String, String> {
         val idToChannel = HashMap<String, String>()
         val claimed = HashSet<String>()
         val unresolved = mutableListOf<Pair<String, String>>()
@@ -192,38 +233,115 @@ object Epg {
             if (candidates.size != 1) continue
             candidates.values.first().filterNot { it in claimed }.forEach { idToChannel[it] = name }
         }
-        if (idToChannel.isEmpty()) return emptyMap()
+        return idToChannel
+    }
 
-        val out = HashMap<String, MutableList<Programme>>()
-        val programmeRegex = Regex(
-            """<programme([^>]*)>(.*?)</programme>""", RegexOption.DOT_MATCHES_ALL)
-        val attr = { text: String, name: String ->
-            Regex("""$name="([^"]*)"""").find(text)?.groupValues?.get(1)
-        }
-        for (match in programmeRegex.findAll(xml)) {
-            val attrs = match.groupValues[1]
-            val channel = attr(attrs, "channel")?.let { idToChannel[it] } ?: continue
-            val start = parseXmltvDate(attr(attrs, "start") ?: continue) ?: continue
-            val stop = parseXmltvDate(attr(attrs, "stop") ?: continue) ?: continue
-            if (stop <= from || start >= to) continue
+    private fun parseProgramme(
+        element: String, idToChannel: Map<String, String>, from: Long, to: Long,
+    ): Pair<String, Programme>? {
+        val head = element.substring(0, element.indexOf('>').takeIf { it > 0 } ?: return null)
+        val channel = attribute(head, "channel")?.let { idToChannel[it] } ?: return null
+        val start = parseXmltvDate(attribute(head, "start") ?: return null) ?: return null
+        val stop = parseXmltvDate(attribute(head, "stop") ?: return null) ?: return null
+        if (stop <= from || start >= to) return null
 
-            val body = match.groupValues[2]
-            val title = Regex("""<title[^>]*>([^<]*)</title>""").find(body)
-                ?.groupValues?.get(1)?.let(::decodeEntities)?.trim() ?: continue
-            if (title.isEmpty()) continue
-            val category = Regex("""<category[^>]*>([^<]*)</category>""").find(body)
-                ?.groupValues?.get(1)?.let(::decodeEntities)?.trim() ?: ""
-            // O pôster vem em atributo, não em texto de elemento.
-            val poster = Regex("""<icon[^>]*src="([^"]+)"""").find(body)
-                ?.groupValues?.get(1)?.let(::decodeEntities)
-            val episode = Regex("""<episode-num[^>]*>([^<]*)</episode-num>""").find(body)
-                ?.groupValues?.get(1)?.trim()
-            val year = Regex("""<date[^>]*>([^<]*)</date>""").find(body)
-                ?.groupValues?.get(1)?.trim()?.take(4)
-            out.getOrPut(channel) { mutableListOf() } +=
-                Programme(title, category, start, stop, poster, episode, year)
+        val title = text(element, "title")?.takeIf { it.isNotEmpty() } ?: return null
+        val category = text(element, "category") ?: ""
+        // O pôster vem em atributo, não em texto de elemento.
+        val poster = between(element, "<icon", ">")?.let { attribute(it, "src") }?.let(::decodeEntities)
+        val episode = text(element, "episode-num")
+        val year = text(element, "date")?.take(4)
+        return channel to Programme(title, category, start, stop, poster, episode, year)
+    }
+
+    /** `name="value"` out of a tag's attribute text. */
+    private fun attribute(text: String, name: String): String? {
+        var from = 0
+        while (true) {
+            val marker = text.indexOf("$name=\"", from)
+            if (marker < 0) return null
+            // Evita casar o sufixo de outro atributo: "channel" dentro de
+            // "xchannel" não é o mesmo campo.
+            val before = if (marker == 0) ' ' else text[marker - 1]
+            if (before == ' ' || before == '\t' || before == '\n' || before == '<') {
+                val start = marker + name.length + 2
+                val end = text.indexOf('"', start)
+                return if (end < 0) null else text.substring(start, end)
+            }
+            from = marker + 1
         }
-        return out.mapValues { it.value.sortedBy { p -> p.start } }
+    }
+
+    /** Texto de `<tag …>texto</tag>`, já sem entidades. */
+    private fun text(element: String, tag: String): String? {
+        val body = between(element, "<$tag", "</$tag>") ?: return null
+        val start = body.indexOf('>')
+        if (start < 0) return null
+        return decodeEntities(body.substring(start + 1)).trim()
+    }
+
+    private fun between(text: String, open: String, close: String): String? {
+        val start = text.indexOf(open)
+        if (start < 0) return null
+        val end = text.indexOf(close, start + open.length)
+        if (end < 0) return null
+        return text.substring(start, end)
+    }
+
+    private const val CHANNEL = "channel"
+    private const val PROGRAMME = "programme"
+    /// Cauda mantida entre blocos para uma tag partida no limite do buffer.
+    private const val TAIL = 32
+    /// Um elemento maior que isto é lixo, não um programa: sem o teto, um
+    /// fechamento que nunca vem cresceria o buffer até estourar a heap.
+    private const val MAX_ELEMENT = 1 shl 20
+
+    /**
+     * Hands `<channel>` and `<programme>` elements to the caller one at a time,
+     * holding at most one element in memory instead of the whole document.
+     */
+    private inline fun scanElements(reader: Reader, onElement: (String, String) -> Unit) {
+        val chunk = CharArray(1 shl 16)
+        val pending = StringBuilder()
+        var open: String? = null
+        while (true) {
+            val read = reader.read(chunk)
+            if (read < 0) break
+            pending.append(chunk, 0, read)
+            while (true) {
+                val tag = open
+                if (tag == null) {
+                    val found = nextOpening(pending)
+                    if (found == null) {
+                        if (pending.length > TAIL) pending.delete(0, pending.length - TAIL)
+                        break
+                    }
+                    pending.delete(0, found.first)
+                    open = found.second
+                } else {
+                    val marker = pending.indexOf("</$tag>")
+                    if (marker < 0) {
+                        if (pending.length > MAX_ELEMENT) { pending.setLength(0); open = null }
+                        break
+                    }
+                    val end = marker + tag.length + 3
+                    onElement(tag, pending.substring(0, end))
+                    pending.delete(0, end)
+                    open = null
+                }
+            }
+        }
+    }
+
+    /** Earliest `<channel` or `<programme` opening in the buffer. */
+    private fun nextOpening(buffer: StringBuilder): Pair<Int, String>? {
+        val channel = buffer.indexOf("<$CHANNEL")
+        val programme = buffer.indexOf("<$PROGRAMME")
+        return when {
+            channel >= 0 && (programme < 0 || channel < programme) -> channel to CHANNEL
+            programme >= 0 -> programme to PROGRAMME
+            else -> null
+        }
     }
 
     /** XMLTV timestamps look like `20260809153000 -0300`. */
@@ -266,7 +384,11 @@ object Epg {
         else text.replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">")
             .replace("&quot;", "\"").replace("&apos;", "'").replace("&#39;", "'")
 
-    fun download(url: String, referer: String? = null): String {
+    fun download(url: String, referer: String? = null): String =
+        openStream(url, referer).use { it.readText() }
+
+    /** Leitor já descomprimido, para quem não quer o documento inteiro na mão. */
+    fun openStream(url: String, referer: String? = null): Reader {
         val connection = (URL(url).openConnection() as HttpURLConnection).apply {
             setRequestProperty("User-Agent", Playback.DEFAULT_USER_AGENT)
             setRequestProperty("Accept-Encoding", "gzip")
@@ -275,12 +397,11 @@ object Epg {
             readTimeout = 60_000
             instanceFollowRedirects = true
         }
-        connection.inputStream.use { raw ->
-            val stream = if (connection.contentEncoding?.contains("gzip", true) == true) {
-                GZIPInputStream(raw)
-            } else raw
-            return stream.bufferedReader().readText()
-        }
+        val raw = connection.inputStream
+        val stream = if (connection.contentEncoding?.contains("gzip", true) == true) {
+            GZIPInputStream(raw)
+        } else raw
+        return stream.bufferedReader()
     }
 
     // MARK: - Cache

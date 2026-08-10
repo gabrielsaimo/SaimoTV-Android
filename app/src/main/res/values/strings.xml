@@ -3,11 +3,14 @@
     <string name="app_name">Saimo TV</string>
     <string name="live">AO VIVO</string>
     <string name="loading">Ligando o canal…</string>
-    <string name="reconnecting">Sinal caiu — reconectando sozinho</string>
+    <string name="reconnecting">Sinal caiu — reconectando</string>
     <string name="unavailable">Canal indisponível no momento</string>
-    <string name="hint">OK abre a lista de canais</string>
-    <string name="no_guide">sem guia</string>
+    <string name="channels">Canais</string>
+    <string name="guide">Programação</string>
+    <string name="star">★</string>
+    <string name="list_legend">OK assiste · MENU favorita · DIREITA abre a programação</string>
     <string name="guide_info">%1$d de %2$d canais com guia</string>
-    <string name="fav_hint">MENU favorita o canal</string>
     <string name="channel_number">Canal %1$s…</string>
+    <string name="times">%1$s – %2$s · faltam %3$d min</string>
+    <string name="up_next">A seguir: %1$s</string>
 </resources>
