@@ -1,0 +1,3356 @@
+{
+    "success": true,
+    "data": [
+        {
+            "id": 1,
+            "name": "A&E",
+            "category": "Séries",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/aee.png",
+            "drm_system": {
+                "clearKey": "{\"74481194bf32774e0cb44a1d71d6cc19\":\"4bfd25bc9419f1c71e3ee8e6bf5ccf2a\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://video39.mais.uol.com.br/live/267.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36",
+                        "referer": "https://painel.play.uol.com.br/",
+                        "origin": "https://painel.play.uol.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "Adult Swim",
+            "category": "Variedades",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/adult-swim.png",
+            "drm_system": {
+                "clearKey": "{\"7dc3b6abe08d573883365f7d0b09fcb8\":\"7f68828b12e6d739bff28fe2b50e8c94\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0072-tbx.vrioott.com/adultswimbr/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "AMC",
+            "category": "Filmes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/amc.png",
+            "drm_system": {
+                "clearKey": "{\"bc663db258135afe830a1f87018164b8\":\"fbbfde5d3189eb0f0be86975f6e9e381\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0034-tbx.vrioott.com/amc/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "name": "Animal Planet",
+            "category": "Documentários",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/animal-planet.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/3",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "name": "Arte1",
+            "category": "Variedades",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/arte1.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://video37.mais.uol.com.br/live/292.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://painel.play.uol.com.br/",
+                        "origin": "https://painel.play.uol.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "name": "AXN",
+            "category": "Séries",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/axn.png",
+            "drm_system": {
+                "clearKey": "{\"94ab9056f04692f7d56001515df427e2\":\"c61964807f8cff271093fcc1f906d70e\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://video19.mais.uol.com.br/live/278.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://painel.play.uol.com.br/",
+                        "origin": "https://painel.play.uol.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "name": "Band",
+            "category": "Abertos",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/band.png",
+            "drm_system": {
+                "clearKey": "{\"3b43a1fbcf57cfe04109fbc1b381ac79\":\"a23de064124dfddeaf3c23490d96328b\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://video41.mais.uol.com.br/live/3361.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://painel.play.uol.com.br/",
+                        "origin": "https://painel.play.uol.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 8,
+            "name": "BandNews",
+            "category": "Notícias",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/band-news.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/103",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 9,
+            "name": "BandSports",
+            "category": "Esportes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/band-sports.png",
+            "drm_system": {
+                "clearKey": "{\"74481194bf32774e0cb44a1d71d6cc19\":\"4bfd25bc9419f1c71e3ee8e6bf5ccf2a\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://video41.mais.uol.com.br/live/290.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://painel.play.uol.com.br/",
+                        "origin": "https://painel.play.uol.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 10,
+            "name": "BBC News",
+            "category": "Notícias",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/bbc-world-news.png",
+            "drm_system": {
+                "clearKey": "{\"4fb07d14e6365ca4834942eabd413d2d\":\"316afd65622b24852eef49b9642776e5\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0177-tbx.vrioott.com/bbc/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 11,
+            "name": "BIS",
+            "category": "Música",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/bis.png",
+            "drm_system": {
+                "clearKey": "{\"958640f906d45c578c0134cdb43a3370\":\"0ce58331fad6220eddddfae26f692239\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0055-tbx.vrioott.com/bis/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 12,
+            "name": "Bloomberg",
+            "category": "Notícias",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/bloomberg.png",
+            "drm_system": {
+                "clearKey": "{\"5b5a9b636d4756988355724bba22511a\":\"e65748e594acb31725130319709e3328\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0178-tbx.vrioott.com/bloomberg/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 13,
+            "name": "BM&C News",
+            "category": "Notícias",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/bmec-news.png",
+            "drm_system": {
+                "clearKey": "{\"b44ef288adaa577d84c2a1db3863571c\":\"d45abc40b2cd14bdd1699349311719fc\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0175-tbx.vrioott.com/bmyc/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 14,
+            "name": "C3 TV",
+            "category": "Notícias",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/c3-tv.png",
+            "drm_system": {
+                "clearKey": "{\"1d9104bfbaf23b29a9c9b9f1ae94cefe\":\"6de5da54648311a7bc8bf23a8b093142\"}",
+                "widevine": null
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOCLIMATHD/dsc3/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 15,
+            "name": "Canal Brasil",
+            "category": "Filmes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/canal-brasil.png",
+            "drm_system": {
+                "clearKey": "{\"ef21620a76055794856909e3ec83f426\":\"bcf7ea36344d57b8c70b673f3834d8ce\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0056-tbx.vrioott.com/canalbrasil/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 16,
+            "name": "Canção Nova",
+            "category": "Abertos",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/cancao-nova.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/199",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 17,
+            "name": "Canal Uol",
+            "category": "Variedades",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/canal-uol.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://video20.mais.uol.com.br/live/4917.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://painel.play.uol.com.br/",
+                        "origin": "https://painel.play.uol.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 18,
+            "name": "Cartoon Network",
+            "category": "Infantis",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/cartoon-network.png",
+            "drm_system": {
+                "clearKey": "{\"9e21b82aa1b8593a8af31e78f016287d\":\"726579be89fa97b3a7c5785f94a27c72\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0013-tbx.vrioott.com/cartoonnetworkbr/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 19,
+            "name": "Cartoonito",
+            "category": "Infantis",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/cartoonito.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/122",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 20,
+            "name": "CazéTV",
+            "category": "Esportes",
+            "logo": "https://m.media-amazon.com/images/G/01/LCXO_Station_Logos/s151990_lw_h8_aa._SL170_FMpng_.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://dfr80qz435crc.cloudfront.net/MNOP/Amagi/Caze/Caze_TV_BR/Caze_TV.m3u8",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; U; Android 13; T610K Build/TP1A.220624.014; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/126.0.6478.71 Mobile Safari/537.36 OPR/87.0.2254.75258"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 21,
+            "name": "CGTN",
+            "category": "Notícias",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/cgtn.png",
+            "drm_system": {
+                "clearKey": "{\"912e7df55a925b838e3fdc4088545a44\":\"e15aecde0d1f8163ebacd89f94f63e45\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0176-tbx.vrioott.com/cgtn/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 22,
+            "name": "Cinemax",
+            "category": "Filmes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/cinemax.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/9",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 23,
+            "name": "CNBC",
+            "category": "Notícias",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/cnbc-hd.png",
+            "drm_system": {
+                "clearKey": "{\"37469c86b2b2500e86a49c8e081071e1\":\"5683d68f8a8ae100ce496e16d4eae98c\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0236-tbx.vrioott.com/cnbc/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 24,
+            "name": "CNN International",
+            "category": "Notícias",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/cnn-internacional.png",
+            "drm_system": {
+                "clearKey": "{\"5091edd4ee7453a88a17cb629aedb635\":\"9c8f7de63f952f729400aaa5f0178818\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0181-tbx.vrioott.com/cnninternacional/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 25,
+            "name": "CNN Brasil",
+            "category": "Notícias",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/cnn-brasil.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://amg01391-sbtinfast-amg01391c4-lg-br-4597.playouts.now.amagi.tv/playlist/amg01391-addigital-cnnbrasil-lgbr/playlist.m3u8",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; U; Android 13; T610K Build/TP1A.220624.014; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/126.0.6478.71 Mobile Safari/537.36 OPR/87.0.2254.75258"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 26,
+            "name": "CNN Brasil Money",
+            "category": "Notícias",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/cnn-brasil-money.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://amg01391-amg01391c57-amgplt0026.playout.now3.amagi.tv/playlist/amg01391-amg01391c57-amgplt0026/playlist.m3u8",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; U; Android 13; T610K Build/TP1A.220624.014; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/126.0.6478.71 Mobile Safari/537.36 OPR/87.0.2254.75258"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 27,
+            "name": "Curta!",
+            "category": "Variedades",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/curta!.png",
+            "drm_system": {
+                "clearKey": "{\"669248b1bd373c3f8cfe9642efe80903\":\"368f129827c28afbf430c06b34c58c6b\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOCBQ4HD/dsc3/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 28,
+            "name": "Discovery Channel",
+            "category": "Documentários",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/discovery.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/12",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 29,
+            "name": "Discovery Home & Health",
+            "category": "Variedades",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/discovery-home-and-health.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/14",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 30,
+            "name": "Discovery Kids",
+            "category": "Infantis",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/discovery-kids.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/15",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 31,
+            "name": "Discovery Science",
+            "category": "Documentários",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/discovery-science.png",
+            "drm_system": {
+                "clearKey": "{\"a88d766066c657f48d6ef896bcefcd8e\":\"3b76dbd32cbb6b5444476515a44c5e36\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0058-tbx.vrioott.com/discoverysciencebr/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 32,
+            "name": "Discovery Theater",
+            "category": "Documentários",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/discovery-theater.png",
+            "drm_system": {
+                "clearKey": "{\"7b00a834eae359df83472b10934ce21e\":\"ea1780c7e02875ff7d025c5ad7f8d096\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0074-tbx.vrioott.com/discoverytheaterbr/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 33,
+            "name": "Discovery Turbo",
+            "category": "Documentários",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/discovery-turbo.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/18",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 34,
+            "name": "Discovery World",
+            "category": "Documentários",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/discovery-world.png",
+            "drm_system": {
+                "clearKey": "{\"9b182bbd1abc5a108a364bdb3f05ca4a\":\"07b5b9ef7e4807e106b214755729d93a\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0102-tbx.vrioott.com/discoveryworldbr/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 35,
+            "name": "Dog TV",
+            "category": "Variedades",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/dog-tv.png",
+            "drm_system": {
+                "clearKey": "{\"dc7b80534bd937a3a0e7b2a172a74a2f\":\"d3b62e0265db2a518d18ead74e942fa8\"}",
+                "widevine": null
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPODOGTVHD/dsc2/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 36,
+            "name": "DumDum",
+            "category": "Infantis",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/zoomoo-kids.png",
+            "drm_system": {
+                "clearKey": "{\"2975ca9810bc3a3bb6b70274335d4745\":\"26adf3373255c713f2df36b853de1a7d\"}",
+                "widevine": null
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOZOMHD/dsc1/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 37,
+            "name": "DW",
+            "category": "Notícias",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/dw.png",
+            "drm_system": {
+                "clearKey": "{\"2cd1c8503f75538a803e9395844d340d\":\"23a07f7228fb21aec578ab97fe9e4b4e\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0179-tbx.vrioott.com/dw/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 38,
+            "name": "E!",
+            "category": "Variedades",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/e!.png",
+            "drm_system": {
+                "clearKey": "{\"d021c9ff8ab94c1a583a0f5f2cc82725\":\"7de3fcc29e3194b9c65282a42cb7bec6\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://video49.mais.uol.com.br/live/4503.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://painel.play.uol.com.br/",
+                        "origin": "https://painel.play.uol.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 39,
+            "name": "ESPN",
+            "category": "Esportes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/espn.png",
+            "drm_system": {
+                "clearKey": "{\"6cd41235037836528a679d1f92e8e4a2\":\"694916b4ae717c948504bafd5c7278ea\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0007-aws-da-mt.vrioott.com/0007_ESPN_DASH/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 40,
+            "name": "ESPN 2",
+            "category": "Esportes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/espn-2.png",
+            "drm_system": {
+                "clearKey": "{\"784c98de262634eca3680a0347fee6a8\":\"4da2f3caee7a66ac25371d84136d2eaf\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0011-aws-da-mt.vrioott.com/0011_ESPN_2_DASH/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 41,
+            "name": "ESPN 3",
+            "category": "Esportes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/espn-3.png",
+            "drm_system": {
+                "clearKey": "{\"7b60457625cb3173bc65741963a38a9f\":\"80fe470160af50d259a87a576ae12119\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://rr1---sn-bg0eznzx.sporturbo.com/dash/dgo/0052-aws.glbcdn.net/0052_ESPN_3_DASH/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 42,
+            "name": "ESPN 4",
+            "category": "Esportes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/espn-4.png",
+            "drm_system": {
+                "clearKey": "{\"9f07d219385a301c9d4eff10151f502c\":\"89870c6ac581c031247caf6dc9e5579d\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0040-aws-da-mt.vrioott.com/0040_ESPN_4_DASH/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 43,
+            "name": "ESPN 5",
+            "category": "Esportes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/espn-5.png",
+            "drm_system": {
+                "clearKey": "{\"516d5f57e5a335b682daa3e946bd7c9d\":\"aad0526dc2d22f7af17d9e169dd70785\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://rr1---sn-bg0eznzx.sporturbo.com/dash/dgo/0050-aws.glbcdn.net/out/v1/VRIO_CHANNELS/0050_ESPN_5/0050_ESPN_5_DASH/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 44,
+            "name": "ESPN 6",
+            "category": "Esportes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/espn-6.png",
+            "drm_system": {
+                "clearKey": "{\"afa646dadaa4360582b881e91d92ad03\":\"ce1af52465a8766b8349f32af9a7314b\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://rr1---sn-bg0eznzx.sporturbo.com/dash/dgo/0091-aws.glbcdn.net/0091_ESPN_6_DASH/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 45,
+            "name": "Eurochannel",
+            "category": "Filmes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/euro-channel.png",
+            "drm_system": {
+                "clearKey": "{\"78011907100235aebc00c9739ecc68bc\":\"cfdafe0ce7053c9d9bf876d3981814bb\"}",
+                "widevine": null
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOERCHD/dsc1/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 46,
+            "name": "FashionTV",
+            "category": "Variedades",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/fashion-tv.png",
+            "drm_system": {
+                "clearKey": "{\"651904ea3be537d3adc807d4e55cb441\":\"f1f31026157e3a725e4ca8f742bd32aa\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOCBQ10HD/dsc1/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 47,
+            "name": "Film & Arts",
+            "category": "Filmes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/film-e-arts.png",
+            "drm_system": {
+                "clearKey": "{\"e9f160d7858d3d96b0bac24b7f668c6d\":\"98183ab83acd54b0d9f328f8622d9ef1\"}",
+                "widevine": null
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOFEAHD/dsc1/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 48,
+            "name": "Fish TV",
+            "category": "Variedades",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/fish-tv.png",
+            "drm_system": {
+                "clearKey": "{\"f7ae96187e67394f8357a348fe69bb85\":\"cc5c231d0ee8f148a17c613b0f51ac6d\"}",
+                "widevine": null
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOFISHHD/dsc2/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 49,
+            "name": "Food Network",
+            "category": "Variedades",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/food-network.png",
+            "drm_system": {
+                "clearKey": "{\"c0c8121d44265abb8bc5298a9adbe90b\":\"33bb4825451547511755224a8cbf06b4\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0048-tbx.vrioott.com/foodnetworkbr/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 50,
+            "name": "France 24",
+            "category": "Notícias",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/france-24.png",
+            "drm_system": {
+                "clearKey": "{\"8162c824b6a0348494d6bb228f5efcd4\":\"29ac61daffbf692828d533435be503b5\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOF24HD/dsc2/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 51,
+            "name": "Futura",
+            "category": "Abertos",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/futura.png",
+            "drm_system": {
+                "clearKey": "{\"0f8e5540b93a56108578026e4a84fa01\":\"457dd5db001d5d7196b569aaf5802eee\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0092-tbx.vrioott.com/futura/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 52,
+            "name": "GE TV",
+            "category": "Esportes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/ge-tv.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://dfr80qz435crc.cloudfront.net/EFGH/Amagi/Globo/GE_Fast_BR/GE_Fast.m3u8",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; U; Android 13; T610K Build/TP1A.220624.014; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/126.0.6478.71 Mobile Safari/537.36 OPR/87.0.2254.75258"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 53,
+            "name": "Globo Brasília",
+            "category": "Abertos",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/globo.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/334",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 54,
+            "name": "Globo Minas",
+            "category": "Abertos",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/globo.png",
+            "drm_system": {
+                "clearKey": "{\"4e67b4f929bd3680b56cb5126477207f\":\"9896fc28a20a6e59099c5bb6e1ca876d\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/BHZGLHD/dsc4/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 55,
+            "name": "Globo Nordeste",
+            "category": "Abertos",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/globo.png",
+            "drm_system": {
+                "clearKey": "{\"e285e019c20c3322affb6ded9690dad2\":\"214ab02a625d31d43fd24b07231662b2\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/RECGLHD/dsc3/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 56,
+            "name": "Globo Rio",
+            "category": "Abertos",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/globo.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/335",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 57,
+            "name": "Globo São Paulo",
+            "category": "Abertos",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/globo.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/741",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 58,
+            "name": "Globo RBS TV Porto Alegre",
+            "category": "Abertos",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/rbs-tv.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/337",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 59,
+            "name": "Globo RPC Curitiba",
+            "category": "Abertos",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/rpc.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/405",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 60,
+            "name": "GloboNews",
+            "category": "Notícias",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/globonews.png",
+            "drm_system": {
+                "clearKey": "{\"57ecd6a2086b99cc1d0452b102a7043b\":\"11386090a315fc1e88427aeed4a60900\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/dsfrp5mjrb/out/v1/9fa07e663bc94e9f93c53726a558478a/cenc.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.primevideo.com/",
+                        "origin": "https://www.primevideo.com"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 61,
+            "name": "Globoplay Novelas",
+            "category": "Variedades",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/viva.png",
+            "drm_system": {
+                "clearKey": "{\"eab4523b0358f3c59f1da92b3f478232\":\"253ef14355d987d4076b4544e4741977\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/ds9ertnhrl/out/v1/cb791b7362754ba1b87d9474ccd95fa3/cenc.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.primevideo.com/",
+                        "origin": "https://www.primevideo.com"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 62,
+            "name": "Gloob",
+            "category": "Infantis",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/gloob.png",
+            "drm_system": {
+                "clearKey": "{\"0980bcf6ebf15aa4831e3f8a095fff79\":\"14e23e425e82f18d4ff4466da098aa1b\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0060-tbx.vrioott.com/gloob/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 63,
+            "name": "Gloobinho",
+            "category": "Infantis",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/gloobinho.png",
+            "drm_system": {
+                "clearKey": "{\"ab29ae9d310c5bcd89af885553566756\":\"4a8a50a8cad4761a22015f69d720fbf6\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0061-tbx.vrioott.com/gloobinho/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 64,
+            "name": "GNT",
+            "category": "Variedades",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/gnt.png",
+            "drm_system": {
+                "clearKey": "{\"4c4d19c8cda9e78bae924e07ce49cb04\":\"4a3a155e480a67b81c5492befe07fa61\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/h9c8z9m1dq/out/v1/9b1b1aa15b4f471ea19674290554499e/cenc.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.primevideo.com/",
+                        "origin": "https://www.primevideo.com"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 65,
+            "name": "HBO",
+            "category": "Filmes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/hbo.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/41",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 66,
+            "name": "HBO2",
+            "category": "Filmes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/hbo-2.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/39",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 67,
+            "name": "HBO Family",
+            "category": "Filmes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/hbo-family.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/40",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 68,
+            "name": "HBO Mundi",
+            "category": "Filmes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/hbo-mundi.png",
+            "drm_system": {
+                "clearKey": "{\"864d0001e28938b0be3e1c6d8dc110ea\":\"87f36ec6e6747a587d1e6393f61c003a\"}",
+                "widevine": null
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOCMTHD/dsc1/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 69,
+            "name": "HBO Plus",
+            "category": "Filmes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/hboplus.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/42",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 70,
+            "name": "HBO Pop",
+            "category": "Filmes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/hbo-pop.png",
+            "drm_system": {
+                "clearKey": "{\"1d0c9de86aa3375ab848fc728343f4a2\":\"46cb51c3726930edb0e2b98382273f56\"}",
+                "widevine": null
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOMAXHD/dsc3/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 71,
+            "name": "HBO Signature",
+            "category": "Filmes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/hbo-signature.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/43",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 72,
+            "name": "HBO Xtreme",
+            "category": "Filmes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/hbo-xtreme.png",
+            "drm_system": {
+                "clearKey": "{\"88fbeafda45e3cb0a029e2e04152348a\":\"40dd784747107960ed81ab3b5012c5f6\"}",
+                "widevine": null
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOMAPHD/dsc3/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 73,
+            "name": "HGTV",
+            "category": "Variedades",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/hgtv.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/13",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 74,
+            "name": "History",
+            "category": "Documentários",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/history-channel.png",
+            "drm_system": {
+                "clearKey": "{\"f7cb42541fbc6043627e4ee025c18300\":\"24843d82b079bbefb73100b887493400\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://video46.mais.uol.com.br/live/281.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://painel.play.uol.com.br/",
+                        "origin": "https://painel.play.uol.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 75,
+            "name": "History 2",
+            "category": "Documentários",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/history-2.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/44",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 76,
+            "name": "Investigação Discovery",
+            "category": "Séries",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/investigacao-discovery.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/46",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 77,
+            "name": "Jovem Pan News",
+            "category": "Notícias",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/jp-news-vertical.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://amg01391-sbtinfast-amg01391c3-lg-us-8995.playouts.now.amagi.tv/playlist/amg01391-addigital-jovempan-lgus/playlist.m3u8",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; U; Android 13; T610K Build/TP1A.220624.014; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/126.0.6478.71 Mobile Safari/537.36 OPR/87.0.2254.75258"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 78,
+            "name": "Lifetime",
+            "category": "Séries",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/lifetime.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/47",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 79,
+            "name": "LMC+",
+            "category": "Variedades",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/lmc-plus.png",
+            "drm_system": {
+                "clearKey": "{\"0639b631bcb93211b4e88588b6d75e33\":\"051ff625db698fe5605a9027ba7dfcdb\"}",
+                "widevine": null
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOLMCHD/dsc2/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 80,
+            "name": "Megapix",
+            "category": "Filmes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/megapix.png",
+            "drm_system": {
+                "clearKey": "{\"cf8a2c054a3148309bce1039a9a5d603\":\"9417daf3a25dff3f78d76c1ebb550654\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/21ilsertww/out/v1/124c84cbafc745b6b2c47fc9be606727/cenc.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.primevideo.com/",
+                        "origin": "https://www.primevideo.com"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 81,
+            "name": "Mezzo",
+            "category": "Música",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/mezzo-live-hd.png",
+            "drm_system": {
+                "clearKey": "{\"0b7a9aa44673373f96c28fbbb184da0b\":\"94fbb1c83a2b9d0d57c3f99665083d31\"}",
+                "widevine": null
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOMEZHD/dsc1/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 82,
+            "name": "Modo Viagem",
+            "category": "Variedades",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/modo-viagem.png",
+            "drm_system": {
+                "clearKey": "{\"ce56a877d62b53ec8ea615371fd2484d\":\"f204044c3b430f8c3087fcecd1d36d6f\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0064-tbx.vrioott.com/modoviagem/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 83,
+            "name": "MTV Live",
+            "category": "Música",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/mtv-live-hd.png",
+            "drm_system": {
+                "clearKey": "{\"655010c86b533945ad92a936df2042c4\":\"31bc6df0538202b6300cc04c4379006a\"}",
+                "widevine": null
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOMTVLHD/dsc1/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 84,
+            "name": "MTV 00s",
+            "category": "Música",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/mtv-00s.png",
+            "drm_system": {
+                "clearKey": "{\"821b56c8f0f33e679e10b1da83e8760a\":\"f16ad3f207a14a0c33d305f694c9a354\"}",
+                "widevine": null
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOVH1HD/dsc3/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 85,
+            "name": "Multishow",
+            "category": "Variedades",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/multishow.png",
+            "drm_system": {
+                "clearKey": "{\"5a93ff790eca6f86ad6adb53929fe1c4\":\"6664fa23d82cbfeaf5cdb2d662bec3b3\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/x7aaupxajb/out/v1/49d602c6294147a18d798ce6abbb6957/cenc.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.primevideo.com/",
+                        "origin": "https://www.primevideo.com"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 86,
+            "name": "Music Box Brazil",
+            "category": "Música",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/music-boxbrazil.png",
+            "drm_system": {
+                "clearKey": "{\"2d80d745915c3b28a3767d65bd5c1720\":\"18cdf2b14dc95e739502017325781b59\"}",
+                "widevine": null
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOCBQ8HD/dsc2/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 87,
+            "name": "NSports",
+            "category": "Esportes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/nsports.png",
+            "drm_system": {
+                "clearKey": "{\"afd47ed190fe5c3e8e57af7a69cfe510\":\"26312823dc2fe4350f5dbb0462445561\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0185-tbx.vrioott.com/nsports/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 88,
+            "name": "Off",
+            "category": "Variedades",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/canal-off.png",
+            "drm_system": {
+                "clearKey": "{\"16c10fcbe4ca52308f4c6e0af06fb8c7\":\"85fcba987a7925d6c571bee0139dac99\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0067-tbx.vrioott.com/offbr/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 89,
+            "name": "Paramount+ 1",
+            "category": "Esportes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/paramountplus-1.png",
+            "drm_system": {
+                "clearKey": "{\"f45219acab353759a3ceef46f7d196c6\":\"0924995d665b0faf784ff86e3fb5bd52\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOCMB1HD/dsc2/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 90,
+            "name": "Paramount+ 2",
+            "category": "Esportes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/paramountplus-2.png",
+            "drm_system": {
+                "clearKey": "{\"390f26cf7268334cb49f5b86cb3a3444\":\"3fa8d4779d288a9fd1553542ce94a918\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOCMB2HD/dsc3/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 91,
+            "name": "Paramount+ 3",
+            "category": "Esportes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/paramountplus-3.png",
+            "drm_system": {
+                "clearKey": "{\"87d69af564ca374faee38d32a0b01d26\":\"d0c8a52194264d36ec061782af88dcf0\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOCMB3HD/dsc3/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 92,
+            "name": "Paramount+ 4",
+            "category": "Esportes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/paramountplus-4.png",
+            "drm_system": {
+                "clearKey": "{\"e4c9817591fb336799b0d84e0e81fe47\":\"dd6b3ea6009074806c0f36f82e2022ff\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOCMB4HD/dsc3/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 93,
+            "name": "Play TV",
+            "category": "Música",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/play-tv.png",
+            "drm_system": {
+                "clearKey": "{\"bd358a9737b33c9395494a8ed28822f3\":\"377e6948b39d80bd4af6466fb33cc305\"}",
+                "widevine": null
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOCBQ9/dsc1/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 94,
+            "name": "Premiere Clubes",
+            "category": "Esportes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/premiere.png",
+            "drm_system": {
+                "clearKey": "{\"56b79c1782b30e6b6fc973b0e8fd4104\":\"fa38aaa865a57eda7c77444697ba8ed3\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/nelfyucw9a/out/v1/6ffb2c365ad14f88b154591beb43d1f6/cenc.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.primevideo.com/",
+                        "origin": "https://www.primevideo.com"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 95,
+            "name": "Premiere 2",
+            "category": "Esportes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/premiere-2.png",
+            "drm_system": {
+                "clearKey": "{\"9dc40460c93087aea84d6315f08ecb64\":\"f69c8d4624fddff4ca89bd0b31bdc4a7\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/oy6rp0jwmf/out/v1/580ecf12bad24979baf8dd993dce053e/cenc.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.primevideo.com/",
+                        "origin": "https://www.primevideo.com"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 96,
+            "name": "Premiere 3",
+            "category": "Esportes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/premiere-3.png",
+            "drm_system": {
+                "clearKey": "{\"d23f7433798a652a7d4f6791d9e1036c\":\"4942eebd598b5727c5cc484cc62b52e8\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/6onrfniyry/out/v1/f23069c61dbf4e00890a40b705a84079/cenc.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.primevideo.com/",
+                        "origin": "https://www.primevideo.com"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 97,
+            "name": "Premiere 4",
+            "category": "Esportes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/premiere-4.png",
+            "drm_system": {
+                "clearKey": "{\"e23365c2ad97870c871712b73f0d6195\":\"58709c714320bb862dbd07270df81c94\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/tirjor64kh/out/v1/fd2ed9916d994f09a3bd62b64141b9cb/cenc.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.primevideo.com/",
+                        "origin": "https://www.primevideo.com"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 98,
+            "name": "Premiere 5",
+            "category": "Esportes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/premiere-5.png",
+            "drm_system": {
+                "clearKey": "{\"332f62eb3cae824e98a4124da29a7d31\":\"d1698cda3d040f9051125a61745b596b\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/1obktrybht/out/v1/08265453c8f64d9fbeb3cf43764403a8/cenc.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.primevideo.com/",
+                        "origin": "https://www.primevideo.com"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 99,
+            "name": "Premiere 6",
+            "category": "Esportes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/premiere-6.png",
+            "drm_system": {
+                "clearKey": "{\"8bf16a4ba05bcc97e6259297e50be63d\":\"8dd97d486cbdd15cc47ea8c41b264ebb\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/0bmtb2fxcj/out/v1/b5f50c3632264d32bf857652f631b0fb/cenc.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.primevideo.com/",
+                        "origin": "https://www.primevideo.com"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 100,
+            "name": "Premiere 7",
+            "category": "Esportes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/premiere-7.png",
+            "drm_system": {
+                "clearKey": "{\"238f5cf32228c1877f8b939f5f9d7bd8\":\"47571c93e4335b3d1590a5ae3f5c48ef\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/joij38hkop/out/v1/c920c9b42af24588a253530ed2cbd6eb/cenc.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.primevideo.com/",
+                        "origin": "https://www.primevideo.com"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 101,
+            "name": "Premiere 8",
+            "category": "Esportes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/premiere-8.png",
+            "drm_system": {
+                "clearKey": "{\"19aec31e45751958c1d963435d725f33\":\"fb24357e80520fd600dd43c1d8ce8a7a\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/2s8gkqz2id/out/v1/41da2546a9a34238b8615d3beb4ee600/cenc.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.primevideo.com/",
+                        "origin": "https://www.primevideo.com"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 102,
+            "name": "Prime Box Brazil",
+            "category": "Filmes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/prime-boxbrazil.png",
+            "drm_system": {
+                "clearKey": "{\"d3561893dce5316eade79cf3911524bc\":\"8223f74e1bf93bb16894a3cae7c61779\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOCBQ7HD/dsc2/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 103,
+            "name": "RAI Italia",
+            "category": "Notícias",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/rai-italia.png",
+            "drm_system": {
+                "clearKey": "{\"69c893032b0256358a0f2eb2d4cc1c4e\":\"df3ce7b554a97c368825016cd185a35e\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0180-tbx.vrioott.com/raibr/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 104,
+            "name": "Record News",
+            "category": "Notícias",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/recordnews.png",
+            "drm_system": {
+                "clearKey": "{\"499a5a593dce580f887077ab983c933b\":\"64de186536a1c2885f0feed32c36d958\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0168-tbx.vrioott.com/recordnews/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 105,
+            "name": "Record TV São Paulo",
+            "category": "Abertos",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/record-tv.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/726",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 106,
+            "name": "RedeTV!",
+            "category": "Abertos",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/redetv!.png",
+            "drm_system": {
+                "clearKey": "{\"c55c7630ed36518c81ac30833e37839c\":\"2623c318c827f110b0799c39ce6feedd\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0043-tbx.vrioott.com/redetv/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 107,
+            "name": "Rede Vida",
+            "category": "Abertos",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/rede-vida.png",
+            "drm_system": {
+                "clearKey": "{\"f9991bb778cf3714acbb0791dac0a1c4\":\"f16565d4445b7925cd7c7429abb416ef\"}",
+                "widevine": null
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOVDAHD/dsc3/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 108,
+            "name": "Sabor & Arte",
+            "category": "Variedades",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/sabor-e-arte.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://video37.mais.uol.com.br/live/3066.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://painel.play.uol.com.br/",
+                        "origin": "https://painel.play.uol.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 109,
+            "name": "SBT",
+            "category": "Abertos",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/sbt.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://aovivo.maissbt.com/indexMobile.m3u8",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://mais.sbt.com.br/",
+                        "origin": "https://mais.sbt.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 110,
+            "name": "SBT News",
+            "category": "Notícias",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/sbt-news.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://sbtnews.maissbt.com/index.m3u8",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://mais.sbt.com.br/",
+                        "origin": "https://mais.sbt.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 111,
+            "name": "Sony Channel",
+            "category": "Séries",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/sony.png",
+            "drm_system": {
+                "clearKey": "{\"5e8567bf0707bf910f611e5cf2ef352f\":\"8b30ddee60bb9fe6653f1eb8c9b85d5d\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://video37.mais.uol.com.br/live/279.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://painel.play.uol.com.br/",
+                        "origin": "https://painel.play.uol.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 112,
+            "name": "Sony Movies",
+            "category": "Filmes",
+            "logo": "https://media.cdn.telefonica.com//storagearea0/IMAGES/00/14/89/14890843_FA36D119CE56B664.png",
+            "drm_system": {
+                "clearKey": "{\"17b4726678ff548088a4f0b875afdf75\":\"0c4a290769a9af953c3bd6d0bbe50ec3\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0136-tbx.vrioott.com/sonymoviesbr/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 113,
+            "name": "Space",
+            "category": "Filmes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/space.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/70",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 114,
+            "name": "SporTV",
+            "category": "Esportes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/sportv.png",
+            "drm_system": {
+                "clearKey": "{\"4bbcff3289d457b4dd5dbdd21221de9a\":\"c4906b9a9f8dda3c0725bddb8c497733\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/m7duvnk2bu/out/v1/d1ad69118b5647309b1eb7213affdb3d/cenc.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.primevideo.com/",
+                        "origin": "https://www.primevideo.com"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 115,
+            "name": "SporTV 2",
+            "category": "Esportes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/sportv-2.png",
+            "drm_system": {
+                "clearKey": "{\"3de028eafb3b2caffec03be1c1c818b3\":\"8fbdd8a9ae6748696bb13e547bb093fc\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/dsa3hwuhd1/out/v1/631b48c8d9ea437e8309d1a4b55acef5/cenc.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.primevideo.com/",
+                        "origin": "https://www.primevideo.com"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 116,
+            "name": "SporTV 3",
+            "category": "Esportes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/sportv-3.png",
+            "drm_system": {
+                "clearKey": "{\"902e5ec0e3d05e665daa32fc23f4f59e\":\"7b2322a273843921a43e2c61dac7cae3\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/6otiglnptp/out/v1/add7499679b0422cb6791f7701f95ecc/cenc.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.primevideo.com/",
+                        "origin": "https://www.primevideo.com"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 117,
+            "name": "SportyNet",
+            "category": "Esportes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/sportynet.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/546884",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 118,
+            "name": "SportyNet+ 1",
+            "category": "Esportes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/sportynetplus.png",
+            "drm_system": {
+                "clearKey": "{\"77e053d3a94f30bf9a54c218d7cece25\":\"eb5805f5ac77dea89aa219b1179a9fa7\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOCCR1HD/dsc1/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 119,
+            "name": "SportyNet+ 2",
+            "category": "Esportes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/sportynetplus-2.png",
+            "drm_system": {
+                "clearKey": "{\"d4e4b27768463e67a587911a662e9ac5\":\"7a97d9814132b920fa3ad84734bec66f\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOCCR2HD/dsc2/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 120,
+            "name": "SportyNet+ 3",
+            "category": "Esportes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/sportynetplus-3.png",
+            "drm_system": {
+                "clearKey": "{\"bcf000112cd530f495385a7308d940d8\":\"3df9ab4cf64345501367161c4ee8e928\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPONOR3HD/dsc3/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 121,
+            "name": "Studio Universal",
+            "category": "Filmes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/studio-universal.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/74",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 122,
+            "name": "Telecine Action",
+            "category": "Filmes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/tc-action.png",
+            "drm_system": {
+                "clearKey": "{\"3ac931934ee95f6e83bc549f89a13fed\":\"844e6313c76c4e7f75058d1c8e593347\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0084-tbx.vrioott.com/telecineaction/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 123,
+            "name": "Telecine Cult",
+            "category": "Filmes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/tc-cult.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/78",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 124,
+            "name": "Telecine Fun",
+            "category": "Filmes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/tc-fun.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/79",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 125,
+            "name": "Telecine Pipoca",
+            "category": "Filmes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/tc-pipoca.png",
+            "drm_system": {
+                "clearKey": "{\"514a45f76193549382c1017ca8a9387a\":\"56bf5c4de8b0fd8f4566a5a55e14fb6b\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0085-tbx.vrioott.com/telecinepipoca/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 126,
+            "name": "Telecine Premium",
+            "category": "Filmes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/tc-premium.png",
+            "drm_system": {
+                "clearKey": "{\"0f81d428f69f5b2e8e714cadcadaff83\":\"d2b198091bf14b01effe589ecd0ee2ec\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0086-tbx.vrioott.com/telecinepremium/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 127,
+            "name": "Telecine Touch",
+            "category": "Filmes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/tc-touch.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/82",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 128,
+            "name": "TLC",
+            "category": "Variedades",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/tlc.png",
+            "drm_system": {
+                "clearKey": "{\"bde9773d1dd930cd89556abafdf98a1b\":\"caf9e413869c2825bf33974e64abf3a3\"}",
+                "widevine": null
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOTLCHD/dsc1/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 129,
+            "name": "TNT",
+            "category": "Filmes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/tnt.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/84",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 130,
+            "name": "TNT Novelas",
+            "category": "Séries",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/tnt-novelas.png",
+            "drm_system": {
+                "clearKey": "{\"4ef00071a74950f7806cfae846794402\":\"de9acff1bd1532e8a390940b8ed1c67f\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0184-tbx.vrioott.com/tntnovelasbr/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 131,
+            "name": "TNT Séries",
+            "category": "Séries",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/tnt-series.png",
+            "drm_system": {
+                "clearKey": "{\"58d90559a4235ef98711a5b0ec652b7e\":\"84942c1d33c0d96dc84623648f1137e9\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0022-tbx.vrioott.com/tntseries/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 132,
+            "name": "Trace Brasil",
+            "category": "Música",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/trace-brasil.png",
+            "drm_system": {
+                "clearKey": "{\"7c1aa8ad5ac2321990e6318dc5658963\":\"38418f4e6ca8a9a13b43093888662a55\"}",
+                "widevine": null
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOTCBHD/dsc2/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 133,
+            "name": "Travel Box Brazil",
+            "category": "Variedades",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/travel-boxbrazil.png",
+            "drm_system": {
+                "clearKey": "{\"354307f11f4e3caa85ec09e93411ac04\":\"9f6598c238906aa816b324aa3c40ee86\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOCBQ11HD/dsc3/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 134,
+            "name": "Travel Food & Drinks",
+            "category": "Variedades",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/travel-food-e-drinks.png",
+            "drm_system": {
+                "clearKey": "{\"f58a303827513c69bb44fa0ada175028\":\"60e68202ba44cee743ad6662b80b0487\"}",
+                "widevine": null
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOTFDHD/dsc1/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 135,
+            "name": "Trip Brasil Channel",
+            "category": "Variedades",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/trip-brasil-channel.png",
+            "drm_system": {
+                "clearKey": "{\"0281ae3760cd31648492887b231586b1\":\"28d5c9bea4b395872842096a2c9d2fc9\"}",
+                "widevine": null
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOTBCHD/dsc2/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 136,
+            "name": "TV Aparecida",
+            "category": "Abertos",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/tv-aparecida.png",
+            "drm_system": {
+                "clearKey": "{\"7d50c60a91c530d29770517d60b9f952\":\"73d3ec2527c353e9ad25f95e2a91600f\"}",
+                "widevine": null
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOAPAHD/dsc2/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 137,
+            "name": "TV Brasil",
+            "category": "Abertos",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/tv-brasil.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://tvbrasil-stream.ebc.com.br/index.m3u8",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://aovivo.ebc.com.br/",
+                        "origin": "https://aovivo.ebc.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 138,
+            "name": "TV Cultura",
+            "category": "Abertos",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/cultura.png",
+            "drm_system": {
+                "clearKey": "{\"8ef90842d8de5f798e5823b1cb2fb413\":\"66915d667cc16b2cd695c4a63c809676\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0126-tbx.vrioott.com/tvcultura/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 139,
+            "name": "TV Gazeta",
+            "category": "Abertos",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/gazeta.png",
+            "drm_system": {
+                "clearKey": "{\"55adef3c0f33544e83eaf8e0f9a2907c\":\"688b8bf8bd6973529fbb23253d52e207\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0189-tbx.vrioott.com/tvgazeta/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 140,
+            "name": "TV Rá-Tim-Bum",
+            "category": "Infantis",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/tv-ra-tim-bum.png",
+            "drm_system": {
+                "clearKey": "{\"bf9b516ab44c3d6e8dc0c469d586c38a\":\"8cc40040496d449dd02dcd9ddf1c435f\"}",
+                "widevine": null
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPORATHD/dsc3/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 141,
+            "name": "TV5Monde",
+            "category": "Notícias",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/tv-5-monde.png",
+            "drm_system": {
+                "clearKey": "{\"1e8dd4d705e9513d8247075929c465ad\":\"9349e107cf73f8183c6d2d72daf525e6\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0182-tbx.vrioott.com/tv5monde/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 142,
+            "name": "TVE Internacional",
+            "category": "Notícias",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/tve.png",
+            "drm_system": {
+                "clearKey": "{\"61ed5e2b5b3c5dac8b1cc409205cb4c7\":\"509cb76980fca5f54fda864b1a42448d\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0183-tbx.vrioott.com/tve/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 143,
+            "name": "Universal Premiere",
+            "category": "Séries",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/universal-premiere.png",
+            "drm_system": {
+                "clearKey": "{\"3531c1c49b8e63c0b94a8061154e0c58\":\"90e91e6549d2061b793177c70d35e177\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/khnyllds8v/out/v1/1cf61b7a057e4ffdb31f6d82fb24c679/cenc.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.primevideo.com/",
+                        "origin": "https://www.primevideo.com"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 144,
+            "name": "Universal Reality",
+            "category": "Variedades",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/universal-reality.png",
+            "drm_system": {
+                "clearKey": "{\"4b62d6103d99d62f8daca463d1c15430\":\"2fd0079af0bf85289859fff7b8a4e30f\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/5ppjwg1ekb/out/v1/393342b545834c218745c3dd33661013/cenc.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.primevideo.com/",
+                        "origin": "https://www.primevideo.com"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 145,
+            "name": "Universal TV",
+            "category": "Séries",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/universal.png",
+            "drm_system": {
+                "clearKey": "{\"0110de67e8a43229a9afee5fbb1bf34c\":\"14d17ea503859feb50f395a19491a2ea\"}",
+                "widevine": null
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOUNVHD/dsc3/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 146,
+            "name": "USA",
+            "category": "Séries",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/usa.png",
+            "drm_system": {
+                "clearKey": "{\"0bb4434f06f0557a826115d1b8116fd7\":\"9657edeec2aa40936ac070b8ed798883\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://0071-tbx.vrioott.com/usabr/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.skymais.com.br/",
+                        "origin": "https://www.skymais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 147,
+            "name": "Warner",
+            "category": "Séries",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/warner-channel.png",
+            "drm_system": {
+                "clearKey": "{\"ff12e06c66327cd35b99013b38dd4f84\":\"08320e9a44185e55074ac435d8c9a856\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://video45.mais.uol.com.br/live/277.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://painel.play.uol.com.br/",
+                        "origin": "https://painel.play.uol.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 148,
+            "name": "WooHoo",
+            "category": "Variedades",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/woohoo.png",
+            "drm_system": {
+                "clearKey": "{\"2469de2cb4f034aeb668b81851550445\":\"63c5abdc67ce668e48b43f0b85f06461\"}",
+                "widevine": null
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOCBQ5HD/dsc3/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 149,
+            "name": "Xsports",
+            "category": "Esportes",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/xsports.png",
+            "drm_system": {
+                "clearKey": "{\"cb1fdac7d4423da39dcf825413851fbf\":\"fda4873523b7e21a34b98ca847b09d29\"}",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://getcdn.clarocdn.com.br/Content/Channel/SPOXSTHD/dsc1/manifest.mpd",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.clarotvmais.com.br/",
+                        "origin": "https://www.clarotvmais.com.br"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 150,
+            "name": "Disney+ 1",
+            "category": "Disney+",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/disney-plus.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://xtudoplay.com/coming.mp4",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.disneyplus.com/",
+                        "origin": "https://www.disneyplus.com"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 151,
+            "name": "Disney+ 2",
+            "category": "Disney+",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/disney-plus.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://xtudoplay.com/coming.mp4",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.disneyplus.com/",
+                        "origin": "https://www.disneyplus.com"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 152,
+            "name": "Disney+ 3",
+            "category": "Disney+",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/disney-plus.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://xtudoplay.com/coming.mp4",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.disneyplus.com/",
+                        "origin": "https://www.disneyplus.com"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 153,
+            "name": "Disney+ 4",
+            "category": "Disney+",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/disney-plus.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://xtudoplay.com/coming.mp4",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.disneyplus.com/",
+                        "origin": "https://www.disneyplus.com"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 154,
+            "name": "Disney+ 5",
+            "category": "Disney+",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/disney-plus.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://xtudoplay.com/coming.mp4",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.disneyplus.com/",
+                        "origin": "https://www.disneyplus.com"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 155,
+            "name": "Disney+ 6",
+            "category": "Disney+",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/disney-plus.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://xtudoplay.com/coming.mp4",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.disneyplus.com/",
+                        "origin": "https://www.disneyplus.com"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 156,
+            "name": "Disney+ 7",
+            "category": "Disney+",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/disney-plus.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://xtudoplay.com/coming.mp4",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://www.disneyplus.com/",
+                        "origin": "https://www.disneyplus.com"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 157,
+            "name": "HBO Max 1",
+            "category": "HBO Max",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/hbo-max.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://xtudoplay.com/coming.mp4",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://play.hbomax.com/",
+                        "origin": "https://play.hbomax.com"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 158,
+            "name": "HBO Max 2",
+            "category": "HBO Max",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/hbo-max.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://xtudoplay.com/coming.mp4",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://play.hbomax.com/",
+                        "origin": "https://play.hbomax.com"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 159,
+            "name": "HBO Max 3",
+            "category": "HBO Max",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/hbo-max.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://xtudoplay.com/coming.mp4",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://play.hbomax.com/",
+                        "origin": "https://play.hbomax.com"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 160,
+            "name": "HBO Max 4",
+            "category": "HBO Max",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/hbo-max.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://xtudoplay.com/coming.mp4",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://play.hbomax.com/",
+                        "origin": "https://play.hbomax.com"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 161,
+            "name": "HBO Max 5",
+            "category": "HBO Max",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/hbo-max.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://xtudoplay.com/coming.mp4",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://play.hbomax.com/",
+                        "origin": "https://play.hbomax.com"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 162,
+            "name": "HBO Max 6",
+            "category": "HBO Max",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/hbo-max.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://xtudoplay.com/coming.mp4",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://play.hbomax.com/",
+                        "origin": "https://play.hbomax.com"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 163,
+            "name": "HBO Max 7",
+            "category": "HBO Max",
+            "logo": "https://mondrian.claro.com.br/channels/inverse/hbo-max.png",
+            "drm_system": {
+                "clearKey": "",
+                "widevine": ""
+            },
+            "streams": [
+                {
+                    "url": "https://xtudoplay.com/coming.mp4",
+                    "quality": "HD",
+                    "headers": {
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                        "referer": "https://play.hbomax.com/",
+                        "origin": "https://play.hbomax.com"
+                    }
+                }
+            ]
+        }
+    ]
+}
