@@ -84,6 +84,18 @@ e o ExoPlayer precisa dos dois.
 ## Compilar
 
 ```bash
-JAVA_HOME=/opt/homebrew/opt/openjdk@17 gradle assembleDebug
+ANDROID_HOME=~/Library/Android/sdk JAVA_HOME=/opt/homebrew/opt/openjdk@17 gradle assembleDebug
 adb install -r app/build/outputs/apk/debug/app-debug.apk
+```
+
+## Verificar
+
+O app é conferido num emulador Google TV de verdade, não só compilado — foi a
+falta disso que deixou passar foco que não pousava em linha nenhuma e painel
+transparente demais para ler.
+
+```bash
+sdkmanager "system-images;android-34;google-tv;arm64-v8a"
+avdmanager create avd -n SaimoTV -k "system-images;android-34;google-tv;arm64-v8a" -d tv_1080p
+emulator -avd SaimoTV -no-audio -gpu swiftshader_indirect
 ```

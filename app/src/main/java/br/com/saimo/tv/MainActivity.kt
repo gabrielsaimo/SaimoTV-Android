@@ -310,16 +310,28 @@ class MainActivity : AppCompatActivity() {
         // recurso: ler width aqui daria zero e a entrada não aconteceria.
         listPanel.translationX = -panelWidth()
         listPanel.animate().translationX(0f).setDuration(180).start()
+        channels.post { focusRow(current) }
+    }
+
+    /**
+     * Scrolls to a row and focuses it, retrying until the holder exists.
+     *
+     * A scroll only finishes on the next layout pass, so asking for the holder
+     * straight away finds nothing, and the list would open with nothing focused
+     * — a remote that does nothing.
+     */
+    private fun focusRow(index: Int, attempts: Int = 8) {
+        (channels.layoutManager as LinearLayoutManager)
+            .scrollToPositionWithOffset(index, channels.height / 3)
         channels.post {
-            (channels.layoutManager as LinearLayoutManager)
-                .scrollToPositionWithOffset(current, channels.height / 3)
-            channels.findViewHolderForAdapterPosition(current)?.itemView?.requestFocus()
-                ?: channels.getChildAt(0)?.requestFocus()
+            if (channels.findViewHolderForAdapterPosition(index)?.itemView?.requestFocus() == true) return@post
+            if (attempts > 0) focusRow(index, attempts - 1)
+            else channels.getChildAt(0)?.requestFocus()
         }
     }
 
     private fun panelWidth(): Float =
-        if (listPanel.width > 0) listPanel.width.toFloat() else 480 * resources.displayMetrics.density
+        if (listPanel.width > 0) listPanel.width.toFloat() else 430 * resources.displayMetrics.density
 
     private fun closeList() {
         listPanel.animate().translationX(-panelWidth()).setDuration(160)

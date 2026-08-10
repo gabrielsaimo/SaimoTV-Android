@@ -57,6 +57,8 @@
             android:layout_width="430dp"
             android:layout_height="match_parent"
             android:clipToPadding="false"
+            android:descendantFocusability="afterDescendants"
+            android:focusable="true"
             android:paddingStart="8dp"
             android:paddingEnd="16dp" />
 
@@ -72,6 +74,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:clipToPadding="false"
+            android:descendantFocusability="afterDescendants"
+            android:focusable="true"
             android:paddingEnd="10dp" />
     </LinearLayout>
 </LinearLayout>

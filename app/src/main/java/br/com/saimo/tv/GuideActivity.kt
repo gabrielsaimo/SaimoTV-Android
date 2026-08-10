@@ -40,13 +40,20 @@ class GuideActivity : AppCompatActivity() {
 
     private var channels: List<Channel> = emptyList()
     private val programmes = ProgrammeAdapter()
+    private var focused = 0
+    private var shown = -1
 
     /// O relógio e a linha "no ar" precisam acompanhar a passagem do tempo; sem
     /// isto a grade mostra o programa que já acabou enquanto ela fica aberta.
     private val tick = object : Runnable {
         override fun run() {
             clockLabel.text = clock.format(Date())
-            if (Epg.tick()) programmes.refresh()
+            // O guia pode continuar chegando com a tela aberta; se a grade do
+            // canal focado mudou de tamanho, é dado novo e vale remontar.
+            val schedule = channels.getOrNull(focused)?.let { Epg.schedule(it.name) }
+            if (schedule != null && schedule.size != shown) show(focused)
+            else if (Epg.tick()) programmes.refresh()
+            info.text = getString(R.string.guide_info, Epg.channelsWithGuide, CATALOG.size)
             handler.postDelayed(this, 20_000)
         }
     }
@@ -67,11 +74,11 @@ class GuideActivity : AppCompatActivity() {
 
         val adapter = ChannelStripAdapter(
             channels,
-            onFocus = { show(it) },
-            onPick = { index ->
-                setResult(Activity.RESULT_OK, Intent().putExtra(EXTRA_CHANNEL, channels[index].name))
-                finish()
-            })
+            onFocus = { focused = it; show(it) },
+            onPick = { tune(it) })
+        // OK sobre um programa sintoniza o canal daquela programação: quem
+        // navegou até ali quer ver o canal, não voltar à coluna da esquerda.
+        programmes.onPick = { tune(focused) }
 
         channelList.layoutManager = LinearLayoutManager(this)
         channelList.adapter = adapter
@@ -86,17 +93,47 @@ class GuideActivity : AppCompatActivity() {
 
         // Opening centred on what is being watched: with dozens of rows, landing
         // at the top means hunting for your own channel every time.
-        channelList.post {
-            (channelList.layoutManager as LinearLayoutManager)
-                .scrollToPositionWithOffset(startAt, channelList.height / 3)
-            channelList.findViewHolderForAdapterPosition(startAt)?.itemView?.requestFocus()
-        }
+        focused = startAt
+        channelList.post { focusRow(startAt) }
         handler.postDelayed(tick, 20_000)
+    }
+
+    /**
+     * Scrolls to a row and focuses it, retrying until the holder exists.
+     *
+     * A scroll only finishes on the next layout pass, so asking for the holder
+     * straight away finds nothing — and the screen would open with nothing
+     * focused, which on a television means a remote that does nothing at all.
+     */
+    private fun focusRow(index: Int, attempts: Int = 8) {
+        (channelList.layoutManager as LinearLayoutManager)
+            .scrollToPositionWithOffset(index, channelList.height / 3)
+        channelList.post {
+            if (channelList.findViewHolderForAdapterPosition(index)?.itemView?.requestFocus() == true) return@post
+            if (attempts > 0) focusRow(index, attempts - 1)
+            else channelList.getChildAt(0)?.requestFocus()
+        }
+    }
+
+    private fun tune(index: Int) {
+        val channel = channels.getOrNull(index) ?: return
+        setResult(Activity.RESULT_OK, Intent().putExtra(EXTRA_CHANNEL, channel.name))
+        finish()
+    }
+
+    /** Rede de segurança: se nada ficou focado, o controle não pode morrer. */
+    override fun onKeyDown(keyCode: Int, event: android.view.KeyEvent?): Boolean {
+        if (currentFocus == null) {
+            focusRow(focused)
+            return true
+        }
+        return super.onKeyDown(keyCode, event)
     }
 
     private fun show(index: Int) {
         val channel = channels.getOrNull(index) ?: return
         val schedule = Epg.schedule(channel.name)
+        shown = schedule.size
         programmes.submit(schedule)
         // Abre no que está no ar, não às seis da manhã de ontem.
         val now = System.currentTimeMillis()
@@ -174,6 +211,7 @@ private class ProgrammeAdapter : RecyclerView.Adapter<ProgrammeAdapter.Holder>()
 
     private var items: List<Programme> = emptyList()
     private val clock = SimpleDateFormat("HH:mm", Locale("pt", "BR"))
+    var onPick: (() -> Unit)? = null
 
     fun submit(list: List<Programme>) {
         items = list
@@ -215,6 +253,7 @@ private class ProgrammeAdapter : RecyclerView.Adapter<ProgrammeAdapter.Holder>()
             else holder.poster.setImageDrawable(null)
         }
         holder.poster.visibility = if (programme.poster != null) View.VISIBLE else View.GONE
+        holder.itemView.setOnClickListener { onPick?.invoke() }
     }
 
     override fun getItemCount() = items.size

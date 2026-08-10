@@ -36,7 +36,7 @@ object Playback {
      * resolve — that is what forced a DoH fallback into the macOS build. OkHttp
      * ships DoH, so here it is a few lines instead of a hand-written resolver.
      */
-    private val client: OkHttpClient by lazy {
+    internal val client: OkHttpClient by lazy {
         val bootstrap = OkHttpClient.Builder().build()
         val doh = DnsOverHttps.Builder()
             .client(bootstrap)

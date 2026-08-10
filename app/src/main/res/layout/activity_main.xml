@@ -17,20 +17,16 @@
     <!-- Cartão do que está no ar: canal, programa, quanto já passou. -->
     <LinearLayout
         android:id="@+id/banner"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|start"
-        android:layout_marginStart="48dp"
-        android:layout_marginEnd="48dp"
-        android:layout_marginBottom="48dp"
-        android:background="@drawable/bg_card"
+        android:layout_gravity="bottom"
+        android:background="@drawable/bg_bottom_scrim"
         android:gravity="center_vertical"
-        android:minWidth="620dp"
         android:orientation="horizontal"
-        android:paddingStart="26dp"
-        android:paddingTop="22dp"
-        android:paddingEnd="34dp"
-        android:paddingBottom="22dp">
+        android:paddingStart="56dp"
+        android:paddingTop="70dp"
+        android:paddingEnd="56dp"
+        android:paddingBottom="44dp">
 
         <FrameLayout
             android:layout_width="76dp"
@@ -145,7 +141,7 @@
     <!-- Lista de canais: entra pela esquerda, navegada no D-pad. -->
     <LinearLayout
         android:id="@+id/listPanel"
-        android:layout_width="480dp"
+        android:layout_width="430dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="@drawable/bg_panel"

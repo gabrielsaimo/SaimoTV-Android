@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- O painel esquerdo termina em fade sobre o vídeo em vez de cortar reto. -->
+<!-- O painel é praticamente opaco e só se dissolve na borda direita: com a
+     dissolução começando no meio, o vídeo passava por trás do texto. -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
     <gradient
         android:angle="0"
-        android:startColor="@color/surface_panel"
-        android:centerColor="@color/surface_panel"
-        android:endColor="#000B0E14"
+        android:startColor="#FA060810"
+        android:centerColor="#F5060810"
+        android:centerX="0.86"
+        android:endColor="#00060810"
         android:type="linear" />
 </shape>

@@ -133,25 +133,32 @@ object Epg {
         for (url in FEEDS) {
             val parsed = runCatching { parseFeed(url, names, from, to, byTitle) }
                 .getOrNull() ?: continue
-            var added = false
             for ((channel, programmes) in parsed) {
-                if (merged[channel] == null) {
-                    merged[channel] = programmes
-                    added = true
-                }
+                if (merged[channel] == null) merged[channel] = programmes
             }
-            if (added) publish()
+            // O enriquecimento acontece a cada feed, não no fim de todos: é ele
+            // que traz as imagens, e esperar os 19 MB inteiros significava abrir
+            // o guia numa grade sem nenhuma.
+            enrich(merged, byTitle)
+            publish()
         }
 
-        // meuguia publica só título e gênero, então suas entradas são
-        // enriquecidas pelos feeds casando por título: a grade continua certa e
-        // o pôster, o episódio e o ano vêm junto.
-        var enriched = false
+        if (merged.isEmpty()) return@withContext
+        writeCache(context, merged)
+    }
+
+    /**
+     * meuguia publica só título e gênero. Casando por título, os feeds trazem o
+     * pôster, o episódio e o ano sem tocar no horário, que é justamente o dado
+     * em que o meuguia é mais confiável.
+     */
+    private fun enrich(
+        merged: MutableMap<String, List<Programme>>, byTitle: Map<String, Programme>,
+    ) {
         for ((channel, programmes) in merged.toList()) {
             merged[channel] = programmes.map { programme ->
                 if (programme.poster != null) programme
                 else byTitle[normalise(programme.title)]?.let {
-                    enriched = true
                     programme.copy(
                         poster = it.poster,
                         episode = programme.episode ?: it.episode,
@@ -160,9 +167,6 @@ object Epg {
                 } ?: programme
             }
         }
-        if (merged.isEmpty()) return@withContext
-        if (enriched) publish() else byChannel = LinkedHashMap(merged)
-        writeCache(context, merged)
     }
 
     // MARK: - XMLTV

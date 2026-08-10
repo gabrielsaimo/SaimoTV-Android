@@ -8,7 +8,7 @@
     <string name="channels">Canais</string>
     <string name="guide">Programação</string>
     <string name="star">★</string>
-    <string name="list_legend">OK assiste · MENU favorita · DIREITA abre a programação</string>
+    <string name="list_legend">OK assiste · MENU favorita · DIREITA: guia</string>
     <string name="guide_info">%1$d de %2$d canais com guia</string>
     <string name="channel_number">Canal %1$s…</string>
     <string name="times">%1$s – %2$s · faltam %3$d min</string>

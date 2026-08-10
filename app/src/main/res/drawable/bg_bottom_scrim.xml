@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A faixa de baixo ocupa a largura toda e se dissolve na imagem em vez de ser
+     um cartão com bordas: menos moldura, mais vídeo. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <gradient
+        android:angle="90"
+        android:startColor="#F2000000"
+        android:centerColor="#B3000000"
+        android:endColor="#00000000"
+        android:type="linear" />
+</shape>
