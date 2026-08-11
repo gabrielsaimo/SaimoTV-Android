@@ -27,6 +27,10 @@ player.
 | MENU | favorita o canal (favoritos sobem para o topo) |
 | 0–9 | digita o número do canal |
 
+Nem todo controle tem teclas numéricas — o da Xiaomi não tem. Por isso o
+cabeçalho da lista é focável e abre um teclado na tela, navegado no D-pad: é o
+único conjunto de teclas que existe em todos os controles.
+
 Nada fica fixo por cima do vídeo: o cartão do canal aparece a cada tecla e some
 sozinho em seis segundos.
 

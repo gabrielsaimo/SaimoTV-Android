@@ -60,6 +60,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var bannerProgress: ProgressBar
     private lateinit var bannerTimes: TextView
     private lateinit var status: TextView
+    private lateinit var listHeader: View
+    private lateinit var numpad: View
+    private lateinit var numpadValue: TextView
 
     private val handler = Handler(Looper.getMainLooper())
     private val clock = SimpleDateFormat("HH:mm", Locale("pt", "BR"))
@@ -114,6 +117,21 @@ class MainActivity : AppCompatActivity() {
         bannerProgress = findViewById(R.id.bannerProgress)
         bannerTimes = findViewById(R.id.bannerTimes)
         status = findViewById(R.id.status)
+        listHeader = findViewById(R.id.listHeader)
+        numpad = findViewById(R.id.numpad)
+        numpadValue = findViewById(R.id.numpadValue)
+
+        listHeader.setOnClickListener { openNumpad() }
+        for ((id, digit) in listOf(
+            R.id.pad0 to 0, R.id.pad1 to 1, R.id.pad2 to 2, R.id.pad3 to 3, R.id.pad4 to 4,
+            R.id.pad5 to 5, R.id.pad6 to 6, R.id.pad7 to 7, R.id.pad8 to 8, R.id.pad9 to 9)) {
+            findViewById<View>(id).setOnClickListener { padDigit(digit) }
+        }
+        findViewById<View>(R.id.padDel).setOnClickListener {
+            if (typed.isNotEmpty()) typed.deleteCharAt(typed.length - 1)
+            numpadValue.text = typed
+        }
+        findViewById<View>(R.id.padOk).setOnClickListener { padCommit() }
 
         Favorites.load(this)
         channels.layoutManager = LinearLayoutManager(this)
@@ -217,6 +235,17 @@ class MainActivity : AppCompatActivity() {
     // MARK: - Remote
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (numpad.visibility == View.VISIBLE) {
+            if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ESCAPE) {
+                closeNumpad()
+                return true
+            }
+            if (keyCode in KeyEvent.KEYCODE_0..KeyEvent.KEYCODE_9) {
+                padDigit(keyCode - KeyEvent.KEYCODE_0)
+                return true
+            }
+            return super.onKeyDown(keyCode, event)
+        }
         val listOpen = listPanel.visibility == View.VISIBLE
         return when (keyCode) {
             // Um toque no OK mostra o que está no ar; segurar três segundos é
@@ -295,6 +324,51 @@ class MainActivity : AppCompatActivity() {
         if (number != null && number in 1..ordered.size) play(number - 1)
     }
 
+    // MARK: - Teclado na tela
+
+    /**
+     * Not every remote has number keys — the Xiaomi one does not — and the code
+     * that reveals the extra list is typed, so there has to be a way in with
+     * nothing but the D-pad and OK. The keypad opens from the list header.
+     */
+    private fun openNumpad() {
+        typed = StringBuilder()
+        handler.removeCallbacks(commitTyped)
+        numpadValue.text = ""
+        numpad.visibility = View.VISIBLE
+        numpad.post { findViewById<View>(R.id.pad1).requestFocus() }
+    }
+
+    private fun closeNumpad() {
+        numpad.visibility = View.GONE
+        typed = StringBuilder()
+        focusRow(current)
+    }
+
+    private fun padDigit(digit: Int) {
+        if (typed.length >= 4) return
+        typed.append(digit)
+        numpadValue.text = typed
+    }
+
+    private fun padCommit() {
+        val entered = typed.toString()
+        typed = StringBuilder()
+        numpad.visibility = View.GONE
+        if (Unlock.consume(entered)) {
+            reorder()
+            focusRow(current)
+            return
+        }
+        val number = entered.toIntOrNull()
+        if (number != null && number in 1..ordered.size) {
+            closeList()
+            play(number - 1)
+        } else {
+            focusRow(current)
+        }
+    }
+
     private fun typeDigit(digit: Int) {
         // Quatro dígitos cabem: o catálogo não chega a mil canais, então um
         // quarto dígito nunca é número de canal.
@@ -368,6 +442,7 @@ class MainActivity : AppCompatActivity() {
         if (listPanel.width > 0) listPanel.width.toFloat() else 430 * resources.displayMetrics.density
 
     private fun closeList() {
+        numpad.visibility = View.GONE
         listPanel.animate().translationX(-panelWidth()).setDuration(160)
             .withEndAction {
                 listPanel.visibility = View.GONE

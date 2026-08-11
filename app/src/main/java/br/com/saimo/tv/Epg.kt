@@ -107,7 +107,12 @@ object Epg {
             byChannel = it
             withContext(Dispatchers.Main) { onReady() }
         }
-        val stale = cacheAge(context) > CACHE_TTL_MS || byChannel.isEmpty()
+        // Um canal novo no catálogo torna o cache velho na hora, mesmo dentro do
+        // prazo: sem isto, quem já tinha o app instalado ficaria até seis horas
+        // com o canal recém-chegado sem guia nenhum.
+        val stale = cacheAge(context) > CACHE_TTL_MS ||
+            byChannel.isEmpty() ||
+            readSignature(context) != signature()
         if (!stale) return@withContext
 
         val names = CATALOG.map { it.name }
@@ -425,6 +430,17 @@ object Epg {
         return changed
     }
 
+    /// Assinatura do catálogo gravada junto do cache. O nome começa com um
+    /// caractere que nenhum canal usa, então nunca colide com uma chave de canal.
+    private const val SIGNATURE_KEY = "#catalogo"
+
+    private fun signature(): String =
+        CATALOG.joinToString("|") { it.name }.hashCode().toString()
+
+    private fun readSignature(context: Context): String? = runCatching {
+        JSONObject(cacheFile(context).readText()).optString(SIGNATURE_KEY).ifEmpty { null }
+    }.getOrNull()
+
     private fun cacheAge(context: Context): Long {
         val file = cacheFile(context)
         return if (file.exists()) System.currentTimeMillis() - file.lastModified() else Long.MAX_VALUE
@@ -435,6 +451,7 @@ object Epg {
         val cutoff = System.currentTimeMillis() - PAST_WINDOW_MS
         val out = HashMap<String, List<Programme>>()
         for (name in root.keys()) {
+            if (name == SIGNATURE_KEY) continue
             val array = root.getJSONArray(name)
             val list = (0 until array.length()).map { index ->
                 val item = array.getJSONObject(index)
@@ -466,6 +483,7 @@ object Epg {
             }
             root.put(name, array)
         }
+        root.put(SIGNATURE_KEY, signature())
         cacheFile(context).writeText(root.toString())
     }
 }

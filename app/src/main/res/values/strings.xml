@@ -6,6 +6,9 @@
     <string name="reconnecting">Sinal caiu — reconectando</string>
     <string name="unavailable">Canal indisponível no momento</string>
     <string name="channels">Canais</string>
+    <string name="keypad">123</string>
+    <string name="pad_delete">apagar</string>
+    <string name="pad_ok">ir</string>
     <string name="guide">Programação</string>
     <string name="star">★</string>
     <string name="list_legend">OK assiste · MENU favorita · DIREITA: guia</string>
