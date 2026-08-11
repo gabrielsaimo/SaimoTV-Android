@@ -1,75 +1,139 @@
-import json, unicodedata, re
+#!/usr/bin/env python3
+"""Gera Catalog.kt a partir do catálogo do app de macOS.
 
-SRC = "/Volumes/SSD 1TB/DEV/Saimo/SaimoPlayer/Sources/Channels.swift"
+Uma fonte só para as duas plataformas: SaimoPlayer/Sources/Channels.swift. O
+Swift guarda apenas a chave do ClearKey, porque o AVFoundation não pede o KID —
+o ExoPlayer pede os dois, então o KID já presente no Catalog.kt é preservado,
+casando pela URL. Editar o par à mão continua valendo; regenerar não o perde.
+"""
+import re
+from pathlib import Path
 
-def norm(s):
-    s = unicodedata.normalize('NFKD', s).encode('ascii', 'ignore').decode().lower()
-    return re.sub(r'[^a-z0-9]', '', s)
+ROOT = Path(__file__).resolve().parent.parent
+SWIFT = ROOT.parent / "SaimoPlayer" / "Sources" / "Channels.swift"
+KOTLIN = ROOT / "app" / "src" / "main" / "java" / "br" / "com" / "saimo" / "tv" / "Catalog.kt"
 
-def sw(s):
-    return '"' + s.replace('\\', '\\\\').replace('"', '\\"') + '"'
+HEADER = '''package br.com.saimo.tv
 
-def entry(name, url, logo=None, referer=None, ua=None, key=None):
-    parts = [f'name: {sw(name)}', f'source: {sw(url)}']
-    parts.append(f'logo: {sw(logo)}' if logo else 'logo: nil')
-    parts.append(f'referer: {sw(referer)}' if referer else 'referer: nil')
-    parts.append(f'userAgent: {sw(ua)}' if ua else 'userAgent: nil')
-    parts.append(f'clearKey: {sw(key)}' if key else 'clearKey: nil')
-    return "    Source(" + ",\n           ".join(parts) + "),"
+// Gerado a partir de SaimoPlayer/Sources/Channels.swift — não editar à mão.
+// Regenerar com scripts/gen_catalog.py para manter Mac e TV Box iguais.
 
-# Preserve the hand-maintained HLS block already in Channels.swift.
-existing = open(SRC, encoding="utf-8").read()
-block = existing[existing.index("private let catalog"):existing.index("]\n\nlet defaultChannels")]
-kept = []
-for m in re.finditer(r'Source\(name: "((?:[^"\\]|\\.)*)",\s*\n\s*source: "((?:[^"\\]|\\.)*)",\s*\n\s*logo: (nil|"(?:[^"\\]|\\.)*"),\s*\n\s*referer: (nil|"(?:[^"\\]|\\.)*")', block):
-    name, url, logo, ref = m.group(1), m.group(2), m.group(3), m.group(4)
-    kept.append((name, url,
-                 None if logo == "nil" else logo.strip('"'),
-                 None if ref == "nil" else ref.strip('"')))
-
-data = json.load(open('offline.json'))['data']
-logos = {norm(c['name']): c.get('logo', '') for c in data if c.get('logo')}
-dash = json.load(open('working_dash.json'))
-
-lines = ["import Foundation\n", """/// Static channel line-up.
-///
-/// `source` is the upstream playlist. HLS with HEVC-in-TS and every DASH source
-/// are repackaged by the ffmpeg gateway before AVFoundation sees them; DASH
-/// entries additionally carry the CENC ClearKey.
-struct Source {
-    let name: String
-    let source: String
-    let logo: String?
-    let referer: String?
-    let userAgent: String?
-    let clearKey: String?
+data class Source(
+    val url: String,
+    val referer: String? = null,
+    val userAgent: String? = null,
+    /// Par KID:chave do ClearKey, em hexadecimal, para as fontes DASH.
+    val keyId: String? = null,
+    val key: String? = null,
+) {
+    val isDash: Boolean get() = url.contains(".mpd", ignoreCase = true)
 }
-""", "private let catalog: [Source] = [", "    // HLS"]
 
-known_urls = {u for _, u, _, _ in kept}
-for name, url, logo, ref in kept:
-    lines.append(entry(name, url, logo, ref))
+data class Channel(
+    val name: String,
+    val logo: String? = null,
+    val sources: List<Source>,
+)
 
-lines += ["", "    // DASH + ClearKey, validados por decodificação limpa"]
-added = 0
-for c in sorted(dash, key=lambda x: x['name']):
-    if c['url'] in known_urls:
-        continue
-    lines.append(entry(c['name'], c['url'],
-                       c.get('logo') or logos.get(norm(c['name'])),
-                       c.get('ref') or None, c.get('ua') or None, c.get('key') or None))
-    added += 1
+val CATALOG: List<Channel> = listOf(
+'''
 
-lines += ["]\n", """let defaultChannels: [Channel] = catalog.compactMap { s in
-    guard let url = URL(string: s.source) else { return nil }
-    return Channel(name: s.name,
-                   source: url,
-                   logo: s.logo.flatMap(URL.init(string:)),
-                   referer: s.referer,
-                   userAgent: s.userAgent,
-                   clearKey: s.clearKey)
-}
-"""]
+STRING = r'(?:nil|"(?:[^"\\]|\\.)*")'
 
-open(SRC, "w", encoding="utf-8").write("\n".join(lines))
-print(f"HLS mantidos: {len(kept)} | DASH adicionados: {added} | total: {len(kept)+added}")
+
+def unquote(text):
+    if text == "nil":
+        return None
+    return text[1:-1].replace('\\"', '"').replace("\\\\", "\\")
+
+
+def quote(value):
+    escaped = value.replace("\\", "\\\\").replace('"', '\\"').replace("$", "\\$")
+    return f'"{escaped}"'
+
+
+def known_key_ids():
+    """URL -> keyId já presente no Catalog.kt, para não perder o par."""
+    if not KOTLIN.exists():
+        return {}
+    text = KOTLIN.read_text(encoding="utf-8")
+    pairs = {}
+    for block in re.finditer(
+        r'url = "((?:[^"\\]|\\.)*)",(.*?)\n            \)', text, re.S):
+        key_id = re.search(r'keyId = "([0-9a-fA-F]+)"', block.group(2))
+        if key_id:
+            pairs[block.group(1).replace('\\"', '"').replace("\\$", "$")] = key_id.group(1)
+    return pairs
+
+
+def parse_swift():
+    text = SWIFT.read_text(encoding="utf-8")
+    channels = []
+    entry = re.compile(
+        r'CatalogEntry\(\s*name:\s*(' + STRING + r'),\s*'
+        r'logo:\s*(' + STRING + r'),\s*sources:\s*\[(.*?)\n        \]\)', re.S)
+    source = re.compile(
+        r'Source\(url:\s*(' + STRING + r'),\s*'
+        r'(?:referer:\s*(' + STRING + r'),\s*)?'
+        r'(?:userAgent:\s*(' + STRING + r'),\s*)?'
+        r'(?:clearKey:\s*(' + STRING + r'))?\s*\)', re.S)
+    for match in entry.finditer(text):
+        sources = []
+        for item in source.finditer(match.group(3)):
+            sources.append({
+                "url": unquote(item.group(1)),
+                "referer": unquote(item.group(2) or "nil"),
+                "userAgent": unquote(item.group(3) or "nil"),
+                "key": unquote(item.group(4) or "nil"),
+            })
+        if not sources:
+            raise SystemExit(f"canal sem fonte reconhecida: {match.group(1)}")
+        channels.append({
+            "name": unquote(match.group(1)),
+            "logo": unquote(match.group(2)),
+            "sources": sources,
+        })
+    return channels
+
+
+def main():
+    channels = parse_swift()
+    key_ids = known_key_ids()
+    out = [HEADER]
+    missing = []
+
+    for channel in channels:
+        out.append("    Channel(")
+        out.append(f'        name = {quote(channel["name"])},')
+        if channel["logo"]:
+            out.append(f'        logo = {quote(channel["logo"])},')
+        out.append("        sources = listOf(")
+        for source in channel["sources"]:
+            out.append("            Source(")
+            out.append(f'                url = {quote(source["url"])},')
+            if source["referer"]:
+                out.append(f'                referer = {quote(source["referer"])},')
+            if source["userAgent"]:
+                out.append(f'                userAgent = {quote(source["userAgent"])},')
+            if source["key"]:
+                key_id = key_ids.get(source["url"])
+                if key_id:
+                    out.append(f'                keyId = {quote(key_id)},')
+                else:
+                    missing.append(f'{channel["name"]}: {source["url"][:70]}')
+                out.append(f'                key = {quote(source["key"])},')
+            out.append("            ),")
+        out.append("        ),")
+        out.append("    ),")
+
+    out.append(")")
+    KOTLIN.write_text("\n".join(out) + "\n", encoding="utf-8")
+
+    total = sum(len(c["sources"]) for c in channels)
+    print(f"canais: {len(channels)} | fontes: {total} | com ClearKey: {len(key_ids)}")
+    for item in missing:
+        print(f"  SEM KID (canal DASH não vai tocar no Android): {item}")
+
+
+if __name__ == "__main__":
+    main()

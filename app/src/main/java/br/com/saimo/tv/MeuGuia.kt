@@ -27,7 +27,8 @@ object MeuGuia {
         "Globo SP" to "GRD", "GloboNews" to "GLN", "Gloob" to "GOB", "HBO" to "HBO",
         "HBO Family" to "HFA", "HBO Plus" to "HPL", "HBO2" to "HB2",
         "History" to "HIS", "Megapix" to "MPX", "Record" to "REC", "SBT" to "SBT",
-        "Space" to "SPA", "SporTV 2" to "SP2", "SporTV 3" to "SP3", "TNT" to "TNT",
+        "Space" to "SPA", "SporTV" to "SPO", "SporTV 2" to "SP2",
+        "SporTV 3" to "SP3", "TNT" to "TNT",
         "TNT Séries" to "TBS", "Telecine Pipoca" to "TC4",
         "Telecine Premium" to "TC1", "Universal TV" to "USA", "Warner" to "WBT",
     )

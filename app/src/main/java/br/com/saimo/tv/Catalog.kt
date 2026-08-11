@@ -21,6 +21,7 @@ data class Channel(
 )
 
 val CATALOG: List<Channel> = listOf(
+
     Channel(
         name = "A&E",
         logo = "https://mondrian.claro.com.br/channels/inverse/aee.png",
@@ -366,11 +367,32 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/sony.png",
         sources = listOf(
             Source(
+                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/sony/__index.m3u8?sv=62&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786408417-5jbaSSPBe88ByzCcAo3f6y4WaeKbPbezfqwb3pXoxvA%3D",
+            ),
+            Source(
                 url = "https://video37.mais.uol.com.br/live/279.mpd",
                 referer = "https://painel.play.uol.com.br/",
                 userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
                 keyId = "5e8567bf0707bf910f611e5cf2ef352f",
                 key = "8b30ddee60bb9fe6653f1eb8c9b85d5d",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Studio Universal",
+        logo = "https://mondrian.claro.com.br/channels/inverse/studio-universal.png",
+        sources = listOf(
+            Source(
+                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/studiouniversal/__index.m3u8?sv=153&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786408629-ttZQ50ex7Jw4GXXphI%2BVbOg5APRxPavlxoAW%2BCNOykY%3D",
+            ),
+        ),
+    ),
+    Channel(
+        name = "SporTV",
+        logo = "https://mondrian.claro.com.br/channels/inverse/sportv.png",
+        sources = listOf(
+            Source(
+                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/sportv1/__index.m3u8?sv=159&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786408554-MK0K7%2F0RIabb2i7ktFkDI1P2aEeyuwRUwvOxauQ5e1c%3D",
             ),
         ),
     ),
@@ -459,13 +481,12 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/warner-channel.png",
         sources = listOf(
             Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/warner/__index.m3u8?sv=13&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786223551-oAHvAX%2FWguAlXkW9qd1ApBbvOIgbl7JhLTGmTSvqLWk%3D",
+                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/warner/__index.m3u8?sv=45&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786408187-kiwlPGYo%2BdoNAPFeEevo8dCwHVXiKq%2B%2BJBr%2FI5tNtFg%3D",
             ),
         ),
     ),
     Channel(
         name = "IMPD",
-        logo = null,
         sources = listOf(
             Source(
                 url = "https://68882bdaf156a.streamlock.net/impd/ngrp:impd_all/chunklist_w1464410885_b2691072.m3u8",
