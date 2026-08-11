@@ -20,8 +20,8 @@ data class Channel(
     val sources: List<Source>,
 )
 
-val CATALOG: List<Channel> = listOf(
 
+val CATALOG: List<Channel> = listOf(
     Channel(
         name = "A&E",
         logo = "https://mondrian.claro.com.br/channels/inverse/aee.png",
@@ -423,6 +423,15 @@ val CATALOG: List<Channel> = listOf(
         ),
     ),
     Channel(
+        name = "Telecine Action",
+        logo = "https://mondrian.claro.com.br/channels/inverse/tc-action.png",
+        sources = listOf(
+            Source(
+                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/telecineaction/__index.m3u8?sv=191&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786409777-6357MK63%2ByysgfFiZNfFK3mJeGmSWEVxX3ET2vato6g%3D",
+            ),
+        ),
+    ),
+    Channel(
         name = "Telecine Pipoca",
         logo = "https://mondrian.claro.com.br/channels/inverse/tc-pipoca.png",
         sources = listOf(
@@ -754,6 +763,28 @@ val CATALOG: List<Channel> = listOf(
         sources = listOf(
             Source(
                 url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/universal/__index.m3u8?sv=60&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786320128-FxFFFQxrmw897iWMG7XhBfzLKd1XJ4nk1YU5W1ajEo4%3D",
+            ),
+        ),
+    ),
+)
+
+/// Só entra na lista depois do código. Ver Unlock.
+val RESTRICTED: List<Channel> = listOf(
+    Channel(
+        name = "Sexy Hot",
+        logo = "https://mondrian.claro.com.br/channels/inverse/sexy-hot.png",
+        sources = listOf(
+            Source(
+                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/sexhot/__index.m3u8?sv=108&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786409275-3SbSGeICp%2BQQE1GjPHhT3%2BEEN2faTpnK3nkAYc1ZZ%2Fk%3D",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Sex Privé",
+        logo = "https://mondrian.claro.com.br/channels/inverse/sexprive.png",
+        sources = listOf(
+            Source(
+                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/sexprive/__index.m3u8?sv=155&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786409329-I1OhIzY4uS7zmKoJhWYDv0FInQCzunDEsQkyiw%2F%2Bm%2B4%3D",
             ),
         ),
     ),

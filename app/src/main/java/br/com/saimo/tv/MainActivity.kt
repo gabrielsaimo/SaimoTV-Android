@@ -35,6 +35,7 @@ import kotlin.math.pow
 private const val REQUEST_GUIDE = 1
 private const val BANNER_MS = 6_000L
 private const val TICK_MS = 20_000L
+private const val HOLD_MS = 3_000L
 
 /**
  * The whole app: a channel list and a player, driven entirely by the remote.
@@ -218,8 +219,17 @@ class MainActivity : AppCompatActivity() {
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         val listOpen = listPanel.visibility == View.VISIBLE
         return when (keyCode) {
+            // Um toque no OK mostra o que está no ar; segurar três segundos é
+            // que abre a lista. O toque é o gesto que se dá o tempo todo, então
+            // ele fica com a ação que não tira o vídeo da frente.
             KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER -> {
-                if (!listOpen) { openList(); true } else super.onKeyDown(keyCode, event)
+                if (listOpen) return super.onKeyDown(keyCode, event)
+                if (event == null || event.repeatCount == 0) {
+                    heldOpen = false
+                    revealBanner()
+                    handler.postDelayed(openOnHold, HOLD_MS)
+                }
+                true
             }
             KeyEvent.KEYCODE_DPAD_LEFT -> {
                 if (!listOpen) { openList(); true } else super.onKeyDown(keyCode, event)
@@ -258,16 +268,37 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private var heldOpen = false
+    private val openOnHold = Runnable {
+        heldOpen = true
+        openList()
+    }
+
+    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER) {
+            handler.removeCallbacks(openOnHold)
+            if (listPanel.visibility != View.VISIBLE || heldOpen) return true
+        }
+        return super.onKeyUp(keyCode, event)
+    }
+
     private var typed = StringBuilder()
     private val commitTyped = Runnable {
-        val number = typed.toString().toIntOrNull()
+        val entered = typed.toString()
         typed = StringBuilder()
         status.visibility = View.GONE
+        if (Unlock.consume(entered)) {
+            reorder()
+            return@Runnable
+        }
+        val number = entered.toIntOrNull()
         if (number != null && number in 1..ordered.size) play(number - 1)
     }
 
     private fun typeDigit(digit: Int) {
-        if (typed.length >= 3) typed = StringBuilder()
+        // Quatro dígitos cabem: o catálogo não chega a mil canais, então um
+        // quarto dígito nunca é número de canal.
+        if (typed.length >= 4) typed = StringBuilder()
         typed.append(digit)
         showStatus(getString(R.string.channel_number, typed.toString()))
         handler.removeCallbacks(commitTyped)
@@ -276,8 +307,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun reorder() {
         val playing = ordered.getOrNull(current)?.name
-        ordered = Favorites.sort(CATALOG)
-        current = ordered.indexOfFirst { it.name == playing }.coerceAtLeast(0)
+        ordered = Favorites.sort(Unlock.channels())
+        val found = ordered.indexOfFirst { it.name == playing }
+        // Ao trancar com um desses no ar, o nome ficaria à vista na faixa;
+        // volta para o primeiro canal comum antes de a lista encolher.
+        if (found < 0 && playing != null) play(0) else current = found.coerceAtLeast(0)
         adapter.submit(ordered)
         adapter.select(current)
         listCount.text = ordered.size.toString()

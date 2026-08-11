@@ -35,7 +35,6 @@ data class Channel(
     val sources: List<Source>,
 )
 
-val CATALOG: List<Channel> = listOf(
 '''
 
 STRING = r'(?:nil|"(?:[^"\\]|\\.)*")'
@@ -66,8 +65,10 @@ def known_key_ids():
     return pairs
 
 
-def parse_swift():
+def parse_swift(declaration):
     text = SWIFT.read_text(encoding="utf-8")
+    start = text.index(declaration) + len(declaration)
+    text = text[start:text.index("\n]", start)]
     channels = []
     entry = re.compile(
         r'CatalogEntry\(\s*name:\s*(' + STRING + r'),\s*'
@@ -96,12 +97,7 @@ def parse_swift():
     return channels
 
 
-def main():
-    channels = parse_swift()
-    key_ids = known_key_ids()
-    out = [HEADER]
-    missing = []
-
+def emit(out, missing, key_ids, channels):
     for channel in channels:
         out.append("    Channel(")
         out.append(f'        name = {quote(channel["name"])},')
@@ -126,11 +122,31 @@ def main():
         out.append("        ),")
         out.append("    ),")
 
+
+def main():
+    key_ids = known_key_ids()
+    out, missing = [HEADER], []
+
+    open_list = "val CATALOG: List<Channel> = listOf("
+    restricted_list = "val RESTRICTED: List<Channel> = listOf("
+
+    catalog = parse_swift("private let catalog: [CatalogEntry] = [")
+    restricted = parse_swift("private let restrictedCatalog: [CatalogEntry] = [")
+
+    out.append(open_list)
+    emit(out, missing, key_ids, catalog)
     out.append(")")
+    out.append("")
+    out.append("/// Só entra na lista depois do código. Ver Unlock.")
+    out.append(restricted_list)
+    emit(out, missing, key_ids, restricted)
+    out.append(")")
+
     KOTLIN.write_text("\n".join(out) + "\n", encoding="utf-8")
 
-    total = sum(len(c["sources"]) for c in channels)
-    print(f"canais: {len(channels)} | fontes: {total} | com ClearKey: {len(key_ids)}")
+    total = sum(len(c["sources"]) for c in catalog)
+    print(f"canais: {len(catalog)} | fontes: {total} | com ClearKey: {len(key_ids)}"
+          f" | reservados: {len(restricted)}")
     for item in missing:
         print(f"  SEM KID (canal DASH não vai tocar no Android): {item}")
 

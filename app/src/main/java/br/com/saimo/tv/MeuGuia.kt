@@ -29,7 +29,7 @@ object MeuGuia {
         "History" to "HIS", "Megapix" to "MPX", "Record" to "REC", "SBT" to "SBT",
         "Space" to "SPA", "SporTV" to "SPO", "SporTV 2" to "SP2",
         "SporTV 3" to "SP3", "TNT" to "TNT",
-        "TNT Séries" to "TBS", "Telecine Pipoca" to "TC4",
+        "TNT Séries" to "TBS", "Telecine Action" to "TC2", "Telecine Pipoca" to "TC4",
         "Telecine Premium" to "TC1", "Universal TV" to "USA", "Warner" to "WBT",
     )
 

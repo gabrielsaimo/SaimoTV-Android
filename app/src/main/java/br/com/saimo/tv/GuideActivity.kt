@@ -67,7 +67,7 @@ class GuideActivity : AppCompatActivity() {
         info = findViewById(R.id.guideInfo)
         clockLabel = findViewById(R.id.guideClock)
 
-        channels = Favorites.sort(CATALOG)
+        channels = Favorites.sort(Unlock.channels())
         val startAt = intent.getStringExtra(EXTRA_CHANNEL)
             ?.let { name -> channels.indexOfFirst { it.name == name } }
             ?.takeIf { it >= 0 } ?: 0

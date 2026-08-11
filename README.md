@@ -19,7 +19,8 @@ player.
 
 | Tecla | Ação |
 |---|---|
-| OK ou ← | abre a lista de canais |
+| OK | mostra o que está no ar |
+| OK por 3s, ou ← | abre a lista de canais |
 | ↑ / ↓ ou CH+ / CH− | canal anterior / seguinte, direto na imagem |
 | →, GUIA ou INFO | abre a programação |
 | VOLTAR | fecha |
