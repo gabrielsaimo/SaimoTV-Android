@@ -16,9 +16,9 @@ object Unlock {
     var unlocked = false
         private set
 
-    /** Canais à vista agora. */
+    /** Canais à vista agora: a lista publicada mais, se destrancado, os extras. */
     fun channels(): List<Channel> =
-        if (unlocked) CATALOG + RESTRICTED else CATALOG
+        if (unlocked) Remote.channels + RESTRICTED else Remote.channels
 
     /**
      * Diz se a sequência digitada era o código, alternando o estado quando for.

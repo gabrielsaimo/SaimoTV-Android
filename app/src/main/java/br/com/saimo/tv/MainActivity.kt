@@ -134,6 +134,9 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.padOk).setOnClickListener { padCommit() }
 
         Favorites.load(this)
+        // A lista publicada de ontem já está em disco: abre com ela e troca
+        // quando a de hoje chegar, para o app nunca abrir sem canais.
+        Remote.loadCached(this)
         channels.layoutManager = LinearLayoutManager(this)
         channels.adapter = adapter
         // As linhas têm todas a mesma altura, então o RecyclerView pode pular a
@@ -168,11 +171,21 @@ class MainActivity : AppCompatActivity() {
         playerView.useController = false
 
         play(0)
+        refreshCatalog()
         handler.postDelayed(tick, TICK_MS)
         // Rede é uma só: 35 downloads do guia disputando banda com o canal que
         // acabou de abrir travam a imagem nos primeiros segundos. O guia entra
         // quando o vídeo já está rodando, ou em três segundos se não rodar.
         handler.postDelayed({ startGuide() }, 3_000)
+    }
+
+    /** Pega a lista publicada sem tirar do ar o canal que está tocando. */
+    private fun refreshCatalog() {
+        lifecycleScope.launch {
+            if (!Remote.refresh(this@MainActivity)) return@launch
+            reorder()
+            updateBanner()
+        }
     }
 
     private fun startGuide() {

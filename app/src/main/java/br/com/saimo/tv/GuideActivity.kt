@@ -53,7 +53,7 @@ class GuideActivity : AppCompatActivity() {
             val schedule = channels.getOrNull(focused)?.let { Epg.schedule(it.name) }
             if (schedule != null && schedule.size != shown) show(focused)
             else if (Epg.tick()) programmes.refresh()
-            info.text = getString(R.string.guide_info, Epg.channelsWithGuide, CATALOG.size)
+            info.text = getString(R.string.guide_info, Epg.channelsWithGuide, Remote.channels.size)
             handler.postDelayed(this, 20_000)
         }
     }
@@ -87,7 +87,7 @@ class GuideActivity : AppCompatActivity() {
         programmeList.adapter = programmes
         programmeList.setHasFixedSize(true)
 
-        info.text = getString(R.string.guide_info, Epg.channelsWithGuide, CATALOG.size)
+        info.text = getString(R.string.guide_info, Epg.channelsWithGuide, Remote.channels.size)
         clockLabel.text = clock.format(Date())
         show(startAt)
 

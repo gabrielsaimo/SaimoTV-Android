@@ -115,7 +115,7 @@ object Epg {
             readSignature(context) != signature()
         if (!stale) return@withContext
 
-        val names = CATALOG.map { it.name }
+        val names = Remote.channels.map { it.name }
         val from = System.currentTimeMillis() - PAST_WINDOW_MS
         val to = System.currentTimeMillis() + FUTURE_WINDOW_MS
         val merged = LinkedHashMap<String, List<Programme>>()
@@ -435,7 +435,7 @@ object Epg {
     private const val SIGNATURE_KEY = "#catalogo"
 
     private fun signature(): String =
-        CATALOG.joinToString("|") { it.name }.hashCode().toString()
+        Remote.channels.joinToString("|") { it.name }.hashCode().toString()
 
     private fun readSignature(context: Context): String? = runCatching {
         JSONObject(cacheFile(context).readText()).optString(SIGNATURE_KEY).ifEmpty { null }
