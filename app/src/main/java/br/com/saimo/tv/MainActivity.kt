@@ -36,6 +36,10 @@ private const val REQUEST_GUIDE = 1
 private const val BANNER_MS = 6_000L
 private const val TICK_MS = 20_000L
 private const val HOLD_MS = 3_000L
+/// Uma fonte viva entrega imagem bem antes disto. Passou daqui sem tocar, é
+/// fonte morta que não deu erro — e sem este prazo o canal ficaria carregando
+/// para sempre em vez de descer para a próxima.
+private const val SOURCE_TIMEOUT_MS = 12_000L
 
 /**
  * The whole app: a channel list and a player, driven entirely by the remote.
@@ -208,6 +212,8 @@ class MainActivity : AppCompatActivity() {
         val chosen = channel.sources.getOrNull(sourceIndex) ?: channel.sources.first()
 
         showStatus(getString(R.string.loading))
+        handler.removeCallbacks(sourceTimeout)
+        handler.postDelayed(sourceTimeout, SOURCE_TIMEOUT_MS)
         player.setMediaSource(Playback.mediaSource(this, chosen))
         player.prepare()
         player.playWhenReady = true
@@ -221,12 +227,14 @@ class MainActivity : AppCompatActivity() {
         override fun onPlaybackStateChanged(state: Int) {
             if (state == Player.STATE_READY) {
                 retries = 0
+                handler.removeCallbacks(sourceTimeout)
                 status.visibility = View.GONE
                 startGuide()
             }
         }
 
         override fun onPlayerError(error: PlaybackException) {
+            handler.removeCallbacks(sourceTimeout)
             val channel = ordered[current]
             // Each channel lists its sources in preference order; a dead or
             // expired link falls through to the next before giving up.
@@ -307,6 +315,15 @@ class MainActivity : AppCompatActivity() {
                 if (!listOpen) revealBanner()
                 super.onKeyDown(keyCode, event)
             }
+        }
+    }
+
+    private val sourceTimeout = Runnable {
+        val channel = ordered.getOrNull(current) ?: return@Runnable
+        if (sourceIndex + 1 < channel.sources.size) {
+            play(current, sourceIndex + 1)
+        } else {
+            showStatus(getString(R.string.unavailable))
         }
     }
 
@@ -430,7 +447,11 @@ class MainActivity : AppCompatActivity() {
         // Ainda não foi medido na primeira abertura, então a largura vem do
         // recurso: ler width aqui daria zero e a entrada não aconteceria.
         listPanel.translationX = -panelWidth()
-        listPanel.animate().translationX(0f).setDuration(180).start()
+        // O cabeçalho é focável e vem primeiro na ordem de percurso, então o
+        // sistema o escolhe sozinho quando o painel aparece. Pedir o foco de
+        // novo ao fim da animação garante que ele pouse no canal atual.
+        listPanel.animate().translationX(0f).setDuration(180)
+            .withEndAction { focusRow(current) }.start()
         channels.post { focusRow(current) }
     }
 

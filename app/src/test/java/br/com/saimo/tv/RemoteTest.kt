@@ -17,12 +17,12 @@ class RemoteTest {
     /// O Gradle roda o teste a partir de app/, então o arquivo é procurado
     /// subindo, em vez de fixar quantos níveis são.
     private val published: File = generateSequence(File("").absoluteFile) { it.parentFile }
-        .map { File(it, "SaimoPlayer/canais.txt") }
+        .map { File(it, "SaimoPlayer/catalogo.txt") }
         .firstOrNull { it.exists() } ?: File("canais.txt")
 
     @Test
     fun `a lista publicada carrega tudo o que o catalogo tem`() {
-        assertTrue("canais.txt não encontrado", published.exists())
+        assertTrue("catalogo.txt não encontrado", published.exists())
         val parsed = Remote.parse(published.readText())
 
         println("canais: ${parsed.size} | fontes: ${parsed.sumOf { it.sources.size }}")
@@ -77,5 +77,70 @@ class RemoteTest {
                  https://exemplo/aie.m3u8
         """.trimIndent()
         assertTrue(Remote.parse(antigo).isEmpty())
+    }
+}
+
+/** O par do ClearKey tem de sobreviver inteiro até a licença. */
+class ClearKeyTest {
+
+    @Test
+    fun `toda fonte DASH tem KID e chave utilizaveis`() {
+        val dash = CATALOG.flatMap { c -> c.sources.map { c.name to it } }
+            .filter { it.second.isDash }
+        val comChave = dash.filter { it.second.key != null }
+        println("fontes DASH: ${dash.size} | com chave: ${comChave.size}")
+
+        val semChave = dash.filter { it.second.key == null }.map { it.first }
+        println("DASH sem chave: $semChave")
+
+        for ((nome, source) in comChave) {
+            val kid = source.keyId
+            val key = source.key
+            assertTrue("$nome: KID inválido ($kid)", kid != null && kid.matches(Regex("[0-9a-fA-F]{32}")))
+            assertTrue("$nome: chave inválida ($key)", key != null && key.matches(Regex("[0-9a-fA-F]{32}")))
+            assertTrue("$nome: KID igual à chave, par trocado", kid != key)
+        }
+    }
+
+    @Test
+    fun `a lista publicada preserva o par`() {
+        val published = generateSequence(File("").absoluteFile) { it.parentFile }
+            .map { File(it, "SaimoPlayer/catalogo.txt") }
+            .first { it.exists() }
+        val parsed = Remote.parse(published.readText())
+        val doArquivo = parsed.flatMap { it.sources }.filter { it.key != null }
+        val doCatalogo = CATALOG.flatMap { it.sources }.filter { it.key != null }
+        assertEquals(doCatalogo.map { it.keyId }, doArquivo.map { it.keyId })
+        assertEquals(doCatalogo.map { it.key }, doArquivo.map { it.key })
+    }
+}
+
+/** A lista publicada soma ao catálogo; não substitui. */
+class MergeTest {
+
+    private val m3u = """
+        #EXTM3U
+        #EXTINF:-1 tvg-id="A&E" tvg-logo="https://exemplo/ae.png" group-title="X", A&E (ST)
+        http://exemplo/ae-reserva.ts
+        #EXTINF:-1 tvg-id="Canal Novo" tvg-logo="https://exemplo/novo.png" group-title="X", Canal Novo
+        http://exemplo/novo.ts
+    """.trimIndent()
+
+    @Test
+    fun `fontes publicadas entram como reserva, sem apagar as do catalogo`() {
+        val publicada = Remote.parse(m3u)
+        val merged = Remote.mergeForTest(publicada)
+
+        val ae = merged.first { it.name == "A&E" }
+        val original = CATALOG.first { it.name == "A&E" }
+        // As do catálogo continuam na frente, na mesma ordem.
+        assertEquals(original.sources.map { it.url }, ae.sources.dropLast(1).map { it.url })
+        assertEquals("http://exemplo/ae-reserva.ts", ae.sources.last().url)
+        // E a chave do ClearKey não se perdeu no caminho.
+        assertEquals(original.sources.map { it.key }, ae.sources.dropLast(1).map { it.key })
+
+        // O que só existe na lista publicada entra como canal novo, no fim.
+        assertEquals("Canal Novo", merged.last().name)
+        assertEquals(CATALOG.size + 1, merged.size)
     }
 }

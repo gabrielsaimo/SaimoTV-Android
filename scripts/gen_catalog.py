@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Gera Catalog.kt a partir do catálogo do app de macOS.
 
-Uma fonte só para as duas plataformas: SaimoPlayer/Sources/Channels.swift. O
-Swift guarda apenas a chave do ClearKey, porque o AVFoundation não pede o KID —
-o ExoPlayer pede os dois, então o KID já presente no Catalog.kt é preservado,
-casando pela URL. Editar o par à mão continua valendo; regenerar não o perde.
+Uma fonte só para as duas plataformas: SaimoPlayer/Sources/Channels.swift, que
+guarda o ClearKey como KID:CHAVE. O AVFoundation usa só a chave e o ExoPlayer
+precisa das duas metades, então o par mora inteiro no catálogo e cada lado pega
+o que lhe serve.
 """
 import re
 from pathlib import Path
@@ -51,20 +51,6 @@ def quote(value):
     return f'"{escaped}"'
 
 
-def known_key_ids():
-    """URL -> keyId já presente no Catalog.kt, para não perder o par."""
-    if not KOTLIN.exists():
-        return {}
-    text = KOTLIN.read_text(encoding="utf-8")
-    pairs = {}
-    for block in re.finditer(
-        r'url = "((?:[^"\\]|\\.)*)",(.*?)\n            \)', text, re.S):
-        key_id = re.search(r'keyId = "([0-9a-fA-F]+)"', block.group(2))
-        if key_id:
-            pairs[block.group(1).replace('\\"', '"').replace("\\$", "$")] = key_id.group(1)
-    return pairs
-
-
 def parse_swift(declaration):
     text = SWIFT.read_text(encoding="utf-8")
     start = text.index(declaration) + len(declaration)
@@ -97,7 +83,7 @@ def parse_swift(declaration):
     return channels
 
 
-def emit(out, missing, key_ids, channels):
+def emit(out, missing, channels):
     for channel in channels:
         out.append("    Channel(")
         out.append(f'        name = {quote(channel["name"])},')
@@ -112,19 +98,19 @@ def emit(out, missing, key_ids, channels):
             if source["userAgent"]:
                 out.append(f'                userAgent = {quote(source["userAgent"])},')
             if source["key"]:
-                key_id = key_ids.get(source["url"])
-                if key_id:
-                    out.append(f'                keyId = {quote(key_id)},')
+                # O catálogo guarda KID:CHAVE; o ExoPlayer precisa dos dois.
+                parts = source["key"].split(":")
+                if len(parts) == 2 and all(parts):
+                    out.append(f'                keyId = {quote(parts[0])},')
+                    out.append(f'                key = {quote(parts[1])},')
                 else:
                     missing.append(f'{channel["name"]}: {source["url"][:70]}')
-                out.append(f'                key = {quote(source["key"])},')
             out.append("            ),")
         out.append("        ),")
         out.append("    ),")
 
 
 def main():
-    key_ids = known_key_ids()
     out, missing = [HEADER], []
 
     open_list = "val CATALOG: List<Channel> = listOf("
@@ -134,18 +120,19 @@ def main():
     restricted = parse_swift("private let restrictedCatalog: [CatalogEntry] = [")
 
     out.append(open_list)
-    emit(out, missing, key_ids, catalog)
+    emit(out, missing, catalog)
     out.append(")")
     out.append("")
     out.append("/// Só entra na lista depois do código. Ver Unlock.")
     out.append(restricted_list)
-    emit(out, missing, key_ids, restricted)
+    emit(out, missing, restricted)
     out.append(")")
 
     KOTLIN.write_text("\n".join(out) + "\n", encoding="utf-8")
 
     total = sum(len(c["sources"]) for c in catalog)
-    print(f"canais: {len(catalog)} | fontes: {total} | com ClearKey: {len(key_ids)}"
+    com_chave = sum(1 for c in catalog for s in c["sources"] if s["key"])
+    print(f"canais: {len(catalog)} | fontes: {total} | com ClearKey: {com_chave}"
           f" | reservados: {len(restricted)}")
     for item in missing:
         print(f"  SEM KID (canal DASH não vai tocar no Android): {item}")
