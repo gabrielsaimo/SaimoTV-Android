@@ -7,11 +7,19 @@ import kotlinx.coroutines.withContext
 import okhttp3.Request
 import java.io.File
 
-data class Filme(val titulo: String, val fontes: Map<String, String>)
+/// Versão (dublado/legendado) -> fontes em ordem de preferência. O mesmo filme
+/// existe nas duas listas de origem, e em vez de aparecer duas vezes ele aparece
+/// uma com as duas fontes.
+data class Filme(val titulo: String, val fontes: Map<String, List<String>>)
 
 data class Serie(val titulo: String, val ano: String, val pedaco: Int, val episodios: Int)
 
-data class Episodio(val temporada: Int, val numero: Int, val versao: String, val url: String)
+data class Episodio(
+    val temporada: Int,
+    val numero: Int,
+    val versao: String,
+    val urls: List<String>,
+)
 
 /**
  * Filmes e séries, baixados por pedaço conforme a pessoa navega.
@@ -26,44 +34,48 @@ object Vod {
 
     private const val BASE = "https://raw.githubusercontent.com/gabrielsaimo/SaimoPlayer/main/vod/"
 
-    /** Letra -> quantos filmes e quantas séries começam com ela. */
-    data class Gaveta(val letra: String, val filmes: Int, val series: Int)
+    /** Letra -> quantos filmes, séries e reservados começam com ela. */
+    data class Gaveta(val letra: String, val filmes: Int, val series: Int, val reservados: Int)
 
     @Volatile
-    private var baseFilme = ""
-
-    @Volatile
-    private var baseSerie = ""
+    private var bases: List<String> = emptyList()
 
     suspend fun indice(context: Context): List<Gaveta> {
         val texto = arquivo(context, "indice.txt") ?: return emptyList()
         val out = mutableListOf<Gaveta>()
+        val encontradas = mutableListOf<String>()
         for (linha in texto.lineSequence()) {
             when {
-                linha.startsWith("base-filme:") -> baseFilme = linha.substringAfter(":").trim()
-                linha.startsWith("base-serie:") -> baseSerie = linha.substringAfter(":").trim()
+                linha.startsWith("base:") -> {
+                    val partes = linha.removePrefix("base:").trim().split(" ", limit = 2)
+                    if (partes.size == 2) encontradas += partes[1]
+                }
                 linha.isNotBlank() -> {
                     val campos = linha.split("\t")
-                    if (campos.size == 3) {
+                    if (campos.size >= 3) {
                         out += Gaveta(campos[0], campos[1].toIntOrNull() ?: 0,
-                            campos[2].toIntOrNull() ?: 0)
+                            campos[2].toIntOrNull() ?: 0,
+                            campos.getOrNull(3)?.toIntOrNull() ?: 0)
                     }
                 }
             }
         }
+        if (encontradas.isNotEmpty()) bases = encontradas
         return out
     }
 
-    suspend fun filmes(context: Context, letra: String): List<Filme> {
-        val texto = arquivo(context, "filmes-${gaveta(letra)}.txt") ?: return emptyList()
+    suspend fun filmes(context: Context, letra: String, reservados: Boolean = false): List<Filme> {
+        val prefixo = if (reservados) "reservado" else "filmes"
+        val texto = arquivo(context, "$prefixo-${gaveta(letra)}.txt") ?: return emptyList()
         return texto.lineSequence().mapNotNull { linha ->
             val campos = linha.split("\t")
             if (campos.size < 2 || campos[0].isBlank()) return@mapNotNull null
             val fontes = campos.drop(1).mapNotNull { parte ->
                 val marca = parte.indexOf('=')
-                if (marca <= 0) null
-                else parte.take(marca) to montar(parte.substring(marca + 1), baseFilme)
-            }.toMap()
+                if (marca <= 0) return@mapNotNull null
+                parte.take(marca) to parte.substring(marca + 1)
+                    .split(",").filter { it.isNotBlank() }.map(::montar)
+            }.filter { it.second.isNotEmpty() }.toMap()
             if (fontes.isEmpty()) null else Filme(campos[0], fontes)
         }.toList()
     }
@@ -93,21 +105,26 @@ object Vod {
             if (!dentro) continue
             val campos = linha.split("\t")
             if (campos.size < 4) continue
+            val urls = campos[3].split(",").filter { it.isNotBlank() }.map(::montar)
+            if (urls.isEmpty()) continue
             out += Episodio(
                 campos[0].toIntOrNull() ?: 0,
                 campos[1].toIntOrNull() ?: 0,
                 campos[2],
-                montar(campos[3], baseSerie))
+                urls)
         }
         return out
     }
 
-    /// O catálogo guarda só o número; o endereço inteiro sairia setenta vezes
-    /// maior e é sempre o mesmo.
-    private fun montar(valor: String, base: String): String = when {
-        valor.startsWith("http") -> valor
-        valor.contains('.') -> base + valor
-        else -> "$base$valor.mp4"
+    /// O item guarda "base:resto"; o endereço inteiro sairia dezenas de vezes
+    /// maior, e o começo é sempre o mesmo punhado de servidores.
+    private fun montar(valor: String): String {
+        if (valor.startsWith("http")) return valor
+        val corte = valor.indexOf(':')
+        val indice = valor.take(corte).toIntOrNull() ?: return valor
+        val resto = valor.substring(corte + 1)
+        val base = bases.getOrNull(indice) ?: return valor
+        return if (resto.contains('.')) base + resto else "$base$resto.mp4"
     }
 
     private fun gaveta(letra: String) = if (letra == "#") "%23" else letra

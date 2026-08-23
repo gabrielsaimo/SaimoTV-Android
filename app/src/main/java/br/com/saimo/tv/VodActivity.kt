@@ -29,11 +29,11 @@ class VodActivity : AppCompatActivity() {
 
     private sealed interface Passo {
         object Inicio : Passo
-        data class Letras(val filmes: Boolean) : Passo
-        data class Titulos(val filmes: Boolean, val letra: String) : Passo
+        data class Letras(val filmes: Boolean, val reservado: Boolean = false) : Passo
+        data class Titulos(val filmes: Boolean, val letra: String, val reservado: Boolean = false) : Passo
         data class Temporadas(val letra: String, val serie: Serie) : Passo
         data class Episodios(val letra: String, val serie: Serie, val temporada: Int) : Passo
-        data class Versoes(val titulo: String, val fontes: Map<String, String>) : Passo
+        data class Versoes(val titulo: String, val fontes: Map<String, List<String>>) : Passo
     }
 
     private data class Linha(
@@ -101,8 +101,8 @@ class VodActivity : AppCompatActivity() {
         estado.visibility = View.VISIBLE
         val linhas: List<Linha> = when (passo) {
             is Passo.Inicio -> inicio()
-            is Passo.Letras -> letras(passo.filmes)
-            is Passo.Titulos -> titulos(passo.filmes, passo.letra)
+            is Passo.Letras -> letras(passo)
+            is Passo.Titulos -> titulos(passo.filmes, passo.letra, passo.reservado)
             is Passo.Temporadas -> temporadas(passo.letra, passo.serie)
             is Passo.Episodios -> episodios(passo.temporada)
             is Passo.Versoes -> versoes(passo.fontes)
@@ -131,16 +131,20 @@ class VodActivity : AppCompatActivity() {
 
     private fun trilhaDe(passo: Passo): String = when (passo) {
         is Passo.Inicio -> ""
-        is Passo.Letras -> secao(passo.filmes)
-        is Passo.Titulos -> "${secao(passo.filmes)} › ${passo.letra}"
+        is Passo.Letras -> secao(passo.filmes, passo.reservado)
+        is Passo.Titulos -> "${secao(passo.filmes, passo.reservado)} › ${passo.letra}"
         is Passo.Temporadas -> "${getString(R.string.vod_series)} › ${passo.serie.titulo}"
         is Passo.Episodios -> "${passo.serie.titulo} › " +
             getString(R.string.vod_temporada, passo.temporada)
         is Passo.Versoes -> passo.titulo
     }
 
-    private fun secao(filmes: Boolean) =
-        getString(if (filmes) R.string.vod_filmes else R.string.vod_series)
+    private fun secao(filmes: Boolean, reservado: Boolean = false) = getString(
+        when {
+            reservado -> R.string.vod_extras
+            filmes -> R.string.vod_filmes
+            else -> R.string.vod_series
+        })
 
     // MARK: - Degraus
 
@@ -154,22 +158,45 @@ class VodActivity : AppCompatActivity() {
             },
             Linha(getString(R.string.vod_series), getString(R.string.vod_contagem, series), "S") {
                 ir(Passo.Letras(filmes = false))
-            })
+            }) + reservados()
     }
 
-    private fun letras(filmes: Boolean) = gavetas
-        .filter { if (filmes) it.filmes > 0 else it.series > 0 }
+    /// Só existe depois do código, e como uma linha igual às outras: nada aqui
+    /// diz que ela é diferente enquanto não estiver à vista.
+    private fun reservados(): List<Linha> {
+        if (!Unlock.unlocked) return emptyList()
+        val total = gavetas.sumOf { it.reservados }
+        if (total == 0) return emptyList()
+        return listOf(Linha(getString(R.string.vod_extras),
+            getString(R.string.vod_contagem, total), "+") {
+            ir(Passo.Letras(filmes = true, reservado = true))
+        })
+    }
+
+    private fun letras(passo: Passo.Letras) = gavetas
+        .filter {
+            when {
+                passo.reservado -> it.reservados > 0
+                passo.filmes -> it.filmes > 0
+                else -> it.series > 0
+            }
+        }
         .map { gaveta ->
-            val quantos = if (filmes) gaveta.filmes else gaveta.series
+            val quantos = when {
+                passo.reservado -> gaveta.reservados
+                passo.filmes -> gaveta.filmes
+                else -> gaveta.series
+            }
             Linha(gaveta.letra, quantos.toString(), "") {
-                ir(Passo.Titulos(filmes, gaveta.letra))
+                ir(Passo.Titulos(passo.filmes, gaveta.letra, passo.reservado))
             }
         }
 
-    private suspend fun titulos(filmes: Boolean, letra: String): List<Linha> =
+    private suspend fun titulos(filmes: Boolean, letra: String,
+                                reservado: Boolean = false): List<Linha> =
         if (filmes) {
-            Vod.filmes(this, letra).map { filme ->
-                Linha(filme.titulo, versoesDe(filme.fontes.keys), inicial(filme.titulo)) {
+            Vod.filmes(this, letra, reservado).map { filme ->
+                Linha(filme.titulo, detalheFilme(filme), inicial(filme.titulo)) {
                     if (filme.fontes.size == 1) tocar(filme.titulo, filme.fontes.values.first())
                     else ir(Passo.Versoes(filme.titulo, filme.fontes))
                 }
@@ -201,26 +228,44 @@ class VodActivity : AppCompatActivity() {
         .sortedWith(compareBy({ it.numero }, { it.versao }))
         .map { episodio ->
             Linha(getString(R.string.vod_episodio, episodio.numero),
-                rotulo(episodio.versao), episodio.numero.toString()) {
-                tocar(getString(R.string.vod_episodio, episodio.numero), episodio.url)
+                detalhe(episodio.versao, episodio.urls.size), episodio.numero.toString()) {
+                tocar(getString(R.string.vod_episodio, episodio.numero), episodio.urls)
             }
         }
 
-    private fun versoes(fontes: Map<String, String>) = fontes.map { (versao, url) ->
-        Linha(rotulo(versao), null, "") { tocar(rotulo(versao), url) }
+    private fun versoes(fontes: Map<String, List<String>>) = fontes.map { (versao, urls) ->
+        Linha(rotulo(versao), detalhe(versao, urls.size).takeIf { urls.size > 1 }, "") {
+            tocar(rotulo(versao), urls)
+        }
+    }
+
+    /// Duas fontes não viram duas linhas: viram uma linha e uma reserva. Dizer
+    /// quantas há evita a impressão de que o título ficou por um fio.
+    private fun detalhe(versao: String, fontes: Int) =
+        if (fontes > 1) "${rotulo(versao)} · $fontes fontes" else rotulo(versao)
+
+    private fun detalheFilme(filme: Filme): String {
+        val total = filme.fontes.values.sumOf { it.size }
+        val versoes = filme.fontes.keys.sorted().joinToString(" · ") { rotulo(it) }
+        return if (total > filme.fontes.size) "$versoes · $total fontes" else versoes
     }
 
     private fun rotulo(versao: String) =
         getString(if (versao == "leg") R.string.vod_legendado else R.string.vod_dublado)
 
-    private fun versoesDe(chaves: Set<String>) =
-        chaves.sorted().joinToString(" · ") { rotulo(it) }
-
     private fun inicial(texto: String) = texto.trim().take(1).uppercase()
 
     // MARK: - Reprodução
 
-    private fun tocar(nome: String, url: String) {
+    /// Fontes em ordem: a primeira que entregar imagem fica.
+    private var fontesAtuais: List<String> = emptyList()
+    private var fonteAtual = 0
+
+    private fun tocar(nome: String, urls: List<String>, indice: Int = 0) {
+        if (urls.isEmpty()) return
+        fontesAtuais = urls
+        fonteAtual = indice.coerceIn(urls.indices)
+        val url = urls[fonteAtual]
         pararFilme()
         // Filme não é canal: pausa, volta e avança, então o controle padrão do
         // player fica à vista em vez da faixa de canal ao vivo.
@@ -229,6 +274,15 @@ class VodActivity : AppCompatActivity() {
         // URL com token e recusa cliente sem User-Agent, e é este cliente que
         // segue redirecionamento e ainda resolve por DNS-over-HTTPS.
         novo.setMediaSource(Playback.mediaSource(this, Source(url)))
+        // Fonte morta não pode virar tela preta: cai para a seguinte, como o
+        // canal já faz.
+        novo.addListener(object : androidx.media3.common.Player.Listener {
+            override fun onPlayerError(error: androidx.media3.common.PlaybackException) {
+                if (fonteAtual + 1 < fontesAtuais.size) {
+                    tocar(nome, fontesAtuais, fonteAtual + 1)
+                }
+            }
+        })
         novo.playWhenReady = true
         novo.prepare()
         player = novo

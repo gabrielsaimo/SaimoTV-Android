@@ -16,6 +16,7 @@
     <string name="vod">Filmes e Séries</string>
     <string name="vod_filmes">Filmes</string>
     <string name="vod_series">Séries</string>
+    <string name="vod_extras">Extras</string>
     <string name="vod_legenda">OK escolhe · VOLTAR sobe um nível</string>
     <string name="vod_carregando">Carregando…</string>
     <string name="vod_vazio">Nada aqui</string>
