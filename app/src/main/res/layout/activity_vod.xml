@@ -91,44 +91,25 @@
         android:textSize="26sp"
         android:visibility="gone" />
 
-    <!-- Teclado na tela: procurar num controle remoto não tem outro jeito. -->
-    <FrameLayout
-        android:id="@+id/vodTeclado"
+
+
+
+    <!-- O player do VOD tem controle: filme se pausa e se avança, ao contrário
+         de canal ao vivo. -->
+    <androidx.media3.ui.PlayerView
+        android:id="@+id/vodPlayer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#E6000000"
-        android:visibility="gone">
+        android:background="#000000"
+        android:visibility="gone"
+        app:resize_mode="fit"
+        app:show_buffering="when_playing"
+        app:use_controller="true" />
 
-        <LinearLayout
-            android:layout_width="820dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@drawable/bg_modal"
-            android:orientation="vertical"
-            android:padding="26dp">
+    <!-- Estas três são sobreposições e vêm depois do player de propósito:
+         num FrameLayout quem vem por último desenha por cima.
 
-            <TextView
-                android:id="@+id/vodTermo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="14dp"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center"
-                android:hint="@string/vod_buscar_dica"
-                android:minHeight="48dp"
-                android:textColor="@color/accent"
-                android:textColorHint="@color/text_faint"
-                android:textSize="32sp" />
-
-            <GridLayout
-                android:id="@+id/vodTeclas"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:columnCount="8" />
-        </LinearLayout>
-    </FrameLayout>
-
-    <!-- Ficha do que está tocando, acompanhando a barra de controle: aparece
+    Ficha do que está tocando, acompanhando a barra de controle: aparece
          com ela e some com ela, para não ficar sobre a imagem o filme inteiro. -->
     <LinearLayout
         android:id="@+id/vodFicha"
@@ -172,15 +153,99 @@
             android:textSize="17sp" />
     </LinearLayout>
 
-    <!-- O player do VOD tem controle: filme se pausa e se avança, ao contrário
-         de canal ao vivo. -->
-    <androidx.media3.ui.PlayerView
-        android:id="@+id/vodPlayer"
+    <!-- Temporadas e episódios por cima do vídeo, que continua correndo atrás:
+         trocar de episódio não deveria custar sair do que se está vendo. -->
+    <FrameLayout
+        android:id="@+id/vodSeletor"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#000000"
-        android:visibility="gone"
-        app:resize_mode="fit"
-        app:show_buffering="when_playing"
-        app:use_controller="true" />
+        android:background="#99000000"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="560dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:background="@drawable/bg_painel_direita"
+            android:orientation="vertical"
+            android:paddingStart="24dp"
+            android:paddingTop="30dp"
+            android:paddingEnd="30dp"
+            android:paddingBottom="24dp">
+
+            <TextView
+                android:id="@+id/vodSeletorSerie"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-medium"
+                android:maxLines="1"
+                android:textColor="@color/text_primary"
+                android:textSize="26sp" />
+
+            <TextView
+                android:id="@+id/vodSeletorTemporada"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"
+                android:textColor="@color/accent"
+                android:textSize="18sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/vodSeletorLista"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:clipToPadding="false"
+                android:descendantFocusability="afterDescendants"
+                android:focusable="true" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/vod_seletor_dica"
+                android:textColor="@color/text_faint"
+                android:textSize="15sp" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- Teclado na tela: procurar num controle remoto não tem outro jeito. -->
+    <FrameLayout
+        android:id="@+id/vodTeclado"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#E6000000"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="820dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_modal"
+            android:orientation="vertical"
+            android:padding="26dp">
+
+            <TextView
+                android:id="@+id/vodTermo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="14dp"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:hint="@string/vod_buscar_dica"
+                android:minHeight="48dp"
+                android:textColor="@color/accent"
+                android:textColorHint="@color/text_faint"
+                android:textSize="32sp" />
+
+            <GridLayout
+                android:id="@+id/vodTeclas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="8" />
+        </LinearLayout>
+    </FrameLayout>
+
 </FrameLayout>

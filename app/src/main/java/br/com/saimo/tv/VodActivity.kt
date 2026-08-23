@@ -57,6 +57,11 @@ class VodActivity : AppCompatActivity() {
     private lateinit var estado: TextView
     private lateinit var browse: View
     private lateinit var playerView: PlayerView
+    private lateinit var seletor: View
+    private lateinit var seletorSerie: TextView
+    private lateinit var seletorTemporada: TextView
+    private lateinit var seletorLista: RecyclerView
+    private val seletorAdapter = Adapter()
     private lateinit var teclado: View
     private lateinit var termo: TextView
     private lateinit var teclas: android.widget.GridLayout
@@ -92,6 +97,12 @@ class VodActivity : AppCompatActivity() {
         estado = findViewById(R.id.vodEstado)
         browse = findViewById(R.id.browse)
         playerView = findViewById(R.id.vodPlayer)
+        seletor = findViewById(R.id.vodSeletor)
+        seletorSerie = findViewById(R.id.vodSeletorSerie)
+        seletorTemporada = findViewById(R.id.vodSeletorTemporada)
+        seletorLista = findViewById(R.id.vodSeletorLista)
+        seletorLista.layoutManager = GridLayoutManager(this, 1)
+        seletorLista.adapter = seletorAdapter
         teclado = findViewById(R.id.vodTeclado)
         termo = findViewById(R.id.vodTermo)
         teclas = findViewById(R.id.vodTeclas)
@@ -367,7 +378,9 @@ class VodActivity : AppCompatActivity() {
         }
     }
 
-    private fun episodios(temporada: Int): List<Linha> = episodiosDaSerie
+    private fun episodios(temporada: Int): List<Linha> = episodiosDaSerie.also {
+        temporadaAberta = temporada
+    }
         .filter { it.temporada == temporada }
         .sortedWith(compareBy({ it.numero }, { it.versao }))
         .map { episodio ->
@@ -378,7 +391,8 @@ class VodActivity : AppCompatActivity() {
                       episodio.urls,
                       detalhe = getString(R.string.vod_temporada, episodio.temporada) + ", " +
                           getString(R.string.vod_episodio, episodio.numero).lowercase() +
-                          " · " + rotulo(episodio.versao))
+                          " · " + rotulo(episodio.versao),
+                      deSerie = true)
             }
         }
 
@@ -414,8 +428,11 @@ class VodActivity : AppCompatActivity() {
     private var fonteAtual = 0
 
     private fun tocar(nome: String, urls: List<String>, indice: Int = 0,
-                      detalhe: String = fichaDetalheAtual) {
+                      detalhe: String = fichaDetalheAtual, deSerie: Boolean = false) {
         if (urls.isEmpty()) return
+        // Sem isto, ver um filme depois de uma série deixaria o atalho de baixo
+        // apontando para os episódios da série anterior.
+        if (!deSerie && indice == 0) serieNoAr = null
         fichaDetalheAtual = detalhe
         fontesAtuais = urls
         fonteAtual = indice.coerceIn(urls.indices)
@@ -433,7 +450,7 @@ class VodActivity : AppCompatActivity() {
         novo.addListener(object : androidx.media3.common.Player.Listener {
             override fun onPlayerError(error: androidx.media3.common.PlaybackException) {
                 if (fonteAtual + 1 < fontesAtuais.size) {
-                    tocar(nome, fontesAtuais, fonteAtual + 1)
+                    tocar(nome, fontesAtuais, fonteAtual + 1, deSerie = serieNoAr != null)
                 }
             }
         })
@@ -441,6 +458,7 @@ class VodActivity : AppCompatActivity() {
         novo.prepare()
         player = novo
         playerView.player = novo
+        playerView.controllerShowTimeoutMs = 5_000
         playerView.visibility = View.VISIBLE
         browse.visibility = View.GONE
         estado.visibility = View.GONE
@@ -451,6 +469,7 @@ class VodActivity : AppCompatActivity() {
         fichaDetalhe.visibility = if (detalhe.isEmpty()) View.GONE else View.VISIBLE
         atualizarTempo()
         ficha.visibility = View.VISIBLE
+        adiarEsconder()
         relogio.removeCallbacks(tique)
         relogio.postDelayed(tique, 5_000)
     }
@@ -460,6 +479,33 @@ class VodActivity : AppCompatActivity() {
     private var serieNoAr: Serie? = null
     private var letraNoAr = ""
 
+    /**
+     * Some com a barra e devolve o foco ao vídeo.
+     *
+     * O player esconde a barra sozinho, mas não enquanto um dos botões dela
+     * estiver com o foco — que numa TV é sempre. Sem tirar o foco, a barra
+     * ficaria para sempre e o "para baixo" nunca chegaria aos episódios.
+     */
+    private val esconderBarra = Runnable {
+        playerView.hideController()
+        playerView.requestFocus()
+    }
+
+    /// Mostra a barra já com o foco nela, para o primeiro esquerda-direita
+    /// depois do OK arrastar o filme em vez de andar entre botões.
+    private fun mostrarControles() {
+        playerView.showController()
+        playerView.post {
+            playerView.findViewById<View>(androidx.media3.ui.R.id.exo_progress)?.requestFocus()
+        }
+        adiarEsconder()
+    }
+
+    private fun adiarEsconder() {
+        relogio.removeCallbacks(esconderBarra)
+        relogio.postDelayed(esconderBarra, 5_000)
+    }
+
     /// Avança ou volta sem precisar mirar na barra: dez segundos por toque, que
     /// é o passo que se espera de um controle.
     private fun pular(milissegundos: Long) {
@@ -467,17 +513,63 @@ class VodActivity : AppCompatActivity() {
         val destino = (atual.currentPosition + milissegundos)
             .coerceIn(0, if (atual.duration > 0) atual.duration else Long.MAX_VALUE)
         atual.seekTo(destino)
-        playerView.showController()
+        mostrarControles()
         atualizarTempo()
     }
 
-    /// Abre a lista de episódios por cima do filme, se for série.
-    private fun abrirEpisodios(): Boolean {
+    private var temporadaAberta = 1
+
+    /// Abre temporadas e episódios por cima do vídeo, que continua correndo.
+    private fun abrirSeletor(): Boolean {
         val serie = serieNoAr ?: return false
-        pararFilme()
-        pilha.removeAll { it is Passo.Episodios || it is Passo.Temporadas }
-        ir(Passo.Temporadas(letraNoAr, serie))
+        if (episodiosDaSerie.isEmpty()) return false
+        seletorSerie.text = serie.titulo
+        preencherSeletor()
+        seletor.visibility = View.VISIBLE
+        playerView.hideController()
+        seletorLista.post {
+            seletorLista.getChildAt(0)?.requestFocus() ?: seletorLista.requestFocus()
+        }
         return true
+    }
+
+    private fun fecharSeletor() {
+        seletor.visibility = View.GONE
+        playerView.requestFocus()
+    }
+
+    private fun trocarTemporada(passo: Int) {
+        val temporadas = episodiosDaSerie.map { it.temporada }.distinct().sorted()
+        if (temporadas.size < 2) return
+        val atual = temporadas.indexOf(temporadaAberta).coerceAtLeast(0)
+        temporadaAberta = temporadas[(atual + passo + temporadas.size) % temporadas.size]
+        preencherSeletor()
+        seletorLista.post { seletorLista.getChildAt(0)?.requestFocus() }
+    }
+
+    private fun preencherSeletor() {
+        val temporadas = episodiosDaSerie.map { it.temporada }.distinct().sorted()
+        if (temporadaAberta !in temporadas) temporadaAberta = temporadas.firstOrNull() ?: 1
+        seletorTemporada.text = getString(R.string.vod_temporada, temporadaAberta) +
+            if (temporadas.size > 1) " · ${temporadas.size} temporadas" else ""
+        val serie = serieNoAr
+        seletorAdapter.trocar(episodiosDaSerie
+            .filter { it.temporada == temporadaAberta }
+            .sortedWith(compareBy({ it.numero }, { it.versao }))
+            .map { episodio ->
+                Linha(getString(R.string.vod_episodio, episodio.numero),
+                    detalhe(episodio.versao, episodio.urls.size),
+                    episodio.numero.toString()) {
+                    fecharSeletor()
+                    tocar(serie?.titulo.orEmpty()
+                        .ifEmpty { getString(R.string.vod_episodio, episodio.numero) },
+                        episodio.urls,
+                        detalhe = getString(R.string.vod_temporada, episodio.temporada) + ", " +
+                            getString(R.string.vod_episodio, episodio.numero).lowercase() +
+                            " · " + rotulo(episodio.versao),
+                        deSerie = true)
+                }
+            })
     }
 
     /// "faltam 60 min de 87" — o mesmo que o Mac mostra no lugar do guia.
@@ -495,6 +587,8 @@ class VodActivity : AppCompatActivity() {
 
     private fun pararFilme() {
         relogio.removeCallbacks(tique)
+        relogio.removeCallbacks(esconderBarra)
+        seletor.visibility = View.GONE
         ficha.visibility = View.GONE
         player?.release()
         player = null
@@ -505,33 +599,59 @@ class VodActivity : AppCompatActivity() {
         lista.post { lista.getChildAt(0)?.requestFocus() }
     }
 
+    /**
+     * O player recebe as teclas antes da activity, então a decisão mora aqui.
+     *
+     * Com o filme no ar o PlayerView consome o direcional e mostra a barra
+     * sozinho — foi por isso que o "para baixo" nunca chegava aos episódios.
+     * Interceptando no despacho, a regra fica clara: barra escondida, as teclas
+     * têm atalho próprio; barra à vista, o direcional é dela.
+     */
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        if (event.action != KeyEvent.ACTION_DOWN || player == null ||
+            teclado.visibility == View.VISIBLE) {
+            return super.dispatchKeyEvent(event)
+        }
+        if (seletor.visibility == View.VISIBLE) {
+            when (event.keyCode) {
+                KeyEvent.KEYCODE_DPAD_LEFT -> { trocarTemporada(-1); return true }
+                KeyEvent.KEYCODE_DPAD_RIGHT -> { trocarTemporada(1); return true }
+                KeyEvent.KEYCODE_BACK, KeyEvent.KEYCODE_ESCAPE -> {
+                    fecharSeletor(); return true
+                }
+            }
+            return super.dispatchKeyEvent(event)
+        }
+        if (playerView.isControllerFullyVisible) {
+            // A barra está à vista: o direcional é dela, inclusive o para baixo,
+            // que passa para a linha de baixo dos controles.
+            adiarEsconder()
+            return super.dispatchKeyEvent(event)
+        }
+        when (event.keyCode) {
+            KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER,
+            KeyEvent.KEYCODE_DPAD_UP -> { mostrarControles(); return true }
+            KeyEvent.KEYCODE_DPAD_DOWN -> {
+                // Numa série, para baixo abre temporada e episódio, que é o que
+                // mais se troca. Num filme, mostra a barra.
+                if (!abrirSeletor()) mostrarControles()
+                return true
+            }
+            KeyEvent.KEYCODE_DPAD_RIGHT -> { pular(10_000); return true }
+            KeyEvent.KEYCODE_DPAD_LEFT -> { pular(-10_000); return true }
+            KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> {
+                player?.let { it.playWhenReady = !it.playWhenReady }
+                mostrarControles()
+                return true
+            }
+        }
+        return super.dispatchKeyEvent(event)
+    }
+
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         // Com filme no ar, o direcional pertence ao player. Sem isto o OK
         // chegava à linha que ficou atrás e mandava tocar o mesmo filme de
         // novo — do começo.
-        if (player != null && teclado.visibility != View.VISIBLE) {
-            when (keyCode) {
-                KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER -> {
-                    playerView.showController()
-                    return true
-                }
-                KeyEvent.KEYCODE_DPAD_RIGHT -> { pular(10_000); return true }
-                KeyEvent.KEYCODE_DPAD_LEFT -> { pular(-10_000); return true }
-                KeyEvent.KEYCODE_DPAD_DOWN -> {
-                    // Numa série, para baixo abre a escolha de temporada e
-                    // episódio: trocar de episódio é o que mais se faz.
-                    if (abrirEpisodios()) return true
-                    playerView.showController()
-                    return true
-                }
-                KeyEvent.KEYCODE_DPAD_UP -> { playerView.showController(); return true }
-                KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> {
-                    player?.let { it.playWhenReady = !it.playWhenReady }
-                    playerView.showController()
-                    return true
-                }
-            }
-        }
         // Quem tiver teclado — de USB, de celular ou o do próprio aparelho —
         // digita direto, sem passar tecla por tecla no direcional.
         if (teclado.visibility == View.VISIBLE) {

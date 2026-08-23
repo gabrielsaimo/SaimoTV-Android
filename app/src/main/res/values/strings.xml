@@ -23,6 +23,7 @@
     <string name="vod_buscar_dica">digite o nome</string>
     <string name="vod_resultados">Resultados de "%1$s"</string>
     <string name="vod_espaco">espaço</string>
+    <string name="vod_seletor_dica">ESQUERDA e DIREITA trocam a temporada · VOLTAR fecha</string>
     <string name="vod_legenda">OK escolhe · VOLTAR sobe um nível</string>
     <string name="vod_carregando">Carregando…</string>
     <string name="vod_vazio">Nada aqui</string>
