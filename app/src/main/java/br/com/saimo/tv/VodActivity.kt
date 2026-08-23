@@ -335,6 +335,7 @@ class VodActivity : AppCompatActivity() {
                 Linha(filme.titulo, detalheFilme(filme), inicial(filme.titulo), capaDe = false) {
                     val unica = filme.fontes.entries.firstOrNull()
                     if (filme.fontes.size == 1 && unica != null) {
+                        serieNoAr = null
                         tocar(filme.titulo, unica.value,
                               detalhe = getString(R.string.vod_filmes_um) + " · " + rotulo(unica.key))
                     } else {
@@ -354,6 +355,8 @@ class VodActivity : AppCompatActivity() {
         }
 
     private suspend fun temporadas(letra: String, serie: Serie): List<Linha> {
+        serieNoAr = serie
+        letraNoAr = letra
         episodiosDaSerie = Vod.episodios(this, letra, serie)
         return episodiosDaSerie.map { it.temporada }.distinct().sorted().map { numero ->
             val quantos = episodiosDaSerie.count { it.temporada == numero }
@@ -382,6 +385,7 @@ class VodActivity : AppCompatActivity() {
     private fun versoes(titulo: String, fontes: Map<String, List<String>>) =
         fontes.map { (versao, urls) ->
             Linha(rotulo(versao), detalhe(versao, urls.size).takeIf { urls.size > 1 }, "") {
+                serieNoAr = null
                 tocar(titulo, urls,
                       detalhe = getString(R.string.vod_filmes_um) + " · " + rotulo(versao))
             }
@@ -452,6 +456,29 @@ class VodActivity : AppCompatActivity() {
     }
 
     private var fichaDetalheAtual = ""
+    /// Série do episódio no ar, para o atalho de trocar de episódio.
+    private var serieNoAr: Serie? = null
+    private var letraNoAr = ""
+
+    /// Avança ou volta sem precisar mirar na barra: dez segundos por toque, que
+    /// é o passo que se espera de um controle.
+    private fun pular(milissegundos: Long) {
+        val atual = player ?: return
+        val destino = (atual.currentPosition + milissegundos)
+            .coerceIn(0, if (atual.duration > 0) atual.duration else Long.MAX_VALUE)
+        atual.seekTo(destino)
+        playerView.showController()
+        atualizarTempo()
+    }
+
+    /// Abre a lista de episódios por cima do filme, se for série.
+    private fun abrirEpisodios(): Boolean {
+        val serie = serieNoAr ?: return false
+        pararFilme()
+        pilha.removeAll { it is Passo.Episodios || it is Passo.Temporadas }
+        ir(Passo.Temporadas(letraNoAr, serie))
+        return true
+    }
 
     /// "faltam 60 min de 87" — o mesmo que o Mac mostra no lugar do guia.
     private fun atualizarTempo() {
@@ -479,6 +506,32 @@ class VodActivity : AppCompatActivity() {
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        // Com filme no ar, o direcional pertence ao player. Sem isto o OK
+        // chegava à linha que ficou atrás e mandava tocar o mesmo filme de
+        // novo — do começo.
+        if (player != null && teclado.visibility != View.VISIBLE) {
+            when (keyCode) {
+                KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER -> {
+                    playerView.showController()
+                    return true
+                }
+                KeyEvent.KEYCODE_DPAD_RIGHT -> { pular(10_000); return true }
+                KeyEvent.KEYCODE_DPAD_LEFT -> { pular(-10_000); return true }
+                KeyEvent.KEYCODE_DPAD_DOWN -> {
+                    // Numa série, para baixo abre a escolha de temporada e
+                    // episódio: trocar de episódio é o que mais se faz.
+                    if (abrirEpisodios()) return true
+                    playerView.showController()
+                    return true
+                }
+                KeyEvent.KEYCODE_DPAD_UP -> { playerView.showController(); return true }
+                KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> {
+                    player?.let { it.playWhenReady = !it.playWhenReady }
+                    playerView.showController()
+                    return true
+                }
+            }
+        }
         // Quem tiver teclado — de USB, de celular ou o do próprio aparelho —
         // digita direto, sem passar tecla por tecla no direcional.
         if (teclado.visibility == View.VISIBLE) {
