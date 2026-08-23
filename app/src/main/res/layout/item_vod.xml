@@ -55,6 +55,17 @@
             android:textColor="@color/text_primary"
             android:textSize="21sp" />
 
+        <ProgressBar
+            android:id="@+id/vodProgresso"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginEnd="14dp"
+            android:max="1000"
+            android:progressDrawable="@drawable/progress_track"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/vodDetalhe"
             android:layout_width="match_parent"
@@ -66,4 +77,16 @@
             android:textSize="16sp"
             android:visibility="gone" />
     </LinearLayout>
+
+    <!-- Fica à direita, fora do caminho do texto: quem não favoritou nada nunca
+         vê estrela nenhuma. -->
+    <TextView
+        android:id="@+id/vodEstrela"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="@string/star"
+        android:textColor="@color/accent"
+        android:textSize="20sp"
+        android:visibility="gone" />
 </LinearLayout>

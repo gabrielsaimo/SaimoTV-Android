@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -39,6 +40,7 @@ class VodActivity : AppCompatActivity() {
         data class Episodios(val letra: String, val serie: Serie, val temporada: Int) : Passo
         data class Versoes(val titulo: String, val fontes: Map<String, List<String>>) : Passo
         data class Resultados(val termo: String) : Passo
+        object Favoritos : Passo
     }
 
     private data class Linha(
@@ -47,6 +49,10 @@ class VodActivity : AppCompatActivity() {
         val inicial: String = "",
         /// Nulo quando a linha não é um título — letra e temporada não têm capa.
         val capaDe: Boolean? = null,
+        /// Quanto já foi visto, de 0 a 1. Nulo quando nunca foi aberto.
+        val progresso: Float? = null,
+        /// Nulo quando a linha não é favoritável — letra, temporada, versão.
+        val favorito: VodFavoritos.Item? = null,
         val aoEscolher: () -> Unit,
     )
 
@@ -69,6 +75,7 @@ class VodActivity : AppCompatActivity() {
     private lateinit var fichaNome: TextView
     private lateinit var fichaDetalhe: TextView
     private lateinit var fichaTempo: TextView
+    private lateinit var fichaCapa: ImageView
     private var player: ExoPlayer? = null
 
     private val relogio = Handler(Looper.getMainLooper())
@@ -76,6 +83,7 @@ class VodActivity : AppCompatActivity() {
     private val tique = object : Runnable {
         override fun run() {
             atualizarTempo()
+            guardarProgresso()
             relogio.postDelayed(this, 5_000)
         }
     }
@@ -111,6 +119,7 @@ class VodActivity : AppCompatActivity() {
         fichaNome = findViewById(R.id.vodFichaNome)
         fichaDetalhe = findViewById(R.id.vodFichaDetalhe)
         fichaTempo = findViewById(R.id.vodFichaTempo)
+        fichaCapa = findViewById(R.id.vodFichaCapa)
         // A ficha acompanha a barra de controle: aparece com ela e some junto.
         playerView.setControllerVisibilityListener(
             PlayerView.ControllerVisibilityListener { visivel ->
@@ -158,6 +167,7 @@ class VodActivity : AppCompatActivity() {
             is Passo.Episodios -> episodios(passo.temporada)
             is Passo.Versoes -> versoes(passo.titulo, passo.fontes)
             is Passo.Resultados -> resultados(passo.termo)
+            is Passo.Favoritos -> favoritos()
         }
         estado.visibility = if (linhas.isEmpty()) View.VISIBLE else View.GONE
         if (linhas.isEmpty()) estado.text = getString(R.string.vod_vazio)
@@ -167,7 +177,7 @@ class VodActivity : AppCompatActivity() {
         // duas colunas ainda dobram o que se vê sem apertar o texto.
         (lista.layoutManager as GridLayoutManager).spanCount = when (passo) {
             is Passo.Letras -> 6
-            is Passo.Titulos, is Passo.Episodios, is Passo.Resultados -> 2
+            is Passo.Titulos, is Passo.Episodios, is Passo.Resultados, is Passo.Favoritos -> 2
             else -> 1
         }
         trilha.text = trilhaDe(passo)
@@ -175,7 +185,7 @@ class VodActivity : AppCompatActivity() {
         // número só ajuda quando são títulos.
         contagem.text = when {
             linhas.isEmpty() || passo is Passo.Inicio || passo is Passo.Letras -> ""
-            else -> getString(R.string.vod_contagem, linhas.size)
+            else -> resources.getQuantityString(R.plurals.vod_titulos, linhas.size, linhas.size)
         }
         adapter.trocar(linhas)
         lista.post { lista.getChildAt(0)?.requestFocus() ?: lista.requestFocus() }
@@ -190,6 +200,7 @@ class VodActivity : AppCompatActivity() {
             getString(R.string.vod_temporada, passo.temporada)
         is Passo.Versoes -> passo.titulo
         is Passo.Resultados -> getString(R.string.vod_resultados, passo.termo)
+        is Passo.Favoritos -> getString(R.string.vod_favoritos)
     }
 
     private fun secao(filmes: Boolean, reservado: Boolean = false) = getString(
@@ -270,12 +281,19 @@ class VodActivity : AppCompatActivity() {
         Vod.buscar(this, termo).map { achado ->
             Linha(achado.titulo,
                 getString(if (achado.serie) R.string.vod_series else R.string.vod_filmes_um),
-                inicial(achado.titulo), capaDe = achado.serie) {
+                inicial(achado.titulo), capaDe = achado.serie,
+                // Série guarda progresso por episódio, e a busca devolve o título:
+                // sem saber qual episódio, ela não tem o que mostrar aqui.
+                progresso = if (achado.serie) null
+                            else Progresso.fracao(this, Progresso.chaveFilme(achado.titulo)),
+                favorito = VodFavoritos.Item(achado.titulo, achado.serie, achado.letra)) {
                 lifecycleScope.launch { abrirAchado(achado) }
             }
         }
 
     private suspend fun abrirAchado(achado: Vod.Achado) {
+        // A busca também precisa da chave certa, senão o filme achado por ela
+        // não retomaria de onde parou.
         if (achado.serie) {
             Vod.serie(this, achado)?.let { ir(Passo.Temporadas(achado.letra, it)) }
         } else {
@@ -283,7 +301,8 @@ class VodActivity : AppCompatActivity() {
             val unica = filme.fontes.entries.firstOrNull()
             if (filme.fontes.size == 1 && unica != null) {
                 tocar(filme.titulo, unica.value,
-                      detalhe = getString(R.string.vod_filmes_um) + " · " + rotulo(unica.key))
+                      detalhe = getString(R.string.vod_filmes_um) + " · " + rotulo(unica.key),
+                      chave = Progresso.chaveFilme(filme.titulo))
             } else {
                 ir(Passo.Versoes(filme.titulo, filme.fontes))
             }
@@ -296,16 +315,63 @@ class VodActivity : AppCompatActivity() {
         if (gavetas.isEmpty()) gavetas = Vod.indice(this)
         val filmes = gavetas.sumOf { it.filmes }
         val series = gavetas.sumOf { it.series }
-        return listOf(
-            Linha(getString(R.string.vod_filmes), getString(R.string.vod_contagem, filmes), "F") {
+        // Favoritos em primeiro: quem marcou um título marcou para voltar nele.
+        return favoritosNoInicio() + listOf(
+            Linha(getString(R.string.vod_filmes), resources.getQuantityString(R.plurals.vod_titulos, filmes, filmes), "F") {
                 ir(Passo.Letras(filmes = true))
             },
-            Linha(getString(R.string.vod_series), getString(R.string.vod_contagem, series), "S") {
+            Linha(getString(R.string.vod_series), resources.getQuantityString(R.plurals.vod_titulos, series, series), "S") {
                 ir(Passo.Letras(filmes = false))
             },
             Linha(getString(R.string.vod_buscar), getString(R.string.vod_buscar_dica), "?") {
                 abrirBusca()
             }) + reservados()
+    }
+
+    /// A linha só existe quando há o que abrir: uma seção vazia na primeira
+    /// tela seria um beco.
+    private fun favoritosNoInicio(): List<Linha> {
+        val quantos = VodFavoritos.lista(this).size
+        if (quantos == 0) return emptyList()
+        return listOf(Linha(getString(R.string.vod_favoritos),
+            resources.getQuantityString(R.plurals.vod_titulos, quantos, quantos), "★") {
+            ir(Passo.Favoritos)
+        })
+    }
+
+    private fun favoritos(): List<Linha> = VodFavoritos.lista(this).map { item ->
+        Linha(item.titulo,
+            getString(if (item.serie) R.string.vod_series else R.string.vod_filmes_um),
+            inicial(item.titulo), capaDe = item.serie,
+            progresso = if (item.serie) null
+                        else Progresso.fracao(this, Progresso.chaveFilme(item.titulo)),
+            favorito = item) {
+            lifecycleScope.launch {
+                abrirAchado(Vod.Achado(item.titulo, item.serie, item.letra))
+            }
+        }
+    }
+
+    /// A tecla age sobre a linha em foco, e é o adaptador quem sabe qual é.
+    private fun favoritarEmFoco() {
+        val foco = currentFocus ?: return
+        val posicao = lista.getChildAdapterPosition(
+            generateSequence(foco) { it.parent as? View }
+                .firstOrNull { it.parent === lista } ?: return)
+        if (posicao == RecyclerView.NO_POSITION) return
+        adapter.linha(posicao)?.let { favoritar(it) }
+    }
+
+    private fun marcado(linha: Linha): Boolean =
+        linha.favorito?.let { VodFavoritos.contem(this, it.titulo, it.serie) } == true
+
+    /// Marcar de dentro da própria lista de favoritos tira a linha da tela, e aí
+    /// a lista precisa ser refeita; nas outras basta a estrela acender.
+    private fun favoritar(linha: Linha) {
+        val item = linha.favorito ?: return
+        VodFavoritos.alternar(this, item)
+        if (pilha.lastOrNull() is Passo.Favoritos) mostrar(Passo.Favoritos)
+        else adapter.notifyDataSetChanged()
     }
 
     /// Só existe depois do código, e como uma linha igual às outras: nada aqui
@@ -315,7 +381,7 @@ class VodActivity : AppCompatActivity() {
         val total = gavetas.sumOf { it.reservados }
         if (total == 0) return emptyList()
         return listOf(Linha(getString(R.string.vod_extras),
-            getString(R.string.vod_contagem, total), "+") {
+            resources.getQuantityString(R.plurals.vod_titulos, total, total), "+") {
             ir(Passo.Letras(filmes = true, reservado = true))
         })
     }
@@ -343,12 +409,15 @@ class VodActivity : AppCompatActivity() {
                                 reservado: Boolean = false): List<Linha> =
         if (filmes) {
             Vod.filmes(this, letra, reservado).map { filme ->
-                Linha(filme.titulo, detalheFilme(filme), inicial(filme.titulo), capaDe = false) {
+                Linha(filme.titulo, detalheFilme(filme), inicial(filme.titulo), capaDe = false,
+                    progresso = Progresso.fracao(this, Progresso.chaveFilme(filme.titulo)),
+                    favorito = VodFavoritos.Item(filme.titulo, serie = false, letra = letra)) {
                     val unica = filme.fontes.entries.firstOrNull()
                     if (filme.fontes.size == 1 && unica != null) {
                         serieNoAr = null
                         tocar(filme.titulo, unica.value,
-                              detalhe = getString(R.string.vod_filmes_um) + " · " + rotulo(unica.key))
+                              detalhe = getString(R.string.vod_filmes_um) + " · " + rotulo(unica.key),
+                              chave = Progresso.chaveFilme(filme.titulo))
                     } else {
                         ir(Passo.Versoes(filme.titulo, filme.fontes))
                     }
@@ -359,7 +428,8 @@ class VodActivity : AppCompatActivity() {
                 val detalhe = listOfNotNull(
                     serie.ano.takeIf { it.isNotBlank() },
                     getString(R.string.vod_eps, serie.episodios)).joinToString(" · ")
-                Linha(serie.titulo, detalhe, inicial(serie.titulo), capaDe = true) {
+                Linha(serie.titulo, detalhe, inicial(serie.titulo), capaDe = true,
+                    favorito = VodFavoritos.Item(serie.titulo, serie = true, letra = letra)) {
                     ir(Passo.Temporadas(letra, serie))
                 }
             }
@@ -385,14 +455,18 @@ class VodActivity : AppCompatActivity() {
         .sortedWith(compareBy({ it.numero }, { it.versao }))
         .map { episodio ->
             Linha(getString(R.string.vod_episodio, episodio.numero),
-                detalhe(episodio.versao, episodio.urls.size), episodio.numero.toString()) {
+                detalhe(episodio.versao, episodio.urls.size), episodio.numero.toString(),
+                progresso = Progresso.fracao(this, Progresso.chaveEpisodio(
+                    (pilha.last() as? Passo.Episodios)?.serie?.titulo.orEmpty(),
+                    episodio.temporada, episodio.numero))) {
                 val serie = (pilha.last() as? Passo.Episodios)?.serie?.titulo.orEmpty()
                 tocar(serie.ifEmpty { getString(R.string.vod_episodio, episodio.numero) },
                       episodio.urls,
                       detalhe = getString(R.string.vod_temporada, episodio.temporada) + ", " +
                           getString(R.string.vod_episodio, episodio.numero).lowercase() +
                           " · " + rotulo(episodio.versao),
-                      deSerie = true)
+                      deSerie = true,
+                      chave = Progresso.chaveEpisodio(serie, episodio.temporada, episodio.numero))
             }
         }
 
@@ -401,7 +475,8 @@ class VodActivity : AppCompatActivity() {
             Linha(rotulo(versao), detalhe(versao, urls.size).takeIf { urls.size > 1 }, "") {
                 serieNoAr = null
                 tocar(titulo, urls,
-                      detalhe = getString(R.string.vod_filmes_um) + " · " + rotulo(versao))
+                      detalhe = getString(R.string.vod_filmes_um) + " · " + rotulo(versao),
+                      chave = Progresso.chaveFilme(titulo))
             }
         }
 
@@ -428,8 +503,12 @@ class VodActivity : AppCompatActivity() {
     private var fonteAtual = 0
 
     private fun tocar(nome: String, urls: List<String>, indice: Int = 0,
-                      detalhe: String = fichaDetalheAtual, deSerie: Boolean = false) {
+                      detalhe: String = fichaDetalheAtual, deSerie: Boolean = false,
+                      chave: String = chaveAtual) {
         if (urls.isEmpty()) return
+        // Guarda onde o anterior parou antes de trocar de filme.
+        guardarProgresso()
+        chaveAtual = chave
         // Sem isto, ver um filme depois de uma série deixaria o atalho de baixo
         // apontando para os episódios da série anterior.
         if (!deSerie && indice == 0) serieNoAr = null
@@ -454,6 +533,10 @@ class VodActivity : AppCompatActivity() {
                 }
             }
         })
+        // Volta ao ponto em que parou. O seek vai antes do prepare para o
+        // player já abrir lá, em vez de mostrar o começo e pular depois.
+        val retomar = Progresso.posicao(this, chave)
+        if (retomar > 0) novo.seekTo(retomar)
         novo.playWhenReady = true
         novo.prepare()
         player = novo
@@ -465,6 +548,17 @@ class VodActivity : AppCompatActivity() {
         playerView.requestFocus()
         titulo.text = nome
         fichaNome.text = nome
+        fichaCapa.setImageDrawable(null)
+        fichaCapa.visibility = View.GONE
+        lifecycleScope.launch {
+            val capa = Capas.capa(nome, deSerie) ?: return@launch
+            if (fichaNome.text != nome) return@launch
+            fichaCapa.visibility = View.VISIBLE
+            fichaCapa.load(capa) {
+                diskCachePolicy(coil.request.CachePolicy.DISABLED)
+                crossfade(true)
+            }
+        }
         fichaDetalhe.text = detalhe
         fichaDetalhe.visibility = if (detalhe.isEmpty()) View.GONE else View.VISIBLE
         atualizarTempo()
@@ -475,6 +569,14 @@ class VodActivity : AppCompatActivity() {
     }
 
     private var fichaDetalheAtual = ""
+    private var chaveAtual = ""
+
+    /// Onde o que está tocando parou. Chamado a cada tique, ao sair e ao trocar.
+    private fun guardarProgresso() {
+        val atual = player ?: return
+        if (chaveAtual.isBlank()) return
+        Progresso.salvar(this, chaveAtual, atual.currentPosition, atual.duration)
+    }
     /// Série do episódio no ar, para o atalho de trocar de episódio.
     private var serieNoAr: Serie? = null
     private var letraNoAr = ""
@@ -559,7 +661,9 @@ class VodActivity : AppCompatActivity() {
             .map { episodio ->
                 Linha(getString(R.string.vod_episodio, episodio.numero),
                     detalhe(episodio.versao, episodio.urls.size),
-                    episodio.numero.toString()) {
+                    episodio.numero.toString(),
+                    progresso = Progresso.fracao(this, Progresso.chaveEpisodio(
+                        serie?.titulo.orEmpty(), episodio.temporada, episodio.numero))) {
                     fecharSeletor()
                     tocar(serie?.titulo.orEmpty()
                         .ifEmpty { getString(R.string.vod_episodio, episodio.numero) },
@@ -567,7 +671,9 @@ class VodActivity : AppCompatActivity() {
                         detalhe = getString(R.string.vod_temporada, episodio.temporada) + ", " +
                             getString(R.string.vod_episodio, episodio.numero).lowercase() +
                             " · " + rotulo(episodio.versao),
-                        deSerie = true)
+                        deSerie = true,
+                        chave = Progresso.chaveEpisodio(serie?.titulo.orEmpty(),
+                            episodio.temporada, episodio.numero))
                 }
             })
     }
@@ -586,6 +692,7 @@ class VodActivity : AppCompatActivity() {
     }
 
     private fun pararFilme() {
+        guardarProgresso()
         relogio.removeCallbacks(tique)
         relogio.removeCallbacks(esconderBarra)
         seletor.visibility = View.GONE
@@ -608,6 +715,22 @@ class VodActivity : AppCompatActivity() {
      * têm atalho próprio; barra à vista, o direcional é dela.
      */
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        // O ENTER de um teclado de verdade confirma a busca. Sem interceptar
+        // aqui, ele chegava antes à tecla em foco e digitava a letra dela.
+        if (event.action == KeyEvent.ACTION_DOWN && teclado.visibility == View.VISIBLE &&
+            event.keyCode == KeyEvent.KEYCODE_ENTER) {
+            confirmarBusca()
+            return true
+        }
+        // MENU favorita a linha em foco — o mesmo botão que favorita canal na
+        // tela inicial, para não haver dois gestos para a mesma ideia.
+        if (event.action == KeyEvent.ACTION_DOWN && player == null &&
+            teclado.visibility != View.VISIBLE &&
+            (event.keyCode == KeyEvent.KEYCODE_MENU ||
+             event.keyCode == KeyEvent.KEYCODE_BOOKMARK)) {
+            favoritarEmFoco()
+            return true
+        }
         if (event.action != KeyEvent.ACTION_DOWN || player == null ||
             teclado.visibility == View.VISIBLE) {
             return super.dispatchKeyEvent(event)
@@ -666,7 +789,6 @@ class VodActivity : AppCompatActivity() {
                 }
                 keyCode == KeyEvent.KEYCODE_SPACE -> { digitar(" "); return true }
                 keyCode == KeyEvent.KEYCODE_DEL -> { apagar(); return true }
-                keyCode == KeyEvent.KEYCODE_ENTER -> { confirmarBusca(); return true }
             }
         }
         if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ESCAPE) {
@@ -681,6 +803,7 @@ class VodActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
+        guardarProgresso()
         player?.playWhenReady = false
     }
 
@@ -693,6 +816,8 @@ class VodActivity : AppCompatActivity() {
     private inner class Adapter : RecyclerView.Adapter<Adapter.Holder>() {
         private var itens: List<Linha> = emptyList()
 
+        fun linha(posicao: Int): Linha? = itens.getOrNull(posicao)
+
         fun trocar(novos: List<Linha>) {
             itens = novos
             notifyDataSetChanged()
@@ -703,6 +828,8 @@ class VodActivity : AppCompatActivity() {
             val detalhe: TextView = view.findViewById(R.id.vodDetalhe)
             val inicial: TextView = view.findViewById(R.id.vodInicial)
             val capa: ImageView = view.findViewById(R.id.vodCapa)
+            val progresso: ProgressBar = view.findViewById(R.id.vodProgresso)
+            val estrela: TextView = view.findViewById(R.id.vodEstrela)
             /// Para descartar a capa que chegar depois de a linha ser reusada.
             var pedido: String? = null
         }
@@ -725,7 +852,15 @@ class VodActivity : AppCompatActivity() {
                 if (linha.detalhe.isNullOrEmpty()) View.GONE else View.VISIBLE
             holder.inicial.text = linha.inicial
             holder.inicial.visibility = if (linha.inicial.isEmpty()) View.GONE else View.VISIBLE
+            holder.progresso.visibility =
+                if (linha.progresso == null) View.GONE else View.VISIBLE
+            linha.progresso?.let { holder.progresso.progress = (it * 1000).toInt() }
+            holder.estrela.visibility = if (marcado(linha)) View.VISIBLE else View.GONE
             holder.itemView.setOnClickListener { linha.aoEscolher() }
+            // Segurar OK é o mesmo gesto que favorita um canal na tela inicial.
+            holder.itemView.setOnLongClickListener {
+                if (linha.favorito == null) false else { favoritar(linha); true }
+            }
 
             holder.capa.setImageDrawable(null)
             holder.capa.visibility = View.GONE
