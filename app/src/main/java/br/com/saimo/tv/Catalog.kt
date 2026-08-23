@@ -33,9 +33,6 @@ val CATALOG: List<Channel> = listOf(
                 keyId = "74481194bf32774e0cb44a1d71d6cc19",
                 key = "4bfd25bc9419f1c71e3ee8e6bf5ccf2a",
             ),
-            Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/aie/__index.m3u8?sv=129&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786292396-Y5Yoli4LGQ3J7yOTuPXE%2BvnA3yQAMLNAUdYTF3HbDgg%3D",
-            ),
         ),
     ),
     Channel(
@@ -45,12 +42,14 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/adultswim/__index.m3u8?sv=10&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786290776-nJUghGmLjJRyjF0SPqaBgidgAOJiU3S97xh4hE2NE1I%3D",
             ),
+        ),
+    ),
+    Channel(
+        name = "AMC",
+        logo = "https://mondrian.claro.com.br/channels/inverse/amc.png",
+        sources = listOf(
             Source(
-                url = "https://0072-tbx.vrioott.com/adultswimbr/manifest.mpd",
-                referer = "https://www.skymais.com.br/",
-                userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
-                keyId = "7dc3b6abe08d573883365f7d0b09fcb8",
-                key = "7f68828b12e6d739bff28fe2b50e8c94",
+                url = "https://p12-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/amc/__index.m3u8?sv=159&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787510151-YIGtfAhUh4aAlbp%2Bsl0oNeDHoIaO9jxfdbx82zsKvFA%3D",
             ),
         ),
     ),
@@ -60,10 +59,6 @@ val CATALOG: List<Channel> = listOf(
         sources = listOf(
             Source(
                 url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/animalplanet/__index.m3u8?sv=12&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786291576-cljMHYyJK3iEhKhqrwvs2DVTA0kXJMj71miu9g%2Bmv9w%3D",
-            ),
-            Source(
-                url = "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/3",
-                userAgent = "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
             ),
         ),
     ),
@@ -86,13 +81,6 @@ val CATALOG: List<Channel> = listOf(
         sources = listOf(
             Source(
                 url = "https://p12-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/cartoon/__index.m3u8?sv=206&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787508049-h5sT7JXl7pqAEjuwW2AvieOmBzyLFZ%2BW6VnCnVLXdYA%3D",
-            ),
-            Source(
-                url = "https://0013-tbx.vrioott.com/cartoonnetworkbr/manifest.mpd",
-                referer = "https://www.skymais.com.br/",
-                userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
-                keyId = "9e21b82aa1b8593a8af31e78f016287d",
-                key = "726579be89fa97b3a7c5785f94a27c72",
             ),
         ),
     ),
@@ -156,10 +144,6 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/boborj/__index.m3u8?sv=44&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786291899-hGV11bG1ulIMifsBzTvVaZKkCLm227WfthQBbXp8w5g%3D",
             ),
-            Source(
-                url = "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/335",
-                userAgent = "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
-            ),
         ),
     ),
     Channel(
@@ -212,9 +196,6 @@ val CATALOG: List<Channel> = listOf(
                 keyId = "f7cb42541fbc6043627e4ee025c18300",
                 key = "24843d82b079bbefb73100b887493400",
             ),
-            Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/history/__index.m3u8?sv=55&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786291762-tHU51SX3yOLe0qe6%2BM0vDfNsino79JkgeziJXPObC5E%3D",
-            ),
         ),
     ),
     Channel(
@@ -223,10 +204,6 @@ val CATALOG: List<Channel> = listOf(
         sources = listOf(
             Source(
                 url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/history2/__index.m3u8?sv=97&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786291713-XbODG62M9FkfenILPzk1Tg1OMEzEmII4kllJIMtsWxI%3D",
-            ),
-            Source(
-                url = "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/44",
-                userAgent = "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
             ),
         ),
     ),
@@ -250,9 +227,6 @@ val CATALOG: List<Channel> = listOf(
                 userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
                 keyId = "cf8a2c054a3148309bce1039a9a5d603",
                 key = "9417daf3a25dff3f78d76c1ebb550654",
-            ),
-            Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/megapix/__index.m3u8?sv=36&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786292042-lEvGkdtu6aw2yTM0jTeV5jlkTa8hKgsAEz2Kqrsvsu8%3D",
             ),
         ),
     ),
@@ -406,9 +380,6 @@ val CATALOG: List<Channel> = listOf(
                 keyId = "5e8567bf0707bf910f611e5cf2ef352f",
                 key = "8b30ddee60bb9fe6653f1eb8c9b85d5d",
             ),
-            Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/sony/__index.m3u8?sv=62&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786408417-5jbaSSPBe88ByzCcAo3f6y4WaeKbPbezfqwb3pXoxvA%3D",
-            ),
         ),
     ),
     Channel(
@@ -418,10 +389,6 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/studiouniversal/__index.m3u8?sv=153&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786408629-ttZQ50ex7Jw4GXXphI%2BVbOg5APRxPavlxoAW%2BCNOykY%3D",
             ),
-            Source(
-                url = "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/74",
-                userAgent = "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
-            ),
         ),
     ),
     Channel(
@@ -430,13 +397,6 @@ val CATALOG: List<Channel> = listOf(
         sources = listOf(
             Source(
                 url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/sportv1/__index.m3u8?sv=159&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786408554-MK0K7%2F0RIabb2i7ktFkDI1P2aEeyuwRUwvOxauQ5e1c%3D",
-            ),
-            Source(
-                url = "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/m7duvnk2bu/out/v1/d1ad69118b5647309b1eb7213affdb3d/cenc.mpd",
-                referer = "https://www.primevideo.com/",
-                userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
-                keyId = "4bbcff3289d457b4dd5dbdd21221de9a",
-                key = "c4906b9a9f8dda3c0725bddb8c497733",
             ),
         ),
     ),
@@ -473,13 +433,6 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/telecineaction/__index.m3u8?sv=191&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786409777-6357MK63%2ByysgfFiZNfFK3mJeGmSWEVxX3ET2vato6g%3D",
             ),
-            Source(
-                url = "https://0084-tbx.vrioott.com/telecineaction/manifest.mpd",
-                referer = "https://www.skymais.com.br/",
-                userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
-                keyId = "3ac931934ee95f6e83bc549f89a13fed",
-                key = "844e6313c76c4e7f75058d1c8e593347",
-            ),
         ),
     ),
     Channel(
@@ -489,13 +442,6 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/telecinepipoca/__index.m3u8?sv=58&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786492376-lVHrv7GkGdIq6AAU1c65luWS5GerVjL4DwRV0Ajf6x8%3D",
             ),
-            Source(
-                url = "https://0085-tbx.vrioott.com/telecinepipoca/manifest.mpd",
-                referer = "https://www.skymais.com.br/",
-                userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
-                keyId = "514a45f76193549382c1017ca8a9387a",
-                key = "56bf5c4de8b0fd8f4566a5a55e14fb6b",
-            ),
         ),
     ),
     Channel(
@@ -504,13 +450,6 @@ val CATALOG: List<Channel> = listOf(
         sources = listOf(
             Source(
                 url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/telecinepremium/__index.m3u8?sv=79&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786292168-FKlxVeuJhXev%2F1KUUB5nexfVY5bv0OpgfJecX3Kk9q0%3D",
-            ),
-            Source(
-                url = "https://0086-tbx.vrioott.com/telecinepremium/manifest.mpd",
-                referer = "https://www.skymais.com.br/",
-                userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
-                keyId = "0f81d428f69f5b2e8e714cadcadaff83",
-                key = "d2b198091bf14b01effe589ecd0ee2ec",
             ),
         ),
     ),
@@ -562,9 +501,6 @@ val CATALOG: List<Channel> = listOf(
                 keyId = "ff12e06c66327cd35b99013b38dd4f84",
                 key = "08320e9a44185e55074ac435d8c9a856",
             ),
-            Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/warner/__index.m3u8?sv=45&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786408187-kiwlPGYo%2BdoNAPFeEevo8dCwHVXiKq%2B%2BJBr%2FI5tNtFg%3D",
-            ),
         ),
     ),
     Channel(
@@ -580,17 +516,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/food-network.png",
         sources = listOf(
             Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/foodnetwork/__index.m3u8?sv=173&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786318587-jiNY6eM7XRD%2FkW0wXhwxSh6laUG3oM%2BKParp6FtaoDc%3D",
-            ),
-            Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/foodnetwork/__index.m3u8?sv=178&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786301641-I%2B8e4UfH7a84n9jbFrfVRTAvhHz0XGzIVx0gpToH7zI%3D",
-            ),
-            Source(
-                url = "https://0048-tbx.vrioott.com/foodnetworkbr/manifest.mpd",
-                referer = "https://www.skymais.com.br/",
-                userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
-                keyId = "c0c8121d44265abb8bc5298a9adbe90b",
-                key = "33bb4825451547511755224a8cbf06b4",
+                url = "https://p12-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/foodnetwork/__index.m3u8?sv=154&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787510790-oLglpNJTCmF4dMfrjs1DtdFDeq5mTV9g6bSMLrUWnT0%3D",
             ),
         ),
     ),
@@ -601,13 +527,6 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/gloob/__index.m3u8?sv=35&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786301449-TnMgF08Dd9XnKs8sugyFuOsAjSHmlVN5TN13pVqFhDk%3D",
             ),
-            Source(
-                url = "https://0060-tbx.vrioott.com/gloob/manifest.mpd",
-                referer = "https://www.skymais.com.br/",
-                userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
-                keyId = "0980bcf6ebf15aa4831e3f8a095fff79",
-                key = "14e23e425e82f18d4ff4466da098aa1b",
-            ),
         ),
     ),
     Channel(
@@ -617,10 +536,6 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/bobosp/__index.m3u8?sv=88&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786308190-ZJ9brWallKsnk%2F7UWQ%2FQTAGEXpmP%2FKcVaSUGn9znNbA%3D",
             ),
-            Source(
-                url = "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/741",
-                userAgent = "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
-            ),
         ),
     ),
     Channel(
@@ -628,11 +543,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/cartoonito.png",
         sources = listOf(
             Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/cartoonito/__index.m3u8?sv=114&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786317656-1XIQOrlNN%2BHazl3Wst%2F7IlT24vGk2bzQvu%2BVvw7czSQ%3D",
-            ),
-            Source(
-                url = "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/122",
-                userAgent = "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
+                url = "https://p12-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/cartoonito/__index.m3u8?sv=104&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787510257-GQhBnx%2BG5cpajilROyCzjS%2FP4S314BXTNWvXEwkEJbw%3D",
             ),
         ),
     ),
@@ -641,11 +552,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/cinemax.png",
         sources = listOf(
             Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/cinemax/__index.m3u8?sv=89&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786317781-Zb0ihZRP%2Fd8xd9LFBPc%2BJkw8LPD7h%2BCIG49P8T5DB3w%3D",
-            ),
-            Source(
-                url = "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/9",
-                userAgent = "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
+                url = "https://p12-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/cinemax/__index.m3u8?sv=66&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787510316-X70RycSXFaJIDV%2BwMOJkE%2Bdz%2FmNYSqg%2B2TU9KVeKl4Y%3D",
             ),
         ),
     ),
@@ -663,11 +570,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/discovery.png",
         sources = listOf(
             Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/discovery/__index.m3u8?sv=8&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786317914-q0BTVDVdNa6OnGufXqIB18CL6Av9hu1qbjgZTCifu3s%3D",
-            ),
-            Source(
-                url = "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/12",
-                userAgent = "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
+                url = "https://p12-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/discovery/__index.m3u8?sv=84&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787510373-0HgEmdOEGldo50qybV3oLKZNVQWv%2Bey9ClwFeLZJ0QY%3D",
             ),
         ),
     ),
@@ -676,11 +579,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/discovery-home-and-health.png",
         sources = listOf(
             Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/discoveryhomeihealth/__index.m3u8?sv=165&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786317976-YfEFqP5bEhiFUgUHTxJ2R6BLc3rxZAasmpQOjE1xx8M%3D",
-            ),
-            Source(
-                url = "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/14",
-                userAgent = "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
+                url = "https://p12-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/discoveryhomeihealth/__index.m3u8?sv=29&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787510491-LXPCJR%2BIA5IcHXUlV%2FZ9bcvbmd%2FTzc2XQwKhkl1c7wc%3D",
             ),
         ),
     ),
@@ -689,11 +588,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/discovery-kids.png",
         sources = listOf(
             Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/discoverykids/__index.m3u8?sv=154&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786318026-groDks79ir2Y%2Fkhwi%2FUklj48Q9TgNV6u8nXTUDyFtZA%3D",
-            ),
-            Source(
-                url = "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/15",
-                userAgent = "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
+                url = "https://p12-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/discoverykids/__index.m3u8?sv=41&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787510570-wQNMSqGrzYbqhAFRD0FcTi7fjlw2po6ZvQkdxdN8qMI%3D",
             ),
         ),
     ),
@@ -702,14 +597,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/discovery-theater.png",
         sources = listOf(
             Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/discoverytheater/__index.m3u8?sv=198&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786318156-eEfPQ8%2F6bq3VdNNjLimmnVYV9pJAsGVi%2BvdBpgx1uGk%3D",
-            ),
-            Source(
-                url = "https://0074-tbx.vrioott.com/discoverytheaterbr/manifest.mpd",
-                referer = "https://www.skymais.com.br/",
-                userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
-                keyId = "7b00a834eae359df83472b10934ce21e",
-                key = "ea1780c7e02875ff7d025c5ad7f8d096",
+                url = "https://p12-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/discoverytheater/__index.m3u8?sv=190&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787510630-Op%2Bsog%2Bv2erU8IV6JPCrEGzkbErasNbwsbUPXPOzhQ8%3D",
             ),
         ),
     ),
@@ -718,14 +606,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/discovery-world.png",
         sources = listOf(
             Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/discoveryworld/__index.m3u8?sv=101&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786318262-3PA%2BHb4nyzwzInWXdoGJEpIzuzxq4CopzX6sCTcr7uk%3D",
-            ),
-            Source(
-                url = "https://0102-tbx.vrioott.com/discoveryworldbr/manifest.mpd",
-                referer = "https://www.skymais.com.br/",
-                userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
-                keyId = "9b182bbd1abc5a108a364bdb3f05ca4a",
-                key = "07b5b9ef7e4807e106b214755729d93a",
+                url = "https://p12-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/discoveryworld/__index.m3u8?sv=41&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787510703-6MLdUm4d8J0NguUbdHYIDN%2BB5mxIu7%2FTQSCAQTYXYWw%3D",
             ),
         ),
     ),
@@ -736,13 +617,6 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/espn/__index.m3u8?sv=12&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786318392-QvKT%2FUp7bZQSZYJz6P10ssTqi7CQZwlTquxwquyZKOM%3D",
             ),
-            Source(
-                url = "https://0007-aws-da-mt.vrioott.com/0007_ESPN_DASH/manifest.mpd",
-                referer = "https://www.skymais.com.br/",
-                userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
-                keyId = "6cd41235037836528a679d1f92e8e4a2",
-                key = "694916b4ae717c948504bafd5c7278ea",
-            ),
         ),
     ),
     Channel(
@@ -751,13 +625,6 @@ val CATALOG: List<Channel> = listOf(
         sources = listOf(
             Source(
                 url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/espn2/__index.m3u8?sv=141&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786318445-zhWacyLIG8lLoYvlDCss2l3Uzb6bPtJB7boGnCgWXvI%3D",
-            ),
-            Source(
-                url = "https://0011-aws-da-mt.vrioott.com/0011_ESPN_2_DASH/manifest.mpd",
-                referer = "https://www.skymais.com.br/",
-                userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
-                keyId = "784c98de262634eca3680a0347fee6a8",
-                key = "4da2f3caee7a66ac25371d84136d2eaf",
             ),
         ),
     ),
@@ -768,13 +635,6 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/espn4/__index.m3u8?sv=166&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786318524-FDNFOsKiw6lTQJ35mV3KKuwHL8%2Bg%2FeKqmq3oedHtH9s%3D",
             ),
-            Source(
-                url = "https://0040-aws-da-mt.vrioott.com/0040_ESPN_4_DASH/manifest.mpd",
-                referer = "https://www.skymais.com.br/",
-                userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
-                keyId = "9f07d219385a301c9d4eff10151f502c",
-                key = "89870c6ac581c031247caf6dc9e5579d",
-            ),
         ),
     ),
     Channel(
@@ -782,14 +642,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/gloobinho.png",
         sources = listOf(
             Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/gloobinho/__index.m3u8?sv=129&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786318782-D10ReLfV9K9Pf5Sm4bYoowgfG3kuv5taawFmvkqoD4c%3D",
-            ),
-            Source(
-                url = "https://0061-tbx.vrioott.com/gloobinho/manifest.mpd",
-                referer = "https://www.skymais.com.br/",
-                userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
-                keyId = "ab29ae9d310c5bcd89af885553566756",
-                key = "4a8a50a8cad4761a22015f69d720fbf6",
+                url = "https://p12-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/gloobinho/__index.m3u8?sv=152&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787510910-dWg7AzcPE2zHD3WIjWatnOkglW%2FPAZcLFjjICoFp4d4%3D",
             ),
         ),
     ),
@@ -800,10 +653,6 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/hbo/__index.m3u8?sv=132&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786492099-MUqmGUjva9IbHeQRUp%2BYUm3aOWZlUj6pQOchl2bOPoc%3D",
             ),
-            Source(
-                url = "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/41",
-                userAgent = "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
-            ),
         ),
     ),
     Channel(
@@ -813,10 +662,6 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/hbo2/__index.m3u8?sv=130&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786318898-K3ZqHfTFH1G%2BGiR8Cm9Rj%2F97Hz%2FArnNn7isruGQHqK0%3D",
             ),
-            Source(
-                url = "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/39",
-                userAgent = "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
-            ),
         ),
     ),
     Channel(
@@ -825,10 +670,6 @@ val CATALOG: List<Channel> = listOf(
         sources = listOf(
             Source(
                 url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/hbofamily/__index.m3u8?sv=110&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786318990-VHr%2FSKUQMB04QL6bqlaqNJUjBnjWuqn%2BtRMC3XY30uw%3D",
-            ),
-            Source(
-                url = "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/40",
-                userAgent = "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
             ),
         ),
     ),
@@ -843,9 +684,6 @@ val CATALOG: List<Channel> = listOf(
                 keyId = "864d0001e28938b0be3e1c6d8dc110ea",
                 key = "87f36ec6e6747a587d1e6393f61c003a",
             ),
-            Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/hbomundi/__index.m3u8?sv=123&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786319375-0KBZxAs709vCiKdjPn%2Bb%2B5W6MSguL8DqKgf04TSxglw%3D",
-            ),
         ),
     ),
     Channel(
@@ -854,10 +692,6 @@ val CATALOG: List<Channel> = listOf(
         sources = listOf(
             Source(
                 url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/hboplus/__index.m3u8?sv=1&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786319431-Pi9MnjfX4JxMUuxnHJgxq52SXIFzdeOKuVtwNVT6KM0%3D",
-            ),
-            Source(
-                url = "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/42",
-                userAgent = "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
             ),
         ),
     ),
@@ -872,9 +706,6 @@ val CATALOG: List<Channel> = listOf(
                 keyId = "1d0c9de86aa3375ab848fc728343f4a2",
                 key = "46cb51c3726930edb0e2b98382273f56",
             ),
-            Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/hbopop/__index.m3u8?sv=157&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786319479-lDYSgAj4ZFIepwV0vX8u9S0e7Ebxhf4BTv3EniTCBnY%3D",
-            ),
         ),
     ),
     Channel(
@@ -884,10 +715,6 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/hbosignature/__index.m3u8?sv=160&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786319526-INBbshGXlD9TpQbIrO2o%2B%2Bvh2AdOSYyq40%2Bxn2K8TP8%3D",
             ),
-            Source(
-                url = "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/43",
-                userAgent = "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
-            ),
         ),
     ),
     Channel(
@@ -895,14 +722,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/hbo-xtreme.png",
         sources = listOf(
             Source(
-                url = "https://getcdn.clarocdn.com.br/Content/Channel/SPOMAPHD/dsc3/manifest.mpd",
-                referer = "https://www.clarotvmais.com.br/",
-                userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
-                keyId = "88fbeafda45e3cb0a029e2e04152348a",
-                key = "40dd784747107960ed81ab3b5012c5f6",
-            ),
-            Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/hboxtreme/__index.m3u8?sv=54&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786319588-UdulgZyZ6RDlqovJ2z2GT922OIYzhtERsRLNIvGENhw%3D",
+                url = "https://p12-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/hboxtreme/__index.m3u8?sv=189&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787511065-MF8cOCgOLxbhNjlDx7aYgFiqI3wzNWscj9lyMGAo870%3D",
             ),
         ),
     ),
@@ -911,11 +731,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/hgtv.png",
         sources = listOf(
             Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/hgtv/__index.m3u8?sv=19&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786319632-e1qPFbo7TJi2Lby9%2BI9oTn0jZMeT0HApUMoTzAF%2FwJw%3D",
-            ),
-            Source(
-                url = "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/13",
-                userAgent = "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
+                url = "https://p12-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/hgtv/__index.m3u8?sv=188&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787511107-5Gqm2EtvzFQgO5xWcbBEWw3h3s3gsAbFx3JKsKK2jG0%3D",
             ),
         ),
     ),
@@ -924,11 +740,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/record-tv.png",
         sources = listOf(
             Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/record/__index.m3u8?sv=56&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786319751-ihJPWustFQ8fO9p1yyF%2BMusOyiKd5%2FAq0JfK%2FT7%2B2AY%3D",
-            ),
-            Source(
-                url = "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/726",
-                userAgent = "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
+                url = "https://p12-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/record-sd/__index.m3u8?sv=73&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787511191-SNf%2FD88bP%2BjjhIapnxWU19X0mBN5cdY85xCqEanPUsI%3D",
             ),
         ),
     ),
@@ -937,11 +749,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/space.png",
         sources = listOf(
             Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/space/__index.m3u8?sv=32&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786319822-jZjECmMzIWG6zhTnKGLKJd%2BzLRKz4K5nb1etZg2KBOU%3D",
-            ),
-            Source(
-                url = "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/70",
-                userAgent = "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
+                url = "https://p12-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/space/__index.m3u8?sv=92&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787511271-pvZFXRB6qIcrfFUyEDuS1MreRBFIgm3sYbySni7QoPs%3D",
             ),
         ),
     ),
@@ -952,10 +760,6 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/tnt/__index.m3u8?sv=86&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786320015-pLkZ%2FNdlgXV4jqtDYTJ51nEkLG8WRJkACfkgm5UMYF8%3D",
             ),
-            Source(
-                url = "http://aguasdecoco.cdnxjp.space:80/03985093485/903482930834/84",
-                userAgent = "Mozilla/5.0 (Linux; Android 13; SM-A536B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
-            ),
         ),
     ),
     Channel(
@@ -964,13 +768,6 @@ val CATALOG: List<Channel> = listOf(
         sources = listOf(
             Source(
                 url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/tntseries/__index.m3u8?sv=5&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786320066-hcnuxiV0uoL54pSnZai999RtJv4kuUlXop3OpOigZek%3D",
-            ),
-            Source(
-                url = "https://0022-tbx.vrioott.com/tntseries/manifest.mpd",
-                referer = "https://www.skymais.com.br/",
-                userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
-                keyId = "58d90559a4235ef98711a5b0ec652b7e",
-                key = "84942c1d33c0d96dc84623648f1137e9",
             ),
         ),
     ),
@@ -985,9 +782,6 @@ val CATALOG: List<Channel> = listOf(
                 keyId = "0110de67e8a43229a9afee5fbb1bf34c",
                 key = "14d17ea503859feb50f395a19491a2ea",
             ),
-            Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/universal/__index.m3u8?sv=60&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786320128-FxFFFQxrmw897iWMG7XhBfzLKd1XJ4nk1YU5W1ajEo4%3D",
-            ),
         ),
     ),
 )
@@ -999,7 +793,7 @@ val RESTRICTED: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/sexy-hot.png",
         sources = listOf(
             Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/sexhot/__index.m3u8?sv=108&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786409275-3SbSGeICp%2BQQE1GjPHhT3%2BEEN2faTpnK3nkAYc1ZZ%2Fk%3D",
+                url = "https://p12-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/sexhot/__index.m3u8?sv=78&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787511388-rZbfJ5bOpuDMWOJEcSsiyRRhOgnqQDs4s%2B%2BXoJWy43I%3D",
             ),
         ),
     ),
@@ -1008,7 +802,7 @@ val RESTRICTED: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/sexprive.png",
         sources = listOf(
             Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/sexprive/__index.m3u8?sv=155&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786409329-I1OhIzY4uS7zmKoJhWYDv0FInQCzunDEsQkyiw%2F%2Bm%2B4%3D",
+                url = "https://p12-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/sexprive/__index.m3u8?sv=110&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787511437-dFK5X3iYi9G%2FI1YwlVC3CqnGpQyF75Cm83YWOxkbhuI%3D",
             ),
         ),
     ),
