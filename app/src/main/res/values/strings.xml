@@ -15,8 +15,14 @@
     <string name="guide">Programação</string>
     <string name="vod">Filmes e Séries</string>
     <string name="vod_filmes">Filmes</string>
+    <string name="vod_filmes_um">Filme</string>
+    <string name="vod_faltam">faltam %1$d min de %2$d</string>
     <string name="vod_series">Séries</string>
     <string name="vod_extras">Extras</string>
+    <string name="vod_buscar">Buscar</string>
+    <string name="vod_buscar_dica">digite o nome</string>
+    <string name="vod_resultados">Resultados de "%1$s"</string>
+    <string name="vod_espaco">espaço</string>
     <string name="vod_legenda">OK escolhe · VOLTAR sobe um nível</string>
     <string name="vod_carregando">Carregando…</string>
     <string name="vod_vazio">Nada aqui</string>

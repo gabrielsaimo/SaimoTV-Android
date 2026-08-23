@@ -91,6 +91,87 @@
         android:textSize="26sp"
         android:visibility="gone" />
 
+    <!-- Teclado na tela: procurar num controle remoto não tem outro jeito. -->
+    <FrameLayout
+        android:id="@+id/vodTeclado"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#E6000000"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="820dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_modal"
+            android:orientation="vertical"
+            android:padding="26dp">
+
+            <TextView
+                android:id="@+id/vodTermo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="14dp"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:hint="@string/vod_buscar_dica"
+                android:minHeight="48dp"
+                android:textColor="@color/accent"
+                android:textColorHint="@color/text_faint"
+                android:textSize="32sp" />
+
+            <GridLayout
+                android:id="@+id/vodTeclas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="8" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- Ficha do que está tocando, acompanhando a barra de controle: aparece
+         com ela e some com ela, para não ficar sobre a imagem o filme inteiro. -->
+    <LinearLayout
+        android:id="@+id/vodFicha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:background="@drawable/bg_top_scrim"
+        android:orientation="vertical"
+        android:paddingStart="56dp"
+        android:paddingTop="40dp"
+        android:paddingEnd="56dp"
+        android:paddingBottom="60dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/vodFichaNome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-medium"
+            android:maxLines="1"
+            android:textColor="@color/text_primary"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/vodFichaDetalhe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/text_secondary"
+            android:textSize="19sp" />
+
+        <TextView
+            android:id="@+id/vodFichaTempo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/text_faint"
+            android:textSize="17sp" />
+    </LinearLayout>
+
     <!-- O player do VOD tem controle: filme se pausa e se avança, ao contrário
          de canal ao vivo. -->
     <androidx.media3.ui.PlayerView

@@ -90,6 +90,50 @@ object Vod {
         }.toList()
     }
 
+    data class Achado(val titulo: String, val serie: Boolean, val letra: String)
+
+    /**
+     * Procura em todo o acervo.
+     *
+     * O índice traz só nome, tipo e letra — 780 KB para trinta mil títulos —
+     * então dá para procurar no acervo inteiro sem baixar o acervo. Ele fica na
+     * memória depois da primeira busca, que é quando a pessoa vai fazer a
+     * segunda.
+     */
+    suspend fun buscar(context: Context, termo: String): List<Achado> {
+        val alvo = normalizar(termo)
+        if (alvo.length < 2) return emptyList()
+        val texto = indiceBusca ?: arquivo(context, "busca.txt")?.also { indiceBusca = it }
+            ?: return emptyList()
+        val out = mutableListOf<Achado>()
+        for (linha in texto.lineSequence()) {
+            val campos = linha.split("\t")
+            if (campos.size < 3) continue
+            if (!normalizar(campos[0]).contains(alvo)) continue
+            out += Achado(campos[0], campos[1] == "s", campos[2])
+            if (out.size >= 200) break
+        }
+        return out
+    }
+
+    @Volatile
+    private var indiceBusca: String? = null
+
+    private fun normalizar(texto: String): String =
+        java.text.Normalizer.normalize(texto, java.text.Normalizer.Form.NFD)
+            .replace(Regex("\\p{Mn}+"), "")
+            .lowercase()
+            .replace(Regex("[^a-z0-9]+"), " ")
+            .trim()
+
+    /** Um filme específico, pelo nome, dentro da letra dele. */
+    suspend fun filme(context: Context, achado: Achado): Filme? =
+        filmes(context, achado.letra).firstOrNull { it.titulo == achado.titulo }
+
+    /** Uma série específica, pelo nome, dentro da letra dela. */
+    suspend fun serie(context: Context, achado: Achado): Serie? =
+        series(context, achado.letra).firstOrNull { it.titulo == achado.titulo }
+
     /** Episódios de uma série. Baixa só o pedaço em que ela está. */
     suspend fun episodios(context: Context, letra: String, serie: Serie): List<Episodio> {
         val nome = "series-${gaveta(letra)}-${serie.pedaco}.txt"

@@ -1,11 +1,14 @@
 package br.com.saimo.tv
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -14,6 +17,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import kotlinx.coroutines.launch
 
 /**
@@ -34,12 +38,15 @@ class VodActivity : AppCompatActivity() {
         data class Temporadas(val letra: String, val serie: Serie) : Passo
         data class Episodios(val letra: String, val serie: Serie, val temporada: Int) : Passo
         data class Versoes(val titulo: String, val fontes: Map<String, List<String>>) : Passo
+        data class Resultados(val termo: String) : Passo
     }
 
     private data class Linha(
         val texto: String,
         val detalhe: String? = null,
         val inicial: String = "",
+        /// Nulo quando a linha não é um título — letra e temporada não têm capa.
+        val capaDe: Boolean? = null,
         val aoEscolher: () -> Unit,
     )
 
@@ -50,7 +57,23 @@ class VodActivity : AppCompatActivity() {
     private lateinit var estado: TextView
     private lateinit var browse: View
     private lateinit var playerView: PlayerView
+    private lateinit var teclado: View
+    private lateinit var termo: TextView
+    private lateinit var teclas: android.widget.GridLayout
+    private lateinit var ficha: View
+    private lateinit var fichaNome: TextView
+    private lateinit var fichaDetalhe: TextView
+    private lateinit var fichaTempo: TextView
     private var player: ExoPlayer? = null
+
+    private val relogio = Handler(Looper.getMainLooper())
+    /// A ficha mostra quanto falta, e isso muda enquanto o filme corre.
+    private val tique = object : Runnable {
+        override fun run() {
+            atualizarTempo()
+            relogio.postDelayed(this, 5_000)
+        }
+    }
 
     private val pilha = ArrayDeque<Passo>()
     private val adapter = Adapter()
@@ -69,6 +92,23 @@ class VodActivity : AppCompatActivity() {
         estado = findViewById(R.id.vodEstado)
         browse = findViewById(R.id.browse)
         playerView = findViewById(R.id.vodPlayer)
+        teclado = findViewById(R.id.vodTeclado)
+        termo = findViewById(R.id.vodTermo)
+        teclas = findViewById(R.id.vodTeclas)
+        montarTeclado()
+        ficha = findViewById(R.id.vodFicha)
+        fichaNome = findViewById(R.id.vodFichaNome)
+        fichaDetalhe = findViewById(R.id.vodFichaDetalhe)
+        fichaTempo = findViewById(R.id.vodFichaTempo)
+        // A ficha acompanha a barra de controle: aparece com ela e some junto.
+        playerView.setControllerVisibilityListener(
+            PlayerView.ControllerVisibilityListener { visivel ->
+                ficha.visibility = if (player != null && visivel == View.VISIBLE) {
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
+            })
 
         lista.layoutManager = GridLayoutManager(this, 1)
         lista.adapter = adapter
@@ -105,7 +145,8 @@ class VodActivity : AppCompatActivity() {
             is Passo.Titulos -> titulos(passo.filmes, passo.letra, passo.reservado)
             is Passo.Temporadas -> temporadas(passo.letra, passo.serie)
             is Passo.Episodios -> episodios(passo.temporada)
-            is Passo.Versoes -> versoes(passo.fontes)
+            is Passo.Versoes -> versoes(passo.titulo, passo.fontes)
+            is Passo.Resultados -> resultados(passo.termo)
         }
         estado.visibility = if (linhas.isEmpty()) View.VISIBLE else View.GONE
         if (linhas.isEmpty()) estado.text = getString(R.string.vod_vazio)
@@ -115,7 +156,7 @@ class VodActivity : AppCompatActivity() {
         // duas colunas ainda dobram o que se vê sem apertar o texto.
         (lista.layoutManager as GridLayoutManager).spanCount = when (passo) {
             is Passo.Letras -> 6
-            is Passo.Titulos, is Passo.Episodios -> 2
+            is Passo.Titulos, is Passo.Episodios, is Passo.Resultados -> 2
             else -> 1
         }
         trilha.text = trilhaDe(passo)
@@ -137,6 +178,7 @@ class VodActivity : AppCompatActivity() {
         is Passo.Episodios -> "${passo.serie.titulo} › " +
             getString(R.string.vod_temporada, passo.temporada)
         is Passo.Versoes -> passo.titulo
+        is Passo.Resultados -> getString(R.string.vod_resultados, passo.termo)
     }
 
     private fun secao(filmes: Boolean, reservado: Boolean = false) = getString(
@@ -145,6 +187,97 @@ class VodActivity : AppCompatActivity() {
             filmes -> R.string.vod_filmes
             else -> R.string.vod_series
         })
+
+    // MARK: - Busca
+
+    private var digitado = StringBuilder()
+
+    /// Teclado montado em código: vinte e oito botões iguais em XML seriam
+    /// vinte e oito blocos para manter em sincronia.
+    private fun montarTeclado() {
+        val letras = ('A'..'Z').map { it.toString() } + (0..9).map { it.toString() }
+        for (tecla in letras) {
+            teclas.addView(botaoTecla(tecla, 1) { digitar(tecla) })
+        }
+        teclas.addView(botaoTecla(getString(R.string.vod_espaco), 2) { digitar(" ") })
+        teclas.addView(botaoTecla(getString(R.string.pad_delete), 2) { apagar() })
+        teclas.addView(botaoTecla(getString(R.string.vod_buscar), 2) { confirmarBusca() })
+    }
+
+    private fun botaoTecla(texto: String, colunas: Int, aoTocar: () -> Unit): View {
+        val botao = TextView(this).apply {
+            text = texto
+            gravity = android.view.Gravity.CENTER
+            setTextColor(getColor(R.color.text_primary))
+            textSize = if (colunas > 1) 16f else 20f
+            isFocusable = true
+            setBackgroundResource(R.drawable.row_focus)
+            setOnClickListener { aoTocar() }
+        }
+        val parametros = android.widget.GridLayout.LayoutParams().apply {
+            width = 0
+            height = 74
+            columnSpec = android.widget.GridLayout.spec(
+                android.widget.GridLayout.UNDEFINED, colunas, 1f)
+            setMargins(5, 5, 5, 5)
+        }
+        botao.layoutParams = parametros
+        return botao
+    }
+
+    private fun abrirBusca() {
+        digitado = StringBuilder()
+        termo.text = ""
+        teclado.visibility = View.VISIBLE
+        teclado.post { teclas.getChildAt(0)?.requestFocus() }
+    }
+
+    private fun fecharBusca() {
+        teclado.visibility = View.GONE
+        lista.post { lista.getChildAt(0)?.requestFocus() }
+    }
+
+    private fun digitar(texto: String) {
+        if (digitado.length >= 40) return
+        digitado.append(texto)
+        termo.text = digitado
+    }
+
+    private fun apagar() {
+        if (digitado.isNotEmpty()) digitado.deleteCharAt(digitado.length - 1)
+        termo.text = digitado
+    }
+
+    private fun confirmarBusca() {
+        val alvo = digitado.toString().trim()
+        teclado.visibility = View.GONE
+        if (alvo.length < 2) return
+        ir(Passo.Resultados(alvo))
+    }
+
+    private suspend fun resultados(termo: String): List<Linha> =
+        Vod.buscar(this, termo).map { achado ->
+            Linha(achado.titulo,
+                getString(if (achado.serie) R.string.vod_series else R.string.vod_filmes_um),
+                inicial(achado.titulo), capaDe = achado.serie) {
+                lifecycleScope.launch { abrirAchado(achado) }
+            }
+        }
+
+    private suspend fun abrirAchado(achado: Vod.Achado) {
+        if (achado.serie) {
+            Vod.serie(this, achado)?.let { ir(Passo.Temporadas(achado.letra, it)) }
+        } else {
+            val filme = Vod.filme(this, achado) ?: return
+            val unica = filme.fontes.entries.firstOrNull()
+            if (filme.fontes.size == 1 && unica != null) {
+                tocar(filme.titulo, unica.value,
+                      detalhe = getString(R.string.vod_filmes_um) + " · " + rotulo(unica.key))
+            } else {
+                ir(Passo.Versoes(filme.titulo, filme.fontes))
+            }
+        }
+    }
 
     // MARK: - Degraus
 
@@ -158,6 +291,9 @@ class VodActivity : AppCompatActivity() {
             },
             Linha(getString(R.string.vod_series), getString(R.string.vod_contagem, series), "S") {
                 ir(Passo.Letras(filmes = false))
+            },
+            Linha(getString(R.string.vod_buscar), getString(R.string.vod_buscar_dica), "?") {
+                abrirBusca()
             }) + reservados()
     }
 
@@ -196,9 +332,14 @@ class VodActivity : AppCompatActivity() {
                                 reservado: Boolean = false): List<Linha> =
         if (filmes) {
             Vod.filmes(this, letra, reservado).map { filme ->
-                Linha(filme.titulo, detalheFilme(filme), inicial(filme.titulo)) {
-                    if (filme.fontes.size == 1) tocar(filme.titulo, filme.fontes.values.first())
-                    else ir(Passo.Versoes(filme.titulo, filme.fontes))
+                Linha(filme.titulo, detalheFilme(filme), inicial(filme.titulo), capaDe = false) {
+                    val unica = filme.fontes.entries.firstOrNull()
+                    if (filme.fontes.size == 1 && unica != null) {
+                        tocar(filme.titulo, unica.value,
+                              detalhe = getString(R.string.vod_filmes_um) + " · " + rotulo(unica.key))
+                    } else {
+                        ir(Passo.Versoes(filme.titulo, filme.fontes))
+                    }
                 }
             }
         } else {
@@ -206,7 +347,7 @@ class VodActivity : AppCompatActivity() {
                 val detalhe = listOfNotNull(
                     serie.ano.takeIf { it.isNotBlank() },
                     getString(R.string.vod_eps, serie.episodios)).joinToString(" · ")
-                Linha(serie.titulo, detalhe, inicial(serie.titulo)) {
+                Linha(serie.titulo, detalhe, inicial(serie.titulo), capaDe = true) {
                     ir(Passo.Temporadas(letra, serie))
                 }
             }
@@ -229,15 +370,22 @@ class VodActivity : AppCompatActivity() {
         .map { episodio ->
             Linha(getString(R.string.vod_episodio, episodio.numero),
                 detalhe(episodio.versao, episodio.urls.size), episodio.numero.toString()) {
-                tocar(getString(R.string.vod_episodio, episodio.numero), episodio.urls)
+                val serie = (pilha.last() as? Passo.Episodios)?.serie?.titulo.orEmpty()
+                tocar(serie.ifEmpty { getString(R.string.vod_episodio, episodio.numero) },
+                      episodio.urls,
+                      detalhe = getString(R.string.vod_temporada, episodio.temporada) + ", " +
+                          getString(R.string.vod_episodio, episodio.numero).lowercase() +
+                          " · " + rotulo(episodio.versao))
             }
         }
 
-    private fun versoes(fontes: Map<String, List<String>>) = fontes.map { (versao, urls) ->
-        Linha(rotulo(versao), detalhe(versao, urls.size).takeIf { urls.size > 1 }, "") {
-            tocar(rotulo(versao), urls)
+    private fun versoes(titulo: String, fontes: Map<String, List<String>>) =
+        fontes.map { (versao, urls) ->
+            Linha(rotulo(versao), detalhe(versao, urls.size).takeIf { urls.size > 1 }, "") {
+                tocar(titulo, urls,
+                      detalhe = getString(R.string.vod_filmes_um) + " · " + rotulo(versao))
+            }
         }
-    }
 
     /// Duas fontes não viram duas linhas: viram uma linha e uma reserva. Dizer
     /// quantas há evita a impressão de que o título ficou por um fio.
@@ -261,8 +409,10 @@ class VodActivity : AppCompatActivity() {
     private var fontesAtuais: List<String> = emptyList()
     private var fonteAtual = 0
 
-    private fun tocar(nome: String, urls: List<String>, indice: Int = 0) {
+    private fun tocar(nome: String, urls: List<String>, indice: Int = 0,
+                      detalhe: String = fichaDetalheAtual) {
         if (urls.isEmpty()) return
+        fichaDetalheAtual = detalhe
         fontesAtuais = urls
         fonteAtual = indice.coerceIn(urls.indices)
         val url = urls[fonteAtual]
@@ -292,9 +442,33 @@ class VodActivity : AppCompatActivity() {
         estado.visibility = View.GONE
         playerView.requestFocus()
         titulo.text = nome
+        fichaNome.text = nome
+        fichaDetalhe.text = detalhe
+        fichaDetalhe.visibility = if (detalhe.isEmpty()) View.GONE else View.VISIBLE
+        atualizarTempo()
+        ficha.visibility = View.VISIBLE
+        relogio.removeCallbacks(tique)
+        relogio.postDelayed(tique, 5_000)
+    }
+
+    private var fichaDetalheAtual = ""
+
+    /// "faltam 60 min de 87" — o mesmo que o Mac mostra no lugar do guia.
+    private fun atualizarTempo() {
+        val atual = player ?: return
+        val total = atual.duration
+        if (total <= 0) {
+            fichaTempo.visibility = View.GONE
+            return
+        }
+        val faltam = ((total - atual.currentPosition) / 60_000L).coerceAtLeast(0)
+        fichaTempo.visibility = View.VISIBLE
+        fichaTempo.text = getString(R.string.vod_faltam, faltam, total / 60_000L)
     }
 
     private fun pararFilme() {
+        relogio.removeCallbacks(tique)
+        ficha.visibility = View.GONE
         player?.release()
         player = null
         playerView.player = null
@@ -305,7 +479,28 @@ class VodActivity : AppCompatActivity() {
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        // Quem tiver teclado — de USB, de celular ou o do próprio aparelho —
+        // digita direto, sem passar tecla por tecla no direcional.
+        if (teclado.visibility == View.VISIBLE) {
+            when {
+                keyCode in KeyEvent.KEYCODE_A..KeyEvent.KEYCODE_Z -> {
+                    digitar(('A' + (keyCode - KeyEvent.KEYCODE_A)).toString())
+                    return true
+                }
+                keyCode in KeyEvent.KEYCODE_0..KeyEvent.KEYCODE_9 -> {
+                    digitar((keyCode - KeyEvent.KEYCODE_0).toString())
+                    return true
+                }
+                keyCode == KeyEvent.KEYCODE_SPACE -> { digitar(" "); return true }
+                keyCode == KeyEvent.KEYCODE_DEL -> { apagar(); return true }
+                keyCode == KeyEvent.KEYCODE_ENTER -> { confirmarBusca(); return true }
+            }
+        }
         if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ESCAPE) {
+            if (teclado.visibility == View.VISIBLE) {
+                fecharBusca()
+                return true
+            }
             return voltar() || super.onKeyDown(keyCode, event)
         }
         return super.onKeyDown(keyCode, event)
@@ -334,6 +529,9 @@ class VodActivity : AppCompatActivity() {
             val nome: TextView = view.findViewById(R.id.vodNome)
             val detalhe: TextView = view.findViewById(R.id.vodDetalhe)
             val inicial: TextView = view.findViewById(R.id.vodInicial)
+            val capa: ImageView = view.findViewById(R.id.vodCapa)
+            /// Para descartar a capa que chegar depois de a linha ser reusada.
+            var pedido: String? = null
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -355,6 +553,23 @@ class VodActivity : AppCompatActivity() {
             holder.inicial.text = linha.inicial
             holder.inicial.visibility = if (linha.inicial.isEmpty()) View.GONE else View.VISIBLE
             holder.itemView.setOnClickListener { linha.aoEscolher() }
+
+            holder.capa.setImageDrawable(null)
+            holder.capa.visibility = View.GONE
+            holder.pedido = linha.texto
+            val serie = linha.capaDe ?: return
+            // A busca sai só para o que está na tela, e o resultado é descartado
+            // se a linha já tiver sido reusada por outro título enquanto isso.
+            lifecycleScope.launch {
+                val capa = Capas.capa(linha.texto, serie) ?: return@launch
+                if (holder.pedido != linha.texto) return@launch
+                holder.capa.visibility = View.VISIBLE
+                holder.capa.load(capa) {
+                    // Nada de capa em disco: cada abertura busca de novo.
+                    diskCachePolicy(coil.request.CachePolicy.DISABLED)
+                    crossfade(true)
+                }
+            }
         }
 
         override fun getItemCount() = itens.size
