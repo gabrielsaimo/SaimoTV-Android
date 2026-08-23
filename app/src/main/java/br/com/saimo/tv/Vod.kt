@@ -40,7 +40,19 @@ object Vod {
     @Volatile
     private var bases: List<String> = emptyList()
 
+    /**
+     * Sobe quando o formato do catálogo muda.
+     *
+     * O cache é por arquivo e sobrevive à atualização do app, então um catálogo
+     * gravado por uma versão antiga continua sendo lido pela nova — foi assim
+     * que um índice sem as linhas `base:` deixou todo filme com endereço
+     * quebrado. Guardar a versão junto e limpar a pasta quando ela muda evita
+     * que o formato velho envenene o novo.
+     */
+    private const val VERSAO_CACHE = "2"
+
     suspend fun indice(context: Context): List<Gaveta> {
+        conferirVersao(context)
         val texto = arquivo(context, "indice.txt") ?: return emptyList()
         val out = mutableListOf<Gaveta>()
         val encontradas = mutableListOf<String>()
@@ -74,7 +86,7 @@ object Vod {
                 val marca = parte.indexOf('=')
                 if (marca <= 0) return@mapNotNull null
                 parte.take(marca) to parte.substring(marca + 1)
-                    .split(",").filter { it.isNotBlank() }.map(::montar)
+                    .split(",").filter { it.isNotBlank() }.map(::montar).filter { it.isNotEmpty() }
             }.filter { it.second.isNotEmpty() }.toMap()
             if (fontes.isEmpty()) null else Filme(campos[0], fontes)
         }.toList()
@@ -149,7 +161,7 @@ object Vod {
             if (!dentro) continue
             val campos = linha.split("\t")
             if (campos.size < 4) continue
-            val urls = campos[3].split(",").filter { it.isNotBlank() }.map(::montar)
+            val urls = campos[3].split(",").filter { it.isNotBlank() }.map(::montar).filter { it.isNotEmpty() }
             if (urls.isEmpty()) continue
             out += Episodio(
                 campos[0].toIntOrNull() ?: 0,
@@ -164,11 +176,22 @@ object Vod {
     /// maior, e o começo é sempre o mesmo punhado de servidores.
     private fun montar(valor: String): String {
         if (valor.startsWith("http")) return valor
+        // Sem a base o que sobra é "0:19927", que só falha na hora de tocar.
+        // Melhor devolver vazio e deixar a fonte de fora.
         val corte = valor.indexOf(':')
-        val indice = valor.take(corte).toIntOrNull() ?: return valor
+        val indice = valor.take(corte).toIntOrNull() ?: return ""
         val resto = valor.substring(corte + 1)
-        val base = bases.getOrNull(indice) ?: return valor
+        val base = bases.getOrNull(indice) ?: return ""
         return if (resto.contains('.')) base + resto else "$base$resto.mp4"
+    }
+
+    private fun conferirVersao(context: Context) {
+        val pasta = File(context.filesDir, "vod").apply { mkdirs() }
+        val marca = File(pasta, "versao.txt")
+        val atual = runCatching { marca.readText() }.getOrNull()
+        if (atual == VERSAO_CACHE) return
+        pasta.listFiles()?.forEach { it.delete() }
+        runCatching { marca.writeText(VERSAO_CACHE) }
     }
 
     private fun gaveta(letra: String) = if (letra == "#") "%23" else letra
