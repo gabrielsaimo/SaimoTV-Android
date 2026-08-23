@@ -16,6 +16,7 @@ import androidx.media3.exoplayer.drm.DefaultDrmSessionManager
 import androidx.media3.exoplayer.drm.FrameworkMediaDrm
 import androidx.media3.exoplayer.drm.LocalMediaDrmCallback
 import androidx.media3.exoplayer.hls.HlsMediaSource
+import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import androidx.media3.exoplayer.source.MediaSource
 
 /**
@@ -62,14 +63,19 @@ object Playback {
             }
 
         val item = MediaItem.fromUri(source.url)
-        return if (source.isDash) {
-            DashMediaSource.Factory(http)
+        return when {
+            source.isDash -> DashMediaSource.Factory(http)
                 .setDrmSessionManagerProvider { clearKeyManager(source) }
                 .createMediaSource(item)
-        } else {
-            HlsMediaSource.Factory(http)
-                .setAllowChunklessPreparation(true)
-                .createMediaSource(item)
+            source.url.contains(".m3u8", ignoreCase = true) ->
+                HlsMediaSource.Factory(http)
+                    .setAllowChunklessPreparation(true)
+                    .createMediaSource(item)
+            // Fluxo MPEG-TS cru, servido direto e não por playlist. Metade das
+            // listas de IPTV é assim, muitas vezes sem extensão nenhuma na URL.
+            // Mandá-lo para o HLS é pedir uma playlist a quem só tem vídeo: o
+            // canal não abria no TV Box e abria no Mac, que passa pelo ffmpeg.
+            else -> ProgressiveMediaSource.Factory(http).createMediaSource(item)
         }
     }
 
