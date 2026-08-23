@@ -3,6 +3,9 @@
     <string name="app_name">Saimo TV</string>
     <string name="live">AO VIVO</string>
     <string name="loading">Ligando o canal…</string>
+    <string name="loading_source">Ligando o canal… · fonte %1$d de %2$d</string>
+    <string name="source_failed">Fonte %1$d não respondeu · tentando a %2$d de %3$d</string>
+    <string name="source_label">fonte %1$d/%2$d · %3$s</string>
     <string name="reconnecting">Sinal caiu — reconectando</string>
     <string name="unavailable">Canal indisponível no momento</string>
     <string name="channels">Canais</string>

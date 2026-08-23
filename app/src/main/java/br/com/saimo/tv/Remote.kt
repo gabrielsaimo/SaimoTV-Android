@@ -19,8 +19,13 @@ import java.io.File
 @UnstableApi
 object Remote {
 
-    private const val URL =
-        "https://raw.githubusercontent.com/gabrielsaimo/SaimoPlayer/main/canais.txt"
+    private const val BASE = "https://raw.githubusercontent.com/gabrielsaimo/SaimoPlayer/main/"
+    /// O catálogo inteiro, com chave de ClearKey, Referer e agente. É a lista
+    /// que manda: editar este arquivo troca um link sem recompilar nada.
+    private const val CATALOG_URL = BASE + "catalogo.txt"
+    /// Extras publicados à parte, em M3U. Um M3U não guarda chave nem cabeçalho,
+    /// então ele entra como reserva, nunca no lugar do catálogo.
+    private const val EXTRAS_URL = BASE + "canais.txt"
 
     @Volatile
     var channels: List<Channel> = CATALOG
@@ -28,25 +33,32 @@ object Remote {
 
     /** Lista disponível agora, sem tocar na rede. */
     fun loadCached(context: Context) {
-        val text = runCatching { cacheFile(context).readText() }.getOrNull() ?: return
-        val parsed = parse(text)
-        if (parsed.isNotEmpty()) channels = merge(parsed)
+        val base = ler(context, "catalogo.txt")
+        val extras = ler(context, "canais.txt")
+        if (base.isNotEmpty() || extras.isNotEmpty()) channels = merge(base, extras)
+    }
+
+    private fun ler(context: Context, nome: String): List<Channel> {
+        val text = runCatching { File(context.filesDir, nome).readText() }.getOrNull()
+            ?: return emptyList()
+        return parse(text)
     }
 
     /**
-     * Junta a lista publicada ao catálogo em vez de trocar um pelo outro.
+     * Junta as duas listas: o catálogo publicado manda, os extras entram atrás.
      *
-     * O catálogo carrega o que a lista publicada não tem como carregar: a chave
+     * O catálogo carrega o que um M3U não tem como carregar: a chave
      * do ClearKey dos 42 canais com DRM, o Referer e o User-Agent que certos
      * CDNs exigem, e a ordem em que as fontes devem ser tentadas. Trocar um pelo
      * outro apagaria tudo isso. Casando por nome, cada canal fica com as fontes
      * do catálogo primeiro e as publicadas logo atrás, como reserva; o que só
      * existe na lista publicada entra no fim, como canal novo.
      */
-    internal fun merge(published: List<Channel>): List<Channel> {
+    internal fun merge(base: List<Channel>, published: List<Channel>): List<Channel> {
+        val principal = base.ifEmpty { CATALOG }
         val extra = published.associateBy { Epg.normalise(it.name) }
         val usados = mutableSetOf<String>()
-        val out = CATALOG.map { channel ->
+        val out = principal.map { channel ->
             val chave = Epg.normalise(channel.name)
             val vindas = extra[chave] ?: return@map channel
             usados += chave
@@ -63,24 +75,35 @@ object Remote {
      * a lista.
      */
     suspend fun refresh(context: Context): Boolean = withContext(Dispatchers.IO) {
+        val base = baixar(context, CATALOG_URL, "catalogo.txt")
+        val extras = baixar(context, EXTRAS_URL, "canais.txt")
+        if (base.isEmpty() && extras.isEmpty()) return@withContext false
+
+        val merged = merge(base.ifEmpty { ler(context, "catalogo.txt") },
+                           extras.ifEmpty { ler(context, "canais.txt") })
+        if (merged.isEmpty() || merged == channels) return@withContext false
+        channels = merged
+        true
+    }
+
+    /// Baixa e guarda. Devolve vazio quando não veio nada aproveitável, e aí
+    /// quem chamou fica com o que já estava em disco.
+    private fun baixar(context: Context, url: String, nome: String): List<Channel> {
         val text = runCatching {
             val request = Request.Builder()
-                .url(URL)
+                .url(url)
                 .header("User-Agent", Playback.DEFAULT_USER_AGENT)
                 .header("Cache-Control", "no-cache")
                 .build()
             Playback.client.newCall(request).execute().use { response ->
                 if (!response.isSuccessful) null else response.body?.string()
             }
-        }.getOrNull() ?: return@withContext false
+        }.getOrNull() ?: return emptyList()
 
         val parsed = parse(text)
-        if (parsed.isEmpty()) return@withContext false
-        val merged = merge(parsed)
-        runCatching { cacheFile(context).writeText(text) }
-        if (merged == channels) return@withContext false
-        channels = merged
-        true
+        if (parsed.isEmpty()) return emptyList()
+        runCatching { File(context.filesDir, nome).writeText(text) }
+        return parsed
     }
 
     /**
@@ -203,7 +226,5 @@ object Remote {
     }
 
     /** Só para o teste alcançar o merge sem abrir o objeto todo. */
-    internal fun mergeForTest(published: List<Channel>) = merge(published)
-
-    private fun cacheFile(context: Context) = File(context.filesDir, "canais.txt")
+    internal fun mergeForTest(published: List<Channel>) = merge(CATALOG, published)
 }

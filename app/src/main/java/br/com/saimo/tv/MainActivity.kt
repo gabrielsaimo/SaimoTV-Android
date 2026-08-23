@@ -14,6 +14,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
@@ -62,6 +63,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var bannerChannel: TextView
     private lateinit var bannerProgramme: TextView
     private lateinit var bannerProgress: ProgressBar
+    private lateinit var bannerSource: TextView
     private lateinit var bannerTimes: TextView
     private lateinit var status: TextView
     private lateinit var listHeader: View
@@ -119,6 +121,7 @@ class MainActivity : AppCompatActivity() {
         bannerChannel = findViewById(R.id.bannerChannel)
         bannerProgramme = findViewById(R.id.bannerProgramme)
         bannerProgress = findViewById(R.id.bannerProgress)
+        bannerSource = findViewById(R.id.bannerSource)
         bannerTimes = findViewById(R.id.bannerTimes)
         status = findViewById(R.id.status)
         listHeader = findViewById(R.id.listHeader)
@@ -205,13 +208,21 @@ class MainActivity : AppCompatActivity() {
 
     // MARK: - Playback
 
-    private fun play(index: Int, source: Int = 0) {
+    private fun play(index: Int, source: Int = 0, apósFalha: Boolean = false) {
         current = index.coerceIn(ordered.indices)
         sourceIndex = source
         val channel = ordered[current]
         val chosen = channel.sources.getOrNull(sourceIndex) ?: channel.sources.first()
 
-        showStatus(getString(R.string.loading))
+        // O aviso conta a tentativa inteira, não só o instante da troca: dizer
+        // "fonte 1 falhou" por meio segundo e sumir não informa ninguém.
+        showStatus(when {
+            apósFalha -> getString(R.string.source_failed, sourceIndex,
+                                   sourceIndex + 1, channel.sources.size)
+            channel.sources.size > 1 ->
+                getString(R.string.loading_source, sourceIndex + 1, channel.sources.size)
+            else -> getString(R.string.loading)
+        })
         handler.removeCallbacks(sourceTimeout)
         handler.postDelayed(sourceTimeout, SOURCE_TIMEOUT_MS)
         player.setMediaSource(Playback.mediaSource(this, chosen))
@@ -239,7 +250,7 @@ class MainActivity : AppCompatActivity() {
             // Each channel lists its sources in preference order; a dead or
             // expired link falls through to the next before giving up.
             if (sourceIndex + 1 < channel.sources.size) {
-                play(current, sourceIndex + 1)
+                play(current, sourceIndex + 1, apósFalha = true)
                 return
             }
             retries++
@@ -321,7 +332,7 @@ class MainActivity : AppCompatActivity() {
     private val sourceTimeout = Runnable {
         val channel = ordered.getOrNull(current) ?: return@Runnable
         if (sourceIndex + 1 < channel.sources.size) {
-            play(current, sourceIndex + 1)
+            play(current, sourceIndex + 1, apósFalha = true)
         } else {
             showStatus(getString(R.string.unavailable))
         }
@@ -490,6 +501,13 @@ class MainActivity : AppCompatActivity() {
         val channel = ordered[current]
         bannerNumber.text = (current + 1).toString()
         bannerChannel.text = channel.name
+        val fonte = channel.sources.getOrNull(sourceIndex)
+        bannerSource.text = fonte?.let {
+            getString(R.string.source_label, sourceIndex + 1, channel.sources.size,
+                it.url.toUri().host ?: it.url.take(40))
+        }.orEmpty()
+        bannerSource.visibility =
+            if (bannerSource.text.isNullOrEmpty()) View.GONE else View.VISIBLE
         if (channel.logo != null) bannerLogo.load(channel.logo) else bannerLogo.setImageDrawable(null)
 
         val now = System.currentTimeMillis()
