@@ -129,6 +129,9 @@ class MainActivity : AppCompatActivity() {
         numpadValue = findViewById(R.id.numpadValue)
 
         listHeader.setOnClickListener { openNumpad() }
+        findViewById<View>(R.id.vodEntrada).setOnClickListener {
+            startActivity(Intent(this, VodActivity::class.java))
+        }
         for ((id, digit) in listOf(
             R.id.pad0 to 0, R.id.pad1 to 1, R.id.pad2 to 2, R.id.pad3 to 3, R.id.pad4 to 4,
             R.id.pad5 to 5, R.id.pad6 to 6, R.id.pad7 to 7, R.id.pad8 to 8, R.id.pad9 to 9)) {
