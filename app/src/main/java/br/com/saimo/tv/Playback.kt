@@ -48,10 +48,60 @@ object Playback {
             .includeIPv6(false)
             .build()
         OkHttpClient.Builder()
-            .dns(doh)
+            .dns(NomeValido.dns(doh))
+            .addInterceptor(NomeValido.interceptor)
             .followRedirects(true)
             .followSslRedirects(true)
             .build()
+    }
+
+    /**
+     * Faz caber um host que o Java recusa.
+     *
+     * Alguns links vêm num host cujo primeiro rótulo é só underscore (63
+     * deles). Underscore não é nome de domínio válido: o `SNIHostName` recusa
+     * antes de qualquer byte sair — "Invalid input to toASCII" — e o canal
+     * nunca abre, embora o CDN responda normalmente a quem consegue falar com
+     * ele.
+     *
+     * O pedido sai então para o domínio de verdade, que é o que sobra depois de
+     * tirar os rótulos inválidos, com o nome inteiro no cabeçalho `Host` — é
+     * por ele que o CDN roteia. E como o domínio encurtado não tem endereço
+     * próprio no DNS, a busca continua sendo feita pelo nome original.
+     */
+    private object NomeValido {
+
+        /// Encurtado -> original, preenchido pelo interceptor antes de o DNS
+        /// ser consultado para aquela chamada.
+        private val nomes = java.util.concurrent.ConcurrentHashMap<String, String>()
+
+        /// O que sobra tirando os rótulos que o DNS não aceita. Nulo quando o
+        /// host já é válido, que é o caso de todos os outros.
+        private fun encurtar(host: String): String? {
+            val partes = host.split(".")
+            if (partes.none { rotulo -> rotulo.any { it == '_' } }) return null
+            val bons = partes.filterNot { rotulo -> rotulo.any { it == '_' } }
+            return if (bons.size >= 2) bons.joinToString(".") else null
+        }
+
+        val interceptor = okhttp3.Interceptor { chain ->
+            val pedido = chain.request()
+            val host = pedido.url.host
+            val curto = encurtar(host) ?: return@Interceptor chain.proceed(pedido)
+            nomes[curto] = host
+            chain.proceed(
+                pedido.newBuilder()
+                    .url(pedido.url.newBuilder().host(curto).build())
+                    // Sem isto o CDN devolve 404: o roteamento é pelo nome
+                    // completo, não pelo domínio.
+                    .header("Host", host)
+                    .build())
+        }
+
+        fun dns(base: okhttp3.Dns) = object : okhttp3.Dns {
+            override fun lookup(hostname: String): List<InetAddress> =
+                base.lookup(nomes[hostname] ?: hostname)
+        }
     }
 
     fun mediaSource(context: Context, source: Source): MediaSource {
