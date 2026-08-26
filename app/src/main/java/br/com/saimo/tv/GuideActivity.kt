@@ -34,6 +34,17 @@ class GuideActivity : AppCompatActivity() {
     private lateinit var programmeList: RecyclerView
     private lateinit var info: TextView
     private lateinit var clockLabel: TextView
+    private lateinit var ficha: View
+    private lateinit var fichaCapa: ImageView
+    private lateinit var fichaCanal: TextView
+    private lateinit var fichaTitulo: TextView
+    private lateinit var fichaHorario: TextView
+    private lateinit var fichaProgresso: ProgressBar
+    private lateinit var fichaDetalhe: TextView
+    private lateinit var fichaSinopse: TextView
+    private lateinit var fichaElenco: TextView
+    private lateinit var fichaAssistir: TextView
+    private lateinit var fichaFechar: TextView
 
     private val handler = Handler(Looper.getMainLooper())
     private val clock = SimpleDateFormat("HH:mm", Locale("pt", "BR"))
@@ -76,9 +87,24 @@ class GuideActivity : AppCompatActivity() {
             channels,
             onFocus = { focused = it; show(it) },
             onPick = { tune(it) })
-        // OK sobre um programa sintoniza o canal daquela programação: quem
-        // navegou até ali quer ver o canal, não voltar à coluna da esquerda.
-        programmes.onPick = { tune(focused) }
+        // OK sobre um programa abre a ficha dele. Trocar de canal por engano
+        // faz perder o lugar na grade, e quem parou num horário quer saber o
+        // que é aquilo — sintonizar continua a um botão de distância.
+        programmes.onPick = { programa -> abrirFicha(programa) }
+
+        ficha = findViewById(R.id.guideFicha)
+        fichaCapa = findViewById(R.id.fichaCapa)
+        fichaCanal = findViewById(R.id.fichaCanal)
+        fichaTitulo = findViewById(R.id.fichaTitulo)
+        fichaHorario = findViewById(R.id.fichaHorario)
+        fichaProgresso = findViewById(R.id.fichaProgresso)
+        fichaDetalhe = findViewById(R.id.fichaDetalhe)
+        fichaSinopse = findViewById(R.id.fichaSinopse)
+        fichaElenco = findViewById(R.id.fichaElenco)
+        fichaAssistir = findViewById(R.id.fichaAssistir)
+        fichaFechar = findViewById(R.id.fichaFechar)
+        fichaAssistir.setOnClickListener { tune(focused) }
+        fichaFechar.setOnClickListener { fecharFicha() }
 
         channelList.layoutManager = LinearLayoutManager(this)
         channelList.adapter = adapter
@@ -123,11 +149,67 @@ class GuideActivity : AppCompatActivity() {
 
     /** Rede de segurança: se nada ficou focado, o controle não pode morrer. */
     override fun onKeyDown(keyCode: Int, event: android.view.KeyEvent?): Boolean {
+        if (keyCode == android.view.KeyEvent.KEYCODE_BACK &&
+            ficha.visibility == View.VISIBLE) {
+            fecharFicha()
+            return true
+        }
         if (currentFocus == null) {
             focusRow(focused)
             return true
         }
         return super.onKeyDown(keyCode, event)
+    }
+
+    /**
+     * A ficha do programa escolhido.
+     *
+     * O guia traz o que traz: fora do que está no ar, a maioria dos programas
+     * não tem sinopse em fonte nenhuma. Então a ficha mostra o que existe —
+     * canal, título, horário, duração, categoria, temporada e episódio — em vez
+     * de fingir um campo vazio.
+     */
+    private fun abrirFicha(programa: Programme) {
+        val canal = channels.getOrNull(focused)
+        fichaCanal.text = canal?.name.orEmpty()
+        fichaTitulo.text = programa.title
+        val minutos = ((programa.stop - programa.start) / 60000).toInt()
+        fichaHorario.text = getString(R.string.ficha_horario,
+            clock.format(Date(programa.start)), clock.format(Date(programa.stop)), minutos)
+
+        val agora = System.currentTimeMillis()
+        val noAr = programa.isOnAir(agora)
+        fichaProgresso.visibility = if (noAr) View.VISIBLE else View.GONE
+        if (noAr) fichaProgresso.progress = (programa.progress(agora) * 1000).toInt()
+
+        fichaDetalhe.text = listOfNotNull(
+            programa.shortDetail,
+            if (noAr) getString(R.string.ficha_agora, ((programa.stop - agora) / 60000).toInt())
+            else null).joinToString(" · ")
+        fichaDetalhe.visibility =
+            if (fichaDetalhe.text.isNullOrBlank()) View.GONE else View.VISIBLE
+
+        fichaSinopse.text = programa.description.orEmpty()
+        fichaSinopse.visibility =
+            if (programa.description.isNullOrBlank()) View.GONE else View.VISIBLE
+        fichaElenco.text = if (programa.cast.isEmpty()) ""
+                           else getString(R.string.ficha_elenco, programa.cast.joinToString(", "))
+        fichaElenco.visibility = if (programa.cast.isEmpty()) View.GONE else View.VISIBLE
+
+        if (programa.poster != null) {
+            fichaCapa.visibility = View.VISIBLE
+            fichaCapa.load(programa.poster)
+        } else {
+            fichaCapa.visibility = View.GONE
+        }
+
+        ficha.visibility = View.VISIBLE
+        fichaAssistir.post { fichaAssistir.requestFocus() }
+    }
+
+    private fun fecharFicha() {
+        ficha.visibility = View.GONE
+        programmeList.post { programmeList.requestFocus() }
     }
 
     private fun show(index: Int) {
@@ -211,7 +293,7 @@ private class ProgrammeAdapter : RecyclerView.Adapter<ProgrammeAdapter.Holder>()
 
     private var items: List<Programme> = emptyList()
     private val clock = SimpleDateFormat("HH:mm", Locale("pt", "BR"))
-    var onPick: (() -> Unit)? = null
+    var onPick: ((Programme) -> Unit)? = null
 
     fun submit(list: List<Programme>) {
         items = list
@@ -253,7 +335,7 @@ private class ProgrammeAdapter : RecyclerView.Adapter<ProgrammeAdapter.Holder>()
             else holder.poster.setImageDrawable(null)
         }
         holder.poster.visibility = if (programme.poster != null) View.VISIBLE else View.GONE
-        holder.itemView.setOnClickListener { onPick?.invoke() }
+        holder.itemView.setOnClickListener { onPick?.invoke(programme) }
     }
 
     override fun getItemCount() = items.size

@@ -192,9 +192,48 @@ class MainActivity : AppCompatActivity() {
     /** Pega a lista publicada sem tirar do ar o canal que está tocando. */
     private fun refreshCatalog() {
         lifecycleScope.launch {
+            ofertarAtualizacao()
             if (!Remote.refresh(this@MainActivity)) return@launch
             reorder()
             updateBanner()
+        }
+    }
+
+    /**
+     * Oferece a versão nova, quando há uma.
+     *
+     * Pergunta em vez de trocar sozinho, e a checagem só acontece depois que o
+     * canal já está no ar: atualizar é assunto de quem assiste, não do começo
+     * da abertura.
+     */
+    private fun ofertarAtualizacao() {
+        lifecycleScope.launch {
+            val versao = Atualizacao.procurar(this@MainActivity) ?: return@launch
+            val dialogo = android.app.AlertDialog.Builder(this@MainActivity)
+                .setTitle(getString(R.string.update_titulo, versao.numero))
+                .setMessage(
+                    listOf(getString(R.string.update_atual, BuildConfig.VERSION_NAME),
+                           versao.notas.take(400))
+                        .filter { it.isNotBlank() }.joinToString("\n\n"))
+                .setPositiveButton(R.string.update_agora) { _, _ -> baixarAtualizacao(versao) }
+                .setNegativeButton(R.string.update_depois, null)
+                .setNeutralButton(R.string.update_pular) { _, _ ->
+                    Atualizacao.pular(this@MainActivity, versao)
+                }
+                .create()
+            dialogo.show()
+        }
+    }
+
+    private fun baixarAtualizacao(versao: Atualizacao.Versao) {
+        showStatus(getString(R.string.update_baixando, 0))
+        lifecycleScope.launch {
+            val erro = Atualizacao.instalar(this@MainActivity, versao) { fracao ->
+                runOnUiThread {
+                    showStatus(getString(R.string.update_baixando, (fracao * 100).toInt()))
+                }
+            }
+            showStatus(erro ?: getString(R.string.update_instalando))
         }
     }
 

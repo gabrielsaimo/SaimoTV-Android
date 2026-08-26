@@ -25,6 +25,9 @@ data class Programme(
     val poster: String? = null,
     val episode: String? = null,
     val year: String? = null,
+    /// A sinopse vem em quase todo programa do XMLTV e era descartada.
+    val description: String? = null,
+    val cast: List<String> = emptyList(),
 ) {
     /// XMLTV escreve episódio como "0.2." no sistema xmltv_ns: temporada,
     /// episódio e parte, todos base zero. Cru não diz nada; vira "T1 E3".
@@ -154,20 +157,26 @@ object Epg {
 
     /**
      * meuguia publica só título e gênero. Casando por título, os feeds trazem o
-     * pôster, o episódio e o ano sem tocar no horário, que é justamente o dado
-     * em que o meuguia é mais confiável.
+     * pôster, a sinopse, o elenco, o episódio e o ano sem tocar no horário, que
+     * é justamente o dado em que o meuguia é mais confiável.
+     *
+     * Preenche campo a campo: parar no primeiro programa que já tem pôster
+     * deixava sem sinopse justamente os que o feed conseguiu ilustrar.
      */
     private fun enrich(
         merged: MutableMap<String, List<Programme>>, byTitle: Map<String, Programme>,
     ) {
         for ((channel, programmes) in merged.toList()) {
             merged[channel] = programmes.map { programme ->
-                if (programme.poster != null) programme
-                else byTitle[normalise(programme.title)]?.let {
+                if (programme.poster != null && programme.description != null &&
+                    programme.cast.isNotEmpty()) return@map programme
+                byTitle[normalise(programme.title)]?.let {
                     programme.copy(
-                        poster = it.poster,
+                        poster = programme.poster ?: it.poster,
                         episode = programme.episode ?: it.episode,
                         year = programme.year ?: it.year,
+                        description = programme.description ?: it.description,
+                        cast = programme.cast.ifEmpty { it.cast },
                         category = programme.category.ifBlank { it.category })
                 } ?: programme
             }
@@ -260,7 +269,18 @@ object Epg {
         val poster = between(element, "<icon", ">")?.let { attribute(it, "src") }?.let(::decodeEntities)
         val episode = text(element, "episode-num")
         val year = text(element, "date")?.take(4)
-        return channel to Programme(title, category, start, stop, poster, episode, year)
+        val description = text(element, "desc")?.takeIf { it.isNotBlank() }
+        // O elenco vem como uma lista de <actor> dentro de <credits>.
+        val cast = between(element, "<credits", "</credits>")
+            ?.let { bloco ->
+                Regex("<actor[^>]*>(.*?)</actor>", RegexOption.DOT_MATCHES_ALL)
+                    .findAll(bloco)
+                    .map { decodeEntities(it.groupValues[1]).trim() }
+                    .filter { it.isNotEmpty() }
+                    .toList()
+            } ?: emptyList()
+        return channel to Programme(title, category, start, stop, poster, episode, year,
+                                    description, cast)
     }
 
     /** `name="value"` out of a tag's attribute text. */
@@ -434,8 +454,11 @@ object Epg {
     /// caractere que nenhum canal usa, então nunca colide com uma chave de canal.
     private const val SIGNATURE_KEY = "#catalogo"
 
+    /// O "v2" força o cache antigo a ser refeito: ele foi gravado sem sinopse
+    /// e sem elenco, e reaproveitá-lo mostraria a ficha vazia até o guia
+    /// vencer sozinho.
     private fun signature(): String =
-        Remote.channels.joinToString("|") { it.name }.hashCode().toString()
+        "v2:" + Remote.channels.joinToString("|") { it.name }.hashCode().toString()
 
     private fun readSignature(context: Context): String? = runCatching {
         JSONObject(cacheFile(context).readText()).optString(SIGNATURE_KEY).ifEmpty { null }
@@ -459,7 +482,11 @@ object Epg {
                     item.getLong("s"), item.getLong("e"),
                     item.optString("p").ifEmpty { null },
                     item.optString("n").ifEmpty { null },
-                    item.optString("y").ifEmpty { null })
+                    item.optString("y").ifEmpty { null },
+                    item.optString("d").ifEmpty { null },
+                    item.optJSONArray("a")?.let { atores ->
+                        (0 until atores.length()).map { atores.getString(it) }
+                    } ?: emptyList())
             }.filter { it.stop > cutoff }
             if (list.isNotEmpty()) out[name] = list
         }
@@ -479,6 +506,8 @@ object Epg {
                     programme.poster?.let { put("p", it) }
                     programme.episode?.let { put("n", it) }
                     programme.year?.let { put("y", it) }
+                    programme.description?.let { put("d", it) }
+                    if (programme.cast.isNotEmpty()) put("a", JSONArray(programme.cast))
                 })
             }
             root.put(name, array)

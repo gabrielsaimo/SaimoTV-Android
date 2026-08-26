@@ -12,8 +12,8 @@ android {
         // Alcança os TV Box antigos ainda em uso.
         minSdk = 21
         targetSdk = 35
-        versionCode = 2
-        versionName = "1.1"
+        versionCode = 10000
+        versionName = "1.0.0"
     }
 
     buildTypes {
@@ -28,7 +28,11 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions { jvmTarget = "17" }
-    buildFeatures { viewBinding = true }
+    buildFeatures {
+        viewBinding = true
+        // A atualização compara a versão instalada com a do release.
+        buildConfig = true
+    }
     // O parser do guia é Kotlin puro, então roda em teste de JVM contra os
     // feeds de verdade — sem isso a única forma de validá-lo seria no aparelho.
     testOptions { unitTests.isReturnDefaultValues = true }

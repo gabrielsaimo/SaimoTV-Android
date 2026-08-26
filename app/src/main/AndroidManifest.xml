@@ -3,6 +3,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- Instalar a atualização baixada; o sistema ainda pede a confirmação. -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <!-- Televisão primeiro: sem toque, tudo pelo controle. -->
     <uses-feature android:name="android.software.leanback" android:required="false" />

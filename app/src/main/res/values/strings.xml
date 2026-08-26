@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Saimo TV</string>
+    <string name="update_titulo">Versão %1$s disponível</string>
+    <string name="update_atual">Você está na %1$s.</string>
+    <string name="update_agora">Atualizar</string>
+    <string name="update_depois">Depois</string>
+    <string name="update_pular">Pular esta versão</string>
+    <string name="update_baixando">Baixando atualização… %1$d%%</string>
+    <string name="update_instalando">Confirme a instalação na tela do sistema</string>
     <string name="live">AO VIVO</string>
     <string name="loading">Ligando o canal…</string>
     <string name="loading_source">Ligando o canal… · fonte %1$d de %2$d</string>
@@ -13,6 +20,11 @@
     <string name="pad_delete">apagar</string>
     <string name="pad_ok">ir</string>
     <string name="guide">Programação</string>
+    <string name="ficha_assistir">Assistir este canal</string>
+    <string name="ficha_fechar">Fechar</string>
+    <string name="ficha_horario">%1$s – %2$s · %3$d min</string>
+    <string name="ficha_agora">no ar agora · faltam %1$d min</string>
+    <string name="ficha_elenco">Elenco: %1$s</string>
     <string name="vod">Filmes e Séries</string>
     <string name="vod_filmes">Filmes</string>
     <string name="vod_filmes_um">Filme</string>
