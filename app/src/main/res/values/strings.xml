@@ -8,6 +8,7 @@
     <string name="update_pular">Pular esta versão</string>
     <string name="update_baixando">Baixando atualização… %1$d%%</string>
     <string name="update_instalando">Confirme a instalação na tela do sistema</string>
+    <string name="update_falhou">Não deu para instalar a atualização. %1$s</string>
     <string name="live">AO VIVO</string>
     <string name="loading">Ligando o canal…</string>
     <string name="loading_source">Ligando o canal… · fonte %1$d de %2$d</string>

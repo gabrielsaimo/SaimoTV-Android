@@ -37,6 +37,16 @@
             android:exported="false"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.Saimo" />
+        <!-- O sistema responde aqui quando a instalação precisa da confirmação
+             de quem está assistindo. -->
+        <receiver
+            android:name=".InstaladorReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="br.com.saimo.tv.INSTALADO" />
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name=".GuideActivity"
             android:exported="false"
