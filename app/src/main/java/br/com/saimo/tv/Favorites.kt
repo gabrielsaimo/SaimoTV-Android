@@ -23,8 +23,8 @@ object Favorites {
             .edit().putStringSet(KEY, cache).apply()
     }
 
-    /** Favourites first, then the catalog order. */
+    /** Favourites first, then alphabetical. */
     fun sort(channels: List<Channel>): List<Channel> =
         channels.sortedWith(compareByDescending<Channel> { contains(it.name) }
-            .thenBy { channels.indexOf(it) })
+            .thenBy { it.name.lowercase() })
 }
