@@ -380,6 +380,9 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/sony.png",
         sources = listOf(
             Source(
+                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/sony/__index.m3u8?sv=207&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787840421-CoMPQTpI1T81KNG3ezpJhbubzfOqOodNk9aR1CEItWw%3D",
+            ),
+            Source(
                 url = "https://video37.mais.uol.com.br/live/279.mpd",
                 referer = "https://painel.play.uol.com.br/",
                 userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
@@ -789,7 +792,6 @@ val CATALOG: List<Channel> = listOf(
             ),
         ),
     ),
-
     Channel(
         name = "AMC Séries",
         logo = "https://mondrian.claro.com.br/channels/inverse/amc.png",
@@ -899,6 +901,15 @@ val RESTRICTED: List<Channel> = listOf(
         sources = listOf(
             Source(
                 url = "https://_______________________________________________________________.null-null.shop/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/sexprive/__index.m3u8?sv=54&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787689614-T5qTalNl2RblYNCOvkva1kwAqG1ahOhUp0YxwPPKWWE%3D",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Playboy TV",
+        logo = "https://mondrian.claro.com.br/channels/inverse/playboy-tv.png",
+        sources = listOf(
+            Source(
+                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/playboytv/__index.m3u8?sv=48&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787840278-pcqPCfDH7M3QsYXk1k6laCLQIhqLIrTK4YxaTqKUJVc%3D",
             ),
         ),
     ),
