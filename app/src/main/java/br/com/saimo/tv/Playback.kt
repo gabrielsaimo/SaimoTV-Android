@@ -89,13 +89,21 @@ object Playback {
             val host = pedido.url.host
             val curto = encurtar(host) ?: return@Interceptor chain.proceed(pedido)
             nomes[curto] = host
-            chain.proceed(
+            val resposta = chain.proceed(
                 pedido.newBuilder()
                     .url(pedido.url.newBuilder().host(curto).build())
                     // Sem isto o CDN devolve 404: o roteamento é pelo nome
                     // completo, não pelo domínio.
                     .header("Host", host)
                     .build())
+            // response.request() devolvendo a URL já encurtada é o que
+            // quebrava a playlist ao vivo: o HLS recarrega usando a última
+            // URL que viu, e "null-null.shop" sozinho não tem "_" nenhum —
+            // o encurtamento não roda de novo, o Host some, e a segunda
+            // requisição (poucos segundos depois) leva 404 mesmo o link
+            // continuando válido. Devolvendo o pedido original aqui, quem
+            // recarrega sempre vê o host completo e passa pelo mesmo caminho.
+            resposta.newBuilder().request(pedido).build()
         }
 
         fun dns(base: okhttp3.Dns) = object : okhttp3.Dns {

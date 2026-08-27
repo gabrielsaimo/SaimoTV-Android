@@ -51,12 +51,6 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/amc/__index.m3u8?sv=135&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787791802-19E0T04G7LhoYwlfFJelb6WdUgMP6m04036lcJ1Yxcc%3D",
             ),
-            Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/boborj/__index.m3u8?sv=86&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787792590-2LgoEndsN2iiGA42jdnqsJadhO3ya4uZwPZcspcd%2B%2Bs%3D",
-            ),
-            Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/bobomg/__index.m3u8?sv=25&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787792519-woB%2B15HwWmKrWM20RPsHNIIUT5wyYjEAhpr%2FAMYrPUo%3D",
-            ),
         ),
     ),
     Channel(
