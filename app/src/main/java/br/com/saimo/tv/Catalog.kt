@@ -74,6 +74,9 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/CARTOON_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
+            Source(
+                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/cartoon/__index.m3u8?sv=55&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788281416-bi%2FqmCP0JXVL7CPg8KO17uAbSSaC2aBFhcigfk1vQcU%3D",
+            ),
         ),
     ),
     Channel(
