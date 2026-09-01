@@ -31,6 +31,8 @@ class EpgTest {
         }
 
         assertTrue("nenhum canal casado", parsed.size >= 20)
+        assertTrue("Adult Swim não casou com a grade publicada como TruTV",
+            parsed["Adult Swim"].orEmpty().isNotEmpty())
         val total = parsed.values.sumOf { it.size }
         assertTrue("poucos programas: $total", total > 1000)
         // Cronologia é o que nowNext assume ao varrer a lista.

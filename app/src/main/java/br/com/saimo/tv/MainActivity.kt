@@ -501,10 +501,15 @@ class MainActivity : AppCompatActivity() {
         // recurso: ler width aqui daria zero e a entrada não aconteceria.
         listPanel.translationX = -panelWidth()
         // O cabeçalho é focável e vem primeiro na ordem de percurso, então o
-        // sistema o escolhe sozinho quando o painel aparece. Pedir o foco de
-        // novo ao fim da animação garante que ele pouse no canal atual.
+        // sistema o escolhe sozinho quando o painel aparece; o post abaixo
+        // resolve isso pousando no canal atual assim que a lista tiver layout.
+        // Repetir a mesma chamada aqui no fim da animação, sem condição, foi o
+        // bug: se a pessoa já tivesse descido a lista nesses 180ms, o painel
+        // arrastava o foco de volta para o canal atual, "subindo" a seleção
+        // bem na hora em que ela ainda estava apertando para baixo. Só refaz o
+        // foco se ele realmente escapou da lista (ficou no cabeçalho).
         listPanel.animate().translationX(0f).setDuration(180)
-            .withEndAction { focusRow(current) }.start()
+            .withEndAction { if (!channels.hasFocus()) focusRow(current) }.start()
         channels.post { focusRow(current) }
     }
 

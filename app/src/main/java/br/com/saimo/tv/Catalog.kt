@@ -24,7 +24,7 @@ data class Channel(
 val CATALOG: List<Channel> = listOf(
     Channel(
         name = "A&E",
-        logo = "https://mondrian.claro.com.br/channels/inverse/aee.png",
+        logo = "https://cdn.reidoscanais.st/imagens/ae.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/AE_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -33,7 +33,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Adult Swim",
-        logo = "https://mondrian.claro.com.br/channels/inverse/adult-swim.png",
+        logo = "https://cdn.reidoscanais.st/imagens/adultswim.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TRUTV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -42,7 +42,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "AMC",
-        logo = "https://mondrian.claro.com.br/channels/inverse/amc.png",
+        logo = "https://cdn.reidoscanais.st/imagens/amc.png",
         sources = listOf(
             Source(
                 url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/amc/__index.m3u8?sv=135&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787791802-19E0T04G7LhoYwlfFJelb6WdUgMP6m04036lcJ1Yxcc%3D",
@@ -51,7 +51,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Animal Planet",
-        logo = "https://mondrian.claro.com.br/channels/inverse/animal-planet.png",
+        logo = "https://cdn.reidoscanais.st/imagens/animalplanet.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/ANIMAL_PLANET_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -60,7 +60,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Band",
-        logo = "https://mondrian.claro.com.br/channels/inverse/band.png",
+        logo = "https://cdn.reidoscanais.st/imagens/band.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/BAND_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -69,7 +69,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Cartoon Network",
-        logo = "https://mondrian.claro.com.br/channels/inverse/cartoon-network.png",
+        logo = "https://cdn.reidoscanais.st/imagens/cartoonnetwork.webp",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/CARTOON_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -81,7 +81,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "CazéTV",
-        logo = "https://m.media-amazon.com/images/G/01/LCXO_Station_Logos/s151990_lw_h8_aa._SL170_FMpng_.png",
+        logo = "https://cdn.reidoscanais.st/imagens/cazetv.webp",
         sources = listOf(
             Source(
                 url = "https://dfr80qz435crc.cloudfront.net/MNOP/Amagi/Caze/Caze_TV_BR/Caze_TV.m3u8",
@@ -91,7 +91,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "CNN Brasil",
-        logo = "https://mondrian.claro.com.br/channels/inverse/cnn-brasil.png",
+        logo = "https://cdn.reidoscanais.st/imagens/cnnbrasil.png",
         sources = listOf(
             Source(
                 url = "https://amg01391-sbtinfast-amg01391c4-lg-br-4597.playouts.now.amagi.tv/playlist/amg01391-addigital-cnnbrasil-lgbr/playlist.m3u8",
@@ -111,7 +111,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "E!",
-        logo = "https://mondrian.claro.com.br/channels/inverse/e!.png",
+        logo = "https://cdn.reidoscanais.st/imagens/e.png",
         sources = listOf(
             Source(
                 url = "https://video49.mais.uol.com.br/live/4503.mpd",
@@ -134,7 +134,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Globo RJ",
-        logo = "https://mondrian.claro.com.br/channels/inverse/globo.png",
+        logo = "https://cdn.reidoscanais.st/imagens/tvglobo.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/GLOBO_RIO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -143,7 +143,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "GloboNews",
-        logo = "https://mondrian.claro.com.br/channels/inverse/globonews.png",
+        logo = "https://cdn.reidoscanais.st/imagens/globonews.png",
         sources = listOf(
             Source(
                 url = "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/dsfrp5mjrb/out/v1/9fa07e663bc94e9f93c53726a558478a/cenc.mpd",
@@ -156,7 +156,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Globoplay Novelas",
-        logo = "https://mondrian.claro.com.br/channels/inverse/viva.png",
+        logo = "https://cdn.reidoscanais.st/imagens/globoplaynovelas.png",
         sources = listOf(
             Source(
                 url = "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/ds9ertnhrl/out/v1/cb791b7362754ba1b87d9474ccd95fa3/cenc.mpd",
@@ -169,7 +169,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "GNT",
-        logo = "https://mondrian.claro.com.br/channels/inverse/gnt.png",
+        logo = "https://cdn.reidoscanais.st/imagens/gnt.png",
         sources = listOf(
             Source(
                 url = "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/h9c8z9m1dq/out/v1/9b1b1aa15b4f471ea19674290554499e/cenc.mpd",
@@ -182,7 +182,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "History",
-        logo = "https://mondrian.claro.com.br/channels/inverse/history-channel.png",
+        logo = "https://cdn.reidoscanais.st/imagens/history.webp",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/HISTORY_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -191,7 +191,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "History 2",
-        logo = "https://mondrian.claro.com.br/channels/inverse/history-2.png",
+        logo = "https://cdn.reidoscanais.st/imagens/history2.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/H2_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -200,7 +200,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Jovem Pan News",
-        logo = "https://mondrian.claro.com.br/channels/inverse/jp-news-vertical.png",
+        logo = "https://cdn.reidoscanais.st/imagens/jpnews.webp",
         sources = listOf(
             Source(
                 url = "https://amg01391-sbtinfast-amg01391c3-lg-us-8995.playouts.now.amagi.tv/playlist/amg01391-addigital-jovempan-lgus/playlist.m3u8",
@@ -210,7 +210,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Megapix",
-        logo = "https://mondrian.claro.com.br/channels/inverse/megapix.png",
+        logo = "https://cdn.reidoscanais.st/imagens/megapix.png",
         sources = listOf(
             Source(
                 url = "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/21ilsertww/out/v1/124c84cbafc745b6b2c47fc9be606727/cenc.mpd",
@@ -223,7 +223,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Multishow",
-        logo = "https://mondrian.claro.com.br/channels/inverse/multishow.png",
+        logo = "https://cdn.reidoscanais.st/imagens/multishow.png",
         sources = listOf(
             Source(
                 url = "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/x7aaupxajb/out/v1/49d602c6294147a18d798ce6abbb6957/cenc.mpd",
@@ -236,7 +236,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Premiere 2",
-        logo = "https://mondrian.claro.com.br/channels/inverse/premiere-2.png",
+        logo = "https://cdn.reidoscanais.st/imagens/premiere.png",
         sources = listOf(
             Source(
                 url = "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/oy6rp0jwmf/out/v1/580ecf12bad24979baf8dd993dce053e/cenc.mpd",
@@ -249,7 +249,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Premiere 3",
-        logo = "https://mondrian.claro.com.br/channels/inverse/premiere-3.png",
+        logo = "https://cdn.reidoscanais.st/imagens/premiere.png",
         sources = listOf(
             Source(
                 url = "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/6onrfniyry/out/v1/f23069c61dbf4e00890a40b705a84079/cenc.mpd",
@@ -262,7 +262,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Premiere 4",
-        logo = "https://mondrian.claro.com.br/channels/inverse/premiere-4.png",
+        logo = "https://cdn.reidoscanais.st/imagens/premiere.png",
         sources = listOf(
             Source(
                 url = "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/tirjor64kh/out/v1/fd2ed9916d994f09a3bd62b64141b9cb/cenc.mpd",
@@ -275,7 +275,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Premiere 5",
-        logo = "https://mondrian.claro.com.br/channels/inverse/premiere-5.png",
+        logo = "https://cdn.reidoscanais.st/imagens/premiere.png",
         sources = listOf(
             Source(
                 url = "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/1obktrybht/out/v1/08265453c8f64d9fbeb3cf43764403a8/cenc.mpd",
@@ -288,7 +288,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Premiere 6",
-        logo = "https://mondrian.claro.com.br/channels/inverse/premiere-6.png",
+        logo = "https://cdn.reidoscanais.st/imagens/premiere.png",
         sources = listOf(
             Source(
                 url = "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/0bmtb2fxcj/out/v1/b5f50c3632264d32bf857652f631b0fb/cenc.mpd",
@@ -301,7 +301,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Premiere 7",
-        logo = "https://mondrian.claro.com.br/channels/inverse/premiere-7.png",
+        logo = "https://cdn.reidoscanais.st/imagens/premiere.png",
         sources = listOf(
             Source(
                 url = "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/joij38hkop/out/v1/c920c9b42af24588a253530ed2cbd6eb/cenc.mpd",
@@ -314,7 +314,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Premiere 8",
-        logo = "https://mondrian.claro.com.br/channels/inverse/premiere-8.png",
+        logo = "https://cdn.reidoscanais.st/imagens/premiere.png",
         sources = listOf(
             Source(
                 url = "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/2s8gkqz2id/out/v1/41da2546a9a34238b8615d3beb4ee600/cenc.mpd",
@@ -327,7 +327,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Premiere Clubes",
-        logo = "https://mondrian.claro.com.br/channels/inverse/premiere.png",
+        logo = "https://cdn.reidoscanais.st/imagens/premiere.png",
         sources = listOf(
             Source(
                 url = "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/nelfyucw9a/out/v1/6ffb2c365ad14f88b154591beb43d1f6/cenc.mpd",
@@ -340,7 +340,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "SBT",
-        logo = "https://mondrian.claro.com.br/channels/inverse/sbt.png",
+        logo = "https://cdn.reidoscanais.st/imagens/sbt.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/SBT_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -349,7 +349,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "SBT News",
-        logo = "https://mondrian.claro.com.br/channels/inverse/sbt-news.png",
+        logo = "https://cdn.reidoscanais.st/imagens/sbtnews.png",
         sources = listOf(
             Source(
                 url = "https://sbtnews.maissbt.com/index.m3u8",
@@ -360,7 +360,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Sony Channel",
-        logo = "https://mondrian.claro.com.br/channels/inverse/sony.png",
+        logo = "https://cdn.reidoscanais.st/imagens/sonychannel.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/SONY_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -369,7 +369,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Studio Universal",
-        logo = "https://mondrian.claro.com.br/channels/inverse/studio-universal.png",
+        logo = "https://cdn.reidoscanais.st/imagens/studiouniversal.png",
         sources = listOf(
             Source(
                 url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/studiouniversal/__index.m3u8?sv=9&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787793443-Zlu3fC86O%2B%2FxXEhoyYY0lO7n%2FD6Ey7xed6N8%2FtOvBNE%3D",
@@ -378,7 +378,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "SporTV",
-        logo = "https://mondrian.claro.com.br/channels/inverse/sportv.png",
+        logo = "https://cdn.reidoscanais.st/imagens/sportv.png",
         sources = listOf(
             Source(
                 url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/sportv1/__index.m3u8?sv=159&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786408554-MK0K7%2F0RIabb2i7ktFkDI1P2aEeyuwRUwvOxauQ5e1c%3D",
@@ -387,7 +387,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "SporTV 2",
-        logo = "https://mondrian.claro.com.br/channels/inverse/sportv-2.png",
+        logo = "https://cdn.reidoscanais.st/imagens/sportv.png",
         sources = listOf(
             Source(
                 url = "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/dsa3hwuhd1/out/v1/631b48c8d9ea437e8309d1a4b55acef5/cenc.mpd",
@@ -400,7 +400,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "SporTV 3",
-        logo = "https://mondrian.claro.com.br/channels/inverse/sportv-3.png",
+        logo = "https://cdn.reidoscanais.st/imagens/sportv.png",
         sources = listOf(
             Source(
                 url = "https://qw.live.pv-cdn.net/OTTB/gru-nitro/live/clients/dash/enc/6otiglnptp/out/v1/add7499679b0422cb6791f7701f95ecc/cenc.mpd",
@@ -413,7 +413,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Telecine Action",
-        logo = "https://mondrian.claro.com.br/channels/inverse/tc-action.png",
+        logo = "https://cdn.reidoscanais.st/imagens/telecineaction.png",
         sources = listOf(
             Source(
                 url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/telecineaction/__index.m3u8?sv=65&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788282861-aoKYkiZeKtrLTheu479TRoyPmDfsKa5zJweP7EimknQ%3D",
@@ -422,7 +422,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Telecine Pipoca",
-        logo = "https://mondrian.claro.com.br/channels/inverse/tc-pipoca.png",
+        logo = "https://cdn.reidoscanais.st/imagens/telecinepipoca.png",
         sources = listOf(
             Source(
                 url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/telecinepipoca/__index.m3u8?sv=206&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788282959-3qjOVT%2Bg1UFwS9wUbT%2B%2BYx2y%2BVWtbigNg1%2FrRl%2Fdyug%3D",
@@ -431,7 +431,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Telecine Premium",
-        logo = "https://mondrian.claro.com.br/channels/inverse/tc-premium.png",
+        logo = "https://cdn.reidoscanais.st/imagens/telecinepremium.png",
         sources = listOf(
             Source(
                 url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/telecinepremium/__index.m3u8?sv=104&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788283005-hy2w8s5QaWo34TbclnSO6LsgzLu1mYnLArfARhQEE2w%3D",
@@ -440,7 +440,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "TV Brasil",
-        logo = "https://mondrian.claro.com.br/channels/inverse/tv-brasil.png",
+        logo = "https://cdn.reidoscanais.st/imagens/tvbrasil.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TV_BRASIL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -475,7 +475,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Warner",
-        logo = "https://mondrian.claro.com.br/channels/inverse/warner-channel.png",
+        logo = "https://cdn.reidoscanais.st/imagens/warnertv.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/WARNER_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -484,6 +484,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "IMPD",
+        logo = "https://d5pgibznjcs0s.cloudfront.net/46d92cf6-4807-45c6-9bfd-b38f80288c86/en/images/logo_full.png",
         sources = listOf(
             Source(
                 url = "https://68882bdaf156a.streamlock.net/impd/ngrp:impd_all/chunklist_w1464410885_b2691072.m3u8",
@@ -492,7 +493,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Food Network",
-        logo = "https://mondrian.claro.com.br/channels/inverse/food-network.png",
+        logo = "https://cdn.reidoscanais.st/imagens/foodnetwork.png",
         sources = listOf(
             Source(
                 url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/foodnetwork/__index.m3u8?sv=46&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788283652-sZhESWHgtKoa0AHOUAC04QFA0NU%2B%2Fa7%2F9YByGOdWodM%3D",
@@ -501,7 +502,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Gloob",
-        logo = "https://mondrian.claro.com.br/channels/inverse/gloob.png",
+        logo = "https://cdn.reidoscanais.st/imagens/gloob.png",
         sources = listOf(
             Source(
                 url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/gloob/__index.m3u8?sv=44&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788282571-gk4cH1WiXG%2FLaG9A7Y0ZtxiJq8hUvnG0E2JylBENtHw%3D",
@@ -510,7 +511,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Globo SP",
-        logo = "https://mondrian.claro.com.br/channels/inverse/globo.png",
+        logo = "https://cdn.reidoscanais.st/imagens/tvglobo.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/GLOBO_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -519,7 +520,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Cartoonito",
-        logo = "https://mondrian.claro.com.br/channels/inverse/cartoonito.png",
+        logo = "https://cdn.reidoscanais.st/imagens/cartoonito.webp",
         sources = listOf(
             Source(
                 url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/cartoonito/__index.m3u8?sv=13&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788282202-dPu0xfaZZXYy9rFVfQhcULjp%2BxqQvGbiwCxIwoq65UQ%3D",
@@ -528,7 +529,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Cinemax",
-        logo = "https://mondrian.claro.com.br/channels/inverse/cinemax.png",
+        logo = "https://cdn.reidoscanais.st/imagens/cinemax.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/CINEMAX/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -537,7 +538,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Combate",
-        logo = "https://mondrian.claro.com.br/channels/inverse/combate.png",
+        logo = "https://cdn.reidoscanais.st/imagens/combate.png",
         sources = listOf(
             Source(
                 url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/combate/__index.m3u8?sv=210&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788282359-UvS0u7yuQe6D0Xl3BQoxuG0Oq3l4jjOjWxj4o5hfm%2Bc%3D",
@@ -546,7 +547,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Discovery Channel",
-        logo = "https://mondrian.claro.com.br/channels/inverse/discovery.png",
+        logo = "https://cdn.reidoscanais.st/imagens/discoverychannel.webp",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/DISCOVERY_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -555,7 +556,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Discovery Home & Health",
-        logo = "https://mondrian.claro.com.br/channels/inverse/discovery-home-and-health.png",
+        logo = "https://cdn.reidoscanais.st/imagens/discoveryheh.webp",
         sources = listOf(
             Source(
                 url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/discoveryhomeihealth/__index.m3u8?sv=71&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788282427-ZEudIRlfmyP0YdW67oUXU9td%2Fr2nDQRwpDFLP95FvFI%3D",
@@ -564,7 +565,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Discovery Kids",
-        logo = "https://mondrian.claro.com.br/channels/inverse/discovery-kids.png",
+        logo = "https://cdn.reidoscanais.st/imagens/discoverykids.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/DISCOVERY_KIDS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -573,7 +574,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Discovery Theater",
-        logo = "https://mondrian.claro.com.br/channels/inverse/discovery-theater.png",
+        logo = "https://cdn.reidoscanais.st/imagens/discoverytheater.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/DISCOVERY_THEATER_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -582,7 +583,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Discovery World",
-        logo = "https://mondrian.claro.com.br/channels/inverse/discovery-world.png",
+        logo = "https://cdn.reidoscanais.st/imagens/discoveryworld.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/DISCOVERY_WORLD_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -591,7 +592,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "ESPN",
-        logo = "https://mondrian.claro.com.br/channels/inverse/espn.png",
+        logo = "https://cdn.reidoscanais.st/imagens/espn.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/ESPN_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -600,7 +601,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "ESPN 2",
-        logo = "https://mondrian.claro.com.br/channels/inverse/espn-2.png",
+        logo = "https://cdn.reidoscanais.st/imagens/espn.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/ESPN2_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -609,7 +610,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "ESPN 4",
-        logo = "https://mondrian.claro.com.br/channels/inverse/espn-4.png",
+        logo = "https://cdn.reidoscanais.st/imagens/espn.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/ESPN4_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -618,7 +619,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Gloobinho",
-        logo = "https://mondrian.claro.com.br/channels/inverse/gloobinho.png",
+        logo = "https://cdn.reidoscanais.st/imagens/gloobinho.png",
         sources = listOf(
             Source(
                 url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/gloobinho/__index.m3u8?sv=79&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787793838-tRD7tqVyKyrzRDnGYUPHk2%2Bj7uP%2B8BgM3QTmfsFiAd0%3D",
@@ -627,7 +628,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "HBO",
-        logo = "https://mondrian.claro.com.br/channels/inverse/hbo.png",
+        logo = "https://cdn.reidoscanais.st/imagens/hbo.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/HBO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -636,7 +637,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "HBO2",
-        logo = "https://mondrian.claro.com.br/channels/inverse/hbo-2.png",
+        logo = "https://cdn.reidoscanais.st/imagens/hbo2.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/HBO2/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -645,7 +646,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "HBO Family",
-        logo = "https://mondrian.claro.com.br/channels/inverse/hbo-family.png",
+        logo = "https://cdn.reidoscanais.st/imagens/hbofamily.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/HBO_FAMILY/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -663,7 +664,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "HBO Plus",
-        logo = "https://mondrian.claro.com.br/channels/inverse/hboplus.png",
+        logo = "https://cdn.reidoscanais.st/imagens/hboplus.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/HBO_PLUS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -672,7 +673,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "HBO Pop",
-        logo = "https://mondrian.claro.com.br/channels/inverse/hbo-pop.png",
+        logo = "https://cdn.reidoscanais.st/imagens/hbopop.webp",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/HBO_POP_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -681,7 +682,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "HBO Signature",
-        logo = "https://mondrian.claro.com.br/channels/inverse/hbo-signature.png",
+        logo = "https://cdn.reidoscanais.st/imagens/hbosignature.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/HBO_SIGNATURE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -690,7 +691,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "HBO Xtreme",
-        logo = "https://mondrian.claro.com.br/channels/inverse/hbo-xtreme.png",
+        logo = "https://cdn.reidoscanais.st/imagens/hboxtreme.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/HBO_EXTREME_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -699,7 +700,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "HGTV",
-        logo = "https://mondrian.claro.com.br/channels/inverse/hgtv.png",
+        logo = "https://cdn.reidoscanais.st/imagens/hgtv.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/HGTV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -708,7 +709,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Record",
-        logo = "https://mondrian.claro.com.br/channels/inverse/record-tv.png",
+        logo = "https://cdn.reidoscanais.st/imagens/record.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/RECORD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -717,7 +718,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Space",
-        logo = "https://mondrian.claro.com.br/channels/inverse/space.png",
+        logo = "https://cdn.reidoscanais.st/imagens/space.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/SPACE_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -726,7 +727,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "TNT",
-        logo = "https://mondrian.claro.com.br/channels/inverse/tnt.png",
+        logo = "https://cdn.reidoscanais.st/imagens/tnt.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TNT_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -735,7 +736,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "TNT Séries",
-        logo = "https://mondrian.claro.com.br/channels/inverse/tnt-series.png",
+        logo = "https://cdn.reidoscanais.st/imagens/tntseries.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TNT_SERIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -744,7 +745,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Universal TV",
-        logo = "https://mondrian.claro.com.br/channels/inverse/universal.png",
+        logo = "https://cdn.reidoscanais.st/imagens/universaltv.png",
         sources = listOf(
             Source(
                 url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/universal/__index.m3u8?sv=145&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787793650-GnrhkyMAFFyYcMrbYnyoK5iNJOpaR%2FxBaNSV1xhO1SY%3D",
@@ -769,7 +770,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Discovery Turbo",
-        logo = "https://mondrian.claro.com.br/channels/inverse/discovery-turbo.png",
+        logo = "https://cdn.reidoscanais.st/imagens/discoveryturbo.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/DISCOVERY_TURBO_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -778,7 +779,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "USA Network",
-        logo = "https://mondrian.claro.com.br/channels/inverse/usa.png",
+        logo = "https://cdn.reidoscanais.st/imagens/usa.png",
         sources = listOf(
             Source(
                 url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/usa/__index.m3u8?sv=162&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787793737-hfQnyiPMhLyTb5vIRG%2BkDol7dTIZYzvZvAZewbE3vlc%3D",
@@ -796,7 +797,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "canal-brasil",
-        logo = "https://api.reidoscanais.ooo/img/canalbrasil.png",
+        logo = "https://cdn.reidoscanais.st/imagens/canalbrasil.png",
         sources = listOf(
             Source(
                 url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/canalbrasil/__index.m3u8?sv=155&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787791989-l5AGuGfDmmdtOq0t8pJFxsQmhh7Upxvn%2FDstVgjia5k%3D",
@@ -805,7 +806,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "canal-off",
-        logo = "https://api.reidoscanais.ooo/img/canaloff.png",
+        logo = "https://cdn.reidoscanais.st/imagens/canaloff.png",
         sources = listOf(
             Source(
                 url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/off/__index.m3u8?sv=196&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788282271-L98hh4f38CWyEv6e8hbPxYnoZSx04zmJ6sqM%2B27%2BnFs%3D",
@@ -814,7 +815,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Telecine Fun",
-        logo = "https://embedcanaisdetv.com/images/tcfun.png",
+        logo = "https://cdn.reidoscanais.st/imagens/telecinefun.png",
         sources = listOf(
             Source(
                 url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/telecinefun/__index.m3u8?sv=197&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788282913-QUfl0OgkKjzzhN2SK5Vc1b8ajh3xesFQDuQUd0LPnRw%3D",
@@ -823,7 +824,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Telecine Cult",
-        logo = "https://embedcanaisdetv.com/images/tccult.png",
+        logo = "https://cdn.reidoscanais.st/imagens/telecinecult.png",
         sources = listOf(
             Source(
                 url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/telecinecult/__index.m3u8?sv=97&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787793482-yEwhUO%2BYTFWaVoO3aH%2FerazomyKF74oEBwlw%2BBW2CT8%3D",
@@ -832,7 +833,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Telecine Touch",
-        logo = "https://embedcanaisdetv.com/images/tctouch.png",
+        logo = "https://cdn.reidoscanais.st/imagens/telecinetouch.png",
         sources = listOf(
             Source(
                 url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/telecinetouch/__index.m3u8?sv=70&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788283053-ctAUK48c2z5sn3wmVtILp4lugwD5gPdwZMpTCbf9j%2Fk%3D",
@@ -841,7 +842,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "SONY Movies",
-        logo = "https://api.reidoscanais.ooo/img/sonymovies.png",
+        logo = "https://cdn.reidoscanais.st/imagens/sonymovies.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/SONY_MOVIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -851,7 +852,7 @@ val CATALOG: List<Channel> = listOf(
 
     Channel(
         name = "Globo",
-        logo = "https://mondrian.claro.com.br/channels/inverse/globo.png",
+        logo = "https://cdn.reidoscanais.st/imagens/tvglobo.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/GLOBO_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -860,7 +861,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Tooncast",
-        logo = "https://mondrian.claro.com.br/channels/inverse/tooncast.png",
+        logo = "https://cdn.reidoscanais.st/imagens/tooncast.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TOONCAST/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -869,7 +870,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "TLC",
-        logo = "https://mondrian.claro.com.br/channels/inverse/tlc.png",
+        logo = "https://cdn.reidoscanais.st/imagens/tlc.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TLC_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -878,7 +879,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Arte 1",
-        logo = "https://mondrian.claro.com.br/channels/inverse/arte1.png",
+        logo = "https://cdn.reidoscanais.st/imagens/arte1.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/ARTE_1/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -887,7 +888,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "TNT Novelas",
-        logo = "https://mondrian.claro.com.br/channels/inverse/tnt-novelas.png",
+        logo = "https://cdn.reidoscanais.st/imagens/tntnovelas.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TNT_NOVELAS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -896,7 +897,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Discovery Science",
-        logo = "https://mondrian.claro.com.br/channels/inverse/discovery-science.png",
+        logo = "https://cdn.reidoscanais.st/imagens/discoveryscience.webp",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/DISCOVERY_SCIENCE_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -914,7 +915,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "AXN",
-        logo = "https://mondrian.claro.com.br/channels/inverse/axn.png",
+        logo = "https://cdn.reidoscanais.st/imagens/axn.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/AXN_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -932,7 +933,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Band News",
-        logo = "https://mondrian.claro.com.br/channels/inverse/band-news.png",
+        logo = "https://cdn.reidoscanais.st/imagens/bandnews.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/BAND_NEWS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -950,7 +951,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "RedeTV!",
-        logo = "https://mondrian.claro.com.br/channels/inverse/redetv.png",
+        logo = "https://cdn.reidoscanais.st/imagens/redetv.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/REDE_TV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -959,7 +960,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "TV Cultura",
-        logo = "https://mondrian.claro.com.br/channels/inverse/tv-cultura.png",
+        logo = "https://cdn.reidoscanais.st/imagens/tvcultura.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TV_CULTURA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -968,7 +969,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Terra Viva",
-        logo = "https://mondrian.claro.com.br/channels/inverse/terraviva.png",
+        logo = "https://www.tvlogo.org/brazil/terraviva-br.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TERRA_VIVA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -977,7 +978,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Woohoo",
-        logo = "https://mondrian.claro.com.br/channels/inverse/woohoo.png",
+        logo = "https://cdn.reidoscanais.st/imagens/woohoo.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/WOOHOO_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -986,7 +987,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "PRIME BOX BRAZIL",
-        logo = "https://mondrian.claro.com.br/channels/inverse/prime-box-brazil.png",
+        logo = "https://www.tvlogo.org/brazil/prime-box-brazil-br.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/PRIME_BOX_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -995,7 +996,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "ESPN 3",
-        logo = "https://mondrian.claro.com.br/channels/inverse/espn3.png",
+        logo = "https://cdn.reidoscanais.st/imagens/espn.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/ESPN3_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -1022,7 +1023,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Record News",
-        logo = "https://mondrian.claro.com.br/channels/inverse/record-news.png",
+        logo = "https://cdn.reidoscanais.st/imagens/recordnews.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/RECORD_NEWS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -1040,7 +1041,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "TV Aparecida",
-        logo = "https://mondrian.claro.com.br/channels/inverse/tv-aparecida.png",
+        logo = "https://cdn.reidoscanais.st/imagens/aparecida.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TV_APARECIDA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -1049,7 +1050,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Rede Vida",
-        logo = "https://mondrian.claro.com.br/channels/inverse/redevida.png",
+        logo = "https://www.tvlogo.org/brazil/rede-vida-br.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/REDE_VIDA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -1058,7 +1059,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Discovery ID",
-        logo = "https://mondrian.claro.com.br/channels/inverse/discovery-id.png",
+        logo = "https://cdn.reidoscanais.st/imagens/discoveryid.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/ID_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -1067,7 +1068,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Fish TV",
-        logo = "https://mondrian.claro.com.br/channels/inverse/fish-tv.png",
+        logo = "https://cdn.reidoscanais.st/imagens/fishtv.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/FISH_TV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -1076,7 +1077,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Box Kids TV",
-        logo = "https://mondrian.claro.com.br/channels/inverse/box-kids.png",
+        logo = "https://www.tvlogo.org/brazil/box-kids-tv-br.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/BOX_KIDS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -1085,7 +1086,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Sabor & Arte",
-        logo = "https://mondrian.claro.com.br/channels/inverse/sabor-arte.png",
+        logo = "https://cdn.reidoscanais.st/imagens/saborearte.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/SABOR_E_ARTE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -1094,7 +1095,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "X Sports",
-        logo = "https://mondrian.claro.com.br/channels/inverse/xsports.png",
+        logo = "https://cdn.reidoscanais.st/imagens/xsports.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/XSPORTS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -1103,7 +1104,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "N SPORTS",
-        logo = "https://mondrian.claro.com.br/channels/inverse/nsports.png",
+        logo = "https://cdn.reidoscanais.st/imagens/nsports.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/NSPORTS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -1112,7 +1113,7 @@ val CATALOG: List<Channel> = listOf(
     ),
     Channel(
         name = "Music Box Brazil",
-        logo = "https://mondrian.claro.com.br/channels/inverse/music-box-brazil.png",
+        logo = "https://commons.wikimedia.org/wiki/Special:Redirect/file/MusicBoxBrazil.png",
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/MUSIC_BOX_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",

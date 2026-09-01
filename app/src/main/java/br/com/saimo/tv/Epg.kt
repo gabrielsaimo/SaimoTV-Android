@@ -84,7 +84,8 @@ object Epg {
 
     /** Feed names that differ from ours. */
     private val ALIASES = mapOf(
-        "history" to "history channel", "sony channel" to "sony",
+        "adult swim" to "trutv", "history" to "history channel",
+        "sony channel" to "sony",
         "sportv 2" to "sportv2", "sportv 3" to "sportv3", "gnt" to "gnt hd",
         "band" to "band sp", "warner" to "warner channel", "sbt" to "sbt sp",
     )
@@ -454,11 +455,10 @@ object Epg {
     /// caractere que nenhum canal usa, então nunca colide com uma chave de canal.
     private const val SIGNATURE_KEY = "#catalogo"
 
-    /// O "v2" força o cache antigo a ser refeito: ele foi gravado sem sinopse
-    /// e sem elenco, e reaproveitá-lo mostraria a ficha vazia até o guia
-    /// vencer sozinho.
+    /// O "v3" força o cache anterior a ser refeito. Além de sinopse e elenco,
+    /// esta versão reconhece a grade do Adult Swim publicada como TruTV.
     private fun signature(): String =
-        "v2:" + Remote.channels.joinToString("|") { it.name }.hashCode().toString()
+        "v3:" + Remote.channels.joinToString("|") { it.name }.hashCode().toString()
 
     private fun readSignature(context: Context): String? = runCatching {
         JSONObject(cacheFile(context).readText()).optString(SIGNATURE_KEY).ifEmpty { null }

@@ -1,16 +1,21 @@
 package br.com.saimo.tv
 
 import android.content.Context
+import android.net.Uri
 import android.util.Base64
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DataSource
+import androidx.media3.datasource.ResolvingDataSource
 import androidx.media3.datasource.okhttp.OkHttpDataSource
 import okhttp3.OkHttpClient
 import okhttp3.dnsoverhttps.DnsOverHttps
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import java.net.InetAddress
+import java.net.URI
+import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
 import androidx.media3.exoplayer.dash.DashMediaSource
 import androidx.media3.exoplayer.drm.DefaultDrmSessionManager
 import androidx.media3.exoplayer.drm.FrameworkMediaDrm
@@ -113,12 +118,17 @@ object Playback {
     }
 
     fun mediaSource(context: Context, source: Source): MediaSource {
-        val http: DataSource.Factory = OkHttpDataSource.Factory(client)
+        val upstream: DataSource.Factory = OkHttpDataSource.Factory(client)
             .setUserAgent(source.userAgent ?: DEFAULT_USER_AGENT)
             .apply {
                 // Some CDNs only serve the manifest when a matching Referer is sent.
                 source.referer?.let { setDefaultRequestProperties(mapOf("Referer" to it)) }
             }
+        val http: DataSource.Factory = ResolvingDataSource.Factory(upstream) { dataSpec ->
+            val original = dataSpec.uri.toString()
+            val resolved = corrigirCaminhoDaPlaylist(source.url, original)
+            if (resolved == original) dataSpec else dataSpec.withUri(Uri.parse(resolved))
+        }
 
         val item = MediaItem.fromUri(source.url)
         return when {
@@ -134,6 +144,56 @@ object Playback {
             // Mandá-lo para o HLS é pedir uma playlist a quem só tem vídeo: o
             // canal não abria no TV Box e abria no Mac, que passa pelo ffmpeg.
             else -> ProgressiveMediaSource.Factory(http).createMediaSource(item)
+        }
+    }
+
+    /**
+     * Corrige segmentos relativos de proxies cuja playlist aponta para outra pasta.
+     *
+     * Exemplo real: a playlist chega em `/tos-.../proxy.m3u8`, mas o parâmetro
+     * `url=https://origem/docs/amc/__index.m3u8` informa que os segmentos vivem
+     * em `/docs/amc/`. O ExoPlayer segue a regra HLS e tenta o segmento ao lado
+     * da URL externa; esse CDN, porém, exige a pasta indicada pelo `url=`. O Mac
+     * já faz a mesma correção no proxy local.
+     *
+     * Só pedidos relativos ao diretório da playlist são alterados. A própria
+     * playlist, URLs absolutas de outros hosts e fontes comuns ficam intactas.
+     */
+    internal fun corrigirCaminhoDaPlaylist(origem: String, pedido: String): String {
+        val manifest = runCatching { URI.create(origem) }.getOrNull() ?: return pedido
+        val request = runCatching { URI.create(pedido) }.getOrNull() ?: return pedido
+        val manifestPath = manifest.rawPath ?: return pedido
+        val requestPath = request.rawPath ?: return pedido
+
+        // A playlist ao vivo é recarregada periodicamente e deve conservar sua
+        // query assinada. Só filhos relativos dela precisam da base alternativa.
+        if (requestPath == manifestPath) return pedido
+        if (manifest.scheme != request.scheme || manifest.rawAuthority != request.rawAuthority) {
+            return pedido
+        }
+
+        val nestedValue = manifest.rawQuery
+            ?.split('&')
+            ?.firstOrNull { it.startsWith("url=") }
+            ?.substringAfter("url=")
+            ?: return pedido
+        val nested = runCatching {
+            URI.create(URLDecoder.decode(nestedValue, StandardCharsets.UTF_8.name()))
+        }.getOrNull() ?: return pedido
+        val nestedPath = nested.rawPath ?: return pedido
+
+        val manifestDir = manifestPath.substringBeforeLast('/', "") + "/"
+        val nestedDir = nestedPath.substringBeforeLast('/', "") + "/"
+        if (!requestPath.startsWith(manifestDir)) return pedido
+
+        val correctedPath = nestedDir + requestPath.removePrefix(manifestDir)
+        return buildString {
+            append(request.scheme)
+            append("://")
+            append(request.rawAuthority)
+            append(correctedPath)
+            request.rawQuery?.let { append('?').append(it) }
+            request.rawFragment?.let { append('#').append(it) }
         }
     }
 
