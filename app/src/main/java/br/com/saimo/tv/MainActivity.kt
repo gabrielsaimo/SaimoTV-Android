@@ -736,15 +736,39 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /** Acha o canal cujo nome mais se aproxima do que a pessoa falou. */
+    /// O Assistant e a Alexa nem sempre mandam só o nome: "abrir Globo",
+    /// "assistir Globo", "canal 5" chegam inteiros na busca. Só o COMEÇO da
+    /// frase é limpo — nunca a palavra toda, em qualquer lugar — porque um
+    /// nome de canal pode legitimamente conter "a", "o" ou "de" ("A&E",
+    /// "TV Cultura de Minas") e sumir junto se a limpeza fosse ampla.
+    private val PREFIXO_DE_COMANDO = Regex(
+        "^(abrir|abre|abra|tocar|toca|toque|assistir|assista|ver|veja|colocar|" +
+            "coloca|coloque|mudar|muda|mude|ir|trocar|troca|troque|ligar|liga|" +
+            "ligue)\\s+")
+    private val PREFIXO_CANAL = Regex("^canal\\s+")
+
+    /** Acha o canal cujo nome ou número mais se aproxima do que a pessoa falou. */
     private fun canalPorVoz(consulta: String): Int? {
         val alvo = normalizarVoz(consulta)
         if (alvo.isBlank()) return null
-        ordered.indexOfFirst { normalizarVoz(it.name) == alvo }
+        val termo = alvo.replace(PREFIXO_DE_COMANDO, "").replace(PREFIXO_CANAL, "").trim()
+            .ifBlank { alvo }
+
+        // "5" ou "canal 5" — o mesmo número que aparece do lado do nome na
+        // lista, um a mais que o índice porque a lista começa em 1.
+        termo.toIntOrNull()?.let { numero ->
+            if (numero in 1..ordered.size) return numero - 1
+        }
+
+        ordered.indexOfFirst { normalizarVoz(it.name) == termo }
             .takeIf { it >= 0 }?.let { return it }
-        ordered.indexOfFirst { normalizarVoz(it.name).startsWith(alvo) }
+        ordered.indexOfFirst { normalizarVoz(it.name).startsWith(termo) }
             .takeIf { it >= 0 }?.let { return it }
-        return ordered.indexOfFirst { normalizarVoz(it.name).contains(alvo) }.takeIf { it >= 0 }
+        ordered.indexOfFirst { normalizarVoz(it.name).contains(termo) }
+            .takeIf { it >= 0 }?.let { return it }
+        // "abra a Globo" sem o prefixo tirado por inteiro ainda acha, porque
+        // desta vez é a consulta que precisa conter o nome, não o contrário.
+        return ordered.indexOfFirst { termo.contains(normalizarVoz(it.name)) }.takeIf { it >= 0 }
     }
 
     private fun normalizarVoz(texto: String): String =
