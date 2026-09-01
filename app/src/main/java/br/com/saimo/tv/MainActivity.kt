@@ -16,13 +16,18 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
+import androidx.media3.common.ForwardingPlayer
+import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.DefaultLoadControl
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.upstream.DefaultBandwidthMeter
+import androidx.media3.session.MediaSession
 import androidx.media3.ui.PlayerView
+import com.google.common.util.concurrent.Futures
+import com.google.common.util.concurrent.ListenableFuture
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -53,6 +58,7 @@ private const val SOURCE_TIMEOUT_MS = 12_000L
 class MainActivity : AppCompatActivity() {
 
     private lateinit var player: ExoPlayer
+    private lateinit var mediaSession: MediaSession
     private lateinit var playerView: PlayerView
     private lateinit var listPanel: View
     private lateinit var channels: RecyclerView
@@ -192,6 +198,16 @@ class MainActivity : AppCompatActivity() {
             }
         playerView.player = player
         playerView.useController = false
+
+        // A sessão é o que expõe o app pro Assistant (Mi Box) e pra Alexa
+        // (Fire TV): "próximo/canal anterior" e "abrir <canal>" chegam por ela
+        // enquanto o Saimo TV está na tela, sem precisar de servidor nem de
+        // skill cadastrada. O player de fachada existe porque o de verdade
+        // troca de fonte trocando o MediaSource inteiro — nunca tem um
+        // "próximo item" de playlist para a sessão pedir sozinha.
+        mediaSession = MediaSession.Builder(this, ChannelPlayer(player))
+            .setCallback(sessionCallback)
+            .build()
 
         play(0)
         refreshCatalog()
@@ -661,9 +677,82 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         handler.removeCallbacksAndMessages(null)
+        mediaSession.release()
         player.release()
         super.onDestroy()
     }
+
+    // MARK: - Voz (Assistant / Alexa)
+
+    /**
+     * Player de fachada só para a sessão de mídia.
+     *
+     * O de verdade nunca tem "próximo item" — cada canal é uma troca de fonte,
+     * não uma playlist — então por padrão a sessão esconde os comandos de
+     * pular. Aqui eles ficam sempre disponíveis e vão direto para `play`, que
+     * é como "próximo/anterior canal" por voz chega a valer.
+     */
+    private inner class ChannelPlayer(player: Player) : ForwardingPlayer(player) {
+        override fun isCommandAvailable(command: Int) = when (command) {
+            Player.COMMAND_SEEK_TO_NEXT, Player.COMMAND_SEEK_TO_NEXT_MEDIA_ITEM,
+            Player.COMMAND_SEEK_TO_PREVIOUS, Player.COMMAND_SEEK_TO_PREVIOUS_MEDIA_ITEM -> true
+            else -> super.isCommandAvailable(command)
+        }
+
+        override fun getAvailableCommands(): Player.Commands = super.getAvailableCommands()
+            .buildUpon()
+            .addAll(
+                Player.COMMAND_SEEK_TO_NEXT, Player.COMMAND_SEEK_TO_NEXT_MEDIA_ITEM,
+                Player.COMMAND_SEEK_TO_PREVIOUS, Player.COMMAND_SEEK_TO_PREVIOUS_MEDIA_ITEM)
+            .build()
+
+        override fun hasNextMediaItem() = true
+        override fun hasPreviousMediaItem() = true
+        override fun seekToNext() = play((current + 1) % ordered.size)
+        override fun seekToNextMediaItem() = play((current + 1) % ordered.size)
+        override fun seekToPrevious() = play((current - 1 + ordered.size) % ordered.size)
+        override fun seekToPreviousMediaItem() = play((current - 1 + ordered.size) % ordered.size)
+    }
+
+    /**
+     * "Abrir/tocar <canal>" por voz chega aqui, disfarçado de pedido de item
+     * de mídia — é como o Media3 traduz `playFromSearch` do Assistant e da
+     * Alexa. Como não existe playlist de verdade, o item nunca é aceito: ele
+     * só carrega o texto da busca, que vira uma troca de canal, e a lista de
+     * volta fica vazia.
+     */
+    private val sessionCallback = object : MediaSession.Callback {
+        override fun onAddMediaItems(
+            mediaSession: MediaSession,
+            controller: MediaSession.ControllerInfo,
+            mediaItems: MutableList<MediaItem>,
+        ): ListenableFuture<MutableList<MediaItem>> {
+            val pedido = mediaItems.firstOrNull()
+            val termo = pedido?.requestMetadata?.searchQuery
+                ?: pedido?.mediaId?.takeIf { it.isNotBlank() }
+            val índice = termo?.let { canalPorVoz(it) }
+            if (índice != null) runOnUiThread { play(índice) }
+            return Futures.immediateFuture(mutableListOf())
+        }
+    }
+
+    /** Acha o canal cujo nome mais se aproxima do que a pessoa falou. */
+    private fun canalPorVoz(consulta: String): Int? {
+        val alvo = normalizarVoz(consulta)
+        if (alvo.isBlank()) return null
+        ordered.indexOfFirst { normalizarVoz(it.name) == alvo }
+            .takeIf { it >= 0 }?.let { return it }
+        ordered.indexOfFirst { normalizarVoz(it.name).startsWith(alvo) }
+            .takeIf { it >= 0 }?.let { return it }
+        return ordered.indexOfFirst { normalizarVoz(it.name).contains(alvo) }.takeIf { it >= 0 }
+    }
+
+    private fun normalizarVoz(texto: String): String =
+        java.text.Normalizer.normalize(texto, java.text.Normalizer.Form.NFD)
+            .replace(Regex("\\p{Mn}+"), "")
+            .lowercase()
+            .replace(Regex("[^a-z0-9]+"), " ")
+            .trim()
 }
 
 /** Channel rows: number, logo, name and whatever is on air right now. */

@@ -46,6 +46,10 @@ dependencies {
     implementation("androidx.media3:media3-exoplayer-hls:$media3")
     implementation("androidx.media3:media3-exoplayer-dash:$media3")
     implementation("androidx.media3:media3-ui:$media3")
+    // A sessão de mídia é o que o Assistant (Mi Box) e a Alexa (Fire TV) usam
+    // para "próximo/anterior canal" e "abrir X" por voz enquanto o app está na
+    // tela — sem ela o sistema não tem para quem mandar o comando de voz.
+    implementation("androidx.media3:media3-session:$media3")
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
