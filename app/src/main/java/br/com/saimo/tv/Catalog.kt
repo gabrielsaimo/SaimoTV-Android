@@ -27,11 +27,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/aee.png",
         sources = listOf(
             Source(
-                url = "https://video39.mais.uol.com.br/live/267.mpd",
-                referer = "https://painel.play.uol.com.br/",
-                userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36",
-                keyId = "74481194bf32774e0cb44a1d71d6cc19",
-                key = "4bfd25bc9419f1c71e3ee8e6bf5ccf2a",
+                url = "https://cdn-sp2.satlabscloud.com.br/AE_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
     ),
@@ -40,7 +36,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/adult-swim.png",
         sources = listOf(
             Source(
-                url = "https://cdn-sp2.satlabscloud.com.br/TRUTV_HD/720p_000093558.ts?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+                url = "https://cdn-sp2.satlabscloud.com.br/TRUTV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
     ),
@@ -58,7 +54,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/animal-planet.png",
         sources = listOf(
             Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/animalplanet/__index.m3u8?sv=12&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786291576-cljMHYyJK3iEhKhqrwvs2DVTA0kXJMj71miu9g%2Bmv9w%3D",
+                url = "https://cdn-sp2.satlabscloud.com.br/ANIMAL_PLANET_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
     ),
@@ -67,11 +63,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/band.png",
         sources = listOf(
             Source(
-                url = "https://video41.mais.uol.com.br/live/3361.mpd",
-                referer = "https://painel.play.uol.com.br/",
-                userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
-                keyId = "3b43a1fbcf57cfe04109fbc1b381ac79",
-                key = "a23de064124dfddeaf3c23490d96328b",
+                url = "https://cdn-sp2.satlabscloud.com.br/BAND_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
     ),
@@ -80,7 +72,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/cartoon-network.png",
         sources = listOf(
             Source(
-                url = "https://_______________________________________________________________.null-null.shop/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/cartoon/__index.m3u8?sv=84&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787689309-%2FssbacY0lf%2FaEdVkBHNWxAAcCUGhU2J8y9NgGnE440g%3D",
+                url = "https://cdn-sp2.satlabscloud.com.br/CARTOON_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
     ),
@@ -142,7 +134,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/globo.png",
         sources = listOf(
             Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/boborj/__index.m3u8?sv=44&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786291899-hGV11bG1ulIMifsBzTvVaZKkCLm227WfthQBbXp8w5g%3D",
+                url = "https://cdn-sp2.satlabscloud.com.br/GLOBO_RIO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
     ),
@@ -190,14 +182,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/history-channel.png",
         sources = listOf(
             Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/history/__index.m3u8?sv=135&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787793059-f3m9JkdrjrQJxep1Ii5aqo1mnsxh3C9Hhd24xvNSqxs%3D",
-            ),
-            Source(
-                url = "https://video46.mais.uol.com.br/live/281.mpd",
-                referer = "https://painel.play.uol.com.br/",
-                userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
-                keyId = "f7cb42541fbc6043627e4ee025c18300",
-                key = "24843d82b079bbefb73100b887493400",
+                url = "https://cdn-sp2.satlabscloud.com.br/HISTORY_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
     ),
@@ -206,10 +191,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/history-2.png",
         sources = listOf(
             Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/history2/__index.m3u8?sv=41&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787793125-3Gtiog3L2lWYU21WxnFk1mORI7RK%2Bgrmq9nU0M4H%2F0w%3D",
-            ),
-            Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/history2-sd/__index.m3u8?sv=41&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787793125-qJ1cp%2FaZU0TB2TS53Hy%2F6OU3u1nHdGgLjGMnC94BSJA%3D",
+                url = "https://cdn-sp2.satlabscloud.com.br/H2_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
     ),
@@ -378,14 +360,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/sony.png",
         sources = listOf(
             Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/sony/__index.m3u8?sv=207&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787840421-CoMPQTpI1T81KNG3ezpJhbubzfOqOodNk9aR1CEItWw%3D",
-            ),
-            Source(
-                url = "https://video37.mais.uol.com.br/live/279.mpd",
-                referer = "https://painel.play.uol.com.br/",
-                userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
-                keyId = "5e8567bf0707bf910f611e5cf2ef352f",
-                key = "8b30ddee60bb9fe6653f1eb8c9b85d5d",
+                url = "https://cdn-sp2.satlabscloud.com.br/SONY_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
     ),
@@ -465,9 +440,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/tv-brasil.png",
         sources = listOf(
             Source(
-                url = "https://tvbrasil-stream.ebc.com.br/index.m3u8",
-                referer = "https://aovivo.ebc.com.br/",
-                userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+                url = "https://cdn-sp2.satlabscloud.com.br/TV_BRASIL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
     ),
@@ -537,7 +510,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/globo.png",
         sources = listOf(
             Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/bobosp/__index.m3u8?sv=88&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786308190-ZJ9brWallKsnk%2F7UWQ%2FQTAGEXpmP%2FKcVaSUGn9znNbA%3D",
+                url = "https://cdn-sp2.satlabscloud.com.br/GLOBO_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
     ),
@@ -555,7 +528,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/cinemax.png",
         sources = listOf(
             Source(
-                url = "https://p12-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/cinemax/__index.m3u8?sv=66&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787510316-X70RycSXFaJIDV%2BwMOJkE%2Bdz%2FmNYSqg%2B2TU9KVeKl4Y%3D",
+                url = "https://cdn-sp2.satlabscloud.com.br/CINEMAX/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
     ),
@@ -573,7 +546,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/discovery.png",
         sources = listOf(
             Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/discovery/__index.m3u8?sv=139&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787792290-fJWwTtvayu87khQ1dLjP6IO6DYBxOFtm53vvQJV4G3U%3D",
+                url = "https://cdn-sp2.satlabscloud.com.br/DISCOVERY_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
     ),
@@ -591,7 +564,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/discovery-kids.png",
         sources = listOf(
             Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/discoverykids/__index.m3u8?sv=20&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787792246-o4vHOJkg%2BDj4Caq%2FNBQ3IdIgxJpQ0cavj5QIWJuedCI%3D",
+                url = "https://cdn-sp2.satlabscloud.com.br/DISCOVERY_KIDS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
     ),
@@ -600,7 +573,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/discovery-theater.png",
         sources = listOf(
             Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/discoverytheater/__index.m3u8?sv=135&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787792363-9cDXDK11ov3pxrqmTh5xvDzwIlVxwFtcCbc%2BUklF%2BTM%3D",
+                url = "https://cdn-sp2.satlabscloud.com.br/DISCOVERY_THEATER_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
     ),
@@ -609,7 +582,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/discovery-world.png",
         sources = listOf(
             Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/discoveryworld/__index.m3u8?sv=136&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787792469-Nwvl6a9j4BZymbR6g6UCqBuxq4SfH0dfrSki5m%2B%2BL%2Bg%3D",
+                url = "https://cdn-sp2.satlabscloud.com.br/DISCOVERY_WORLD_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
     ),
@@ -618,7 +591,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/espn.png",
         sources = listOf(
             Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/espn/__index.m3u8?sv=12&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786318392-QvKT%2FUp7bZQSZYJz6P10ssTqi7CQZwlTquxwquyZKOM%3D",
+                url = "https://cdn-sp2.satlabscloud.com.br/ESPN_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
     ),
@@ -627,7 +600,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/espn-2.png",
         sources = listOf(
             Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/espn2/__index.m3u8?sv=141&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786318445-zhWacyLIG8lLoYvlDCss2l3Uzb6bPtJB7boGnCgWXvI%3D",
+                url = "https://cdn-sp2.satlabscloud.com.br/ESPN2_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
     ),
@@ -636,7 +609,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/espn-4.png",
         sources = listOf(
             Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/espn4/__index.m3u8?sv=166&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786318524-FDNFOsKiw6lTQJ35mV3KKuwHL8%2Bg%2FeKqmq3oedHtH9s%3D",
+                url = "https://cdn-sp2.satlabscloud.com.br/ESPN4_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
     ),
@@ -681,11 +654,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/hbo-mundi.png",
         sources = listOf(
             Source(
-                url = "https://getcdn.clarocdn.com.br/Content/Channel/SPOCMTHD/dsc1/manifest.mpd",
-                referer = "https://www.clarotvmais.com.br/",
-                userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
-                keyId = "864d0001e28938b0be3e1c6d8dc110ea",
-                key = "87f36ec6e6747a587d1e6393f61c003a",
+                url = "https://cdn-sp2.satlabscloud.com.br/HBO_MUNDI_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
     ),
@@ -703,7 +672,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/hbo-pop.png",
         sources = listOf(
             Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/hbopop/__index.m3u8?sv=184&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787792797-vFVR9HJei0AJ1XncxfiSBXWqecgVajCY7kDtx8DlYKE%3D",
+                url = "https://cdn-sp2.satlabscloud.com.br/HBO_POP_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
     ),
@@ -730,7 +699,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/hgtv.png",
         sources = listOf(
             Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/hgtv/__index.m3u8?sv=110&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787792996-HY%2FoZh3zHW%2BSz49EWOXZcgCnmpBuHFUXxm39Te5AY%2FU%3D",
+                url = "https://cdn-sp2.satlabscloud.com.br/HGTV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
     ),
@@ -739,7 +708,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/record-tv.png",
         sources = listOf(
             Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/record/__index.m3u8?sv=198&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787793316-1%2F7AHwT%2BrGJghZvWrDk%2F0w53u6n8C02UvEtZOjNOawI%3D",
+                url = "https://cdn-sp2.satlabscloud.com.br/RECORD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
     ),
@@ -748,7 +717,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/space.png",
         sources = listOf(
             Source(
-                url = "https://_______________________________________________________________.null-null.shop/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/space/__index.m3u8?sv=99&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787689135-lMYR0Q44VqZ1jjexU8svYO9V4nwIWjpMyvQGLchfKlk%3D",
+                url = "https://cdn-sp2.satlabscloud.com.br/SPACE_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
     ),
@@ -757,7 +726,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/tnt.png",
         sources = listOf(
             Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/tnt/__index.m3u8?sv=86&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786320015-pLkZ%2FNdlgXV4jqtDYTJ51nEkLG8WRJkACfkgm5UMYF8%3D",
+                url = "https://cdn-sp2.satlabscloud.com.br/TNT_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
     ),
@@ -766,7 +735,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/tnt-series.png",
         sources = listOf(
             Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/tntseries/__index.m3u8?sv=5&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786320066-hcnuxiV0uoL54pSnZai999RtJv4kuUlXop3OpOigZek%3D",
+                url = "https://cdn-sp2.satlabscloud.com.br/TNT_SERIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
     ),
@@ -800,7 +769,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/discovery-turbo.png",
         sources = listOf(
             Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/discoveryturbo/__index.m3u8?sv=187&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787792423-HLnTQInVZdS8M8NMkNE9XAXOEhN26tz%2FkdWQ5xEMI7U%3D",
+                url = "https://cdn-sp2.satlabscloud.com.br/DISCOVERY_TURBO_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
     ),
@@ -872,7 +841,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://api.reidoscanais.ooo/img/sonymovies.png",
         sources = listOf(
             Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/sonymovies/__index.m3u8?sv=192&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787793366-cTNy2GtWbETsxXemEnMTs1INUxwZjhES5tp6LWV%2FkVU%3D",
+                url = "https://cdn-sp2.satlabscloud.com.br/SONY_MOVIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
     ),
@@ -892,6 +861,258 @@ val CATALOG: List<Channel> = listOf(
         sources = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TOONCAST/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "TLC",
+        logo = "https://mondrian.claro.com.br/channels/inverse/tlc.png",
+        sources = listOf(
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/TLC_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Arte 1",
+        logo = "https://mondrian.claro.com.br/channels/inverse/arte1.png",
+        sources = listOf(
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/ARTE_1/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "TNT Novelas",
+        logo = "https://mondrian.claro.com.br/channels/inverse/tnt-novelas.png",
+        sources = listOf(
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/TNT_NOVELAS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Discovery Science",
+        logo = "https://mondrian.claro.com.br/channels/inverse/discovery-science.png",
+        sources = listOf(
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/DISCOVERY_SCIENCE_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Boomerang",
+        logo = "https://mondrian.claro.com.br/channels/inverse/boomerang.png",
+        sources = listOf(
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/BOOMERANG_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "AXN",
+        logo = "https://mondrian.claro.com.br/channels/inverse/axn.png",
+        sources = listOf(
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/AXN_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "TCM",
+        logo = "https://mondrian.claro.com.br/channels/inverse/tcm.png",
+        sources = listOf(
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/TCM_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Band News",
+        logo = "https://mondrian.claro.com.br/channels/inverse/band-news.png",
+        sources = listOf(
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/BAND_NEWS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "BAND SPORTS HD",
+        logo = "https://mondrian.claro.com.br/channels/inverse/band-sports.png",
+        sources = listOf(
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/BAND_SPORTS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "RedeTV!",
+        logo = "https://mondrian.claro.com.br/channels/inverse/redetv.png",
+        sources = listOf(
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/REDE_TV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "TV Cultura",
+        logo = "https://mondrian.claro.com.br/channels/inverse/tv-cultura.png",
+        sources = listOf(
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/TV_CULTURA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Terra Viva",
+        logo = "https://mondrian.claro.com.br/channels/inverse/terraviva.png",
+        sources = listOf(
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/TERRA_VIVA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Woohoo",
+        logo = "https://mondrian.claro.com.br/channels/inverse/woohoo.png",
+        sources = listOf(
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/WOOHOO_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "PRIME BOX BRAZIL",
+        logo = "https://mondrian.claro.com.br/channels/inverse/prime-box-brazil.png",
+        sources = listOf(
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/PRIME_BOX_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "ESPN 3",
+        logo = "https://mondrian.claro.com.br/channels/inverse/espn3.png",
+        sources = listOf(
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/ESPN3_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "ESPN Extra",
+        logo = "https://mondrian.claro.com.br/channels/inverse/espn-extra.png",
+        sources = listOf(
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/ESPN_EXTRA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "TV Gazeta",
+        logo = "https://mondrian.claro.com.br/channels/inverse/tv-gazeta.png",
+        sources = listOf(
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/GAZETA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Record News",
+        logo = "https://mondrian.claro.com.br/channels/inverse/record-news.png",
+        sources = listOf(
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/RECORD_NEWS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Canção Nova",
+        logo = "https://mondrian.claro.com.br/channels/inverse/cancao-nova.png",
+        sources = listOf(
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/CANCAO_NOVA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "TV Aparecida",
+        logo = "https://mondrian.claro.com.br/channels/inverse/tv-aparecida.png",
+        sources = listOf(
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/TV_APARECIDA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Rede Vida",
+        logo = "https://mondrian.claro.com.br/channels/inverse/redevida.png",
+        sources = listOf(
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/REDE_VIDA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Discovery ID",
+        logo = "https://mondrian.claro.com.br/channels/inverse/discovery-id.png",
+        sources = listOf(
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/ID_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Fish TV",
+        logo = "https://mondrian.claro.com.br/channels/inverse/fish-tv.png",
+        sources = listOf(
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/FISH_TV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Box Kids TV",
+        logo = "https://mondrian.claro.com.br/channels/inverse/box-kids.png",
+        sources = listOf(
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/BOX_KIDS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Sabor & Arte",
+        logo = "https://mondrian.claro.com.br/channels/inverse/sabor-arte.png",
+        sources = listOf(
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/SABOR_E_ARTE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "X Sports",
+        logo = "https://mondrian.claro.com.br/channels/inverse/xsports.png",
+        sources = listOf(
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/XSPORTS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "N SPORTS",
+        logo = "https://mondrian.claro.com.br/channels/inverse/nsports.png",
+        sources = listOf(
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/NSPORTS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Music Box Brazil",
+        logo = "https://mondrian.claro.com.br/channels/inverse/music-box-brazil.png",
+        sources = listOf(
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/MUSIC_BOX_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
     ),
