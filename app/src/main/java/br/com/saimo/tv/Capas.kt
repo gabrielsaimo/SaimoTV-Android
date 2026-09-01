@@ -35,13 +35,14 @@ object Capas {
     private val RUIDO = Regex(
         "\\b(4k|uhd|fhd|hd|sd|h265|hevc|hdr|dv|dual|remux|legendado|dublado|leg|dub)\\b",
         RegexOption.IGNORE_CASE)
-    private val PARENTESES = Regex("[\\[(][^\\])]*[\\])]")
+    private val COLCHETES = Regex("\\[[^]]*]")
+    private val PARENTESES_SEM_ANO = Regex("\\((?!(?:19|20)\\d{2}\\))[^)]*\\)")
 
-    /** Nome de busca: sem marca de qualidade, sem colchete, sem ano no fim. */
+    /** Mantém o ano: é ele que separa a capa de uma refilmagem da outra. */
     fun limpar(titulo: String): String {
-        var texto = PARENTESES.replace(titulo, " ")
+        var texto = COLCHETES.replace(titulo, " ")
+        texto = PARENTESES_SEM_ANO.replace(texto, " ")
         texto = RUIDO.replace(texto, " ")
-        texto = Regex("\\s+((19|20)\\d{2})\\s*$").replace(texto, " ")
         return texto.replace(Regex("\\s{2,}", RegexOption.IGNORE_CASE), " ").trim()
     }
 

@@ -12,7 +12,10 @@ import java.io.File
 /// uma com as duas fontes.
 data class Filme(val titulo: String, val fontes: Map<String, List<String>>)
 
-data class Serie(val titulo: String, val ano: String, val pedaco: Int, val episodios: Int)
+data class Serie(val titulo: String, val ano: String, val pedaco: Int, val episodios: Int) {
+    val nomeCompleto: String
+        get() = if (ano.isBlank()) titulo else "$titulo ($ano)"
+}
 
 data class Episodio(
     val temporada: Int,
@@ -49,7 +52,7 @@ object Vod {
      * quebrado. Guardar a versão junto e limpar a pasta quando ela muda evita
      * que o formato velho envenene o novo.
      */
-    private const val VERSAO_CACHE = "2"
+    private const val VERSAO_CACHE = "3"
 
     suspend fun indice(context: Context): List<Gaveta> {
         conferirVersao(context)
@@ -102,7 +105,15 @@ object Vod {
         }.toList()
     }
 
-    data class Achado(val titulo: String, val serie: Boolean, val letra: String)
+    data class Achado(
+        val titulo: String,
+        val serie: Boolean,
+        val letra: String,
+        val ano: String = "",
+    ) {
+        val nomeCompleto: String
+            get() = if (ano.isBlank()) titulo else "$titulo ($ano)"
+    }
 
     /**
      * Procura em todo o acervo.
@@ -121,8 +132,9 @@ object Vod {
         for (linha in texto.lineSequence()) {
             val campos = linha.split("\t")
             if (campos.size < 3) continue
-            if (!normalizar(campos[0]).contains(alvo)) continue
-            out += Achado(campos[0], campos[1] == "s", campos[2])
+            val ano = campos.getOrNull(3).orEmpty()
+            if (!normalizar(campos[0] + " " + ano).contains(alvo)) continue
+            out += Achado(campos[0], campos[1] == "s", campos[2], ano)
             if (out.size >= 200) break
         }
         return out
@@ -144,7 +156,9 @@ object Vod {
 
     /** Uma série específica, pelo nome, dentro da letra dela. */
     suspend fun serie(context: Context, achado: Achado): Serie? =
-        series(context, achado.letra).firstOrNull { it.titulo == achado.titulo }
+        series(context, achado.letra).firstOrNull {
+            it.titulo == achado.titulo && (achado.ano.isBlank() || it.ano == achado.ano)
+        }
 
     /** Episódios de uma série. Baixa só o pedaço em que ela está. */
     suspend fun episodios(context: Context, letra: String, serie: Serie): List<Episodio> {
@@ -155,7 +169,9 @@ object Vod {
         for (linha in texto.lineSequence()) {
             if (linha.startsWith("@")) {
                 if (dentro) break
-                dentro = linha.substring(1) == serie.titulo
+                val identidade = linha.substring(1).split("\t", limit = 2)
+                dentro = identidade[0] == serie.titulo &&
+                    identidade.getOrNull(1).orEmpty() == serie.ano
                 continue
             }
             if (!dentro) continue

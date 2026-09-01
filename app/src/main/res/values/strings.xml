@@ -37,6 +37,11 @@
     <string name="vod_buscar">Buscar</string>
     <string name="vod_buscar_dica">digite o nome</string>
     <string name="vod_resultados">Resultados de "%1$s"</string>
+    <string name="vod_escolha_fonte">Escolha a fonte</string>
+    <string name="vod_fonte_opcao">%1$s · Fonte %2$d de %3$d</string>
+    <string name="vod_fonte_numero">Fonte %1$d de %2$d</string>
+    <string name="vod_episodio_fonte">Episódio %1$d · Fonte %2$d de %3$d</string>
+    <string name="vod_servidor_desconhecido">Servidor não identificado</string>
     <string name="vod_espaco">espaço</string>
     <string name="vod_seletor_dica">ESQUERDA e DIREITA trocam a temporada · VOLTAR fecha</string>
     <string name="vod_legenda">OK escolhe · MENU favorita · VOLTAR sobe um nível</string>
@@ -45,6 +50,10 @@
     <plurals name="vod_titulos">
         <item quantity="one">%1$d título</item>
         <item quantity="other">%1$d títulos</item>
+    </plurals>
+    <plurals name="vod_fontes">
+        <item quantity="one">%1$d fonte</item>
+        <item quantity="other">%1$d fontes</item>
     </plurals>
     <string name="vod_eps">%1$d episódios</string>
     <string name="vod_temporada">Temporada %1$d</string>

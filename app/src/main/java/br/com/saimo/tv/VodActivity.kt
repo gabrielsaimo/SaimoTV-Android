@@ -3,6 +3,7 @@ package br.com.saimo.tv
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.net.Uri
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -32,13 +33,26 @@ import kotlinx.coroutines.launch
 @UnstableApi
 class VodActivity : AppCompatActivity() {
 
+    private data class OpcaoFonte(
+        val versao: String,
+        val url: String,
+        val numero: Int,
+        val total: Int,
+    )
+
     private sealed interface Passo {
         object Inicio : Passo
         data class Letras(val filmes: Boolean, val reservado: Boolean = false) : Passo
         data class Titulos(val filmes: Boolean, val letra: String, val reservado: Boolean = false) : Passo
         data class Temporadas(val letra: String, val serie: Serie) : Passo
         data class Episodios(val letra: String, val serie: Serie, val temporada: Int) : Passo
-        data class Versoes(val titulo: String, val fontes: Map<String, List<String>>) : Passo
+        data class Fontes(
+            val titulo: String,
+            val detalhe: String,
+            val opcoes: List<OpcaoFonte>,
+            val deSerie: Boolean,
+            val chave: String,
+        ) : Passo
         data class Resultados(val termo: String) : Passo
         object Favoritos : Passo
     }
@@ -165,7 +179,7 @@ class VodActivity : AppCompatActivity() {
             is Passo.Titulos -> titulos(passo.filmes, passo.letra, passo.reservado)
             is Passo.Temporadas -> temporadas(passo.letra, passo.serie)
             is Passo.Episodios -> episodios(passo.temporada)
-            is Passo.Versoes -> versoes(passo.titulo, passo.fontes)
+            is Passo.Fontes -> fontes(passo)
             is Passo.Resultados -> resultados(passo.termo)
             is Passo.Favoritos -> favoritos()
         }
@@ -185,6 +199,8 @@ class VodActivity : AppCompatActivity() {
         // número só ajuda quando são títulos.
         contagem.text = when {
             linhas.isEmpty() || passo is Passo.Inicio || passo is Passo.Letras -> ""
+            passo is Passo.Fontes ->
+                resources.getQuantityString(R.plurals.vod_fontes, linhas.size, linhas.size)
             else -> resources.getQuantityString(R.plurals.vod_titulos, linhas.size, linhas.size)
         }
         adapter.trocar(linhas)
@@ -195,10 +211,10 @@ class VodActivity : AppCompatActivity() {
         is Passo.Inicio -> ""
         is Passo.Letras -> secao(passo.filmes, passo.reservado)
         is Passo.Titulos -> "${secao(passo.filmes, passo.reservado)} › ${passo.letra}"
-        is Passo.Temporadas -> "${getString(R.string.vod_series)} › ${passo.serie.titulo}"
-        is Passo.Episodios -> "${passo.serie.titulo} › " +
+        is Passo.Temporadas -> "${getString(R.string.vod_series)} › ${passo.serie.nomeCompleto}"
+        is Passo.Episodios -> "${passo.serie.nomeCompleto} › " +
             getString(R.string.vod_temporada, passo.temporada)
-        is Passo.Versoes -> passo.titulo
+        is Passo.Fontes -> "${passo.titulo} › ${getString(R.string.vod_escolha_fonte)}"
         is Passo.Resultados -> getString(R.string.vod_resultados, passo.termo)
         is Passo.Favoritos -> getString(R.string.vod_favoritos)
     }
@@ -279,14 +295,15 @@ class VodActivity : AppCompatActivity() {
 
     private suspend fun resultados(termo: String): List<Linha> =
         Vod.buscar(this, termo).map { achado ->
-            Linha(achado.titulo,
+            Linha(achado.nomeCompleto,
                 getString(if (achado.serie) R.string.vod_series else R.string.vod_filmes_um),
                 inicial(achado.titulo), capaDe = achado.serie,
                 // Série guarda progresso por episódio, e a busca devolve o título:
                 // sem saber qual episódio, ela não tem o que mostrar aqui.
                 progresso = if (achado.serie) null
                             else Progresso.fracao(this, Progresso.chaveFilme(achado.titulo)),
-                favorito = VodFavoritos.Item(achado.titulo, achado.serie, achado.letra)) {
+                favorito = VodFavoritos.Item(
+                    achado.titulo, achado.serie, achado.letra, achado.ano)) {
                 lifecycleScope.launch { abrirAchado(achado) }
             }
         }
@@ -298,14 +315,7 @@ class VodActivity : AppCompatActivity() {
             Vod.serie(this, achado)?.let { ir(Passo.Temporadas(achado.letra, it)) }
         } else {
             val filme = Vod.filme(this, achado) ?: return
-            val unica = filme.fontes.entries.firstOrNull()
-            if (filme.fontes.size == 1 && unica != null) {
-                tocar(filme.titulo, unica.value,
-                      detalhe = getString(R.string.vod_filmes_um) + " · " + rotulo(unica.key),
-                      chave = Progresso.chaveFilme(filme.titulo))
-            } else {
-                ir(Passo.Versoes(filme.titulo, filme.fontes))
-            }
+            abrirFilme(filme)
         }
     }
 
@@ -340,14 +350,14 @@ class VodActivity : AppCompatActivity() {
     }
 
     private fun favoritos(): List<Linha> = VodFavoritos.lista(this).map { item ->
-        Linha(item.titulo,
+        Linha(item.nomeCompleto,
             getString(if (item.serie) R.string.vod_series else R.string.vod_filmes_um),
             inicial(item.titulo), capaDe = item.serie,
             progresso = if (item.serie) null
                         else Progresso.fracao(this, Progresso.chaveFilme(item.titulo)),
             favorito = item) {
             lifecycleScope.launch {
-                abrirAchado(Vod.Achado(item.titulo, item.serie, item.letra))
+                abrirAchado(Vod.Achado(item.titulo, item.serie, item.letra, item.ano))
             }
         }
     }
@@ -363,7 +373,7 @@ class VodActivity : AppCompatActivity() {
     }
 
     private fun marcado(linha: Linha): Boolean =
-        linha.favorito?.let { VodFavoritos.contem(this, it.titulo, it.serie) } == true
+        linha.favorito?.let { VodFavoritos.contem(this, it.titulo, it.serie, it.ano) } == true
 
     /// Marcar de dentro da própria lista de favoritos tira a linha da tela, e aí
     /// a lista precisa ser refeita; nas outras basta a estrela acender.
@@ -412,24 +422,15 @@ class VodActivity : AppCompatActivity() {
                 Linha(filme.titulo, detalheFilme(filme), inicial(filme.titulo), capaDe = false,
                     progresso = Progresso.fracao(this, Progresso.chaveFilme(filme.titulo)),
                     favorito = VodFavoritos.Item(filme.titulo, serie = false, letra = letra)) {
-                    val unica = filme.fontes.entries.firstOrNull()
-                    if (filme.fontes.size == 1 && unica != null) {
-                        serieNoAr = null
-                        tocar(filme.titulo, unica.value,
-                              detalhe = getString(R.string.vod_filmes_um) + " · " + rotulo(unica.key),
-                              chave = Progresso.chaveFilme(filme.titulo))
-                    } else {
-                        ir(Passo.Versoes(filme.titulo, filme.fontes))
-                    }
+                    abrirFilme(filme)
                 }
             }
         } else {
             Vod.series(this, letra).map { serie ->
-                val detalhe = listOfNotNull(
-                    serie.ano.takeIf { it.isNotBlank() },
-                    getString(R.string.vod_eps, serie.episodios)).joinToString(" · ")
-                Linha(serie.titulo, detalhe, inicial(serie.titulo), capaDe = true,
-                    favorito = VodFavoritos.Item(serie.titulo, serie = true, letra = letra)) {
+                Linha(serie.nomeCompleto, getString(R.string.vod_eps, serie.episodios),
+                    inicial(serie.titulo), capaDe = true,
+                    favorito = VodFavoritos.Item(
+                        serie.titulo, serie = true, letra = letra, ano = serie.ano)) {
                     ir(Passo.Temporadas(letra, serie))
                 }
             }
@@ -457,31 +458,71 @@ class VodActivity : AppCompatActivity() {
             Linha(getString(R.string.vod_episodio, episodio.numero),
                 detalhe(episodio.versao, episodio.urls.size), episodio.numero.toString(),
                 progresso = Progresso.fracao(this, Progresso.chaveEpisodio(
-                    (pilha.last() as? Passo.Episodios)?.serie?.titulo.orEmpty(),
+                    (pilha.last() as? Passo.Episodios)?.serie?.nomeCompleto.orEmpty(),
                     episodio.temporada, episodio.numero))) {
-                val serie = (pilha.last() as? Passo.Episodios)?.serie?.titulo.orEmpty()
-                tocar(serie.ifEmpty { getString(R.string.vod_episodio, episodio.numero) },
-                      episodio.urls,
-                      detalhe = getString(R.string.vod_temporada, episodio.temporada) + ", " +
-                          getString(R.string.vod_episodio, episodio.numero).lowercase() +
-                          " · " + rotulo(episodio.versao),
-                      deSerie = true,
-                      chave = Progresso.chaveEpisodio(serie, episodio.temporada, episodio.numero))
+                val serie = (pilha.last() as? Passo.Episodios)?.serie?.nomeCompleto.orEmpty()
+                escolherFonte(
+                    titulo = serie.ifEmpty { getString(R.string.vod_episodio, episodio.numero) },
+                    fontes = mapOf(episodio.versao to episodio.urls),
+                    detalhe = getString(R.string.vod_temporada, episodio.temporada) + ", " +
+                        getString(R.string.vod_episodio, episodio.numero).lowercase(),
+                    deSerie = true,
+                    chave = Progresso.chaveEpisodio(
+                        serie, episodio.temporada, episodio.numero))
             }
         }
 
-    private fun versoes(titulo: String, fontes: Map<String, List<String>>) =
-        fontes.map { (versao, urls) ->
-            Linha(rotulo(versao), detalhe(versao, urls.size).takeIf { urls.size > 1 }, "") {
-                serieNoAr = null
-                tocar(titulo, urls,
-                      detalhe = getString(R.string.vod_filmes_um) + " · " + rotulo(versao),
-                      chave = Progresso.chaveFilme(titulo))
+    private fun fontes(passo: Passo.Fontes): List<Linha> = passo.opcoes.map { opcao ->
+        Linha(
+            getString(R.string.vod_fonte_opcao, rotulo(opcao.versao), opcao.numero, opcao.total),
+            origem(opcao.url), opcao.numero.toString()) {
+                tocar(passo.titulo, listOf(opcao.url),
+                    detalhe = detalheDaFonte(passo.detalhe, opcao),
+                    deSerie = passo.deSerie, chave = passo.chave)
             }
-        }
+    }
 
-    /// Duas fontes não viram duas linhas: viram uma linha e uma reserva. Dizer
-    /// quantas há evita a impressão de que o título ficou por um fio.
+    private fun abrirFilme(filme: Filme) {
+        escolherFonte(
+            titulo = filme.titulo,
+            fontes = filme.fontes,
+            detalhe = getString(R.string.vod_filmes_um),
+            deSerie = false,
+            chave = Progresso.chaveFilme(filme.titulo))
+    }
+
+    /// Uma fonte abre direto; duas ou mais viram opções explícitas. O servidor
+    /// aparece junto para que duas entradas do mesmo idioma não pareçam iguais.
+    private fun escolherFonte(
+        titulo: String,
+        fontes: Map<String, List<String>>,
+        detalhe: String,
+        deSerie: Boolean,
+        chave: String,
+    ) {
+        val pares = fontes.keys.sortedWith(compareBy({ if (it == "leg") 1 else 0 }, { it }))
+            .flatMap { versao -> fontes[versao].orEmpty().map { versao to it } }
+        val opcoes = pares.mapIndexed { indice, (versao, url) ->
+            OpcaoFonte(versao, url, indice + 1, pares.size)
+        }
+        val unica = opcoes.singleOrNull()
+        if (unica != null) {
+            tocar(titulo, listOf(unica.url), detalhe = detalheDaFonte(detalhe, unica),
+                deSerie = deSerie, chave = chave)
+        } else if (opcoes.isNotEmpty()) {
+            ir(Passo.Fontes(titulo, detalhe, opcoes, deSerie, chave))
+        }
+    }
+
+    private fun detalheDaFonte(base: String, opcao: OpcaoFonte) =
+        "$base · ${rotulo(opcao.versao)} · " +
+            getString(R.string.vod_fonte_numero, opcao.numero, opcao.total)
+
+    private fun origem(url: String): String = runCatching {
+        Uri.parse(url).host?.removePrefix("www.")
+    }.getOrNull().orEmpty().ifEmpty { getString(R.string.vod_servidor_desconhecido) }
+
+    /// A contagem avisa que haverá escolha antes de abrir o item.
     private fun detalhe(versao: String, fontes: Int) =
         if (fontes > 1) "${rotulo(versao)} · $fontes fontes" else rotulo(versao)
 
@@ -498,7 +539,7 @@ class VodActivity : AppCompatActivity() {
 
     // MARK: - Reprodução
 
-    /// Fontes em ordem: a primeira que entregar imagem fica.
+    /// Depois da escolha, a reprodução recebe apenas a fonte selecionada.
     private var fontesAtuais: List<String> = emptyList()
     private var fonteAtual = 0
 
@@ -625,7 +666,7 @@ class VodActivity : AppCompatActivity() {
     private fun abrirSeletor(): Boolean {
         val serie = serieNoAr ?: return false
         if (episodiosDaSerie.isEmpty()) return false
-        seletorSerie.text = serie.titulo
+        seletorSerie.text = serie.nomeCompleto
         preencherSeletor()
         seletor.visibility = View.VISIBLE
         playerView.hideController()
@@ -658,22 +699,35 @@ class VodActivity : AppCompatActivity() {
         seletorAdapter.trocar(episodiosDaSerie
             .filter { it.temporada == temporadaAberta }
             .sortedWith(compareBy({ it.numero }, { it.versao }))
-            .map { episodio ->
-                Linha(getString(R.string.vod_episodio, episodio.numero),
-                    detalhe(episodio.versao, episodio.urls.size),
-                    episodio.numero.toString(),
-                    progresso = Progresso.fracao(this, Progresso.chaveEpisodio(
-                        serie?.titulo.orEmpty(), episodio.temporada, episodio.numero))) {
-                    fecharSeletor()
-                    tocar(serie?.titulo.orEmpty()
-                        .ifEmpty { getString(R.string.vod_episodio, episodio.numero) },
-                        episodio.urls,
-                        detalhe = getString(R.string.vod_temporada, episodio.temporada) + ", " +
-                            getString(R.string.vod_episodio, episodio.numero).lowercase() +
-                            " · " + rotulo(episodio.versao),
-                        deSerie = true,
-                        chave = Progresso.chaveEpisodio(serie?.titulo.orEmpty(),
-                            episodio.temporada, episodio.numero))
+            .flatMap { episodio ->
+                val nomeSerie = serie?.nomeCompleto.orEmpty()
+                val chave = Progresso.chaveEpisodio(
+                    nomeSerie, episodio.temporada, episodio.numero)
+                episodio.urls.mapIndexed { indice, url ->
+                    val opcao = OpcaoFonte(
+                        episodio.versao, url, indice + 1, episodio.urls.size)
+                    Linha(
+                        if (episodio.urls.size > 1) {
+                            getString(R.string.vod_episodio_fonte,
+                                episodio.numero, opcao.numero, opcao.total)
+                        } else {
+                            getString(R.string.vod_episodio, episodio.numero)
+                        },
+                        "${rotulo(episodio.versao)} · ${origem(url)}",
+                        episodio.numero.toString(),
+                        progresso = Progresso.fracao(this, chave)) {
+                        fecharSeletor()
+                        tocar(
+                            nomeSerie.ifEmpty {
+                                getString(R.string.vod_episodio, episodio.numero)
+                            },
+                            listOf(url),
+                            detalhe = detalheDaFonte(
+                                getString(R.string.vod_temporada, episodio.temporada) + ", " +
+                                    getString(R.string.vod_episodio, episodio.numero).lowercase(),
+                                opcao),
+                            deSerie = true, chave = chave)
+                    }
                 }
             })
     }
