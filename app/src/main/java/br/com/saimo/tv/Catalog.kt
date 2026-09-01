@@ -416,7 +416,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/tc-action.png",
         sources = listOf(
             Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/telecineaction/__index.m3u8?sv=191&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786409777-6357MK63%2ByysgfFiZNfFK3mJeGmSWEVxX3ET2vato6g%3D",
+                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/telecineaction/__index.m3u8?sv=65&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788282861-aoKYkiZeKtrLTheu479TRoyPmDfsKa5zJweP7EimknQ%3D",
             ),
         ),
     ),
@@ -425,7 +425,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/tc-pipoca.png",
         sources = listOf(
             Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/telecinepipoca/__index.m3u8?sv=58&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786492376-lVHrv7GkGdIq6AAU1c65luWS5GerVjL4DwRV0Ajf6x8%3D",
+                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/telecinepipoca/__index.m3u8?sv=206&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788282959-3qjOVT%2Bg1UFwS9wUbT%2B%2BYx2y%2BVWtbigNg1%2FrRl%2Fdyug%3D",
             ),
         ),
     ),
@@ -434,7 +434,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/tc-premium.png",
         sources = listOf(
             Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/telecinepremium/__index.m3u8?sv=79&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786292168-FKlxVeuJhXev%2F1KUUB5nexfVY5bv0OpgfJecX3Kk9q0%3D",
+                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/telecinepremium/__index.m3u8?sv=104&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788283005-hy2w8s5QaWo34TbclnSO6LsgzLu1mYnLArfARhQEE2w%3D",
             ),
         ),
     ),
@@ -504,7 +504,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/gloob.png",
         sources = listOf(
             Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/gloob/__index.m3u8?sv=91&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787793787-9h%2Bs%2B%2FRV9nGKt4Fclr9SyE2NXEr1j09Qx7tlNvn6FB0%3D",
+                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/gloob/__index.m3u8?sv=44&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788282571-gk4cH1WiXG%2FLaG9A7Y0ZtxiJq8hUvnG0E2JylBENtHw%3D",
             ),
         ),
     ),
@@ -522,7 +522,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/cartoonito.png",
         sources = listOf(
             Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/cartoonito/__index.m3u8?sv=12&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787792050-bykfcjcri4xlMawMEAbEK0ib1ZngaZ96MUudlmODfgk%3D",
+                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/cartoonito/__index.m3u8?sv=13&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788282202-dPu0xfaZZXYy9rFVfQhcULjp%2BxqQvGbiwCxIwoq65UQ%3D",
             ),
         ),
     ),
@@ -540,7 +540,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/combate.png",
         sources = listOf(
             Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/combate/__index.m3u8?sv=180&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786317841-kasstfdIhiqSElnrlbwkM4AVYt3R8NSVQYvsaAz2vmc%3D",
+                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/combate/__index.m3u8?sv=210&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788282359-UvS0u7yuQe6D0Xl3BQoxuG0Oq3l4jjOjWxj4o5hfm%2Bc%3D",
             ),
         ),
     ),
@@ -558,7 +558,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/discovery-home-and-health.png",
         sources = listOf(
             Source(
-                url = "https://p12-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/discoveryhomeihealth/__index.m3u8?sv=29&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787510491-LXPCJR%2BIA5IcHXUlV%2FZ9bcvbmd%2FTzc2XQwKhkl1c7wc%3D",
+                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/discoveryhomeihealth/__index.m3u8?sv=71&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788282427-ZEudIRlfmyP0YdW67oUXU9td%2Fr2nDQRwpDFLP95FvFI%3D",
             ),
         ),
     ),
@@ -808,7 +808,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://api.reidoscanais.ooo/img/canaloff.png",
         sources = listOf(
             Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/off/__index.m3u8?sv=143&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787793259-sSVLAlB%2FyEIDR1SYL1gWsDeonZz8E6h7esY7TXSA%2F94%3D",
+                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/off/__index.m3u8?sv=196&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788282271-L98hh4f38CWyEv6e8hbPxYnoZSx04zmJ6sqM%2B27%2BnFs%3D",
             ),
         ),
     ),
@@ -817,7 +817,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://embedcanaisdetv.com/images/tcfun.png",
         sources = listOf(
             Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/telecinefun/__index.m3u8?sv=164&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787793521-AgfMEtyIf7thou7yDHByqO2ulZwFKnnFeMdLGfnXEMo%3D",
+                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/telecinefun/__index.m3u8?sv=197&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788282913-QUfl0OgkKjzzhN2SK5Vc1b8ajh3xesFQDuQUd0LPnRw%3D",
             ),
         ),
     ),
@@ -835,7 +835,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://embedcanaisdetv.com/images/tctouch.png",
         sources = listOf(
             Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/telecinetouch/__index.m3u8?sv=104&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1787793560-W9IjDsYoBCDmrZ35n%2FSbaXlsYhE84n%2Fd90%2B36hjStSI%3D",
+                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/telecinetouch/__index.m3u8?sv=70&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788283053-ctAUK48c2z5sn3wmVtILp4lugwD5gPdwZMpTCbf9j%2Fk%3D",
             ),
         ),
     ),
