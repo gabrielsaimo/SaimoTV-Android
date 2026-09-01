@@ -69,6 +69,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var listHeader: View
     private lateinit var numpad: View
     private lateinit var numpadValue: TextView
+    private lateinit var vodEntrada: View
 
     private val handler = Handler(Looper.getMainLooper())
     private val clock = SimpleDateFormat("HH:mm", Locale("pt", "BR"))
@@ -86,7 +87,10 @@ class MainActivity : AppCompatActivity() {
     private val tick = object : Runnable {
         override fun run() {
             if (Epg.tick()) {
-                if (listPanel.visibility == View.VISIBLE) adapter.refresh()
+                // O refresh reconstrói as linhas visíveis; sem repor o foco na
+                // posição que a pessoa escolheu, ele voltaria para onde o
+                // RecyclerView calhar de pousar.
+                if (listPanel.visibility == View.VISIBLE) { adapter.refresh(); focusRow(listaFoco) }
                 if (banner.visibility == View.VISIBLE) updateBanner()
             }
             handler.postDelayed(this, TICK_MS)
@@ -105,6 +109,14 @@ class MainActivity : AppCompatActivity() {
     private var current = 0
     private var sourceIndex = 0
     private var retries = 0
+
+    /// Posição focada dentro da lista aberta — não confundir com `current`, que
+    /// é o canal no ar. Movida só por nós (ver `moverFoco`), nunca pela busca
+    /// de foco do sistema.
+    private var listaFoco = 0
+    /// Sobe a cada `focusRow` novo, para uma chamada atrasada (o post de
+    /// dentro dela) desistir se a pessoa já pediu outra posição enquanto isso.
+    private var focoGeracao = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -129,7 +141,8 @@ class MainActivity : AppCompatActivity() {
         numpadValue = findViewById(R.id.numpadValue)
 
         listHeader.setOnClickListener { openNumpad() }
-        findViewById<View>(R.id.vodEntrada).setOnClickListener {
+        vodEntrada = findViewById(R.id.vodEntrada)
+        vodEntrada.setOnClickListener {
             startActivity(Intent(this, VodActivity::class.java))
         }
         for ((id, digit) in listOf(
@@ -242,7 +255,10 @@ class MainActivity : AppCompatActivity() {
         guideStarted = true
         lifecycleScope.launch {
             Epg.load(this@MainActivity) {
-                if (listPanel.visibility == View.VISIBLE) adapter.refresh()
+                // O refresh reconstrói as linhas visíveis; sem repor o foco na
+                // posição que a pessoa escolheu, ele voltaria para onde o
+                // RecyclerView calhar de pousar.
+                if (listPanel.visibility == View.VISIBLE) { adapter.refresh(); focusRow(listaFoco) }
                 updateBanner()
             }
         }
@@ -342,13 +358,26 @@ class MainActivity : AppCompatActivity() {
             }
             // Sobre a imagem o direcional troca de canal, como numa TV: cima e
             // baixo andam na lista, direita abre a programação.
+            //
+            // Dentro da lista, cima/baixo NÃO passam para o RecyclerView achar
+            // o próximo foco sozinho — segurando a tecla, o TV Box antigo não
+            // dá conta de gerar as linhas na velocidade dos eventos, a busca de
+            // foco falha e ele "desiste" voltando pro topo, num loop. Em vez
+            // disso o índice é nosso: cada tecla anda um item e manda rolar
+            // para ele, sem depender da busca espacial do sistema.
             KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_CHANNEL_UP, KeyEvent.KEYCODE_MEDIA_PREVIOUS -> {
-                if (listOpen) super.onKeyDown(keyCode, event)
-                else { play((current - 1 + ordered.size) % ordered.size); true }
+                when {
+                    !listOpen -> { play((current - 1 + ordered.size) % ordered.size); true }
+                    channels.hasFocus() -> { moverFoco(-1); true }
+                    else -> super.onKeyDown(keyCode, event)
+                }
             }
             KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_CHANNEL_DOWN, KeyEvent.KEYCODE_MEDIA_NEXT -> {
-                if (listOpen) super.onKeyDown(keyCode, event)
-                else { play((current + 1) % ordered.size); true }
+                when {
+                    !listOpen -> { play((current + 1) % ordered.size); true }
+                    channels.hasFocus() -> { moverFoco(1); true }
+                    else -> super.onKeyDown(keyCode, event)
+                }
             }
             KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> {
                 player.playWhenReady = !player.playWhenReady; true
@@ -514,18 +543,41 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
+     * Anda um item na lista aberta e rola/foca para lá.
+     *
+     * Não usa a busca de foco do RecyclerView (`View.focusSearch`), que é o que
+     * bugava segurando a tecla num TV Box fraco: os eventos chegam mais rápido
+     * do que ele consegue medir a próxima linha, a busca falha e o sistema
+     * "recupera" pulando pro topo — daí o loop subindo. Aqui a posição é
+     * contada por nós, então cada tecla sempre sabe exatamente para onde ir.
+     */
+    private fun moverFoco(delta: Int) {
+        val alvo = listaFoco + delta
+        if (alvo < 0) { vodEntrada.requestFocus(); return }
+        if (alvo >= ordered.size) return
+        listaFoco = alvo
+        focusRow(alvo)
+    }
+
+    /**
      * Scrolls to a row and focuses it, retrying until the holder exists.
      *
      * A scroll only finishes on the next layout pass, so asking for the holder
      * straight away finds nothing, and the list would open with nothing focused
-     * — a remote that does nothing.
+     * — a remote that does nothing. `geracao` faz uma chamada velha desistir se
+     * `moverFoco` já pediu outra posição enquanto o post estava na fila —
+     * sem isso, segurar a tecla podia deixar dois pedidos de foco correndo ao
+     * mesmo tempo e o mais lento vencer, arrastando a seleção para trás.
      */
-    private fun focusRow(index: Int, attempts: Int = 8) {
+    private fun focusRow(index: Int, attempts: Int = 8, geracao: Int = ++focoGeracao) {
+        if (geracao != focoGeracao) return
+        listaFoco = index
         (channels.layoutManager as LinearLayoutManager)
             .scrollToPositionWithOffset(index, channels.height / 3)
         channels.post {
+            if (geracao != focoGeracao) return@post
             if (channels.findViewHolderForAdapterPosition(index)?.itemView?.requestFocus() == true) return@post
-            if (attempts > 0) focusRow(index, attempts - 1)
+            if (attempts > 0) focusRow(index, attempts - 1, geracao)
             else channels.getChildAt(0)?.requestFocus()
         }
     }
