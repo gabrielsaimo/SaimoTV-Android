@@ -134,6 +134,13 @@ object Epg {
         merged.putAll(MeuGuia.fetch(names, from, to))
         if (merged.isNotEmpty()) publish()
 
+        // Reserva do guiadetv: só para quem o meuguia não listou.
+        val faltando = names.filter { merged[it] == null }
+        if (faltando.isNotEmpty()) {
+            merged.putAll(GuiaDeTv.fetch(faltando, from, to))
+            if (merged.isNotEmpty()) publish()
+        }
+
         // Os feeds vêm um de cada vez e são lidos em fluxo. Um deles tem 15 MB:
         // virar String de uma vez custa uns 90 MB transitórios de char[] — num
         // TV Box isso é OutOfMemoryError engolido pelo runCatching, ou seja, o
