@@ -72,12 +72,16 @@ object Atualizacao {
         val raiz = JSONObject(corpo)
         val tag = raiz.optString("tag_name").ifBlank { return@runCatching null }
         val ativos = raiz.optJSONArray("assets") ?: return@runCatching null
-        // O nome do arquivo é o contrato com o release: o APK é a atualização
-        // do Android, e o DMG do mesmo release é a do Mac.
+        // O mesmo release traz TV, Mac e celular. O contrato do celular é um
+        // nome começando com "saimo-cell"; qualquer outro ".apk" é a TV Box —
+        // sem essa exclusão, um release com os dois instalaria o app errado
+        // no aparelho errado sempre que o Cell viesse listado primeiro.
+        val nomeDoCelular = Regex("^saimo[-_ ]?cell", RegexOption.IGNORE_CASE)
         var apk: String? = null
         for (i in 0 until ativos.length()) {
             val item = ativos.getJSONObject(i)
-            if (item.optString("name").endsWith(".apk", true)) {
+            val nome = item.optString("name")
+            if (nome.endsWith(".apk", true) && !nomeDoCelular.containsMatchIn(nome)) {
                 apk = item.optString("browser_download_url")
                 break
             }
