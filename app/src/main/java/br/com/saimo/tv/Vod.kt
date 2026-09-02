@@ -52,11 +52,11 @@ object Vod {
      * quebrado. Guardar a versão junto e limpar a pasta quando ela muda evita
      * que o formato velho envenene o novo.
      */
-    private const val VERSAO_CACHE = "3"
+    private const val VERSAO_CACHE = "4"
 
     suspend fun indice(context: Context): List<Gaveta> {
         conferirVersao(context)
-        val texto = arquivo(context, "indice.txt") ?: return emptyList()
+        val texto = indiceAtual(context) ?: return emptyList()
         val out = mutableListOf<Gaveta>()
         val encontradas = mutableListOf<String>()
         for (linha in texto.lineSequence()) {
@@ -75,8 +75,46 @@ object Vod {
                 }
             }
         }
-        if (encontradas.isNotEmpty()) bases = encontradas
+        if (encontradas.isNotEmpty()) {
+            bases = encontradas
+            conferirBases(context, encontradas)
+        }
         return out
+    }
+
+    /**
+     * O índice, sempre da rede quando ela responde.
+     *
+     * Ele é o único arquivo que dá sentido aos outros: cada filme guarda o
+     * número da base, não o endereço. Quando a lista de origens é regerada em
+     * outra ordem, um índice velho em disco aponta cada filme para o servidor
+     * errado e o catálogo inteiro passa a abrir em tela preta. É menos de um
+     * kilobyte, então vale buscar de novo a cada abertura e deixar o disco só
+     * como reserva para quando a rede falhar.
+     */
+    private suspend fun indiceAtual(context: Context): String? = withContext(Dispatchers.IO) {
+        baixar(context, "indice.txt") ?: run {
+            val local = File(File(context.filesDir, "vod"), "indice.txt")
+            if (local.exists() && local.length() > 0) local.readText() else null
+        }
+    }
+
+    /**
+     * Apaga as fatias em disco quando as origens mudam.
+     *
+     * As fatias por letra só fazem sentido junto do índice que as gerou. Se as
+     * bases mudaram, o que está guardado aponta para o lugar errado e precisa
+     * ser baixado de novo — o índice em si fica, que acabou de chegar.
+     */
+    private fun conferirBases(context: Context, encontradas: List<String>) {
+        val pasta = File(context.filesDir, "vod").apply { mkdirs() }
+        val marca = File(pasta, "bases.txt")
+        val atual = encontradas.joinToString("\n")
+        val anterior = runCatching { marca.readText() }.getOrNull()
+        runCatching { marca.writeText(atual) }
+        if (anterior == null || anterior == atual) return
+        val guardar = setOf("bases.txt", "versao.txt", "indice.txt")
+        pasta.listFiles()?.forEach { if (it.name !in guardar) it.delete() }
     }
 
     suspend fun filmes(context: Context, letra: String, reservados: Boolean = false): List<Filme> {
@@ -223,7 +261,13 @@ object Vod {
         val pasta = File(context.filesDir, "vod").apply { mkdirs() }
         val local = File(pasta, nome.replace("%23", "hash"))
         if (local.exists() && local.length() > 0) return@withContext local.readText()
+        baixar(context, nome)
+    }
 
+    /** Busca o arquivo na rede e guarda em disco. */
+    private fun baixar(context: Context, nome: String): String? {
+        val pasta = File(context.filesDir, "vod").apply { mkdirs() }
+        val local = File(pasta, nome.replace("%23", "hash"))
         val texto = runCatching {
             val request = Request.Builder().url(BASE + nome)
                 .header("User-Agent", Playback.DEFAULT_USER_AGENT)
@@ -231,9 +275,9 @@ object Vod {
             Playback.client.newCall(request).execute().use { resposta ->
                 if (!resposta.isSuccessful) null else resposta.body?.string()
             }
-        }.getOrNull() ?: return@withContext null
+        }.getOrNull() ?: return null
 
         runCatching { local.writeText(texto) }
-        texto
+        return texto
     }
 }
