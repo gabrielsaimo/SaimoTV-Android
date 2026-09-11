@@ -27,6 +27,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://www.tvlogo.org/brazil/a-and-e-br.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/AE_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/AE_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/AE_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/AE_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/AE_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/AE_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/AE_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/AE_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -35,6 +56,27 @@ val CATALOG: List<Channel> = listOf(
         name = "Adult Swim",
         logo = "https://mondrian.claro.com.br/channels/inverse/adult-swim.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/TRUTV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/TRUTV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/TRUTV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/TRUTV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/TRUTV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/TRUTV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/TRUTV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TRUTV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -54,6 +96,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/animal-planet.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/ANIMAL_PLANET_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/ANIMAL_PLANET_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/ANIMAL_PLANET_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/ANIMAL_PLANET_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/ANIMAL_PLANET_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/ANIMAL_PLANET_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/ANIMAL_PLANET_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/ANIMAL_PLANET_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -62,6 +125,27 @@ val CATALOG: List<Channel> = listOf(
         name = "Band",
         logo = "https://mondrian.claro.com.br/channels/inverse/band.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/BAND_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/BAND_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/BAND_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/BAND_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/BAND_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/BAND_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/BAND_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/BAND_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -72,6 +156,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/cartoon-network.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/CARTOON_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/CARTOON_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/CARTOON_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/CARTOON_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/CARTOON_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/CARTOON_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/CARTOON_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/CARTOON_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -80,6 +185,27 @@ val CATALOG: List<Channel> = listOf(
         name = "CazéTV",
         logo = "https://commons.wikimedia.org/wiki/Special:FilePath/Caz%C3%A9TV_wordmark.svg?width=300",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/CAZE_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/CAZE_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/CAZE_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/CAZE_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/CAZE_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/CAZE_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/CAZE_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/CAZE_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -132,6 +258,27 @@ val CATALOG: List<Channel> = listOf(
         name = "Globo RJ",
         logo = "https://mondrian.claro.com.br/channels/inverse/globo.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/GLOBO_RIO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/GLOBO_RIO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/GLOBO_RIO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/GLOBO_RIO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/GLOBO_RIO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/GLOBO_RIO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/GLOBO_RIO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/GLOBO_RIO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -190,6 +337,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/history-channel.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/HISTORY_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/HISTORY_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/HISTORY_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/HISTORY_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/HISTORY_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/HISTORY_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/HISTORY_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/HISTORY_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
             Source(
@@ -202,6 +370,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/history-2.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/H2_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/H2_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/H2_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/H2_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/H2_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/H2_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/H2_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/H2_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -210,6 +399,27 @@ val CATALOG: List<Channel> = listOf(
         name = "Jovem Pan News",
         logo = "https://www.tvlogo.org/brazil/jovem-pan-news-br.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/JP_NEWS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/JP_NEWS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/JP_NEWS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/JP_NEWS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/JP_NEWS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/JP_NEWS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/JP_NEWS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/JP_NEWS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -357,6 +567,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/sbt.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/SBT_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/SBT_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/SBT_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/SBT_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/SBT_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/SBT_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/SBT_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/SBT_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -376,6 +607,27 @@ val CATALOG: List<Channel> = listOf(
         name = "Sony Channel",
         logo = "https://mondrian.claro.com.br/channels/inverse/sony.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/SONY_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/SONY_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/SONY_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/SONY_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/SONY_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/SONY_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/SONY_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/SONY_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -448,7 +700,46 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/tv-brasil.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/TV_BRASIL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/TV_BRASIL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/TV_BRASIL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/TV_BRASIL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/TV_BRASIL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/TV_BRASIL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/TV_BRASIL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TV_BRASIL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/TVE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/TVE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/TVE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/TVE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/TVE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/TVE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TVE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
@@ -486,6 +777,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/warner-channel.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/WARNER_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/WARNER_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/WARNER_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/WARNER_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/WARNER_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/WARNER_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/WARNER_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/WARNER_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -503,6 +815,27 @@ val CATALOG: List<Channel> = listOf(
         name = "Globo SP",
         logo = "https://mondrian.claro.com.br/channels/inverse/globo.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/GLOBO_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/GLOBO_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/GLOBO_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/GLOBO_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/GLOBO_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/GLOBO_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/GLOBO_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/GLOBO_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -522,6 +855,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/cinemax.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/CINEMAX/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/CINEMAX/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/CINEMAX/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/CINEMAX/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/CINEMAX/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/CINEMAX/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/CINEMAX/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/CINEMAX/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -530,6 +884,27 @@ val CATALOG: List<Channel> = listOf(
         name = "Discovery Channel",
         logo = "https://mondrian.claro.com.br/channels/inverse/discovery.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/DISCOVERY_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/DISCOVERY_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/DISCOVERY_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/DISCOVERY_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/DISCOVERY_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/DISCOVERY_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/DISCOVERY_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/DISCOVERY_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -540,6 +915,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/discovery-kids.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/DISCOVERY_KIDS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/DISCOVERY_KIDS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/DISCOVERY_KIDS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/DISCOVERY_KIDS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/DISCOVERY_KIDS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/DISCOVERY_KIDS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/DISCOVERY_KIDS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/DISCOVERY_KIDS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -548,6 +944,27 @@ val CATALOG: List<Channel> = listOf(
         name = "Discovery Theater",
         logo = "https://mondrian.claro.com.br/channels/inverse/discovery-theater.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/DISCOVERY_THEATER_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/DISCOVERY_THEATER_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/DISCOVERY_THEATER_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/DISCOVERY_THEATER_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/DISCOVERY_THEATER_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/DISCOVERY_THEATER_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/DISCOVERY_THEATER_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/DISCOVERY_THEATER_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -558,6 +975,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/discovery-world.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/DISCOVERY_WORLD_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/DISCOVERY_WORLD_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/DISCOVERY_WORLD_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/DISCOVERY_WORLD_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/DISCOVERY_WORLD_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/DISCOVERY_WORLD_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/DISCOVERY_WORLD_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/DISCOVERY_WORLD_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -566,6 +1004,27 @@ val CATALOG: List<Channel> = listOf(
         name = "ESPN",
         logo = "https://mondrian.claro.com.br/channels/inverse/espn-3.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/ESPN_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/ESPN_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/ESPN_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/ESPN_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/ESPN_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/ESPN_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/ESPN_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/ESPN_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -576,6 +1035,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/espn-3.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/ESPN2_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/ESPN2_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/ESPN2_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/ESPN2_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/ESPN2_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/ESPN2_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/ESPN2_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/ESPN2_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -584,6 +1064,27 @@ val CATALOG: List<Channel> = listOf(
         name = "ESPN 4",
         logo = "https://mondrian.claro.com.br/channels/inverse/espn-3.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/ESPN4_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/ESPN4_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/ESPN4_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/ESPN4_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/ESPN4_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/ESPN4_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/ESPN4_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/ESPN4_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -594,6 +1095,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/espn-3.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/ESPN5/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/ESPN5/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/ESPN5/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/ESPN5/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/ESPN5/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/ESPN5/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/ESPN5/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/ESPN5/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -602,6 +1124,27 @@ val CATALOG: List<Channel> = listOf(
         name = "ESPN 6",
         logo = "https://mondrian.claro.com.br/channels/inverse/espn-3.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/ESPN6/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/ESPN6/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/ESPN6/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/ESPN6/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/ESPN6/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/ESPN6/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/ESPN6/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/ESPN6/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -612,6 +1155,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/hbo.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/HBO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/HBO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/HBO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/HBO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/HBO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/HBO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/HBO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/HBO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -620,6 +1184,27 @@ val CATALOG: List<Channel> = listOf(
         name = "HBO2",
         logo = "https://mondrian.claro.com.br/channels/inverse/hbo-2.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/HBO2/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/HBO2/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/HBO2/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/HBO2/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/HBO2/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/HBO2/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/HBO2/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/HBO2/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -630,6 +1215,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/hbo-family.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/HBO_FAMILY/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/HBO_FAMILY/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/HBO_FAMILY/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/HBO_FAMILY/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/HBO_FAMILY/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/HBO_FAMILY/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/HBO_FAMILY/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/HBO_FAMILY/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -638,6 +1244,27 @@ val CATALOG: List<Channel> = listOf(
         name = "HBO Mundi",
         logo = "https://mondrian.claro.com.br/channels/inverse/hbo-mundi.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/HBO_MUNDI_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/HBO_MUNDI_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/HBO_MUNDI_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/HBO_MUNDI_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/HBO_MUNDI_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/HBO_MUNDI_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/HBO_MUNDI_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/HBO_MUNDI_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -648,6 +1275,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/hboplus.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/HBO_PLUS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/HBO_PLUS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/HBO_PLUS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/HBO_PLUS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/HBO_PLUS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/HBO_PLUS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/HBO_PLUS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/HBO_PLUS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -656,6 +1304,27 @@ val CATALOG: List<Channel> = listOf(
         name = "HBO Pop",
         logo = "https://mondrian.claro.com.br/channels/inverse/hbo-pop.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/HBO_POP_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/HBO_POP_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/HBO_POP_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/HBO_POP_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/HBO_POP_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/HBO_POP_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/HBO_POP_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/HBO_POP_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -666,6 +1335,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/hbo-signature.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/HBO_SIGNATURE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/HBO_SIGNATURE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/HBO_SIGNATURE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/HBO_SIGNATURE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/HBO_SIGNATURE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/HBO_SIGNATURE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/HBO_SIGNATURE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/HBO_SIGNATURE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -674,6 +1364,27 @@ val CATALOG: List<Channel> = listOf(
         name = "HBO Xtreme",
         logo = "https://mondrian.claro.com.br/channels/inverse/hbo-xtreme.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/HBO_EXTREME_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/HBO_EXTREME_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/HBO_EXTREME_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/HBO_EXTREME_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/HBO_EXTREME_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/HBO_EXTREME_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/HBO_EXTREME_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/HBO_EXTREME_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -684,6 +1395,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/hgtv.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/HGTV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/HGTV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/HGTV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/HGTV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/HGTV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/HGTV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/HGTV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/HGTV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -692,6 +1424,27 @@ val CATALOG: List<Channel> = listOf(
         name = "Record",
         logo = "https://mondrian.claro.com.br/channels/inverse/record-tv.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/RECORD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/RECORD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/RECORD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/RECORD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/RECORD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/RECORD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/RECORD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/RECORD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -705,6 +1458,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/space.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/SPACE_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/SPACE_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/SPACE_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/SPACE_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/SPACE_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/SPACE_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/SPACE_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/SPACE_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -714,6 +1488,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/tnt.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/TNT_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/TNT_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/TNT_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/TNT_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/TNT_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/TNT_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/TNT_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TNT_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -722,6 +1517,27 @@ val CATALOG: List<Channel> = listOf(
         name = "TNT Séries",
         logo = "https://mondrian.claro.com.br/channels/inverse/tnt-series.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/TNT_SERIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/TNT_SERIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/TNT_SERIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/TNT_SERIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/TNT_SERIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/TNT_SERIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/TNT_SERIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TNT_SERIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -756,6 +1572,27 @@ val CATALOG: List<Channel> = listOf(
         name = "Discovery Turbo",
         logo = "https://mondrian.claro.com.br/channels/inverse/discovery-turbo.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/DISCOVERY_TURBO_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/DISCOVERY_TURBO_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/DISCOVERY_TURBO_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/DISCOVERY_TURBO_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/DISCOVERY_TURBO_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/DISCOVERY_TURBO_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/DISCOVERY_TURBO_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/DISCOVERY_TURBO_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -802,6 +1639,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://www.tvlogo.org/brazil/sony-movies-br.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/SONY_MOVIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/SONY_MOVIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/SONY_MOVIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/SONY_MOVIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/SONY_MOVIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/SONY_MOVIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/SONY_MOVIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/SONY_MOVIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -812,6 +1670,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/globo.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/GLOBO_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/GLOBO_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/GLOBO_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/GLOBO_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/GLOBO_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/GLOBO_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/GLOBO_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/GLOBO_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -821,6 +1700,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/tooncast.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/TOONCAST/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/TOONCAST/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/TOONCAST/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/TOONCAST/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/TOONCAST/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/TOONCAST/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/TOONCAST/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TOONCAST/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -829,6 +1729,27 @@ val CATALOG: List<Channel> = listOf(
         name = "TLC",
         logo = "https://mondrian.claro.com.br/channels/inverse/tlc.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/TLC_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/TLC_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/TLC_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/TLC_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/TLC_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/TLC_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/TLC_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TLC_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -842,6 +1763,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/arte1.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/ARTE_1/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/ARTE_1/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/ARTE_1/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/ARTE_1/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/ARTE_1/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/ARTE_1/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/ARTE_1/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/ARTE_1/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -850,6 +1792,27 @@ val CATALOG: List<Channel> = listOf(
         name = "TNT Novelas",
         logo = "https://mondrian.claro.com.br/channels/inverse/tnt-novelas.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/TNT_NOVELAS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/TNT_NOVELAS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/TNT_NOVELAS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/TNT_NOVELAS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/TNT_NOVELAS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/TNT_NOVELAS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/TNT_NOVELAS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TNT_NOVELAS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -860,6 +1823,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/discovery-science.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/DISCOVERY_SCIENCE_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/DISCOVERY_SCIENCE_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/DISCOVERY_SCIENCE_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/DISCOVERY_SCIENCE_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/DISCOVERY_SCIENCE_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/DISCOVERY_SCIENCE_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/DISCOVERY_SCIENCE_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/DISCOVERY_SCIENCE_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -868,6 +1852,27 @@ val CATALOG: List<Channel> = listOf(
         name = "Boomerang",
         logo = "https://mondrian.claro.com.br/channels/inverse/boomerang.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/BOOMERANG_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/BOOMERANG_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/BOOMERANG_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/BOOMERANG_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/BOOMERANG_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/BOOMERANG_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/BOOMERANG_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/BOOMERANG_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -878,6 +1883,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/axn.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/AXN_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/AXN_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/AXN_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/AXN_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/AXN_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/AXN_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/AXN_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/AXN_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -886,6 +1912,27 @@ val CATALOG: List<Channel> = listOf(
         name = "TCM",
         logo = "https://mondrian.claro.com.br/channels/inverse/tcm.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/TCM_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/TCM_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/TCM_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/TCM_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/TCM_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/TCM_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/TCM_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TCM_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -896,6 +1943,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/band-news.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/BAND_NEWS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/BAND_NEWS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/BAND_NEWS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/BAND_NEWS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/BAND_NEWS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/BAND_NEWS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/BAND_NEWS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/BAND_NEWS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -904,6 +1972,27 @@ val CATALOG: List<Channel> = listOf(
         name = "BAND SPORTS HD",
         logo = "https://mondrian.claro.com.br/channels/inverse/band-sports.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/BAND_SPORTS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/BAND_SPORTS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/BAND_SPORTS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/BAND_SPORTS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/BAND_SPORTS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/BAND_SPORTS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/BAND_SPORTS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/BAND_SPORTS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -914,6 +2003,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://www.tvlogo.org/brazil/rede-tv-br.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/REDE_TV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/REDE_TV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/REDE_TV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/REDE_TV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/REDE_TV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/REDE_TV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/REDE_TV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/REDE_TV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -922,6 +2032,27 @@ val CATALOG: List<Channel> = listOf(
         name = "TV Cultura",
         logo = "https://mondrian.claro.com.br/channels/inverse/cultura.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/TV_CULTURA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/TV_CULTURA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/TV_CULTURA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/TV_CULTURA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/TV_CULTURA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/TV_CULTURA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/TV_CULTURA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TV_CULTURA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -932,6 +2063,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://www.tvlogo.org/brazil/terraviva-br.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/TERRA_VIVA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/TERRA_VIVA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/TERRA_VIVA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/TERRA_VIVA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/TERRA_VIVA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/TERRA_VIVA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/TERRA_VIVA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TERRA_VIVA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -940,6 +2092,24 @@ val CATALOG: List<Channel> = listOf(
         name = "Woohoo",
         logo = "https://mondrian.claro.com.br/channels/inverse/woohoo.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/WOOHOO_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/WOOHOO_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/WOOHOO_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/WOOHOO_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/WOOHOO_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/WOOHOO_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/WOOHOO_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -950,6 +2120,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://www.tvlogo.org/brazil/prime-box-brazil-br.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/PRIME_BOX_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/PRIME_BOX_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/PRIME_BOX_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/PRIME_BOX_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/PRIME_BOX_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/PRIME_BOX_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/PRIME_BOX_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/PRIME_BOX_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -958,6 +2149,27 @@ val CATALOG: List<Channel> = listOf(
         name = "ESPN 3",
         logo = "https://mondrian.claro.com.br/channels/inverse/espn-3.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/ESPN3_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/ESPN3_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/ESPN3_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/ESPN3_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/ESPN3_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/ESPN3_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/ESPN3_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/ESPN3_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -968,6 +2180,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/espn-extra.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/ESPN_EXTRA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/ESPN_EXTRA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/ESPN_EXTRA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/ESPN_EXTRA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/ESPN_EXTRA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/ESPN_EXTRA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/ESPN_EXTRA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/ESPN_EXTRA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -976,6 +2209,27 @@ val CATALOG: List<Channel> = listOf(
         name = "TV Gazeta",
         logo = "https://mondrian.claro.com.br/channels/inverse/tv-gazeta.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/GAZETA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/GAZETA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/GAZETA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/GAZETA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/GAZETA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/GAZETA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/GAZETA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/GAZETA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -986,6 +2240,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/recordnews.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/RECORD_NEWS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/RECORD_NEWS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/RECORD_NEWS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/RECORD_NEWS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/RECORD_NEWS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/RECORD_NEWS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/RECORD_NEWS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/RECORD_NEWS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -994,6 +2269,27 @@ val CATALOG: List<Channel> = listOf(
         name = "Canção Nova",
         logo = "https://mondrian.claro.com.br/channels/inverse/cancao-nova.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/CANCAO_NOVA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/CANCAO_NOVA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/CANCAO_NOVA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/CANCAO_NOVA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/CANCAO_NOVA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/CANCAO_NOVA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/CANCAO_NOVA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/CANCAO_NOVA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -1007,6 +2303,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/tv-aparecida.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/TV_APARECIDA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/TV_APARECIDA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/TV_APARECIDA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/TV_APARECIDA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/TV_APARECIDA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/TV_APARECIDA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/TV_APARECIDA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TV_APARECIDA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -1015,6 +2332,27 @@ val CATALOG: List<Channel> = listOf(
         name = "Rede Vida",
         logo = "https://www.tvlogo.org/brazil/rede-vida-br.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/REDE_VIDA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/REDE_VIDA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/REDE_VIDA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/REDE_VIDA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/REDE_VIDA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/REDE_VIDA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/REDE_VIDA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/REDE_VIDA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -1028,6 +2366,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/investigacao-discovery.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/ID_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/ID_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/ID_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/ID_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/ID_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/ID_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/ID_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/ID_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -1036,6 +2395,27 @@ val CATALOG: List<Channel> = listOf(
         name = "Fish TV",
         logo = "https://mondrian.claro.com.br/channels/inverse/fish-tv.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/FISH_TV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/FISH_TV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/FISH_TV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/FISH_TV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/FISH_TV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/FISH_TV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/FISH_TV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/FISH_TV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -1046,6 +2426,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://www.tvlogo.org/brazil/box-kids-tv-br.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/BOX_KIDS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/BOX_KIDS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/BOX_KIDS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/BOX_KIDS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/BOX_KIDS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/BOX_KIDS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/BOX_KIDS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/BOX_KIDS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -1054,6 +2455,27 @@ val CATALOG: List<Channel> = listOf(
         name = "Sabor & Arte",
         logo = "https://mondrian.claro.com.br/channels/inverse/sabor-e-arte.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/SABOR_E_ARTE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/SABOR_E_ARTE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/SABOR_E_ARTE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/SABOR_E_ARTE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/SABOR_E_ARTE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/SABOR_E_ARTE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/SABOR_E_ARTE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/SABOR_E_ARTE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -1064,6 +2486,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/xsports.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/XSPORTS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/XSPORTS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/XSPORTS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/XSPORTS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/XSPORTS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/XSPORTS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/XSPORTS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/XSPORTS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -1072,6 +2515,27 @@ val CATALOG: List<Channel> = listOf(
         name = "N SPORTS",
         logo = "https://mondrian.claro.com.br/channels/inverse/nsports.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/NSPORTS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/NSPORTS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/NSPORTS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/NSPORTS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/NSPORTS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/NSPORTS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/NSPORTS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/NSPORTS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -1082,6 +2546,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://commons.wikimedia.org/wiki/Special:Redirect/file/MusicBoxBrazil.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/MUSIC_BOX_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/MUSIC_BOX_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/MUSIC_BOX_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/MUSIC_BOX_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/MUSIC_BOX_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/MUSIC_BOX_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/MUSIC_BOX_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/MUSIC_BOX_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -1090,6 +2575,27 @@ val CATALOG: List<Channel> = listOf(
         name = "Band SP",
         logo = "https://mondrian.claro.com.br/channels/inverse/band.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/BAND_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/BAND_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/BAND_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/BAND_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/BAND_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/BAND_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/BAND_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/BAND_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -1100,6 +2606,24 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/band.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/BAND_RS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/BAND_RS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/BAND_RS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/BAND_RS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/BAND_RS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/BAND_RS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/BAND_RS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -1108,6 +2632,27 @@ val CATALOG: List<Channel> = listOf(
         name = "SBT SP",
         logo = "https://mondrian.claro.com.br/channels/inverse/sbt.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/SBT_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/SBT_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/SBT_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/SBT_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/SBT_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/SBT_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/SBT_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/SBT_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -1118,6 +2663,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/sbt.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/SBT_RS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/SBT_RS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/SBT_RS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/SBT_RS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/SBT_RS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/SBT_RS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/SBT_RS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/SBT_RS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -1126,6 +2692,27 @@ val CATALOG: List<Channel> = listOf(
         name = "Record SP",
         logo = "https://mondrian.claro.com.br/channels/inverse/record-tv.png",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/RECORD_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/RECORD_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/RECORD_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/RECORD_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/RECORD_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/RECORD_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/RECORD_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/RECORD_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -1136,6 +2723,27 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/record-tv.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/RECORD_RS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/RECORD_RS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/RECORD_RS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/RECORD_RS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/RECORD_RS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/RECORD_RS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/RECORD_RS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/RECORD_RS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -1143,6 +2751,27 @@ val CATALOG: List<Channel> = listOf(
     Channel(
         name = "Canal Rural",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/CANAL_RURAL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/CANAL_RURAL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/CANAL_RURAL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/CANAL_RURAL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/CANAL_RURAL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/CANAL_RURAL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/CANAL_RURAL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/CANAL_RURAL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -1152,6 +2781,27 @@ val CATALOG: List<Channel> = listOf(
         name = "Agro Mais",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/AGROMAIS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/AGROMAIS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/AGROMAIS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/AGROMAIS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/AGROMAIS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/AGROMAIS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/AGROMAIS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/AGROMAIS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -1159,6 +2809,27 @@ val CATALOG: List<Channel> = listOf(
     Channel(
         name = "CNT",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/CNT_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/CNT_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/CNT_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/CNT_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/CNT_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/CNT_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/CNT_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/CNT_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -1168,6 +2839,27 @@ val CATALOG: List<Channel> = listOf(
         name = "Markket",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/MARKKET/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/MARKKET/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/MARKKET/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/MARKKET/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/MARKKET/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/MARKKET/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/MARKKET/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/MARKKET/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -1175,6 +2867,27 @@ val CATALOG: List<Channel> = listOf(
     Channel(
         name = "TV Pai Eterno",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/PAI_ETERNO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/PAI_ETERNO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/PAI_ETERNO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/PAI_ETERNO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/PAI_ETERNO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/PAI_ETERNO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/PAI_ETERNO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/PAI_ETERNO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -1184,6 +2897,24 @@ val CATALOG: List<Channel> = listOf(
         name = "PlayTV",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/PLAYTV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/PLAYTV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/PLAYTV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/PLAYTV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/PLAYTV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/PLAYTV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/PLAYTV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -1191,6 +2922,27 @@ val CATALOG: List<Channel> = listOf(
     Channel(
         name = "Rede Brasil",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/REDE_BRASIL_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/REDE_BRASIL_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/REDE_BRASIL_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/REDE_BRASIL_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/REDE_BRASIL_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/REDE_BRASIL_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/REDE_BRASIL_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/REDE_BRASIL_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -1200,6 +2952,27 @@ val CATALOG: List<Channel> = listOf(
         name = "Rede Gospel",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/REDE_GOSPEL_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/REDE_GOSPEL_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/REDE_GOSPEL_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/REDE_GOSPEL_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/REDE_GOSPEL_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/REDE_GOSPEL_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/REDE_GOSPEL_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/REDE_GOSPEL_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -1207,6 +2980,27 @@ val CATALOG: List<Channel> = listOf(
     Channel(
         name = "Rede Super",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/REDE_SUPER/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/REDE_SUPER/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/REDE_SUPER/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/REDE_SUPER/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/REDE_SUPER/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/REDE_SUPER/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/REDE_SUPER/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/REDE_SUPER/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -1216,6 +3010,27 @@ val CATALOG: List<Channel> = listOf(
         name = "Trace Brazuca",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/TRACE_BRAZUCA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/TRACE_BRAZUCA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/TRACE_BRAZUCA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/TRACE_BRAZUCA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/TRACE_BRAZUCA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/TRACE_BRAZUCA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/TRACE_BRAZUCA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TRACE_BRAZUCA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -1223,6 +3038,27 @@ val CATALOG: List<Channel> = listOf(
     Channel(
         name = "TV Câmara",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/TV_CAMARA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/TV_CAMARA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/TV_CAMARA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/TV_CAMARA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/TV_CAMARA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/TV_CAMARA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/TV_CAMARA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TV_CAMARA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -1232,6 +3068,27 @@ val CATALOG: List<Channel> = listOf(
         name = "TV Evangelizar",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/TV_EVANGELIZAR/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/TV_EVANGELIZAR/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/TV_EVANGELIZAR/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/TV_EVANGELIZAR/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/TV_EVANGELIZAR/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/TV_EVANGELIZAR/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/TV_EVANGELIZAR/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TV_EVANGELIZAR/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -1239,6 +3096,27 @@ val CATALOG: List<Channel> = listOf(
     Channel(
         name = "TV Justiça",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/TV_JUSTICA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/TV_JUSTICA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/TV_JUSTICA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/TV_JUSTICA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/TV_JUSTICA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/TV_JUSTICA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/TV_JUSTICA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TV_JUSTICA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -1248,6 +3126,27 @@ val CATALOG: List<Channel> = listOf(
         name = "TV Novo Tempo",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/TV_NOVO_TEMPO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/TV_NOVO_TEMPO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/TV_NOVO_TEMPO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/TV_NOVO_TEMPO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/TV_NOVO_TEMPO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/TV_NOVO_TEMPO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/TV_NOVO_TEMPO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TV_NOVO_TEMPO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -1255,6 +3154,27 @@ val CATALOG: List<Channel> = listOf(
     Channel(
         name = "TV Senado",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/TV_SENADO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/TV_SENADO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/TV_SENADO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/TV_SENADO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/TV_SENADO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/TV_SENADO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/TV_SENADO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TV_SENADO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -1264,6 +3184,27 @@ val CATALOG: List<Channel> = listOf(
         name = "RIT",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/RIT/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/RIT/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/RIT/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/RIT/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/RIT/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/RIT/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/RIT/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/RIT/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -1271,6 +3212,27 @@ val CATALOG: List<Channel> = listOf(
     Channel(
         name = "TV Escola",
         sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/TV_ESCOLA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/TV_ESCOLA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/TV_ESCOLA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/TV_ESCOLA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/TV_ESCOLA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/TV_ESCOLA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/TV_ESCOLA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TV_ESCOLA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
@@ -1281,7 +3243,927 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/discovery.png",
         sources = listOf(
             Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/DISC_HH_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/DISC_HH_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/DISC_HH_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/DISC_HH_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/DISC_HH_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/DISC_HH_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/DISC_HH_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/DISC_HH_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Agro Brasil",
+        sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/AGROBRASIL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/AGROBRASIL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/AGROBRASIL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/AGROBRASIL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/AGROBRASIL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/AGROBRASIL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/AGROBRASIL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/AGROBRASIL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Canal Agro",
+        sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/AGRO_CANAL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/AGRO_CANAL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/AGRO_CANAL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/AGRO_CANAL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/AGRO_CANAL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/AGRO_CANAL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/AGRO_CANAL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/AGRO_CANAL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Blits TV",
+        sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/BLITS_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/BLITS_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/BLITS_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/BLITS_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/BLITS_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/BLITS_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/BLITS_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/BLITS_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Channel 1",
+        sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/CHANNEL1/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/CHANNEL1/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/CHANNEL1/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/CHANNEL1/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/CHANNEL1/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/CHANNEL1/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/CHANNEL1/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/CHANNEL1/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Cinemonde",
+        sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/CINEMONDE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/CINEMONDE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/CINEMONDE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/CINEMONDE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/CINEMONDE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/CINEMONDE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/CINEMONDE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/CINEMONDE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "CNBC",
+        sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/CNBC_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/CNBC_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/CNBC_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/CNBC_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/CNBC_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/CNBC_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/CNBC_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/CNBC_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Com Brasil",
+        sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/COM_BRASIL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/COM_BRASIL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/COM_BRASIL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/COM_BRASIL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/COM_BRASIL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/COM_BRASIL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/COM_BRASIL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/COM_BRASIL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Darkflix",
+        sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/DARKFLIX/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/DARKFLIX/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/DARKFLIX/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/DARKFLIX/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/DARKFLIX/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/DARKFLIX/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/DARKFLIX/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/DARKFLIX/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "DW",
+        sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/DW/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/DW/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/DW/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/DW/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/DW/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/DW/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/DW/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/DW/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Euronews",
+        sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/EURONEWS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/EURONEWS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/EURONEWS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/EURONEWS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/EURONEWS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/EURONEWS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/EURONEWS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/EURONEWS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "EWTN",
+        sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/EWTN/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/EWTN/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/EWTN/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/EWTN/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/EWTN/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/EWTN/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/EWTN/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/EWTN/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Fox News",
+        sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/FOX_NEWS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/FOX_NEWS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/FOX_NEWS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/FOX_NEWS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/FOX_NEWS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/FOX_NEWS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/FOX_NEWS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/FOX_NEWS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Fox Sports 2",
+        sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/FOX_SPORTS_2/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/FOX_SPORTS_2/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/FOX_SPORTS_2/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/FOX_SPORTS_2/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/FOX_SPORTS_2/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/FOX_SPORTS_2/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/FOX_SPORTS_2/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/FOX_SPORTS_2/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Fuel TV",
+        sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/FUEL_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/FUEL_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/FUEL_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/FUEL_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/FUEL_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/FUEL_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/FUEL_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/FUEL_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Hallo Anime",
+        sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/HALLO_ANIME/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/HALLO_ANIME/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/HALLO_ANIME/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/HALLO_ANIME/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/HALLO_ANIME/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/HALLO_ANIME/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/HALLO_ANIME/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/HALLO_ANIME/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Hallo Doc",
+        sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/HALLO_DOC/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/HALLO_DOC/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/HALLO_DOC/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/HALLO_DOC/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/HALLO_DOC/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/HALLO_DOC/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/HALLO_DOC/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/HALLO_DOC/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Hallo Movies",
+        sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/HALLO_MOVIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/HALLO_MOVIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/HALLO_MOVIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/HALLO_MOVIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/HALLO_MOVIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/HALLO_MOVIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/HALLO_MOVIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/HALLO_MOVIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Hallo Music",
+        sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/HALLO_MUSIC/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/HALLO_MUSIC/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/HALLO_MUSIC/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/HALLO_MUSIC/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/HALLO_MUSIC/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/HALLO_MUSIC/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/HALLO_MUSIC/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/HALLO_MUSIC/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Hallo Series",
+        sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/HALLO_SERIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/HALLO_SERIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/HALLO_SERIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/HALLO_SERIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/HALLO_SERIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/HALLO_SERIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/HALLO_SERIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/HALLO_SERIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "SESC TV",
+        sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/SESC_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/SESC_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/SESC_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/SESC_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/SESC_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/SESC_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/SESC_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/SESC_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Top TV",
+        sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/TOPTV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/TOPTV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/TOPTV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/TOPTV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/TOPTV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/TOPTV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/TOPTV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/TOPTV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Trace Latina",
+        sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/TRACE_LATINA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/TRACE_LATINA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/TRACE_LATINA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/TRACE_LATINA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/TRACE_LATINA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/TRACE_LATINA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/TRACE_LATINA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/TRACE_LATINA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Trace Toca",
+        sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/TRACE_TOCA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/TRACE_TOCA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/TRACE_TOCA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/TRACE_TOCA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/TRACE_TOCA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/TRACE_TOCA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/TRACE_TOCA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/TRACE_TOCA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Trace Urban",
+        sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/TRACE_URBAN/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/TRACE_URBAN/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/TRACE_URBAN/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/TRACE_URBAN/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/TRACE_URBAN/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/TRACE_URBAN/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/TRACE_URBAN/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/TRACE_URBAN/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "TVideoNews",
+        sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/TVIDEONEWS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/TVIDEONEWS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/TVIDEONEWS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/TVIDEONEWS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/TVIDEONEWS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/TVIDEONEWS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/TVIDEONEWS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/TVIDEONEWS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "TV Pampa",
+        sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/TV_PAMPA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/TV_PAMPA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/TV_PAMPA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/TV_PAMPA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/TV_PAMPA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/TV_PAMPA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/TV_PAMPA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/TV_PAMPA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Urban Kids",
+        sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/URBAN_KIDS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/URBAN_KIDS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/URBAN_KIDS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/URBAN_KIDS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/URBAN_KIDS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/URBAN_KIDS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/URBAN_KIDS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/URBAN_KIDS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Urban Movies",
+        sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/URBAN_MOVIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/URBAN_MOVIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/URBAN_MOVIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/URBAN_MOVIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/URBAN_MOVIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/URBAN_MOVIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/URBAN_MOVIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/URBAN_MOVIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Urban Series",
+        sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/URBAN_SERIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/URBAN_SERIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/URBAN_SERIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/URBAN_SERIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/URBAN_SERIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/URBAN_SERIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/URBAN_SERIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/URBAN_SERIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Urban Travel",
+        sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/URBAN_TRAVEL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/URBAN_TRAVEL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/URBAN_TRAVEL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/URBAN_TRAVEL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/URBAN_TRAVEL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/URBAN_TRAVEL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/URBAN_TRAVEL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/URBAN_TRAVEL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+    ),
+    Channel(
+        name = "Vivax TV",
+        sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/VIVAX_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-ba.satlabscloud.com.br/VIVAX_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rj.satlabscloud.com.br/VIVAX_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-rs1.satlabscloud.com.br/VIVAX_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp4.satlabscloud.com.br/VIVAX_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp1.satlabscloud.com.br/VIVAX_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp3.satlabscloud.com.br/VIVAX_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn-sp2.satlabscloud.com.br/VIVAX_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
     ),
