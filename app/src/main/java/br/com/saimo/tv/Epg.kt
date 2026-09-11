@@ -88,6 +88,15 @@ object Epg {
         "sony channel" to "sony",
         "sportv 2" to "sportv2", "sportv 3" to "sportv3", "gnt" to "gnt hd",
         "band" to "band sp", "warner" to "warner channel", "sbt" to "sbt sp",
+        // Ver EPG.swift: sem estes, o Discovery ID pegava o Discovery Channel.
+        "discovery id" to "investigacao discovery",
+        "amc" to "amc brasil",
+        "cnn brasil money" to "cnn brasil money hd br",
+        "universal premiere" to "universal premiere hd br",
+        "universal reality" to "universal reality br",
+        "tnt novelas" to "tnt novelas br",
+        "trace brazuca" to "trace brasil hd br",
+        "record sp" to "recordtv sp",
     )
     private val NOISE = setOf("hd", "sd", "fhd", "uhd", "4k", "br")
 
@@ -261,7 +270,9 @@ object Epg {
                 "$it ".startsWith("$key ") || "$key ".startsWith("$it ")
             }
             if (candidates.size != 1) continue
-            candidates.values.first().filterNot { it in claimed }.forEach { idToChannel[it] = name }
+            candidates.values.first().filterNot { it in claimed }.forEach {
+                idToChannel[it] = name; claimed.add(it)
+            }
         }
         return idToChannel
     }
