@@ -255,7 +255,11 @@ object Epg {
             }
         }
         for ((name, key) in unresolved) {
-            val candidates = nameToIds.filterKeys { it.startsWith(key) || key.startsWith(it) }
+            // Prefixo só quebrando palavra: "viva" não pode casar com
+            // "vivax tv". Ver a mesma regra no EPG.swift.
+            val candidates = nameToIds.filterKeys {
+                "$it ".startsWith("$key ") || "$key ".startsWith("$it ")
+            }
             if (candidates.size != 1) continue
             candidates.values.first().filterNot { it in claimed }.forEach { idToChannel[it] = name }
         }
