@@ -149,6 +149,9 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/BAND_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
+            Source(
+                url = "https://media.cdntvms.com.br/band_sat/index.m3u8",
+            ),
         ),
     ),
     Channel(
@@ -251,6 +254,9 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://dfr80qz435crc.cloudfront.net/EFGH/Amagi/Globo/GE_Fast_BR/GE_Fast.m3u8",
                 userAgent = "Mozilla/5.0 (Linux; U; Android 13; T610K Build/TP1A.220624.014; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/126.0.6478.71 Mobile Safari/537.36 OPR/87.0.2254.75258",
+            ),
+            Source(
+                url = "https://amg00716-globo-amg00716c1-tcl-br-9495.playouts.now.amagi.tv/playlist.m3u8",
             ),
         ),
     ),
@@ -363,6 +369,12 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "http://46.151.196.223:14410",
             ),
+            Source(
+                url = "http://45.177.114.114/HISTORY/index.m3u8",
+            ),
+            Source(
+                url = "http://170.83.16.50/HISTORY/index.m3u8",
+            ),
         ),
     ),
     Channel(
@@ -426,6 +438,15 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://amg01391-sbtinfast-amg01391c3-lg-us-8995.playouts.now.amagi.tv/playlist/amg01391-addigital-jovempan-lgus/playlist.m3u8",
                 userAgent = "Mozilla/5.0 (Linux; U; Android 13; T610K Build/TP1A.220624.014; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/126.0.6478.71 Mobile Safari/537.36 OPR/87.0.2254.75258",
+            ),
+            Source(
+                url = "https://jmp2.uk/plu-6317ba014d4d040007227f72.m3u8",
+            ),
+            Source(
+                url = "http://170.83.49.66:8083/JOVEMPANNEWSHD/index.m3u8",
+            ),
+            Source(
+                url = "http://186.219.52.187/jp_news/index.m3u8",
             ),
         ),
     ),
@@ -590,6 +611,12 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/SBT_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
+            Source(
+                url = "https://6836041ea1117.streamlock.net/cverde/cverde/playlist.m3u8",
+            ),
+            Source(
+                url = "https://media.cdntvms.com.br/sbt_sat/index.m3u8",
+            ),
         ),
     ),
     Channel(
@@ -600,6 +627,9 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://sbtnews.maissbt.com/index.m3u8",
                 referer = "https://mais.sbt.com.br/",
                 userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+            ),
+            Source(
+                url = "https://dai.google.com/linear/hls/event/1XSOdtQ0SH2G8OEmEfGgjQ/master.m3u8",
             ),
         ),
     ),
@@ -630,6 +660,9 @@ val CATALOG: List<Channel> = listOf(
             ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/SONY_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "http://170.83.16.50/SONY_CHANNEL/index.m3u8",
             ),
         ),
     ),
@@ -666,6 +699,9 @@ val CATALOG: List<Channel> = listOf(
                 keyId = "902e5ec0e3d05e665daa32fc23f4f59e",
                 key = "7b2322a273843921a43e2c61dac7cae3",
             ),
+            Source(
+                url = "http://170.83.49.66:8083/SPORTV3HD/index.m3u8",
+            ),
         ),
     ),
     Channel(
@@ -673,7 +709,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://upload.wikimedia.org/wikipedia/commons/3/37/Telecine_Action_2.png",
         sources = listOf(
             Source(
-                url = "http://46.151.196.223:14326",
+                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/telecineaction/__index.m3u8?sv=71&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1789218927-xNieqExLcDiWlBkadztoTnelV5wE8DKtLPXJjmzG5Qc%3D",
             ),
         ),
     ),
@@ -682,7 +718,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://upload.wikimedia.org/wikipedia/commons/2/2f/Telecine_Pipoca_%282021%29.png",
         sources = listOf(
             Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/telecinepipoca/__index.m3u8?sv=39&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788472639-q0t4kfoYFwuz0fd9JMSAa%2B%2B62MGZTiRr2rqnMJx96lU%3D",
+                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/telecinepipoca/__index.m3u8?sv=138&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1789219374-F6IW5BQoqAEf3pOLIzgpJRdy1gsvHmBfDbZAIqFh1k4%3D",
             ),
         ),
     ),
@@ -691,7 +727,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://upload.wikimedia.org/wikipedia/commons/1/11/App-telecine-premium-252x252.png",
         sources = listOf(
             Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/telecinepremium/__index.m3u8?sv=96&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788472691-FnJa9ar3%2BK%2B9Fsm2Hh%2Bec16N3WQUmrIk78qNE9Mwzic%3D",
+                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/telecinepremium/__index.m3u8?sv=197&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1789219484-aQK3WA9dH6oDAAMndZCMPBvj2NxCQTmQmx9DswrnO5M%3D",
             ),
         ),
     ),
@@ -743,6 +779,15 @@ val CATALOG: List<Channel> = listOf(
             ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TVE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://tvbrasil-stream.ebc.com.br/index.m3u8",
+            ),
+            Source(
+                url = "http://45.162.64.114/TV_BRASIL/index.m3u8",
+            ),
+            Source(
+                url = "http://45.177.114.115/TV_BRASIL/index.m3u8",
             ),
         ),
     ),
@@ -808,6 +853,9 @@ val CATALOG: List<Channel> = listOf(
         sources = listOf(
             Source(
                 url = "https://68882bdaf156a.streamlock.net/impd/ngrp:impd_all/chunklist_w1464410885_b2691072.m3u8",
+            ),
+            Source(
+                url = "https://igrejamundial.nuvemplay.live/hls/stream.m3u8",
             ),
         ),
     ),
@@ -1028,6 +1076,9 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/ESPN_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
+            Source(
+                url = "http://181.78.197.59:8000/play/a07z/index.m3u8",
+            ),
         ),
     ),
     Channel(
@@ -1087,6 +1138,9 @@ val CATALOG: List<Channel> = listOf(
             ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/ESPN4_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "http://181.78.197.59:8000/play/a07n/index.m3u8",
             ),
         ),
     ),
@@ -1451,6 +1505,9 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "http://79.127.238.228:14057",
             ),
+            Source(
+                url = "https://media.cdntvms.com.br/record_nacional_sat/index.m3u8",
+            ),
         ),
     ),
     Channel(
@@ -1612,7 +1669,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://upload.wikimedia.org/wikipedia/commons/f/f8/Telecine_Fun_%282021%29.png",
         sources = listOf(
             Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/telecinefun/__index.m3u8?sv=45&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788472591-MQu9Zm%2F3aV46qgPi%2FGK8lQPITC7rFBu89BYJX9HQhl4%3D",
+                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/telecinefun/__index.m3u8?sv=60&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1789219253-QyNo%2BSouIn5NsUWG9CLY3IS1v3VkaHye34ceWOyiOVs%3D",
             ),
         ),
     ),
@@ -1621,7 +1678,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://upload.wikimedia.org/wikipedia/commons/9/9a/Telecine_Cult%282021%29.png",
         sources = listOf(
             Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/telecinecult/__index.m3u8?sv=147&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788472536-p1uhXCPAv%2BhiNspGPwSLrgfu%2Bk%2F3lPr0weu%2FwQ0t7Xo%3D",
+                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/telecinecult/__index.m3u8?sv=62&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1789219128-2d6%2FA%2Bghk7W1jCeuEeiIa%2FzqBJvYswTltdkdtIbUKYE%3D",
             ),
         ),
     ),
@@ -1630,7 +1687,7 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://upload.wikimedia.org/wikipedia/commons/9/95/TELECINE_Touch_Logo_2021.png",
         sources = listOf(
             Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/telecinetouch/__index.m3u8?sv=39&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788472733-mezOvP3QyByaaJYUwIpFQYMT3SQbdg5UhkhHmws96XE%3D",
+                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/telecinetouch/__index.m3u8?sv=24&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1789219606-y4NcNO1KSIHSjnN2cGCPByGn4ZDzVdUj4qjXJLBn0dE%3D",
             ),
         ),
     ),
@@ -1662,6 +1719,15 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/SONY_MOVIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
+            Source(
+                url = "http://45.162.64.114/SONY_MOVIES/index.m3u8",
+            ),
+            Source(
+                url = "http://45.177.114.115/SONY_MOVIES/index.m3u8",
+            ),
+            Source(
+                url = "http://168.197.104.22/SONY_MOVIES/index.m3u8",
+            ),
         ),
     ),
 
@@ -1692,6 +1758,9 @@ val CATALOG: List<Channel> = listOf(
             ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/GLOBO_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://media2.cdntvms.com.br/tv_morena_dorados/index.m3u8",
             ),
         ),
     ),
@@ -1785,6 +1854,15 @@ val CATALOG: List<Channel> = listOf(
             ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/ARTE_1/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "http://45.162.64.114/ARTE1/index.m3u8",
+            ),
+            Source(
+                url = "http://45.177.114.115/ARTE1/index.m3u8",
+            ),
+            Source(
+                url = "http://168.197.104.22/ARTE1/index.m3u8",
             ),
         ),
     ),
@@ -1906,6 +1984,12 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/AXN_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
+            Source(
+                url = "http://170.83.16.50/AXN/index.m3u8",
+            ),
+            Source(
+                url = "http://170.83.49.66:8083/AXNHD/index.m3u8",
+            ),
         ),
     ),
     Channel(
@@ -1966,6 +2050,15 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/BAND_NEWS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
+            Source(
+                url = "http://45.162.64.114/BAND_NEWS/index.m3u8",
+            ),
+            Source(
+                url = "http://45.177.114.115/BAND_NEWS/index.m3u8",
+            ),
+            Source(
+                url = "http://168.197.104.22/BAND_NEWS/index.m3u8",
+            ),
         ),
     ),
     Channel(
@@ -1995,6 +2088,15 @@ val CATALOG: List<Channel> = listOf(
             ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/BAND_SPORTS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "http://45.162.64.114/BAND_SPORTS/index.m3u8",
+            ),
+            Source(
+                url = "http://170.83.16.50/BAND_SPORTS/index.m3u8",
+            ),
+            Source(
+                url = "http://170.83.49.66:8083/BANDSPORTSHD/index.m3u8",
             ),
         ),
     ),
@@ -2056,6 +2158,15 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TV_CULTURA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
+            Source(
+                url = "https://v-us-01.wisestream.io/memfs/e8740862-7a1f-45f3-acb2-4f357e144059.m3u8",
+            ),
+            Source(
+                url = "https://jmp2.uk/plu-62e010e6cd663f0007e57dc8.m3u8",
+            ),
+            Source(
+                url = "https://player-tvcultura.stream.uol.com.br/live/tvcultura.m3u8",
+            ),
         ),
     ),
     Channel(
@@ -2086,6 +2197,15 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TERRA_VIVA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
+            Source(
+                url = "https://9ada494d.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/TEctYnJfVXBseW5rLU5ld2NvX0hMUw/playlist.m3u8",
+            ),
+            Source(
+                url = "http://45.162.64.114/TERRAVIVA/index.m3u8",
+            ),
+            Source(
+                url = "http://45.177.114.115/TERRAVIVA/index.m3u8",
+            ),
         ),
     ),
     Channel(
@@ -2112,6 +2232,15 @@ val CATALOG: List<Channel> = listOf(
             ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/WOOHOO_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "http://45.162.64.114/WOOHOO/index.m3u8",
+            ),
+            Source(
+                url = "http://168.197.104.22/WOOHOO/index.m3u8",
+            ),
+            Source(
+                url = "http://170.83.16.50/WOOHOO/index.m3u8",
             ),
         ),
     ),
@@ -2173,6 +2302,9 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/ESPN3_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
+            Source(
+                url = "http://181.78.197.59:8000/play/a081/index.m3u8",
+            ),
         ),
     ),
     Channel(
@@ -2233,6 +2365,15 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/GAZETA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
+            Source(
+                url = "http://45.162.64.114/GAZETA/index.m3u8",
+            ),
+            Source(
+                url = "http://45.162.64.114/TV_GAZETA/index.m3u8",
+            ),
+            Source(
+                url = "http://168.197.104.22/GAZETA/index.m3u8",
+            ),
         ),
     ),
     Channel(
@@ -2262,6 +2403,15 @@ val CATALOG: List<Channel> = listOf(
             ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/RECORD_NEWS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://rnw-rn.otteravision.com/rnw/rn/rnw_rn.m3u8",
+            ),
+            Source(
+                url = "http://45.162.64.114/RECORD_NEWS/index.m3u8",
+            ),
+            Source(
+                url = "http://45.177.114.115/RECORD_NEWS/index.m3u8",
             ),
         ),
     ),
@@ -2296,6 +2446,15 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "http://46.151.196.223:14225",
             ),
+            Source(
+                url = "https://5c65286fc6ace.streamlock.net/cancaonova/CancaoNova.stream_720p/playlist.m3u8",
+            ),
+            Source(
+                url = "http://45.162.64.114/CANCAO_NOVA/index.m3u8",
+            ),
+            Source(
+                url = "http://168.197.104.22/CANCAO_NOVA/index.m3u8",
+            ),
         ),
     ),
     Channel(
@@ -2325,6 +2484,15 @@ val CATALOG: List<Channel> = listOf(
             ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TV_APARECIDA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "http://45.162.64.114/TV_APARECIDA/index.m3u8",
+            ),
+            Source(
+                url = "http://45.177.114.115/TV_APARECIDA_HD/index.m3u8",
+            ),
+            Source(
+                url = "http://168.197.104.22/TV_APARECIDA/index.m3u8",
             ),
         ),
     ),
@@ -2358,6 +2526,12 @@ val CATALOG: List<Channel> = listOf(
             ),
             Source(
                 url = "http://46.151.196.223:14244",
+            ),
+            Source(
+                url = "http://168.197.104.22/REDE_VIDA/index.m3u8",
+            ),
+            Source(
+                url = "http://186.219.52.187/rede_vida/index.m3u8",
             ),
         ),
     ),
@@ -2419,6 +2593,15 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/FISH_TV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
+            Source(
+                url = "http://45.162.64.114/FISH_TV/index.m3u8",
+            ),
+            Source(
+                url = "http://168.197.104.22/FISH_TV/index.m3u8",
+            ),
+            Source(
+                url = "http://170.83.16.50/FISH_TV/index.m3u8",
+            ),
         ),
     ),
     Channel(
@@ -2448,6 +2631,9 @@ val CATALOG: List<Channel> = listOf(
             ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/BOX_KIDS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "http://170.83.49.66:8083/BOXKIDSHD/index.m3u8",
             ),
         ),
     ),
@@ -2539,6 +2725,9 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/NSPORTS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
+            Source(
+                url = "https://ogc-nsprt-tcl-roku-syndication.otteravision.com/ogc/nsprt/nsprt.m3u8",
+            ),
         ),
     ),
     Channel(
@@ -2568,6 +2757,12 @@ val CATALOG: List<Channel> = listOf(
             ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/MUSIC_BOX_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "http://168.197.104.22/MUSIC/index.m3u8",
+            ),
+            Source(
+                url = "http://170.83.49.66:8083/MUSICBOXBRASILHD/index.m3u8",
             ),
         ),
     ),
@@ -2776,6 +2971,12 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/CANAL_RURAL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
+            Source(
+                url = "http://170.83.49.66:8083/CANALRURALHD/index.m3u8",
+            ),
+            Source(
+                url = "http://186.219.52.187/canal_rural/index.m3u8",
+            ),
         ),
     ),
     Channel(
@@ -2806,6 +3007,15 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/AGROMAIS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
+            Source(
+                url = "http://45.162.64.114/AGROMAIS/index.m3u8",
+            ),
+            Source(
+                url = "http://45.177.114.115/agromais/index.m3u8",
+            ),
+            Source(
+                url = "http://45.177.114.115/AGROMAIS_HD/index.m3u8",
+            ),
         ),
     ),
     Channel(
@@ -2835,6 +3045,15 @@ val CATALOG: List<Channel> = listOf(
             ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/CNT_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "http://45.162.64.114/CNT/index.m3u8",
+            ),
+            Source(
+                url = "http://168.197.104.22/CNT/index.m3u8",
+            ),
+            Source(
+                url = "http://170.83.49.66:8083/REDECNTHD/index.m3u8",
             ),
         ),
     ),
@@ -2896,6 +3115,15 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/PAI_ETERNO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
+            Source(
+                url = "https://video09.logicahost.com.br/paieterno/paieterno/playlist.m3u8",
+            ),
+            Source(
+                url = "http://45.162.64.114/TV_PAI_ETERNO/index.m3u8",
+            ),
+            Source(
+                url = "http://168.197.104.22/TV_PAI_ETERNO/index.m3u8",
+            ),
         ),
     ),
     Channel(
@@ -2922,6 +3150,15 @@ val CATALOG: List<Channel> = listOf(
             ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/PLAYTV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://isaocorp.cloudecast.com/playtv/index.m3u8",
+            ),
+            Source(
+                url = "http://45.162.64.114/PLAY_TV/index.m3u8",
+            ),
+            Source(
+                url = "http://45.177.114.115/PLAY_TV/index.m3u8",
             ),
         ),
     ),
@@ -2953,6 +3190,9 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/REDE_BRASIL_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
+            Source(
+                url = "https://redebrasil.nuvemplay.live/hls/stream.m3u8",
+            ),
         ),
     ),
     Channel(
@@ -2982,6 +3222,15 @@ val CATALOG: List<Channel> = listOf(
             ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/REDE_GOSPEL_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://cdn.live.br1.jmvstream.com/w/LVW-8719/LVW8719_AcLVAxWy5J/playlist.m3u8",
+            ),
+            Source(
+                url = "https://redegospel-aovivo.nuvemplay.live/hls/stream.m3u8",
+            ),
+            Source(
+                url = "http://45.177.114.115/REDE_GOSPEL/index.m3u8",
             ),
         ),
     ),
@@ -3043,6 +3292,9 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TRACE_BRAZUCA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
+            Source(
+                url = "https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg01131-tracetv-tracebrazuca-samsungbr/playlist.m3u8",
+            ),
         ),
     ),
     Channel(
@@ -3072,6 +3324,15 @@ val CATALOG: List<Channel> = listOf(
             ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TV_CAMARA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://stream3.camara.gov.br/tv1/manifest.m3u8",
+            ),
+            Source(
+                url = "http://45.162.64.114/TV_CAMARA/index.m3u8",
+            ),
+            Source(
+                url = "http://168.197.104.22/TV_CAMARA/index.m3u8",
             ),
         ),
     ),
@@ -3103,6 +3364,15 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TV_EVANGELIZAR/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
+            Source(
+                url = "http://45.162.64.114/EVANGELIZAR/index.m3u8",
+            ),
+            Source(
+                url = "http://168.197.104.22/EVANGELIZAR/index.m3u8",
+            ),
+            Source(
+                url = "http://170.83.16.50/TV_EVANGELIZAR/index.m3u8",
+            ),
         ),
     ),
     Channel(
@@ -3132,6 +3402,15 @@ val CATALOG: List<Channel> = listOf(
             ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TV_JUSTICA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "http://45.162.64.114/TV_JUSTICA/index.m3u8",
+            ),
+            Source(
+                url = "http://168.197.104.22/TV_JUSTICA/index.m3u8",
+            ),
+            Source(
+                url = "http://170.83.16.50/TV_JUSTICA/index.m3u8",
             ),
         ),
     ),
@@ -3163,6 +3442,15 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TV_NOVO_TEMPO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
+            Source(
+                url = "http://45.162.64.114/NOVO_TEMPO/index.m3u8",
+            ),
+            Source(
+                url = "http://168.197.104.22/NOVO_TEMPO/index.m3u8",
+            ),
+            Source(
+                url = "http://186.219.52.187/novo_tempo/index.m3u8",
+            ),
         ),
     ),
     Channel(
@@ -3193,6 +3481,15 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TV_SENADO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
+            Source(
+                url = "http://45.162.64.114/TV_SENADO/index.m3u8",
+            ),
+            Source(
+                url = "http://168.197.104.22/TV_SENADO/index.m3u8",
+            ),
+            Source(
+                url = "http://170.83.16.50/TV_SENADO/index.m3u8",
+            ),
         ),
     ),
     Channel(
@@ -3222,6 +3519,15 @@ val CATALOG: List<Channel> = listOf(
             ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/RIT/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://acesso.ecast.site:3648/live/ritlive.m3u8",
+            ),
+            Source(
+                url = "http://45.177.114.115/RIT_TV/index.m3u8",
+            ),
+            Source(
+                url = "http://170.83.49.66:8083/RITHD/index.m3u8",
             ),
         ),
     ),
@@ -3342,6 +3648,15 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/AGRO_CANAL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
+            Source(
+                url = "https://aovivo.equipea.com.br:5443/aovivort/streams/pshRLrnv6isXq7RG4747567774043229.m3u8",
+            ),
+            Source(
+                url = "http://45.162.64.114/AGRO_CANAL/index.m3u8",
+            ),
+            Source(
+                url = "http://168.197.104.22/AGRO_CANAL/index.m3u8",
+            ),
         ),
     ),
     Channel(
@@ -3371,6 +3686,9 @@ val CATALOG: List<Channel> = listOf(
             ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/BLITS_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://stmv1.transmissaodigital.com/blitstv/blitstv/playlist.m3u8",
             ),
         ),
     ),
@@ -3407,27 +3725,6 @@ val CATALOG: List<Channel> = listOf(
         name = "Cinemonde",
         sources = listOf(
             Source(
-                url = "https://cdn-mg1.satlabscloud.com.br/CINEMONDE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
-            ),
-            Source(
-                url = "https://cdn-ba.satlabscloud.com.br/CINEMONDE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
-            ),
-            Source(
-                url = "https://cdn-rj.satlabscloud.com.br/CINEMONDE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
-            ),
-            Source(
-                url = "https://cdn-rs1.satlabscloud.com.br/CINEMONDE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
-            ),
-            Source(
-                url = "https://cdn-sp4.satlabscloud.com.br/CINEMONDE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
-            ),
-            Source(
-                url = "https://cdn-sp1.satlabscloud.com.br/CINEMONDE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
-            ),
-            Source(
-                url = "https://cdn-sp3.satlabscloud.com.br/CINEMONDE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
-            ),
-            Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/CINEMONDE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
@@ -3437,28 +3734,10 @@ val CATALOG: List<Channel> = listOf(
         logo = "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/united-states/cnbc-us.png",
         sources = listOf(
             Source(
-                url = "https://cdn-mg1.satlabscloud.com.br/CNBC_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
-            ),
-            Source(
-                url = "https://cdn-ba.satlabscloud.com.br/CNBC_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
-            ),
-            Source(
-                url = "https://cdn-rj.satlabscloud.com.br/CNBC_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
-            ),
-            Source(
-                url = "https://cdn-rs1.satlabscloud.com.br/CNBC_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
-            ),
-            Source(
                 url = "https://cdn-sp4.satlabscloud.com.br/CNBC_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
             Source(
-                url = "https://cdn-sp1.satlabscloud.com.br/CNBC_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
-            ),
-            Source(
-                url = "https://cdn-sp3.satlabscloud.com.br/CNBC_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
-            ),
-            Source(
-                url = "https://cdn-sp2.satlabscloud.com.br/CNBC_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+                url = "https://jmp2.uk/plu-679a973a97782f0008ff4bb6.m3u8",
             ),
         ),
     ),
@@ -3489,6 +3768,12 @@ val CATALOG: List<Channel> = listOf(
             ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/COM_BRASIL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://br5093.streamingdevideo.com.br/abc/abc/playlist.m3u8",
+            ),
+            Source(
+                url = "https://dfr80qz435crc.cloudfront.net/EFGH/Amagi/NewCo/New_Brasil_BR/New_Brasil.m3u8",
             ),
         ),
     ),
@@ -3579,6 +3864,9 @@ val CATALOG: List<Channel> = listOf(
             ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/EURONEWS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://jmp2.uk/plu-619e6614c9d9650007a2b171.m3u8",
             ),
         ),
     ),
@@ -3875,6 +4163,15 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/SESC_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
+            Source(
+                url = "http://45.162.64.114/SESC_TV/index.m3u8",
+            ),
+            Source(
+                url = "http://170.83.49.66:8083/SESCTVHD/index.m3u8",
+            ),
+            Source(
+                url = "http://186.219.52.187/sesc_tv/index.m3u8",
+            ),
         ),
     ),
     Channel(
@@ -4023,6 +4320,9 @@ val CATALOG: List<Channel> = listOf(
             ),
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/TVIDEONEWS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+            Source(
+                url = "https://video01.logicahost.com.br/tvideonews/tvideonews/playlist.m3u8",
             ),
         ),
     ),
