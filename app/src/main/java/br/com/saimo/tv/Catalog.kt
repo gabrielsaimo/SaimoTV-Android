@@ -2128,6 +2128,15 @@ val CATALOG: List<Channel> = listOf(
             Source(
                 url = "https://cdn-sp2.satlabscloud.com.br/REDE_TV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
+            Source(
+                url = "http://45.162.64.114/REDE_TV/index.m3u8",
+            ),
+            Source(
+                url = "http://168.197.104.22/REDE_TV/index.m3u8",
+            ),
+            Source(
+                url = "http://170.83.16.50/REDE_TV/index.m3u8",
+            ),
         ),
     ),
     Channel(
