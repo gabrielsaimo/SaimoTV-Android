@@ -174,7 +174,10 @@ object Capas {
         }
 
         if (melhorPontos < PONTUACAO_MINIMA) return null
-        return melhor?.posterPath
+        // O TMDB devolve só o caminho ("/abc.jpg"). Entregue assim, o Coil o
+        // lia como arquivo local e nenhuma capa aparecia desde a troca do
+        // Cinemeta. w342 basta para a grade e poupa memória do TV Box.
+        return melhor?.posterPath?.let { "https://image.tmdb.org/t/p/w342$it" }
     }
 
     // MARK: - Limpeza de título

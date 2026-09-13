@@ -140,13 +140,14 @@ object Epg {
 
         // meuguia primeiro: são 33 páginas pequenas, chegam em segundos e a
         // grade já aparece, em vez de a tela ficar vazia até os feeds baixarem.
-        merged.putAll(MeuGuia.fetch(names, from, to))
+        // Cada fonte por conta própria: uma que quebre não leva as outras junto.
+        merged.putAll(runCatching { MeuGuia.fetch(names, from, to) }.getOrNull().orEmpty())
         if (merged.isNotEmpty()) publish()
 
         // Reserva do guiadetv: só para quem o meuguia não listou.
         val faltando = names.filter { merged[it] == null }
         if (faltando.isNotEmpty()) {
-            merged.putAll(GuiaDeTv.fetch(faltando, from, to))
+            merged.putAll(runCatching { GuiaDeTv.fetch(faltando, from, to) }.getOrNull().orEmpty())
             if (merged.isNotEmpty()) publish()
         }
 
@@ -448,6 +449,9 @@ object Epg {
             connectTimeout = 25_000
             readTimeout = 60_000
             instanceFollowRedirects = true
+            // Mesmas raízes embutidas do player: sem elas, feed em Let's
+            // Encrypt não abre em TV Box antigo.
+            if (this is javax.net.ssl.HttpsURLConnection) sslSocketFactory = Confianca.fabrica
         }
         val raw = connection.inputStream
         val stream = if (connection.contentEncoding?.contains("gzip", true) == true) {

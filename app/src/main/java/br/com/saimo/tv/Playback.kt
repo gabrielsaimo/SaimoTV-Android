@@ -43,7 +43,11 @@ object Playback {
      * ships DoH, so here it is a few lines instead of a hand-written resolver.
      */
     internal val client: OkHttpClient by lazy {
-        val bootstrap = OkHttpClient.Builder().build()
+        // As raízes embutidas valem para o próprio DoH também: o certificado do
+        // 1.1.1.1 é de uma autoridade que Android antigo não conhece.
+        val bootstrap = OkHttpClient.Builder()
+            .sslSocketFactory(Confianca.fabrica, Confianca.gerente)
+            .build()
         val doh = DnsOverHttps.Builder()
             .client(bootstrap)
             .url("https://1.1.1.1/dns-query".toHttpUrl())
@@ -53,11 +57,38 @@ object Playback {
             .includeIPv6(false)
             .build()
         OkHttpClient.Builder()
-            .dns(NomeValido.dns(doh))
+            .sslSocketFactory(Confianca.fabrica, Confianca.gerente)
+            .dns(NomeValido.dns(Resolvedor(doh)))
             .addInterceptor(NomeValido.interceptor)
             .followRedirects(true)
             .followSslRedirects(true)
             .build()
+    }
+
+    /**
+     * DNS-over-HTTPS primeiro, o resolvedor do sistema quando ele falha.
+     *
+     * Só DoH era tudo ou nada: bastava o 1.1.1.1 não responder — rede que
+     * bloqueia, certificado que o aparelho não aceita — para nenhum nome
+     * resolver e todos os canais caírem em "indisponível", mesmo com a
+     * internet funcionando para o resto. Depois de algumas vezes em que o
+     * sistema achou o que o DoH não achou, o DoH sai de cena até o app fechar,
+     * para não pagar a espera dele a cada troca de canal.
+     */
+    private class Resolvedor(private val doh: okhttp3.Dns) : okhttp3.Dns {
+        @Volatile private var derrotas = 0
+
+        override fun lookup(hostname: String): List<InetAddress> {
+            if (derrotas >= 3) return okhttp3.Dns.SYSTEM.lookup(hostname)
+            return try {
+                doh.lookup(hostname).also { derrotas = 0 }
+            } catch (falha: java.net.UnknownHostException) {
+                val doSistema = runCatching { okhttp3.Dns.SYSTEM.lookup(hostname) }.getOrNull()
+                    ?: throw falha
+                derrotas++
+                doSistema
+            }
+        }
     }
 
     /**

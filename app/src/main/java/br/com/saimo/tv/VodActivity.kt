@@ -13,12 +13,14 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import coil.dispose
 import coil.load
 import kotlinx.coroutines.launch
 
@@ -170,7 +172,7 @@ class VodActivity : AppCompatActivity() {
         return true
     }
 
-    private fun mostrar(passo: Passo) = lifecycleScope.launch {
+    private fun mostrar(passo: Passo) = lifecycleScope.launch(semDerrubar) {
         estado.text = getString(R.string.vod_carregando)
         estado.visibility = View.VISIBLE
         val linhas: List<Linha> = when (passo) {
@@ -246,7 +248,8 @@ class VodActivity : AppCompatActivity() {
         val botao = TextView(this).apply {
             text = texto
             gravity = android.view.Gravity.CENTER
-            setTextColor(getColor(R.color.text_primary))
+            // Context.getColor é do Android 6; o ContextCompat vale no 5 também.
+            setTextColor(ContextCompat.getColor(this@VodActivity, R.color.text_primary))
             textSize = if (colunas > 1) 16f else 20f
             isFocusable = true
             setBackgroundResource(R.drawable.row_focus)
@@ -304,7 +307,7 @@ class VodActivity : AppCompatActivity() {
                             else Progresso.fracao(this, Progresso.chaveFilme(achado.titulo)),
                 favorito = VodFavoritos.Item(
                     achado.titulo, achado.serie, achado.letra, achado.ano)) {
-                lifecycleScope.launch { abrirAchado(achado) }
+                lifecycleScope.launch(semDerrubar) { abrirAchado(achado) }
             }
         }
 
@@ -356,7 +359,7 @@ class VodActivity : AppCompatActivity() {
             progresso = if (item.serie) null
                         else Progresso.fracao(this, Progresso.chaveFilme(item.titulo)),
             favorito = item) {
-            lifecycleScope.launch {
+            lifecycleScope.launch(semDerrubar) {
                 abrirAchado(Vod.Achado(item.titulo, item.serie, item.letra, item.ano))
             }
         }
@@ -589,9 +592,10 @@ class VodActivity : AppCompatActivity() {
         playerView.requestFocus()
         titulo.text = nome
         fichaNome.text = nome
+        fichaCapa.dispose()
         fichaCapa.setImageDrawable(null)
         fichaCapa.visibility = View.GONE
-        lifecycleScope.launch {
+        lifecycleScope.launch(semDerrubar) {
             val capa = Capas.capa(nome, deSerie) ?: return@launch
             if (fichaNome.text != nome) return@launch
             fichaCapa.visibility = View.VISIBLE
@@ -916,13 +920,14 @@ class VodActivity : AppCompatActivity() {
                 if (linha.favorito == null) false else { favoritar(linha); true }
             }
 
+            holder.capa.dispose()
             holder.capa.setImageDrawable(null)
             holder.capa.visibility = View.GONE
             holder.pedido = linha.texto
             val serie = linha.capaDe ?: return
             // A busca sai só para o que está na tela, e o resultado é descartado
             // se a linha já tiver sido reusada por outro título enquanto isso.
-            lifecycleScope.launch {
+            lifecycleScope.launch(semDerrubar) {
                 val capa = Capas.capa(linha.texto, serie) ?: return@launch
                 if (holder.pedido != linha.texto) return@launch
                 holder.capa.visibility = View.VISIBLE

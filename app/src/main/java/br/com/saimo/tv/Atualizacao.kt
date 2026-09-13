@@ -30,6 +30,7 @@ object Atualizacao {
     private const val ARQUIVO = "atualizacao"
     private const val PULADA = "pulada"
     private const val VISTO = "visto"
+    private const val PENDENTE = "pendente"
     private const val ESPERA_MS = 6L * 60 * 60 * 1000
 
     data class Versao(val tag: String, val numero: String, val notas: String, val apk: String)
@@ -38,24 +39,50 @@ object Atualizacao {
      * Devolve a versão nova quando há uma para oferecer, ou nulo.
      *
      * `manual` vem de quem pediu para checar: aí não há espera nem versão
-     * pulada que valha.
+     * pulada que valha. Uma atualização que a pessoa já aceitou e não terminou
+     * conta como manual também — ver [marcarPendente].
      */
     suspend fun procurar(context: Context, manual: Boolean = false): Versao? =
         withContext(Dispatchers.IO) {
             val prefs = context.getSharedPreferences(ARQUIVO, Context.MODE_PRIVATE)
             val agora = System.currentTimeMillis()
-            if (!manual && agora - prefs.getLong(VISTO, 0) < ESPERA_MS) return@withContext null
+            val forcar = manual || prefs.getString(PENDENTE, null) != null
+            if (!forcar && agora - prefs.getLong(VISTO, 0) < ESPERA_MS) return@withContext null
             prefs.edit().putLong(VISTO, agora).apply()
 
             val versao = buscar() ?: return@withContext null
-            if (!manual && prefs.getString(PULADA, null) == versao.tag) return@withContext null
-            if (!maisNova(versao.numero, BuildConfig.VERSION_NAME)) return@withContext null
+            if (!forcar && prefs.getString(PULADA, null) == versao.tag) return@withContext null
+            if (!maisNova(versao.numero, BuildConfig.VERSION_NAME)) {
+                esquecerPendente(context)
+                return@withContext null
+            }
             versao
         }
 
     fun pular(context: Context, versao: Versao) {
         context.getSharedPreferences(ARQUIVO, Context.MODE_PRIVATE)
-            .edit().putString(PULADA, versao.tag).apply()
+            .edit().putString(PULADA, versao.tag).remove(PENDENTE).apply()
+    }
+
+    /**
+     * Lembra que a pessoa escolheu atualizar.
+     *
+     * Do Android 8 em diante, ligar "instalar apps desconhecidos" para o app
+     * faz o sistema matar o processo na hora. Sem esta marca, quem voltava das
+     * configurações abria o app de novo e só via a oferta seis horas depois —
+     * parecia que o app tinha fechado sozinho e a atualização sumido.
+     */
+    fun marcarPendente(context: Context, versao: Versao) {
+        context.getSharedPreferences(ARQUIVO, Context.MODE_PRIVATE)
+            .edit().putString(PENDENTE, versao.tag).apply()
+    }
+
+    fun temPendente(context: Context): Boolean =
+        context.getSharedPreferences(ARQUIVO, Context.MODE_PRIVATE).getString(PENDENTE, null) != null
+
+    fun esquecerPendente(context: Context) {
+        context.getSharedPreferences(ARQUIVO, Context.MODE_PRIVATE)
+            .edit().remove(PENDENTE).apply()
     }
 
     private fun buscar(): Versao? = runCatching {
@@ -72,18 +99,22 @@ object Atualizacao {
         val raiz = JSONObject(corpo)
         val tag = raiz.optString("tag_name").ifBlank { return@runCatching null }
         val ativos = raiz.optJSONArray("assets") ?: return@runCatching null
-        // O mesmo release traz TV, Mac e celular. O contrato do celular é um
-        // nome começando com "saimo-cell"; qualquer outro ".apk" é a TV Box —
-        // sem essa exclusão, um release com os dois instalaria o app errado
-        // no aparelho errado sempre que o Cell viesse listado primeiro.
-        val nomeDoCelular = Regex("^saimo[-_ ]?cell", RegexOption.IGNORE_CASE)
+        // O mesmo release traz TV, Mac e celular. O da TV é o SaimoTV.apk; na
+        // falta dele, qualquer ".apk" sem "cell" no nome. A regra antiga só
+        // excluía nome *começando* por "saimo-cell", e o celular subiu como
+        // "SaimoTV-Cell.apk": em ordem alfabética ele vem antes, e a TV Box
+        // baixava e instalava o app do celular no lugar da atualização.
+        val nomeDoCelular = Regex("cell|celular|mobile", RegexOption.IGNORE_CASE)
         var apk: String? = null
         for (i in 0 until ativos.length()) {
             val item = ativos.getJSONObject(i)
             val nome = item.optString("name")
-            if (nome.endsWith(".apk", true) && !nomeDoCelular.containsMatchIn(nome)) {
+            if (nome.equals("SaimoTV.apk", ignoreCase = true)) {
                 apk = item.optString("browser_download_url")
                 break
+            }
+            if (apk == null && nome.endsWith(".apk", true) && !nomeDoCelular.containsMatchIn(nome)) {
+                apk = item.optString("browser_download_url")
             }
         }
         // A tag precisa ter cara de versão ("v1.2" ou "1.2.3"). Um "beta-v2"
@@ -168,6 +199,8 @@ object Atualizacao {
                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
                 sessao.commit(aviso.intentSender)
             }
+            // Entregue ao sistema: dali em diante quem decide é a tela dele.
+            esquecerPendente(context)
         }.onFailure { return@withContext "falha ao instalar: ${it.message}" }
 
         null

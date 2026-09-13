@@ -72,7 +72,9 @@ object GuiaDeTv {
             if (titulo.length < 2) continue
             // O mesmo instante pode repetir na página — o link do programa
             // carrega metadados extras que também casam com o padrão.
-            vistos.putIfAbsent(calendario.timeInMillis, titulo)
+            // Nada de putIfAbsent: ele só existe do Android 7 em diante, e num
+            // TV Box com 5 ou 6 a chamada derrubava o app ao carregar o guia.
+            if (!vistos.containsKey(calendario.timeInMillis)) vistos[calendario.timeInMillis] = titulo
         }
 
         val ordenados = vistos.entries.sortedBy { it.key }

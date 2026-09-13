@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import coil.dispose
 import coil.load
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -54,6 +55,14 @@ class GuideActivity : AppCompatActivity() {
     private var focused = 0
     private var shown = -1
 
+    /// A grade do canal focado entra um instante depois do foco, não no meio
+    /// dele. O foco muda por dentro da passada de layout de uma RecyclerView
+    /// (a da grade perde a linha focada e o sistema devolve o foco à coluna de
+    /// canais), e trocar o adapter ali é IllegalStateException — era o que
+    /// fechava o app ao correr o direcional pela programação. De quebra,
+    /// segurar a seta por 300 canais deixa de remontar a grade 300 vezes.
+    private val mostrarFocado = Runnable { show(focused) }
+
     /// O relógio e a linha "no ar" precisam acompanhar a passagem do tempo; sem
     /// isto a grade mostra o programa que já acabou enquanto ela fica aberta.
     private val tick = object : Runnable {
@@ -63,7 +72,7 @@ class GuideActivity : AppCompatActivity() {
             // canal focado mudou de tamanho, é dado novo e vale remontar.
             val schedule = channels.getOrNull(focused)?.let { Epg.schedule(it.name) }
             if (schedule != null && schedule.size != shown) show(focused)
-            else if (Epg.tick()) programmes.refresh()
+            else if (Epg.tick() && !programmeList.isComputingLayout) programmes.refresh()
             info.text = getString(R.string.guide_info, Epg.channelsWithGuide, Remote.channels.size)
             handler.postDelayed(this, 20_000)
         }
@@ -85,7 +94,11 @@ class GuideActivity : AppCompatActivity() {
 
         val adapter = ChannelStripAdapter(
             channels,
-            onFocus = { focused = it; show(it) },
+            onFocus = {
+                focused = it
+                handler.removeCallbacks(mostrarFocado)
+                handler.postDelayed(mostrarFocado, 120)
+            },
             onPick = { tune(it) })
         // OK sobre um programa abre a ficha dele. Trocar de canal por engano
         // faz perder o lugar na grade, e quem parou num horário quer saber o
@@ -213,6 +226,12 @@ class GuideActivity : AppCompatActivity() {
     }
 
     private fun show(index: Int) {
+        // Rede de segurança para qualquer outro caminho que chegue aqui dentro
+        // de um layout: tenta de novo logo depois, fora dele.
+        if (programmeList.isComputingLayout) {
+            programmeList.post { show(index) }
+            return
+        }
         val channel = channels.getOrNull(index) ?: return
         val schedule = Epg.schedule(channel.name)
         shown = schedule.size
@@ -278,11 +297,19 @@ private class ChannelStripAdapter(
         if (holder.loaded != channel.logo) {
             holder.loaded = channel.logo
             if (channel.logo != null) holder.logo.load(channel.logo)
-            else holder.logo.setImageDrawable(null)
+            else { holder.logo.dispose(); holder.logo.setImageDrawable(null) }
         }
 
-        holder.itemView.setOnFocusChangeListener { _, hasFocus -> if (hasFocus) onFocus(position) }
-        holder.itemView.setOnClickListener { onPick(position) }
+        // A posição do momento do foco, não a do bind: a linha pode ter sido
+        // reaproveitada desde então.
+        holder.itemView.setOnFocusChangeListener { _, hasFocus ->
+            val atual = holder.bindingAdapterPosition
+            if (hasFocus && atual != RecyclerView.NO_POSITION) onFocus(atual)
+        }
+        holder.itemView.setOnClickListener {
+            val atual = holder.bindingAdapterPosition
+            if (atual != RecyclerView.NO_POSITION) onPick(atual)
+        }
     }
 
     override fun getItemCount() = items.size
@@ -332,7 +359,7 @@ private class ProgrammeAdapter : RecyclerView.Adapter<ProgrammeAdapter.Holder>()
         if (holder.loaded != programme.poster) {
             holder.loaded = programme.poster
             if (programme.poster != null) holder.poster.load(programme.poster)
-            else holder.poster.setImageDrawable(null)
+            else { holder.poster.dispose(); holder.poster.setImageDrawable(null) }
         }
         holder.poster.visibility = if (programme.poster != null) View.VISIBLE else View.GONE
         holder.itemView.setOnClickListener { onPick?.invoke(programme) }

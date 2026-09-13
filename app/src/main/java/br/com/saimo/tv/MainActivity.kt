@@ -2,9 +2,12 @@ package br.com.saimo.tv
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.Settings
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -30,6 +33,7 @@ import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import coil.dispose
 import coil.load
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -58,7 +62,7 @@ private const val SOURCE_TIMEOUT_MS = 12_000L
 class MainActivity : AppCompatActivity() {
 
     private lateinit var player: ExoPlayer
-    private lateinit var mediaSession: MediaSession
+    private var mediaSession: MediaSession? = null
     private lateinit var playerView: PlayerView
     private lateinit var listPanel: View
     private lateinit var channels: RecyclerView
@@ -205,9 +209,12 @@ class MainActivity : AppCompatActivity() {
         // skill cadastrada. O player de fachada existe porque o de verdade
         // troca de fonte trocando o MediaSource inteiro — nunca tem um
         // "próximo item" de playlist para a sessão pedir sozinha.
-        mediaSession = MediaSession.Builder(this, ChannelPlayer(player))
-            .setCallback(sessionCallback)
-            .build()
+        // Voz é enfeite: um aparelho que recuse a sessão continua passando canal.
+        mediaSession = runCatching {
+            MediaSession.Builder(this, ChannelPlayer(player))
+                .setCallback(sessionCallback)
+                .build()
+        }.onFailure { Log.w("SaimoTV", "sessão de mídia indisponível", it) }.getOrNull()
 
         play(0)
         refreshCatalog()
@@ -220,13 +227,21 @@ class MainActivity : AppCompatActivity() {
 
     /** Pega a lista publicada sem tirar do ar o canal que está tocando. */
     private fun refreshCatalog() {
-        lifecycleScope.launch {
+        lifecycleScope.launch(semDerrubar) {
             ofertarAtualizacao()
             if (!Remote.refresh(this@MainActivity)) return@launch
             reorder()
             updateBanner()
         }
     }
+
+    /// Uma oferta por vez: a abertura e a volta das configurações podem pedir
+    /// juntas, e dois diálogos empilhados confundem quem está no controle.
+    private var ofertando = false
+    private var baixando = false
+    /// Distingue a primeira abertura (que já oferece pelo refreshCatalog) da
+    /// volta de outra tela, como as configurações.
+    private var jaIniciou = false
 
     /**
      * Oferece a versão nova, quando há uma.
@@ -236,40 +251,101 @@ class MainActivity : AppCompatActivity() {
      * da abertura.
      */
     private fun ofertarAtualizacao() {
-        lifecycleScope.launch {
-            val versao = Atualizacao.procurar(this@MainActivity) ?: return@launch
-            val dialogo = android.app.AlertDialog.Builder(this@MainActivity)
+        if (ofertando) return
+        ofertando = true
+        lifecycleScope.launch(semDerrubar) {
+            val versao = try {
+                Atualizacao.procurar(this@MainActivity)
+            } finally {
+                ofertando = false
+            } ?: return@launch
+            // A consulta leva segundos; mostrar diálogo numa tela que já
+            // fechou é BadTokenException.
+            if (isFinishing || isDestroyed) return@launch
+            ofertando = true
+            android.app.AlertDialog.Builder(this@MainActivity)
                 .setTitle(getString(R.string.update_titulo, versao.numero))
                 .setMessage(
                     listOf(getString(R.string.update_atual, BuildConfig.VERSION_NAME),
                            versao.notas.take(400))
                         .filter { it.isNotBlank() }.joinToString("\n\n"))
                 .setPositiveButton(R.string.update_agora) { _, _ -> baixarAtualizacao(versao) }
-                .setNegativeButton(R.string.update_depois, null)
+                .setNegativeButton(R.string.update_depois) { _, _ ->
+                    Atualizacao.esquecerPendente(this@MainActivity)
+                }
                 .setNeutralButton(R.string.update_pular) { _, _ ->
                     Atualizacao.pular(this@MainActivity, versao)
                 }
-                .create()
-            dialogo.show()
+                .setOnDismissListener { ofertando = false }
+                .show()
         }
     }
 
     private fun baixarAtualizacao(versao: Atualizacao.Versao) {
-        showStatus(getString(R.string.update_baixando, 0))
-        lifecycleScope.launch {
-            val erro = Atualizacao.instalar(this@MainActivity, versao) { fracao ->
-                runOnUiThread {
-                    showStatus(getString(R.string.update_baixando, (fracao * 100).toInt()))
-                }
-            }
-            showStatus(erro ?: getString(R.string.update_instalando))
+        Atualizacao.marcarPendente(this, versao)
+        if (!podeInstalar()) {
+            pedirPermissaoDeInstalar()
+            return
         }
+        if (baixando) return
+        baixando = true
+        showStatus(getString(R.string.update_baixando, 0))
+        lifecycleScope.launch(semDerrubar) {
+            try {
+                val erro = Atualizacao.instalar(this@MainActivity, versao) { fracao ->
+                    runOnUiThread {
+                        showStatus(getString(R.string.update_baixando, (fracao * 100).toInt()))
+                    }
+                }
+                showStatus(erro ?: getString(R.string.update_instalando))
+            } finally {
+                baixando = false
+            }
+        }
+    }
+
+    /// Do Android 8 em diante instalar APK pede a chave "apps desconhecidos"
+    /// ligada para este app em particular; antes era uma chave só, do sistema,
+    /// que a própria tela de instalação já oferece.
+    private fun podeInstalar(): Boolean =
+        Build.VERSION.SDK_INT < 26 || packageManager.canRequestPackageInstalls()
+
+    /**
+     * Explica antes de mandar para as configurações.
+     *
+     * Deixar o instalador descobrir sozinho dava na pior experiência possível:
+     * a pessoa ligava a chave, o sistema matava o app por ter mudado a
+     * permissão, e parecia que a TV tinha travado no meio da atualização.
+     */
+    private fun pedirPermissaoDeInstalar() {
+        if (isFinishing || isDestroyed) return
+        android.app.AlertDialog.Builder(this)
+            .setTitle(R.string.update_permissao_titulo)
+            .setMessage(R.string.update_permissao_texto)
+            .setPositiveButton(R.string.update_permissao_abrir) { _, _ -> abrirPermissaoDeInstalar() }
+            .setNegativeButton(R.string.update_depois) { _, _ ->
+                Atualizacao.esquecerPendente(this)
+            }
+            .show()
+    }
+
+    /// Nem todo TV Box tem a tela específica do app; cai para a de segurança
+    /// e, sem ela, para a raiz das configurações.
+    private fun abrirPermissaoDeInstalar() {
+        val tentativas = listOf(
+            Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, "package:$packageName".toUri()),
+            Intent(Settings.ACTION_SECURITY_SETTINGS),
+            Intent(Settings.ACTION_SETTINGS))
+        for (tentativa in tentativas) {
+            if (runCatching { startActivity(tentativa) }.isSuccess) return
+        }
+        showStatus(getString(R.string.update_permissao_sem_tela))
     }
 
     private fun startGuide() {
         if (guideStarted) return
         guideStarted = true
-        lifecycleScope.launch {
+        lifecycleScope.launch(semDerrubar) {
             Epg.load(this@MainActivity) {
                 // O refresh reconstrói as linhas visíveis; sem repor o foco na
                 // posição que a pessoa escolheu, ele voltaria para onde o
@@ -623,7 +699,8 @@ class MainActivity : AppCompatActivity() {
         }.orEmpty()
         bannerSource.visibility =
             if (bannerSource.text.isNullOrEmpty()) View.GONE else View.VISIBLE
-        if (channel.logo != null) bannerLogo.load(channel.logo) else bannerLogo.setImageDrawable(null)
+        if (channel.logo != null) bannerLogo.load(channel.logo)
+        else { bannerLogo.dispose(); bannerLogo.setImageDrawable(null) }
 
         val now = System.currentTimeMillis()
         val pair = Epg.nowNext(channel.name, now)
@@ -673,11 +750,17 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         if (::player.isInitialized) player.playWhenReady = true
+        // Voltando das configurações com a permissão já ligada (nos aparelhos
+        // em que o sistema não matou o app no caminho), retoma a atualização.
+        if (jaIniciou && !baixando && Atualizacao.temPendente(this) && podeInstalar()) {
+            ofertarAtualizacao()
+        }
+        jaIniciou = true
     }
 
     override fun onDestroy() {
         handler.removeCallbacksAndMessages(null)
-        mediaSession.release()
+        mediaSession?.release()
         player.release()
         super.onDestroy()
     }
@@ -848,7 +931,9 @@ private class ChannelAdapter(
         if (holder.loaded != channel.logo) {
             holder.loaded = channel.logo
             if (channel.logo != null) holder.logo.load(channel.logo)
-            else holder.logo.setImageDrawable(null)
+            // Sem cancelar, o logo do canal que ocupava a linha antes chegava
+            // depois e ficava num canal sem logo nenhum.
+            else { holder.logo.dispose(); holder.logo.setImageDrawable(null) }
         }
 
         holder.itemView.setOnClickListener { onPick(position) }

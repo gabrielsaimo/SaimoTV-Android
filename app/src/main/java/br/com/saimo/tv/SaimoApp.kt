@@ -1,11 +1,27 @@
 package br.com.saimo.tv
 
 import android.app.Application
+import android.util.Log
 import androidx.media3.common.util.UnstableApi
 import coil.ImageLoader
 import coil.ImageLoaderFactory
 import coil.disk.DiskCache
 import coil.memory.MemoryCache
+import kotlinx.coroutines.CoroutineExceptionHandler
+
+/**
+ * Para as tarefas que correm por fora do vídeo: guia, catálogo, capas e
+ * atualização.
+ *
+ * Sem ele, qualquer tropeço numa delas — um site que mudou o HTML, um TV Box
+ * sem um método do Java — ia direto para o tratador da thread e fechava o app.
+ * Foi assim na 1.5: o guia novo chamava um método que o Android 5 e 6 não têm,
+ * e a TV fechava dez segundos depois de abrir. Perder o guia é bem menos grave
+ * que perder o canal.
+ */
+val semDerrubar = CoroutineExceptionHandler { _, erro ->
+    Log.w("SaimoTV", "tarefa em segundo plano falhou", erro)
+}
 
 /**
  * Application-wide image loading.

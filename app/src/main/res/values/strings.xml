@@ -9,6 +9,10 @@
     <string name="update_baixando">Baixando atualização… %1$d%%</string>
     <string name="update_instalando">Confirme a instalação na tela do sistema</string>
     <string name="update_falhou">Não deu para instalar a atualização. %1$s</string>
+    <string name="update_permissao_titulo">Falta uma permissão</string>
+    <string name="update_permissao_texto">Para atualizar, a TV precisa deixar o Saimo TV instalar apps. Na próxima tela, ative a opção do Saimo TV e volte: a atualização será oferecida de novo.</string>
+    <string name="update_permissao_abrir">Abrir configurações</string>
+    <string name="update_permissao_sem_tela">Ative \"Fontes desconhecidas\" para o Saimo TV nas configurações da TV e abra o app de novo</string>
     <string name="live">AO VIVO</string>
     <string name="loading">Ligando o canal…</string>
     <string name="loading_source">Ligando o canal… · fonte %1$d de %2$d</string>

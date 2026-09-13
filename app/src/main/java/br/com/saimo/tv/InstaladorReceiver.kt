@@ -27,7 +27,13 @@ class InstaladorReceiver : BroadcastReceiver() {
                 }
                 confirmar?.let {
                     it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    context.startActivity(it)
+                    // Um receiver que lança exceção derruba o processo inteiro;
+                    // aparelho sem a tela de confirmação vira aviso, não fechamento.
+                    runCatching { context.startActivity(it) }.onFailure { erro ->
+                        Toast.makeText(context,
+                            context.getString(R.string.update_falhou, erro.message.orEmpty()),
+                            Toast.LENGTH_LONG).show()
+                    }
                 }
             }
             PackageInstaller.STATUS_SUCCESS -> Unit // O sistema reabre o app.
