@@ -87,7 +87,7 @@ class GuideActivity : AppCompatActivity() {
         info = findViewById(R.id.guideInfo)
         clockLabel = findViewById(R.id.guideClock)
 
-        channels = Favorites.sort(Unlock.channels())
+        channels = Categorias.ordenar(Unlock.channels())
         val startAt = intent.getStringExtra(EXTRA_CHANNEL)
             ?.let { name -> channels.indexOfFirst { it.name == name } }
             ?.takeIf { it >= 0 } ?: 0
@@ -269,6 +269,7 @@ private class ChannelStripAdapter(
         val programme: TextView = view.findViewById(R.id.programme)
         val progress: ProgressBar = view.findViewById(R.id.rowProgress)
         val star: TextView = view.findViewById(R.id.star)
+        val secao: TextView = view.findViewById(R.id.secao)
         var loaded: String? = null
     }
 
@@ -281,6 +282,9 @@ private class ChannelStripAdapter(
         holder.name.text = channel.name
         holder.star.visibility =
             if (Favorites.contains(channel.name)) View.VISIBLE else View.GONE
+        val rotulo = Categorias.rotulo(items, position)
+        holder.secao.text = rotulo.orEmpty()
+        holder.secao.visibility = if (rotulo == null) View.GONE else View.VISIBLE
 
         val now = System.currentTimeMillis()
         val onAir = Epg.nowNext(channel.name, now)?.first

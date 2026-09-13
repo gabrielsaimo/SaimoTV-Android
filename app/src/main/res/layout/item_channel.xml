@@ -44,6 +44,20 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
+        <!-- Nome da seção, só na primeira linha de cada uma. -->
+        <TextView
+            android:id="@+id/secao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:fontFamily="sans-serif-medium"
+            android:letterSpacing="0.08"
+            android:maxLines="1"
+            android:textAllCaps="true"
+            android:textColor="@color/accent"
+            android:textSize="13sp"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/name"
             android:layout_width="match_parent"

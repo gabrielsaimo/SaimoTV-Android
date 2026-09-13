@@ -33,6 +33,9 @@ data class Channel(
     val name: String,
     val logo: String? = null,
     val sources: List<Source>,
+    /// Seção da lista ("24 Horas", "Esportes"...). Nula no catálogo embutido:
+    /// aí a seção sai do nome, ver [Categorias].
+    val categoria: String? = null,
 )
 
 '''

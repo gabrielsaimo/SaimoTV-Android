@@ -436,6 +436,12 @@ class MainActivity : AppCompatActivity() {
             KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER -> {
                 if (listOpen) return super.onKeyDown(keyCode, event)
                 if (event == null || event.repeatCount == 0) {
+                    // Com a faixa já à vista, o segundo OK escolhe a fonte — é o
+                    // único jeito com um controle que só tem direcional e OK.
+                    if (banner.visibility == View.VISIBLE && banner.alpha > 0.5f) {
+                        escolherFonte(current)
+                        return true
+                    }
                     heldOpen = false
                     revealBanner()
                     handler.postDelayed(openOnHold, HOLD_MS)
@@ -475,7 +481,14 @@ class MainActivity : AppCompatActivity() {
                 player.playWhenReady = !player.playWhenReady; true
             }
             KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.KEYCODE_GUIDE, KeyEvent.KEYCODE_INFO -> {
-                if (!listOpen) { openGuide(); true } else super.onKeyDown(keyCode, event)
+                when {
+                    !listOpen -> { openGuide(); true }
+                    // Na lista, a direita abre as fontes do canal em foco.
+                    keyCode == KeyEvent.KEYCODE_DPAD_RIGHT && channels.hasFocus() -> {
+                        escolherFonte(listaFoco); true
+                    }
+                    else -> super.onKeyDown(keyCode, event)
+                }
             }
             in KeyEvent.KEYCODE_0..KeyEvent.KEYCODE_9 -> {
                 // Digitar o número é a busca que existe num controle remoto:
@@ -585,7 +598,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun reorder() {
         val playing = ordered.getOrNull(current)?.name
-        ordered = Favorites.sort(Unlock.channels())
+        ordered = Categorias.ordenar(Unlock.channels())
         val found = ordered.indexOfFirst { it.name == playing }
         // Ao trancar com um desses no ar, o nome ficaria à vista na faixa;
         // volta para o primeiro canal comum antes de a lista encolher.
@@ -593,6 +606,31 @@ class MainActivity : AppCompatActivity() {
         adapter.submit(ordered)
         adapter.select(current)
         listCount.text = ordered.size.toString()
+    }
+
+    /**
+     * Lista as fontes de um canal para escolher uma à mão, como no Mac e no
+     * site. A troca automática continua valendo a partir da escolhida: se ela
+     * cair, desce para a seguinte.
+     */
+    private fun escolherFonte(index: Int) {
+        val canal = ordered.getOrNull(index) ?: return
+        if (isFinishing || isDestroyed) return
+        handler.removeCallbacks(openOnHold)
+        val itens = canal.sources.mapIndexed { i, fonte ->
+            getString(R.string.fontes_item, i + 1,
+                fonte.url.toUri().host?.removePrefix("www.") ?: fonte.url.take(40))
+        }.toTypedArray()
+        val marcada = if (index == current) sourceIndex else -1
+        android.app.AlertDialog.Builder(this)
+            .setTitle(getString(R.string.fontes_titulo, canal.name))
+            .setSingleChoiceItems(itens, marcada) { dialogo, escolhida ->
+                dialogo.dismiss()
+                if (listPanel.visibility == View.VISIBLE) closeList()
+                retries = 0
+                play(index, escolhida)
+            }
+            .show()
     }
 
     private fun openGuide() {
@@ -893,6 +931,7 @@ private class ChannelAdapter(
         val programme: TextView = view.findViewById(R.id.programme)
         val progress: ProgressBar = view.findViewById(R.id.rowProgress)
         val star: TextView = view.findViewById(R.id.star)
+        val secao: TextView = view.findViewById(R.id.secao)
         /// Guardado para não pedir ao Coil a mesma imagem a cada redesenho.
         var loaded: String? = null
     }
@@ -915,6 +954,9 @@ private class ChannelAdapter(
         holder.name.text = channel.name
         holder.star.visibility =
             if (Favorites.contains(channel.name)) View.VISIBLE else View.GONE
+        val rotulo = Categorias.rotulo(items, position)
+        holder.secao.text = rotulo.orEmpty()
+        holder.secao.visibility = if (rotulo == null) View.GONE else View.VISIBLE
 
         val now = System.currentTimeMillis()
         val onAir = Epg.nowNext(channel.name, now)?.first

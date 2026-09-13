@@ -118,15 +118,17 @@ object Remote {
         val out = mutableListOf<Channel>()
         var name: String? = null
         var logo: String? = null
+        var categoria: String? = null
         var sources = mutableListOf<Source>()
 
         fun flush() {
             val current = name
             if (current != null && sources.isNotEmpty()) {
-                out += Channel(current, logo, sources.toList())
+                out += Channel(current, logo, sources.toList(), categoria)
             }
             name = null
             logo = null
+            categoria = null
             sources = mutableListOf()
         }
 
@@ -142,6 +144,7 @@ object Remote {
             when (field) {
                 "canal" -> { flush(); name = value }
                 "logo" -> logo = value
+                "categoria" -> categoria = value
                 "fonte" -> sources += Source(value)
                 "referer" -> if (sources.isNotEmpty()) {
                     sources[sources.size - 1] = sources.last().copy(referer = value)
