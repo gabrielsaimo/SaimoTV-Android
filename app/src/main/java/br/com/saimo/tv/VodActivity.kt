@@ -557,10 +557,14 @@ class VodActivity : AppCompatActivity() {
         // apontando para os episódios da série anterior.
         if (!deSerie && indice == 0) serieNoAr = null
         fichaDetalheAtual = detalhe
+        val trocaPorFalha = indice > 0 && titulo.text.toString() == nome && player != null
         fontesAtuais = urls
         fonteAtual = indice.coerceIn(urls.indices)
         val url = urls[fonteAtual]
-        pararFilme()
+        pararFilme(avisar = false)
+        val tentativaDesde = android.os.SystemClock.elapsedRealtime()
+        var tocouAvisado = false
+        Telemetria.comecou("vod", nome, url, fonteAtual + 1, nova = !trocaPorFalha)
         // Filme não é canal: pausa, volta e avança, então o controle padrão do
         // player fica à vista em vez da faixa de canal ao vivo.
         val novo = ExoPlayer.Builder(this).build()
@@ -571,9 +575,20 @@ class VodActivity : AppCompatActivity() {
         // Fonte morta não pode virar tela preta: cai para a seguinte, como o
         // canal já faz.
         novo.addListener(object : androidx.media3.common.Player.Listener {
+            override fun onPlaybackStateChanged(state: Int) {
+                if (state == androidx.media3.common.Player.STATE_READY && !tocouAvisado) {
+                    tocouAvisado = true
+                    Telemetria.tocou("vod", nome, url, fonteAtual + 1,
+                        android.os.SystemClock.elapsedRealtime() - tentativaDesde)
+                }
+            }
+
             override fun onPlayerError(error: androidx.media3.common.PlaybackException) {
+                Telemetria.falhou("vod", nome, url, fonteAtual + 1, error.errorCodeName)
                 if (fonteAtual + 1 < fontesAtuais.size) {
                     tocar(nome, fontesAtuais, fonteAtual + 1, deSerie = serieNoAr != null)
+                } else {
+                    Telemetria.caiu("vod", nome, fontesAtuais.size)
                 }
             }
         })
@@ -749,7 +764,8 @@ class VodActivity : AppCompatActivity() {
         fichaTempo.text = getString(R.string.vod_faltam, faltam, total / 60_000L)
     }
 
-    private fun pararFilme() {
+    private fun pararFilme(avisar: Boolean = true) {
+        if (avisar && player != null) Telemetria.parou()
         guardarProgresso()
         relogio.removeCallbacks(tique)
         relogio.removeCallbacks(esconderBarra)

@@ -21,6 +21,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
  */
 val semDerrubar = CoroutineExceptionHandler { _, erro ->
     Log.w("SaimoTV", "tarefa em segundo plano falhou", erro)
+    Telemetria.erro(erro)
 }
 
 /**
@@ -33,6 +34,11 @@ val semDerrubar = CoroutineExceptionHandler { _, erro ->
  */
 @UnstableApi
 class SaimoApp : Application(), ImageLoaderFactory {
+
+    override fun onCreate() {
+        super.onCreate()
+        Telemetria.iniciar(this)
+    }
 
     override fun newImageLoader(): ImageLoader =
         ImageLoader.Builder(this)

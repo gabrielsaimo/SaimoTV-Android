@@ -358,11 +358,25 @@ class MainActivity : AppCompatActivity() {
 
     // MARK: - Playback
 
+    /// Para o monitor: quando a tentativa começou, se já avisou que tocou e se
+    /// já avisou que o canal caiu — um aviso por tentativa, não um por segundo.
+    private var tentativaDesde = 0L
+    private var tocouAvisado = false
+    private var caiuAvisado = false
+
     private fun play(index: Int, source: Int = 0, apósFalha: Boolean = false) {
+        val mesmoCanal = ordered.getOrNull(current)?.name == ordered.getOrNull(index.coerceIn(ordered.indices))?.name
         current = index.coerceIn(ordered.indices)
         sourceIndex = source
         val channel = ordered[current]
         val chosen = channel.sources.getOrNull(sourceIndex) ?: channel.sources.first()
+        tentativaDesde = android.os.SystemClock.elapsedRealtime()
+        tocouAvisado = false
+        if (!apósFalha) caiuAvisado = false
+        // Falha passando para a próxima fonte, ou a reconexão do mesmo canal,
+        // não é mais uma abertura; escolher canal ou fonte à mão é.
+        Telemetria.comecou("live", channel.name, chosen.url, sourceIndex + 1,
+            nova = !(apósFalha || (mesmoCanal && retries > 0)))
 
         // O aviso conta a tentativa inteira, não só o instante da troca: dizer
         // "fonte 1 falhou" por meio segundo e sumir não informa ninguém.
@@ -387,6 +401,13 @@ class MainActivity : AppCompatActivity() {
     private val playerListener = object : Player.Listener {
         override fun onPlaybackStateChanged(state: Int) {
             if (state == Player.STATE_READY) {
+                if (!tocouAvisado) {
+                    tocouAvisado = true
+                    ordered.getOrNull(current)?.let { canal ->
+                        Telemetria.tocou("live", canal.name, canal.sources.getOrNull(sourceIndex)?.url.orEmpty(),
+                            sourceIndex + 1, android.os.SystemClock.elapsedRealtime() - tentativaDesde)
+                    }
+                }
                 retries = 0
                 handler.removeCallbacks(sourceTimeout)
                 status.visibility = View.GONE
@@ -397,12 +418,15 @@ class MainActivity : AppCompatActivity() {
         override fun onPlayerError(error: PlaybackException) {
             handler.removeCallbacks(sourceTimeout)
             val channel = ordered[current]
+            Telemetria.falhou("live", channel.name, channel.sources.getOrNull(sourceIndex)?.url.orEmpty(),
+                sourceIndex + 1, error.errorCodeName)
             // Each channel lists its sources in preference order; a dead or
             // expired link falls through to the next before giving up.
             if (sourceIndex + 1 < channel.sources.size) {
                 play(current, sourceIndex + 1, apósFalha = true)
                 return
             }
+            avisarQueCaiu(channel)
             retries++
             if (retries > 6) {
                 showStatus(getString(R.string.unavailable))
@@ -507,11 +531,20 @@ class MainActivity : AppCompatActivity() {
 
     private val sourceTimeout = Runnable {
         val channel = ordered.getOrNull(current) ?: return@Runnable
+        Telemetria.falhou("live", channel.name, channel.sources.getOrNull(sourceIndex)?.url.orEmpty(),
+            sourceIndex + 1, "sem imagem em ${SOURCE_TIMEOUT_MS / 1000} s")
         if (sourceIndex + 1 < channel.sources.size) {
             play(current, sourceIndex + 1, apósFalha = true)
         } else {
+            avisarQueCaiu(channel)
             showStatus(getString(R.string.unavailable))
         }
+    }
+
+    private fun avisarQueCaiu(channel: Channel) {
+        if (caiuAvisado) return
+        caiuAvisado = true
+        Telemetria.caiu("live", channel.name, channel.sources.size)
     }
 
     private var heldOpen = false
