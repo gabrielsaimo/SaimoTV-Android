@@ -1,21 +1,21 @@
 #!/usr/bin/env python3
-"""Gera Catalog.kt a partir do catálogo do app de macOS.
+"""Gera Catalog.kt a partir das listas publicadas pelo SaimoPlayer.
 
-Uma fonte só para as duas plataformas: SaimoPlayer/Sources/Channels.swift, que
-guarda o ClearKey como KID:CHAVE. O AVFoundation usa só a chave e o ExoPlayer
-precisa das duas metades, então o par mora inteiro no catálogo e cada lado pega
-o que lhe serve.
+catalogo.txt e restritos.txt são o que os apps baixam; o Catalog.kt é só a
+reserva de quando não há rede, então sai deles, com a categoria de cada canal.
+O ClearKey vem como KID:CHAVE: o AVFoundation usa só a chave e o ExoPlayer
+precisa das duas metades.
 """
 import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-SWIFT = ROOT.parent / "SaimoPlayer" / "Sources" / "Channels.swift"
+PUBLICADO = ROOT.parent / "SaimoPlayer"
 KOTLIN = ROOT / "app" / "src" / "main" / "java" / "br" / "com" / "saimo" / "tv" / "Catalog.kt"
 
 HEADER = '''package br.com.saimo.tv
 
-// Gerado a partir de SaimoPlayer/Sources/Channels.swift — não editar à mão.
+// Gerado de SaimoPlayer/catalogo.txt e restritos.txt — não editar à mão.
 // Regenerar com scripts/gen_catalog.py para manter Mac e TV Box iguais.
 
 data class Source(
@@ -33,8 +33,8 @@ data class Channel(
     val name: String,
     val logo: String? = null,
     val sources: List<Source>,
-    /// Seção da lista ("24 Horas", "Esportes"...). Nula no catálogo embutido:
-    /// aí a seção sai do nome, ver [Categorias].
+    /// Seção da lista ("24 Horas", "Esportes"...). Nula numa lista sem
+    /// categoria declarada: aí a seção sai do nome, ver [Categorias].
     val categoria: String? = null,
 )
 
@@ -54,36 +54,31 @@ def quote(value):
     return f'"{escaped}"'
 
 
-def parse_swift(declaration):
-    text = SWIFT.read_text(encoding="utf-8")
-    start = text.index(declaration) + len(declaration)
-    text = text[start:text.index("\n]", start)]
-    channels = []
-    entry = re.compile(
-        r'CatalogEntry\(\s*name:\s*(' + STRING + r'),\s*'
-        r'logo:\s*(' + STRING + r'),\s*sources:\s*\[(.*?)\n        \]\)', re.S)
-    source = re.compile(
-        r'Source\(url:\s*(' + STRING + r'),\s*'
-        r'(?:referer:\s*(' + STRING + r'),\s*)?'
-        r'(?:userAgent:\s*(' + STRING + r'),\s*)?'
-        r'(?:clearKey:\s*(' + STRING + r'))?\s*\)', re.S)
-    for match in entry.finditer(text):
-        sources = []
-        for item in source.finditer(match.group(3)):
-            sources.append({
-                "url": unquote(item.group(1)),
-                "referer": unquote(item.group(2) or "nil"),
-                "userAgent": unquote(item.group(3) or "nil"),
-                "key": unquote(item.group(4) or "nil"),
-            })
-        if not sources:
-            raise SystemExit(f"canal sem fonte reconhecida: {match.group(1)}")
-        channels.append({
-            "name": unquote(match.group(1)),
-            "logo": unquote(match.group(2)),
-            "sources": sources,
-        })
-    return channels
+def parse_txt(nome, categoria_padrao=None):
+    channels, fonte = [], None
+    for raw in (PUBLICADO / nome).read_text(encoding="utf-8").splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#") or ":" not in line:
+            continue
+        campo, valor = (x.strip() for x in line.split(":", 1))
+        campo = campo.lower()
+        if not valor:
+            continue
+        if campo == "canal":
+            channels.append({"name": valor, "logo": None, "sources": [],
+                             "categoria": categoria_padrao})
+        elif not channels:
+            continue
+        elif campo == "logo":
+            channels[-1]["logo"] = valor
+        elif campo == "categoria":
+            channels[-1]["categoria"] = valor
+        elif campo == "fonte":
+            fonte = {"url": valor, "referer": None, "userAgent": None, "key": None}
+            channels[-1]["sources"].append(fonte)
+        elif fonte is not None and campo in ("referer", "agente", "chave"):
+            fonte[{"agente": "userAgent", "chave": "key"}.get(campo, campo)] = valor
+    return [c for c in channels if c["sources"]]
 
 
 def emit(out, missing, channels):
@@ -110,6 +105,8 @@ def emit(out, missing, channels):
                     missing.append(f'{channel["name"]}: {source["url"][:70]}')
             out.append("            ),")
         out.append("        ),")
+        if channel.get("categoria"):
+            out.append(f'        categoria = {quote(channel["categoria"])},')
         out.append("    ),")
 
 
@@ -119,14 +116,15 @@ def main():
     open_list = "val CATALOG: List<Channel> = listOf("
     restricted_list = "val RESTRICTED: List<Channel> = listOf("
 
-    catalog = parse_swift("private let catalog: [CatalogEntry] = [")
-    restricted = parse_swift("private let restrictedCatalog: [CatalogEntry] = [")
+    catalog = parse_txt("catalogo.txt")
+    restricted = parse_txt("restritos.txt", categoria_padrao="Adulto")
 
     out.append(open_list)
     emit(out, missing, catalog)
     out.append(")")
     out.append("")
-    out.append("/// Só entra na lista depois do código. Ver Unlock.")
+    out.append("/// Só entra na lista depois do código, e só sem rede: a que vale é a")
+    out.append("/// baixada pelo Remote. Ver Unlock.")
     out.append(restricted_list)
     emit(out, missing, restricted)
     out.append(")")

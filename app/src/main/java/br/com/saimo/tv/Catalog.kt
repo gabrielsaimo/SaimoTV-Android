@@ -1,6 +1,6 @@
 package br.com.saimo.tv
 
-// Gerado a partir de SaimoPlayer/Sources/Channels.swift — não editar à mão.
+// Gerado de SaimoPlayer/catalogo.txt e restritos.txt — não editar à mão.
 // Regenerar com scripts/gen_catalog.py para manter Mac e TV Box iguais.
 
 data class Source(
@@ -18,8 +18,8 @@ data class Channel(
     val name: String,
     val logo: String? = null,
     val sources: List<Source>,
-    /// Seção da lista ("24 Horas", "Esportes"...). Nula no catálogo embutido:
-    /// aí a seção sai do nome, ver [Categorias].
+    /// Seção da lista ("24 Horas", "Esportes"...). Nula numa lista sem
+    /// categoria declarada: aí a seção sai do nome, ver [Categorias].
     val categoria: String? = null,
 )
 
@@ -54,6 +54,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/AE_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Documentários",
     ),
     Channel(
         name = "Adult Swim",
@@ -84,15 +85,17 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/TRUTV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "AMC",
         logo = "https://mondrian.claro.com.br/channels/inverse/amc.png",
         sources = listOf(
             Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/amc/__index.m3u8?sv=12&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788473027-1p5ON3MLfzAs8siCd4PYlYy%2FbYd54KR6B6BZBJq8I%2Bo%3D",
+                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/amc/__index.m3u8?sv=174&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1789481850-aQfTkNQAOqt0%2FDZ1N2fQuCIVuahnjtgve%2BB7F03qauI%3D",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "Animal Planet",
@@ -123,6 +126,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/ANIMAL_PLANET_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Documentários",
     ),
     Channel(
         name = "Band",
@@ -156,6 +160,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://media.cdntvms.com.br/band_sat/index.m3u8",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "Cartoon Network",
@@ -186,6 +191,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/CARTOON_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Infantil",
     ),
     Channel(
         name = "CazéTV",
@@ -216,6 +222,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/CAZE_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "CNN Brasil",
@@ -226,6 +233,7 @@ val CATALOG: List<Channel> = listOf(
                 userAgent = "Mozilla/5.0 (Linux; U; Android 13; T610K Build/TP1A.220624.014; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/126.0.6478.71 Mobile Safari/537.36 OPR/87.0.2254.75258",
             ),
         ),
+        categoria = "Notícias",
     ),
     Channel(
         name = "CNN Brasil Money",
@@ -236,6 +244,7 @@ val CATALOG: List<Channel> = listOf(
                 userAgent = "Mozilla/5.0 (Linux; U; Android 13; T610K Build/TP1A.220624.014; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/126.0.6478.71 Mobile Safari/537.36 OPR/87.0.2254.75258",
             ),
         ),
+        categoria = "Notícias",
     ),
     Channel(
         name = "E!",
@@ -249,6 +258,7 @@ val CATALOG: List<Channel> = listOf(
                 key = "7de3fcc29e3194b9c65282a42cb7bec6",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "GE TV",
@@ -262,6 +272,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://amg00716-globo-amg00716c1-tcl-br-9495.playouts.now.amagi.tv/playlist.m3u8",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "Globo RJ",
@@ -292,6 +303,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/GLOBO_RIO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "GloboNews",
@@ -308,6 +320,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://79.127.238.228:14093",
             ),
         ),
+        categoria = "Notícias",
     ),
     Channel(
         name = "Globoplay Novelas",
@@ -324,6 +337,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://79.127.238.228:14455",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "GNT",
@@ -340,6 +354,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://79.127.238.228:14402",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "History",
@@ -379,6 +394,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://170.83.16.50/HISTORY/index.m3u8",
             ),
         ),
+        categoria = "Documentários",
     ),
     Channel(
         name = "History 2",
@@ -409,6 +425,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/H2_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Documentários",
     ),
     Channel(
         name = "Jovem Pan News",
@@ -452,6 +469,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://186.219.52.187/jp_news/index.m3u8",
             ),
         ),
+        categoria = "Notícias",
     ),
     Channel(
         name = "Megapix",
@@ -468,6 +486,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://79.127.238.228:14592",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "Multishow",
@@ -481,6 +500,7 @@ val CATALOG: List<Channel> = listOf(
                 key = "6664fa23d82cbfeaf5cdb2d662bec3b3",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "Premiere 2",
@@ -494,6 +514,7 @@ val CATALOG: List<Channel> = listOf(
                 key = "f69c8d4624fddff4ca89bd0b31bdc4a7",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "Premiere 3",
@@ -507,6 +528,7 @@ val CATALOG: List<Channel> = listOf(
                 key = "4942eebd598b5727c5cc484cc62b52e8",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "Premiere 4",
@@ -520,6 +542,7 @@ val CATALOG: List<Channel> = listOf(
                 key = "58709c714320bb862dbd07270df81c94",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "Premiere 5",
@@ -533,6 +556,7 @@ val CATALOG: List<Channel> = listOf(
                 key = "d1698cda3d040f9051125a61745b596b",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "Premiere 6",
@@ -546,6 +570,7 @@ val CATALOG: List<Channel> = listOf(
                 key = "8dd97d486cbdd15cc47ea8c41b264ebb",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "Premiere 7",
@@ -559,6 +584,7 @@ val CATALOG: List<Channel> = listOf(
                 key = "47571c93e4335b3d1590a5ae3f5c48ef",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "Premiere 8",
@@ -572,6 +598,7 @@ val CATALOG: List<Channel> = listOf(
                 key = "fb24357e80520fd600dd43c1d8ce8a7a",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "Premiere Clubes",
@@ -585,6 +612,7 @@ val CATALOG: List<Channel> = listOf(
                 key = "fa38aaa865a57eda7c77444697ba8ed3",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "SBT",
@@ -621,6 +649,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://media.cdntvms.com.br/sbt_sat/index.m3u8",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "SBT News",
@@ -635,6 +664,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://dai.google.com/linear/hls/event/1XSOdtQ0SH2G8OEmEfGgjQ/master.m3u8",
             ),
         ),
+        categoria = "Notícias",
     ),
     Channel(
         name = "Sony Channel",
@@ -668,15 +698,17 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://170.83.16.50/SONY_CHANNEL/index.m3u8",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "SporTV",
         logo = "https://mondrian.claro.com.br/channels/inverse/sportv-3.png",
         sources = listOf(
             Source(
-                url = "https://p17-common-sign.dynamic.pages.cloudflareusercontent.com/tos-alisg-avt-0068/proxy?container=images&refresh=10&url=https://neosoro.gq/docs/sportv1/__index.m3u8?sv=159&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1786408554-MK0K7%2F0RIabb2i7ktFkDI1P2aEeyuwRUwvOxauQ5e1c%3D",
+                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/sportv1/__index.m3u8?sv=209&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1789482247-IsLpWWPSCOVPJe%2BQFKfjj8ad6ME1HqQgB4Ilj8j3bIc%3D",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "SporTV 2",
@@ -690,6 +722,7 @@ val CATALOG: List<Channel> = listOf(
                 key = "8fbdd8a9ae6748696bb13e547bb093fc",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "SporTV 3",
@@ -706,33 +739,47 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://170.83.49.66:8083/SPORTV3HD/index.m3u8",
             ),
         ),
+        categoria = "Esportes",
+    ),
+    Channel(
+        name = "Canal OFF",
+        logo = "https://mondrian.claro.com.br/channels/inverse/canal-off.png",
+        sources = listOf(
+            Source(
+                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/off/__index.m3u8?sv=170&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1789482178-hTTR6m5u7tJKBv%2BhzwcRf1RlCc7gP%2Fj3%2FYDoWN1TqcA%3D",
+            ),
+        ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "Telecine Action",
         logo = "https://upload.wikimedia.org/wikipedia/commons/3/37/Telecine_Action_2.png",
         sources = listOf(
             Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/telecineaction/__index.m3u8?sv=71&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1789218927-xNieqExLcDiWlBkadztoTnelV5wE8DKtLPXJjmzG5Qc%3D",
+                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/telecineaction/__index.m3u8?sv=165&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1789480849-%2BLNTW%2BYZ8D1xeEQtqqfFKMOnz%2BRjKIAMya248czYw9k%3D",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "Telecine Pipoca",
         logo = "https://upload.wikimedia.org/wikipedia/commons/2/2f/Telecine_Pipoca_%282021%29.png",
         sources = listOf(
             Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/telecinepipoca/__index.m3u8?sv=138&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1789219374-F6IW5BQoqAEf3pOLIzgpJRdy1gsvHmBfDbZAIqFh1k4%3D",
+                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/telecinepipoca/__index.m3u8?sv=180&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1789481420-wsQGn%2B%2BG7zXUNEt30tuVTlxLptNEGRIJLyuVr4ySGCE%3D",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "Telecine Premium",
         logo = "https://upload.wikimedia.org/wikipedia/commons/1/11/App-telecine-premium-252x252.png",
         sources = listOf(
             Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/telecinepremium/__index.m3u8?sv=197&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1789219484-aQK3WA9dH6oDAAMndZCMPBvj2NxCQTmQmx9DswrnO5M%3D",
+                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/telecinepremium/__index.m3u8?sv=109&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1789481656-ONs6POlWKE0GJKIkx21NeahpogJD60Zlio8BIrF0cqc%3D",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "TV Brasil",
@@ -793,6 +840,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://45.177.114.115/TV_BRASIL/index.m3u8",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "Universal Premiere",
@@ -806,6 +854,7 @@ val CATALOG: List<Channel> = listOf(
                 key = "90e91e6549d2061b793177c70d35e177",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "Universal Reality",
@@ -819,6 +868,7 @@ val CATALOG: List<Channel> = listOf(
                 key = "2fd0079af0bf85289859fff7b8a4e30f",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "Warner",
@@ -849,6 +899,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/WARNER_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "IMPD",
@@ -861,6 +912,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://igrejamundial.nuvemplay.live/hls/stream.m3u8",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "Globo SP",
@@ -891,6 +943,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/GLOBO_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "Cartoonito",
@@ -900,6 +953,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/cartoonito/__index.m3u8?sv=7&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788473248-7Yzu%2FtAxzRQJhmQMxTVyaqyf5vslWwRo1yq49kLi7ms%3D",
             ),
         ),
+        categoria = "Infantil",
     ),
     Channel(
         name = "Cinemax",
@@ -930,6 +984,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/CINEMAX/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "Discovery Channel",
@@ -960,6 +1015,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/DISCOVERY_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Documentários",
     ),
     Channel(
         name = "Discovery Kids",
@@ -990,6 +1046,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/DISCOVERY_KIDS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Infantil",
     ),
     Channel(
         name = "Discovery Theater",
@@ -1020,6 +1077,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/DISCOVERY_THEATER_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Documentários",
     ),
     Channel(
         name = "Discovery World",
@@ -1050,6 +1108,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/DISCOVERY_WORLD_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Documentários",
     ),
     Channel(
         name = "ESPN",
@@ -1083,6 +1142,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://181.78.197.59:8000/play/a07z/index.m3u8",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "ESPN 2",
@@ -1113,6 +1173,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/ESPN2_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "ESPN 4",
@@ -1146,6 +1207,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://181.78.197.59:8000/play/a07n/index.m3u8",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "ESPN 5",
@@ -1176,6 +1238,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/ESPN5/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "ESPN 6",
@@ -1206,6 +1269,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/ESPN6/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "HBO",
@@ -1236,6 +1300,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/HBO/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "HBO2",
@@ -1266,6 +1331,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/HBO2/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "HBO Family",
@@ -1296,6 +1362,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/HBO_FAMILY/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "HBO Mundi",
@@ -1326,6 +1393,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/HBO_MUNDI_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "HBO Plus",
@@ -1356,6 +1424,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/HBO_PLUS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "HBO Pop",
@@ -1386,6 +1455,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/HBO_POP_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "HBO Signature",
@@ -1416,6 +1486,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/HBO_SIGNATURE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "HBO Xtreme",
@@ -1446,6 +1517,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/HBO_EXTREME_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "HGTV",
@@ -1476,6 +1548,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/HGTV_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "Record",
@@ -1512,6 +1585,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://media.cdntvms.com.br/record_nacional_sat/index.m3u8",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "Space",
@@ -1542,6 +1616,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/SPACE_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "TNT",
@@ -1572,6 +1647,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/TNT_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "TNT Séries",
@@ -1602,13 +1678,14 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/TNT_SERIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "Universal TV",
         logo = "https://mondrian.claro.com.br/channels/inverse/universal.png",
         sources = listOf(
             Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/universal/__index.m3u8?sv=160&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788472902-u%2FRQX14ioJ69OPfvvDO1qYblKfL%2FF5lv7lKx%2Bx9GxPk%3D",
+                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/universal/__index.m3u8?sv=74&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1789482672-uCEvMtRV007ucHTRwZKYBOCkaXSKKT6lbExawBbmlo4%3D",
             ),
             Source(
                 url = "https://getcdn.clarocdn.com.br/Content/Channel/SPOUNVHD/dsc3/manifest.mpd",
@@ -1618,6 +1695,7 @@ val CATALOG: List<Channel> = listOf(
                 key = "14d17ea503859feb50f395a19491a2ea",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "AMC Séries",
@@ -1627,6 +1705,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/amcseries/__index.m3u8?sv=104&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788472213-9X3RxgrzGBnYkKf9TDcG8To6ntcgw1Ltd1LupkS57Fg%3D",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "Discovery Turbo",
@@ -1657,42 +1736,47 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/DISCOVERY_TURBO_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Documentários",
     ),
     Channel(
         name = "USA Network",
         logo = "https://mondrian.claro.com.br/channels/inverse/usa.png",
         sources = listOf(
             Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/usa/__index.m3u8?sv=152&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788472952-usk1Sd862HUsEeFJpIgF1mgp%2BipLQSEzd%2BnacW%2BsYEs%3D",
+                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/usa/__index.m3u8?sv=12&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1789482616-tLQ0mx7Cv80cr%2FKJrDa7zE2ioGhYDrDuezzyI9uQlAI%3D",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "Telecine Fun",
         logo = "https://upload.wikimedia.org/wikipedia/commons/f/f8/Telecine_Fun_%282021%29.png",
         sources = listOf(
             Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/telecinefun/__index.m3u8?sv=60&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1789219253-QyNo%2BSouIn5NsUWG9CLY3IS1v3VkaHye34ceWOyiOVs%3D",
+                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/telecinefun/__index.m3u8?sv=17&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1789481327-bAc95Xi1E33YuPzcP0Pfdk59FX1r3MNMJfugpAIgMyg%3D",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "Telecine Cult",
         logo = "https://upload.wikimedia.org/wikipedia/commons/9/9a/Telecine_Cult%282021%29.png",
         sources = listOf(
             Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/telecinecult/__index.m3u8?sv=62&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1789219128-2d6%2FA%2Bghk7W1jCeuEeiIa%2FzqBJvYswTltdkdtIbUKYE%3D",
+                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/telecinecult/__index.m3u8?sv=86&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1789481098-We7WOf%2FCKC5Szz6DBJZWjWDomevUrQBhQEZeAWygp1w%3D",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "Telecine Touch",
         logo = "https://upload.wikimedia.org/wikipedia/commons/9/95/TELECINE_Touch_Logo_2021.png",
         sources = listOf(
             Source(
-                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/telecinetouch/__index.m3u8?sv=24&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1789219606-y4NcNO1KSIHSjnN2cGCPByGn4ZDzVdUj4qjXJLBn0dE%3D",
+                url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/telecinetouch/__index.m3u8?sv=182&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1789481749-PEP6NRR3E9xH7MZHGVXlfncRXoDVCcI8fs%2F7C3d7Dds%3D",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "SONY Movies",
@@ -1732,8 +1816,8 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://168.197.104.22/SONY_MOVIES/index.m3u8",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
-
     Channel(
         name = "Globo",
         logo = "https://mondrian.claro.com.br/channels/inverse/globo.png",
@@ -1766,6 +1850,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://media2.cdntvms.com.br/tv_morena_dorados/index.m3u8",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "Tooncast",
@@ -1796,6 +1881,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/TOONCAST/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Infantil",
     ),
     Channel(
         name = "TLC",
@@ -1829,6 +1915,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://79.127.238.228:14433",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "Arte 1",
@@ -1868,6 +1955,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://168.197.104.22/ARTE1/index.m3u8",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "TNT Novelas",
@@ -1898,6 +1986,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/TNT_NOVELAS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "Discovery Science",
@@ -1928,6 +2017,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/DISCOVERY_SCIENCE_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Documentários",
     ),
     Channel(
         name = "Boomerang",
@@ -1958,6 +2048,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/BOOMERANG_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Infantil",
     ),
     Channel(
         name = "AXN",
@@ -1994,6 +2085,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://170.83.49.66:8083/AXNHD/index.m3u8",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "TCM",
@@ -2024,6 +2116,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/TCM_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "Band News",
@@ -2063,6 +2156,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://168.197.104.22/BAND_NEWS/index.m3u8",
             ),
         ),
+        categoria = "Notícias",
     ),
     Channel(
         name = "BAND SPORTS HD",
@@ -2102,6 +2196,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://170.83.49.66:8083/BANDSPORTSHD/index.m3u8",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "RedeTV!",
@@ -2141,6 +2236,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://170.83.16.50/REDE_TV/index.m3u8",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "TV Cultura",
@@ -2180,6 +2276,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://player-tvcultura.stream.uol.com.br/live/tvcultura.m3u8",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "Terra Viva",
@@ -2219,6 +2316,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://45.177.114.115/TERRAVIVA/index.m3u8",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "Woohoo",
@@ -2255,6 +2353,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://170.83.16.50/WOOHOO/index.m3u8",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "PRIME BOX BRAZIL",
@@ -2285,6 +2384,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/PRIME_BOX_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "ESPN 3",
@@ -2318,6 +2418,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://181.78.197.59:8000/play/a081/index.m3u8",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "ESPN Extra",
@@ -2348,6 +2449,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/ESPN_EXTRA_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "TV Gazeta",
@@ -2387,6 +2489,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://168.197.104.22/GAZETA/index.m3u8",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "Record News",
@@ -2426,6 +2529,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://45.177.114.115/RECORD_NEWS/index.m3u8",
             ),
         ),
+        categoria = "Notícias",
     ),
     Channel(
         name = "Canção Nova",
@@ -2468,6 +2572,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://168.197.104.22/CANCAO_NOVA/index.m3u8",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "TV Aparecida",
@@ -2507,6 +2612,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://168.197.104.22/TV_APARECIDA/index.m3u8",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "Rede Vida",
@@ -2546,6 +2652,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://186.219.52.187/rede_vida/index.m3u8",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "Discovery ID",
@@ -2576,6 +2683,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/ID_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Documentários",
     ),
     Channel(
         name = "Fish TV",
@@ -2615,6 +2723,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://170.83.16.50/FISH_TV/index.m3u8",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "Box Kids TV",
@@ -2648,6 +2757,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://170.83.49.66:8083/BOXKIDSHD/index.m3u8",
             ),
         ),
+        categoria = "Infantil",
     ),
     Channel(
         name = "Sabor & Arte",
@@ -2678,6 +2788,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/SABOR_E_ARTE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "X Sports",
@@ -2708,6 +2819,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/XSPORTS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "N SPORTS",
@@ -2741,6 +2853,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://ogc-nsprt-tcl-roku-syndication.otteravision.com/ogc/nsprt/nsprt.m3u8",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "Music Box Brazil",
@@ -2777,6 +2890,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://170.83.49.66:8083/MUSICBOXBRASILHD/index.m3u8",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "Band SP",
@@ -2807,6 +2921,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/BAND_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "Band RS",
@@ -2834,6 +2949,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/BAND_RS_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "SBT SP",
@@ -2864,6 +2980,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/SBT_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "SBT RS",
@@ -2894,6 +3011,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/SBT_RS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "Record SP",
@@ -2924,6 +3042,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/RECORD_SP/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "Record RS",
@@ -2954,6 +3073,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/RECORD_RS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "Canal Rural",
@@ -2990,6 +3110,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://186.219.52.187/canal_rural/index.m3u8",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "Agro Mais",
@@ -3029,6 +3150,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://45.177.114.115/AGROMAIS_HD/index.m3u8",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "CNT",
@@ -3068,6 +3190,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://170.83.49.66:8083/REDECNTHD/index.m3u8",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "Markket",
@@ -3098,6 +3221,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/MARKKET/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "TV Pai Eterno",
@@ -3137,6 +3261,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://168.197.104.22/TV_PAI_ETERNO/index.m3u8",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "PlayTV",
@@ -3173,6 +3298,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://45.177.114.115/PLAY_TV/index.m3u8",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "Rede Brasil",
@@ -3206,6 +3332,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://redebrasil.nuvemplay.live/hls/stream.m3u8",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "Rede Gospel",
@@ -3245,6 +3372,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://45.177.114.115/REDE_GOSPEL/index.m3u8",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "Rede Super",
@@ -3275,6 +3403,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/REDE_SUPER/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "Trace Brazuca",
@@ -3308,6 +3437,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg01131-tracetv-tracebrazuca-samsungbr/playlist.m3u8",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "TV Câmara",
@@ -3347,6 +3477,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://168.197.104.22/TV_CAMARA/index.m3u8",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "TV Evangelizar",
@@ -3386,6 +3517,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://170.83.16.50/TV_EVANGELIZAR/index.m3u8",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "TV Justiça",
@@ -3425,6 +3557,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://170.83.16.50/TV_JUSTICA/index.m3u8",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "TV Novo Tempo",
@@ -3464,6 +3597,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://186.219.52.187/novo_tempo/index.m3u8",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "TV Senado",
@@ -3503,6 +3637,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://170.83.16.50/TV_SENADO/index.m3u8",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "RIT",
@@ -3542,6 +3677,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://170.83.49.66:8083/RITHD/index.m3u8",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "TV Escola",
@@ -3572,6 +3708,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/TV_ESCOLA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "Discovery Home & Health",
@@ -3602,6 +3739,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/DISC_HH_HD/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Documentários",
     ),
     Channel(
         name = "Agro Brasil",
@@ -3632,6 +3770,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/AGROBRASIL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "Canal Agro",
@@ -3670,6 +3809,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://168.197.104.22/AGRO_CANAL/index.m3u8",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "Blits TV",
@@ -3703,6 +3843,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://stmv1.transmissaodigital.com/blitstv/blitstv/playlist.m3u8",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "Channel 1",
@@ -3732,6 +3873,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/CHANNEL1/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "Cinemonde",
@@ -3740,6 +3882,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/CINEMONDE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "CNBC",
@@ -3752,6 +3895,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-679a973a97782f0008ff4bb6.m3u8",
             ),
         ),
+        categoria = "Notícias",
     ),
     Channel(
         name = "Com Brasil",
@@ -3788,6 +3932,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://dfr80qz435crc.cloudfront.net/EFGH/Amagi/NewCo/New_Brasil_BR/New_Brasil.m3u8",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "Darkflix",
@@ -3818,6 +3963,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/DARKFLIX/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "DW",
@@ -3848,6 +3994,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/DW/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Notícias",
     ),
     Channel(
         name = "Euronews",
@@ -3881,6 +4028,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-619e6614c9d9650007a2b171.m3u8",
             ),
         ),
+        categoria = "Notícias",
     ),
     Channel(
         name = "EWTN",
@@ -3911,6 +4059,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/EWTN/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "Fox News",
@@ -3941,6 +4090,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/FOX_NEWS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Notícias",
     ),
     Channel(
         name = "Fox Sports 2",
@@ -3971,6 +4121,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/FOX_SPORTS_2/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "Fuel TV",
@@ -4001,6 +4152,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/FUEL_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "Hallo Anime",
@@ -4030,6 +4182,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/HALLO_ANIME/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Infantil",
     ),
     Channel(
         name = "Hallo Doc",
@@ -4059,6 +4212,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/HALLO_DOC/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Documentários",
     ),
     Channel(
         name = "Hallo Movies",
@@ -4088,6 +4242,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/HALLO_MOVIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "Hallo Music",
@@ -4117,6 +4272,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/HALLO_MUSIC/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "Hallo Series",
@@ -4146,6 +4302,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/HALLO_SERIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "SESC TV",
@@ -4185,6 +4342,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://186.219.52.187/sesc_tv/index.m3u8",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "Top TV",
@@ -4214,6 +4372,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/TOPTV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "Trace Latina",
@@ -4244,6 +4403,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/TRACE_LATINA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "Trace Toca",
@@ -4274,6 +4434,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/TRACE_TOCA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "Trace Urban",
@@ -4304,6 +4465,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/TRACE_URBAN/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "TVideoNews",
@@ -4337,6 +4499,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://video01.logicahost.com.br/tvideonews/tvideonews/playlist.m3u8",
             ),
         ),
+        categoria = "Notícias",
     ),
     Channel(
         name = "TV Pampa",
@@ -4367,6 +4530,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/TV_PAMPA/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "Urban Kids",
@@ -4397,6 +4561,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/URBAN_KIDS/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Infantil",
     ),
     Channel(
         name = "Urban Movies",
@@ -4427,6 +4592,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/URBAN_MOVIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "Urban Series",
@@ -4457,6 +4623,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/URBAN_SERIES/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "Urban Travel",
@@ -4487,6 +4654,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/URBAN_TRAVEL/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "Vivax TV",
@@ -4516,6 +4684,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://cdn-sp2.satlabscloud.com.br/VIVAX_TV/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "A Caçadora de Relíquias",
@@ -4525,6 +4694,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-67e59a6557487a8b7fe73e23.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "A Feiticeira",
@@ -4534,6 +4704,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-631fa8dd7f25240007099a40.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Acumuladores Obsessivos",
@@ -4543,6 +4714,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-656e2a4b4261ca00083aa99e.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Adrenalina Pura TV",
@@ -4552,6 +4724,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-61b790b985706b00072cb797.m3u8",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "Assombrações",
@@ -4561,6 +4734,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-620d1512c7986a0007220213.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Avatar: A lenda de Aang",
@@ -4570,6 +4744,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-6759eeb1bd523200083b4f29.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "BET Pluto TV",
@@ -4579,6 +4754,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5ff768b6a4c8b80008498610.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Baby Shark TV",
@@ -4588,6 +4764,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-63da6bcd60bc8f0008a5d364.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Babyfirst",
@@ -4597,6 +4774,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5f4fb4cf605ddf000748e16f.m3u8",
             ),
         ),
+        categoria = "Infantil",
     ),
     Channel(
         name = "Beyblade",
@@ -4606,6 +4784,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-633dc392e0282400071b0d39.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Bob Esponja Calça Quadrada",
@@ -4615,6 +4794,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-62545c0b002f4b0007688b61.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Boruto: Naruto Next Generations",
@@ -4624,6 +4804,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-656f389c3944b60008e5bdab.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "CBS News",
@@ -4632,6 +4813,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-62310f66d5888f0007534342.m3u8",
             ),
         ),
+        categoria = "Notícias",
     ),
     Channel(
         name = "CSI: Miami",
@@ -4641,6 +4823,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-63eb9c5351f5d000085e8d7e.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Canal Educacao",
@@ -4656,6 +4839,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://45.177.114.115/CANAL_EDUCACAO/index.m3u8",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "Canal Futura",
@@ -4671,6 +4855,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://186.219.52.187/futura/index.m3u8",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "Canal Gov",
@@ -4686,6 +4871,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://168.197.104.22/TV_BRASIL_2/index.m3u8",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "Canal UOL",
@@ -4695,6 +4881,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://video24.mais.uol.com.br/live/6146.m3u8",
             ),
         ),
+        categoria = "Notícias",
     ),
     Channel(
         name = "Canal do Boi",
@@ -4710,6 +4897,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://170.83.16.50/CANAL_DO_BOI/index.m3u8",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "Caçadores de Óvnis",
@@ -4719,6 +4907,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-656e2a10954b020008ed167c.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Charmed: Jovens Bruxas",
@@ -4728,6 +4917,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-67f9602ee173fa5664fafae8.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Chef TV",
@@ -4737,6 +4927,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://168.197.104.22/CHEF_TV/index.m3u8",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "Cocoricó",
@@ -4746,6 +4937,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-62d969fd8451a30007f0fd94.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Comedy Central Pluto TV",
@@ -4755,6 +4947,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5f357e91b18f0b00073583d2.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Comedy Central South Park",
@@ -4764,6 +4957,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-609ae66b359b270007869ff1.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Cultura Fast",
@@ -4772,6 +4966,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://fpa-gateway.tvcultura.com.br:8181/memfs/606caef0-a290-413d-9f1f-8fcdb3a73831.m3u8",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "Death Note",
@@ -4781,6 +4976,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-625464a945b6a200079257d1.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Detetives Médicos",
@@ -4790,6 +4986,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-638df93ae2f2a3000737c168.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Diff’rent Strokes Arnold",
@@ -4799,6 +4996,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-61f1d27a189ed10007b7393e.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "DumDum",
@@ -4814,6 +5012,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://186.219.52.187/zoomoo/index.m3u8",
             ),
         ),
+        categoria = "Infantil",
     ),
     Channel(
         name = "Estado Paranormal",
@@ -4823,6 +5022,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-656e2a81954b020008ed17a4.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "FIFA+",
@@ -4832,6 +5032,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-66997e8d3a4ad20008e50be9.m3u8",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "FailArmy",
@@ -4841,6 +5042,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5f5141c1605ddf000748eb1b.m3u8",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "Filmelier TV",
@@ -4850,6 +5052,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-633dcebd80386500074a2461.m3u8",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "Filmes Suspense",
@@ -4859,6 +5062,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5f171d3442a0500007362f22.m3u8",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "Futura",
@@ -4871,6 +5075,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://170.83.49.66:8083/FUTURAHD/index.m3u8",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "Homeful",
@@ -4880,6 +5085,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-67603668f433320008760af1.m3u8",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "Hunter x Hunter",
@@ -4889,6 +5095,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-65d9167818036500080e8780.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Inspetor Bugiganga",
@@ -4898,6 +5105,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-69162648d03565d6c8c8df97.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Inuyasha",
@@ -4907,6 +5115,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-66b26681d2d50d00083abe8b.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "JoJo’s Bizarre Adventure",
@@ -4916,6 +5125,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-66c7982f6838ee00085f0d24.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Jornada nas Estrelas A Nova Geração",
@@ -4925,6 +5135,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-69162ad79505d0f3b1ebf07d.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Jornada nas Estrelas Deep Space Nine",
@@ -4934,6 +5145,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-69162af591700f4c4c135c95.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Jornada nas Estrelas Voyager",
@@ -4943,6 +5155,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-69162b1ef189e235142b17ab.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Kenan & Kel",
@@ -4952,6 +5165,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5ffcc5130fd98c0007f2e216.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "KpopTV Play",
@@ -4961,6 +5175,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://giatv.bozztv.com/giatv/giatv-kpoptvplay/kpoptvplay/playlist.m3u8",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "MTV Are you the One?",
@@ -4970,6 +5185,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5f6108d8cc331900075e98e4.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "MTV Biggest Pop",
@@ -4979,6 +5195,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-6047fbdbbb776a0007e7f2ff.m3u8",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "MTV Catfish",
@@ -4988,6 +5205,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-626c2a3502d84a0007cec817.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "MTV Com o Ex",
@@ -4997,6 +5215,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-61a528267e1b8b0007357920.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "MTV Dating",
@@ -5005,6 +5224,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-6851bb3426beced4f2f67ee6.m3u8",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "MTV Jovens e Mães",
@@ -5014,6 +5234,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-620fdc7d8a36fc000710e3ba.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "MTV Pluto TV",
@@ -5023,6 +5244,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5f1212fb81e85c00077ae9ef.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "MTV Reality",
@@ -5032,6 +5254,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-6851bdfc9ac48fde5e07f5ae.m3u8",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "MTV Rocks",
@@ -5041,6 +5264,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-66a01e07d2d50d0008100d6a.m3u8",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "MTV Rupaul's Drag Race",
@@ -5049,6 +5273,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-645111f1d8436e00081bb2bd.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "MTV Shore",
@@ -5058,6 +5283,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-625463563b8ddc0007134aeb.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "MacGyver",
@@ -5067,6 +5293,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-63eb9dc84e83e70008abea92.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Mais MasterChef Brasil",
@@ -5076,6 +5303,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-681111be5e0764e297fb200e.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "MasterChef",
@@ -5085,6 +5313,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-6077045b6031bd00078de127.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "MasterChef Brasil Profissionais",
@@ -5094,6 +5323,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-681110afc188aa63faa147e0.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Mistérios sem Solução",
@@ -5103,6 +5333,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-62b5c5a064163d0007b2efe6.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Moranguinho",
@@ -5112,6 +5343,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-63eba189c111bc0008ff59c5.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "MyTime Movie Network",
@@ -5121,6 +5353,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://appletree-mytime-samsungbrazil.amagi.tv/playlist.m3u8",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "NCIS",
@@ -5130,6 +5363,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-63eb9fdda995710008991c54.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Naruto",
@@ -5139,6 +5373,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5f6df5a173d7340007c559f7.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Naruto Shippuden",
@@ -5148,6 +5383,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-64c92f965580090008084968.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "NatureTime",
@@ -5157,6 +5393,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-681ba2ad93d3d19bcab47433.m3u8",
             ),
         ),
+        categoria = "Documentários",
     ),
     Channel(
         name = "Nick Jr. Club",
@@ -5166,6 +5403,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-6824ce95f09106f4b18f4114.m3u8",
             ),
         ),
+        categoria = "Infantil",
     ),
     Channel(
         name = "NickOnline",
@@ -5175,6 +5413,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://x1colegal.com/hls/stream.m3u8",
             ),
         ),
+        categoria = "Infantil",
     ),
     Channel(
         name = "NickOnline Bob Esponja",
@@ -5184,6 +5423,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://bob.x1colegal.com/hls/stream.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "NickToons Brasil",
@@ -5193,6 +5433,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://stmv2.srvif.com/nicktoons/nicktoons/playlist.m3u8",
             ),
         ),
+        categoria = "Infantil",
     ),
     Channel(
         name = "Nickelodeon",
@@ -5201,6 +5442,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://stmv2.srvif.com/gafeab/gafeab/playlist.m3u8",
             ),
         ),
+        categoria = "Infantil",
     ),
     Channel(
         name = "Nickelodeon Clássico",
@@ -5210,6 +5452,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-6824ce10c5d53e1351ceb8d1.m3u8",
             ),
         ),
+        categoria = "Infantil",
     ),
     Channel(
         name = "Nickelodeon Teen",
@@ -5219,6 +5462,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-60f5fabf0721880007cd50e3.m3u8",
             ),
         ),
+        categoria = "Infantil",
     ),
     Channel(
         name = "Nickelodeon Toons",
@@ -5228,6 +5472,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-645951c0e94c38000802d2cb.m3u8",
             ),
         ),
+        categoria = "Infantil",
     ),
     Channel(
         name = "Nickelodeon iCarly",
@@ -5237,6 +5482,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-620ff46e0a576e0007dc2f89.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Numbers",
@@ -5246,6 +5492,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-67f960c5441853fe50e7afc1.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "O Encantador de Cães",
@@ -5255,6 +5502,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-61099df8cee03b00074b2ecf.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "O Homem que veio do Céu",
@@ -5264,6 +5512,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-62052d3b4eeb740007fbe125.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "O Reino Infantil",
@@ -5273,6 +5522,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5f5c216df68f920007888315.m3u8",
             ),
         ),
+        categoria = "Infantil",
     ),
     Channel(
         name = "Oggy e as Baratas Tontas",
@@ -5282,6 +5532,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-63221bafdc6e110007b50270.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "One Piece",
@@ -5291,6 +5542,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-624b1c8d4321e200073ee421.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Os Arquivos do FBI",
@@ -5300,6 +5552,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-620d12a82e8ac50007c269c3.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Os Padrinhos Mágicos",
@@ -5309,6 +5562,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-63221e41af69b500076f84e7.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Os Smurfs",
@@ -5318,6 +5572,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-68b88ae1943f6fb1fb2ad749.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "PFL MMA",
@@ -5327,6 +5582,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-64f6180130ab3300083d896b.m3u8",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "Pegadinhas Just for Laughs",
@@ -5336,6 +5592,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-67802a22a5d8215f99dcee30.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Pluto TV Aliens",
@@ -5345,6 +5602,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-6806d65e84f24b70109485fa.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Animais",
@@ -5354,6 +5612,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-6474aa984cfc2c0008883a92.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Anime",
@@ -5363,6 +5622,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5f12136385bccc00070142ed.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Anime Ação",
@@ -5372,6 +5632,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-604b79c558393100078faeef.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Bang Bang",
@@ -5381,6 +5642,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-663b9dc7cb3ea10008f1a0ce.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Canal UOL",
@@ -5390,6 +5652,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-64b9370b409629000802d32b.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Cine Clássicos",
@@ -5399,6 +5662,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5fa1612a669ba0000702017b.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Cine Comédia",
@@ -5408,6 +5672,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5f12101f0b12f00007844c7c.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Cine Comédia Romântica",
@@ -5417,6 +5682,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-62545ed3dab4380007582f7c.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Cine Crime",
@@ -5426,6 +5692,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-6479ff764f5ba5000878dfe2.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Cine Drama",
@@ -5435,6 +5702,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5f1210d14ae1f80007bafb1d.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Cine Família",
@@ -5444,6 +5712,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5f171f032cd22e0007f17f3d.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Cine Inspiração",
@@ -5453,6 +5722,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5fa991b1f09e020007e78626.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Cine Romance",
@@ -5462,6 +5732,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5f171f988ab9780007fa95ea.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Cine Sucessos",
@@ -5471,6 +5742,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5f120e94a5714d00074576a1.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Cine Terror",
@@ -5480,6 +5752,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5f12111c9e6c2c00078ef3bb.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Cozinha",
@@ -5489,6 +5762,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5f1ef23020a5ac0007e5e8ea.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Desenhos Clássicos",
@@ -5498,6 +5772,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-655e5c4d2c46f3000877a54b.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Esportes",
@@ -5507,6 +5782,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5f32d2db0af67400077f29c4.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Ficção Científica",
@@ -5516,6 +5792,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5fa15ad6367e170007cdd098.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Filmes Aventura",
@@ -5525,6 +5802,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-66c79a4262e5510008ff68a5.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Filmes Ação",
@@ -5534,6 +5812,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5f120f41b7d403000783a6d6.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Filmes Nacionais",
@@ -5543,6 +5822,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5f5a545d0dbf7f0007c09408.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Filmes de Luta",
@@ -5552,6 +5832,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-6806d62369aec5b19cd628c0.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV História",
@@ -5561,6 +5842,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5f1ef1a8cec6be00072a7ac9.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Investigação",
@@ -5570,6 +5852,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5f32cf37c9ff2b00082adbc8.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Junior",
@@ -5579,6 +5862,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5f12141b146d760007934ea7.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV KFOOD",
@@ -5588,6 +5872,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-633ee9ba83c08f00076b60a6.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Karaokê por Stingray",
@@ -5597,6 +5882,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-604b99d633a72b00078e05ad.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Kids",
@@ -5606,6 +5892,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5f1214a637c6fd00079c652f.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Kids Club",
@@ -5615,6 +5902,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-66c8cae7fed35b0008580ec0.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Mistérios",
@@ -5624,6 +5912,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5fac52f142044f00078e2a51.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Natureza",
@@ -5633,6 +5922,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5f1213ba0ecebc00070e170f.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Negócio Fechado",
@@ -5642,6 +5932,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-64ad7394798def00087b2bfe.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Netmovies",
@@ -5651,6 +5942,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-663b9de4f999220008230fa8.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Novelas",
@@ -5660,6 +5952,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5f512365abe1f50007d3ff56.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Paisagens por Stingray",
@@ -5669,6 +5962,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-604a8dedbca75b0007b1c753.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Policial",
@@ -5678,6 +5972,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-678fdf9e3de7c8cf948e8824.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Record News",
@@ -5687,6 +5982,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-6102e04e9ab1db0007a980a1.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Retrô",
@@ -5696,6 +5992,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5f1212ad1728050007a523b8.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Shows por Stingray",
@@ -5705,6 +6002,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-604b91e0692f770007d9f33f.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Star Trek",
@@ -5714,6 +6012,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5f99ac4fded33000078f29ab.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Séries Ação",
@@ -5723,6 +6022,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-6474ab1da51cb80008bfb5f4.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Séries Comédia",
@@ -5732,6 +6032,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-655e5bc94261ca000810cb17.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Séries Criminais",
@@ -5741,6 +6042,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-6474ab5cdc7a760008745008.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Séries Drama",
@@ -5750,6 +6052,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-65f060d84e01740008d7421f.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Séries Novelescas",
@@ -5759,6 +6062,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-691627e4a29a6123e400b3e0.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Séries Sci-Fi",
@@ -5768,6 +6072,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-63d2ba2f60bc8f0008981a0e.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Terror Trash",
@@ -5777,6 +6082,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-66aa67493a4ad2000806d91b.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Turbo",
@@ -5786,6 +6092,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-6014761dfb91870008ea6463.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Viagens",
@@ -5795,6 +6102,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5f32d432d612e50007e56133.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pluto TV Vida Real",
@@ -5804,6 +6112,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5f32d4d9ec194100070c7449.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Pokémon",
@@ -5813,6 +6122,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-687007a8ee4155e89a8f6d67.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Popeye",
@@ -5822,6 +6132,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-677d93f37bffa600080795e7.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Pronto-socorro: Histórias De Emergência",
@@ -5831,6 +6142,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-61bb72a7bf8c520007a8fd27.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "RACER Brasil",
@@ -5840,6 +6152,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-65a6818c7bdc8d0008457b21.m3u8",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "Realmadrid TV",
@@ -5849,6 +6162,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-63dac28760bc8f0008a7654b.m3u8",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "Red Bull TV BR",
@@ -5857,6 +6171,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-67813f3162bf016db944c9ab.m3u8",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "Rede TV!",
@@ -5872,6 +6187,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://170.83.16.50/REDE_TV/index.m3u8",
             ),
         ),
+        categoria = "TV Aberta",
     ),
     Channel(
         name = "Rookie Blue",
@@ -5881,6 +6197,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-64ff2d8c6625510008c5a512.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Runtime",
@@ -5890,6 +6207,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-62c5d32e2c48f9000715b6e9.m3u8",
             ),
         ),
+        categoria = "Filmes e Séries",
     ),
     Channel(
         name = "SFT Combat",
@@ -5899,6 +6217,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-6660b636cb3ea10008429c6a.m3u8",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "Smithsonian Channel Pluto TV",
@@ -5908,6 +6227,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-6298bd10d88ef000073f16b7.m3u8",
             ),
         ),
+        categoria = "Pluto TV",
     ),
     Channel(
         name = "Sony One Shark Tank Brasil",
@@ -5917,6 +6237,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-6647c0b91050b60008390de4.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "South Park: Coleção Cartman",
@@ -5926,6 +6247,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-65df71008b24c80008f04281.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "South Park: Coleção Kenny",
@@ -5935,6 +6257,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-65df704366eec8000898e32f.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "South Park: Coleção Kyle",
@@ -5944,6 +6267,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-65df713dec9fda0008b7a81d.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "South Park: Coleção Stan",
@@ -5953,6 +6277,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-65df70b0f7f0af0008c3b316.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Super Onze",
@@ -5962,6 +6287,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-63988c2750108d00072e2686.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Tastemade",
@@ -5971,6 +6297,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5fd1419a3b4f4b000773ba85.m3u8",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "Tastemade Casa",
@@ -5980,6 +6307,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-68b88821e542386ab0bf5bef.m3u8",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "Tastemade Viagem",
@@ -5989,6 +6317,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-68b8875777201ec428d9eaa5.m3u8",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "Teletubbies",
@@ -5998,6 +6327,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-64e50055286f6b000838c067.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "The Pet Collective",
@@ -6007,6 +6337,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5f515ebac01c0f00080e8439.m3u8",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "The Walking Dead by AMC",
@@ -6016,6 +6347,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-678aa104680721c77c506746.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Tokusato",
@@ -6025,6 +6357,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5ff609de50ab210008025c1b.m3u8",
             ),
         ),
+        categoria = "Infantil",
     ),
     Channel(
         name = "Top Barça",
@@ -6034,6 +6367,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-6888ee858f4a4aa11feb9430.m3u8",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "Travel Box Brazil",
@@ -6046,6 +6380,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "http://170.83.49.66:8083/TRAVELBOXHD/index.m3u8",
             ),
         ),
+        categoria = "Variedades",
     ),
     Channel(
         name = "Turma da Mônica",
@@ -6055,6 +6390,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-5f997e44949bc70007a6941e.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "UFC",
@@ -6064,6 +6400,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-69a20556814d27f4ae630a92.m3u8",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "World Poker Tour",
@@ -6073,6 +6410,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-63eba66da8b2270008436b10.m3u8",
             ),
         ),
+        categoria = "Esportes",
     ),
     Channel(
         name = "Yu-Gi-Oh",
@@ -6082,6 +6420,7 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-63988a50be012600070f5db3.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
     Channel(
         name = "Z Nation",
@@ -6091,10 +6430,12 @@ val CATALOG: List<Channel> = listOf(
                 url = "https://jmp2.uk/plu-66b3af48d2d50d00083d6936.m3u8",
             ),
         ),
+        categoria = "24 Horas",
     ),
 )
 
-/// Só entra na lista depois do código. Ver Unlock.
+/// Só entra na lista depois do código, e só sem rede: a que vale é a
+/// baixada pelo Remote. Ver Unlock.
 val RESTRICTED: List<Channel> = listOf(
     Channel(
         name = "Sexy Hot",
@@ -6103,7 +6444,11 @@ val RESTRICTED: List<Channel> = listOf(
             Source(
                 url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/sexhot/__index.m3u8?sv=15&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788473176-%2FrETindfv8DLP9eUlGVfeX%2B1m2urVGsPdbroXrlpPhM%3D",
             ),
+            Source(
+                url = "https://canais.fazoeli.co.za/fontes/smart/sexyhot.m3u8",
+            ),
         ),
+        categoria = "Adulto",
     ),
     Channel(
         name = "Playboy TV",
@@ -6112,6 +6457,642 @@ val RESTRICTED: List<Channel> = listOf(
             Source(
                 url = "https://xn--l---------------------------_________________________-2w85c.null-null.shop/tos-alisg-avt-0068/proxy.m3u8?container=images&refresh=10&url=https://neosoro.gq/docs/playboytv/__index.m3u8?sv=108&cc=y&secure_uri=true&nu3zAQc9HC3GbwJq=1788473127-vjRDY07Z4OZJsNw%2FoZ8hVP%2FdN0GSUrAvqdY5JmuQ93o%3D",
             ),
+            Source(
+                url = "https://canais.fazoeli.co.za/fontes/smart/playboy.m3u8",
+            ),
         ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Anal",
+        sources = listOf(
+            Source(
+                url = "https://cdn.adultiptv.net/anal.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Asian",
+        sources = listOf(
+            Source(
+                url = "https://cdn.adultiptv.net/asian.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Big Ass",
+        sources = listOf(
+            Source(
+                url = "https://cdn.adultiptv.net/bigass.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Big Dick",
+        sources = listOf(
+            Source(
+                url = "https://cdn.adultiptv.net/bigdick.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Big Tits",
+        sources = listOf(
+            Source(
+                url = "https://cdn.adultiptv.net/bigtits.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Blowjob",
+        sources = listOf(
+            Source(
+                url = "https://cdn.adultiptv.net/blowjob.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Compilation",
+        sources = listOf(
+            Source(
+                url = "https://cdn.adultiptv.net/compilation.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Cuckold",
+        sources = listOf(
+            Source(
+                url = "https://cdn.adultiptv.net/cuckold.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Fetish",
+        sources = listOf(
+            Source(
+                url = "https://cdn.adultiptv.net/fetish.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Gangbang",
+        sources = listOf(
+            Source(
+                url = "https://cdn.adultiptv.net/gangbang.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Gay",
+        sources = listOf(
+            Source(
+                url = "https://cdn.adultiptv.net/gay.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Hardcore",
+        sources = listOf(
+            Source(
+                url = "https://cdn.adultiptv.net/hardcore.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Interracial",
+        sources = listOf(
+            Source(
+                url = "https://cdn.adultiptv.net/interracial.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Live Cams",
+        sources = listOf(
+            Source(
+                url = "https://cdn.adultiptv.net/livecams.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Pornstar",
+        sources = listOf(
+            Source(
+                url = "https://cdn.adultiptv.net/pornstar.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "POV",
+        sources = listOf(
+            Source(
+                url = "https://cdn.adultiptv.net/pov.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Rough",
+        sources = listOf(
+            Source(
+                url = "https://cdn.adultiptv.net/rough.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Russian",
+        sources = listOf(
+            Source(
+                url = "https://cdn.adultiptv.net/russian.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Threesome",
+        sources = listOf(
+            Source(
+                url = "https://cdn.adultiptv.net/threesome.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Woman",
+        sources = listOf(
+            Source(
+                url = "https://live.redtraffic.net/woman.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "MyCam Anal",
+        sources = listOf(
+            Source(
+                url = "https://live.mycamtv.com/anal.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "MyCam Asian",
+        sources = listOf(
+            Source(
+                url = "https://live.mycamtv.com/asian.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "MyCam Big Ass",
+        sources = listOf(
+            Source(
+                url = "https://live.mycamtv.com/defstream.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "MyCam Big Tits",
+        sources = listOf(
+            Source(
+                url = "https://live.mycamtv.com/bigtits.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "MyCam Blonde",
+        sources = listOf(
+            Source(
+                url = "https://live.mycamtv.com/blonde.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "MyCam Brunette",
+        sources = listOf(
+            Source(
+                url = "https://live.mycamtv.com/brunette.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "MyCam Latina",
+        sources = listOf(
+            Source(
+                url = "https://live.mycamtv.com/latina.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "MyCam Squirt",
+        sources = listOf(
+            Source(
+                url = "https://live.mycamtv.com/squirt.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "MyCam White",
+        sources = listOf(
+            Source(
+                url = "https://live.mycamtv.com/white.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Jenny Live",
+        sources = listOf(
+            Source(
+                url = "https://59ec5453559f0.streamlock.net/JennyLive/JennyLive/playlist.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Miami TV Mexico",
+        sources = listOf(
+            Source(
+                url = "https://59ec5453559f0.streamlock.net/mexicotv/smil:miamitvmexico/playlist.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "O-la-la!",
+        logo = "https://i.imgur.com/6aOmZs4.png",
+        sources = listOf(
+            Source(
+                url = "http://31.148.48.15/O-la-la/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Playboy TV Latin America",
+        logo = "https://i.imgur.com/B3DMUM9.png",
+        sources = listOf(
+            Source(
+                url = "http://190.11.225.124:5000/live/playboy_hd/playlist.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Penthouse TV",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/5010/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Penthouse TV 2",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/5012/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "21 Sexture",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6164/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "SexArt",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6165/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Adult Time",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6166/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "My Cam TV 1",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6167/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Analized",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6168/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Angel Trans",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6169/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Babes",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6171/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Bang Bros",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6173/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Bang",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6174/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Bang Bros 2",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6175/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "My Cam TV 2",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6176/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "InteRacial",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6177/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Blacked",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6178/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "My Cam TV 3",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6180/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Brazzers",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6181/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Brazzers 2",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6182/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "My Cam TV 4",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6183/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Cento X Cento",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6184/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Cherry Pimps",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6185/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Club Sweethearts",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6186/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "My Cam TV 5",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6187/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "My Cam TV 6",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6188/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Cum Louder",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6189/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Cum 4K",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6190/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Daughter Swap",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6191/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Brazzers 3",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6192/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "DDF Network",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6193/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "DDF Network 2",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6194/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "XXX",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6195/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "DP",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6196/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Dorcel Club",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6197/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Deep Lush",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6198/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Evil Angel",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6199/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "XXX 2",
+        sources = listOf(
+            Source(
+                url = "http://s1w8pqrh.megatv.fun/iptv/VZEVDE3KMBMVGUR9Y2EEL7EF/6200/index.m3u8",
+            ),
+        ),
+        categoria = "Adulto",
+    ),
+    Channel(
+        name = "Sex Privé",
+        sources = listOf(
+            Source(
+                url = "https://cdn-mg1.satlabscloud.com.br/SEX_PRIVE/index.m3u8?token=ulDZjn1kAAan1kzoXmUL1B84gijOI6v7",
+            ),
+        ),
+        categoria = "Adulto",
     ),
 )

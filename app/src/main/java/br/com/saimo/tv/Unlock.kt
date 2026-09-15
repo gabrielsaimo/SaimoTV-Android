@@ -18,7 +18,7 @@ object Unlock {
 
     /** Canais à vista agora: a lista publicada mais, se destrancado, os extras. */
     fun channels(): List<Channel> =
-        if (unlocked) Remote.channels + RESTRICTED else Remote.channels
+        if (unlocked) Remote.channels + Remote.restritos else Remote.channels
 
     /**
      * Diz se a sequência digitada era o código, alternando o estado quando for.
@@ -27,7 +27,7 @@ object Unlock {
      * código errado se parece exatamente com nada acontecendo.
      */
     fun consume(typed: String): Boolean {
-        if (typed != CODE || RESTRICTED.isEmpty()) return false
+        if (typed != CODE || Remote.restritos.isEmpty()) return false
         unlocked = !unlocked
         return true
     }

@@ -21,6 +21,17 @@ class RemoteTest {
         .firstOrNull { it.exists() } ?: File("canais.txt")
 
     @Test
+    fun `a lista restrita publicada bate com a reserva embutida`() {
+        val arquivo = File(published.parentFile, "restritos.txt")
+        assertTrue("restritos.txt não encontrado", arquivo.exists())
+        val parsed = Remote.parse(arquivo.readText())
+        assertEquals(RESTRICTED.map { it.name }, parsed.map { it.name })
+        assertTrue("Adulto 08 voltou", parsed.none { it.name.startsWith("Adulto ") })
+        assertEquals("nome repetido", parsed.size, parsed.map { it.name }.toSet().size)
+        assertTrue("canal sem categoria", parsed.all { it.categoria == "Adulto" })
+    }
+
+    @Test
     fun `a lista publicada carrega tudo o que o catalogo tem`() {
         assertTrue("catalogo.txt não encontrado", published.exists())
         val parsed = Remote.parse(published.readText())

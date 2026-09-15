@@ -26,9 +26,17 @@ object Remote {
     /// Extras publicados à parte, em M3U. Um M3U não guarda chave nem cabeçalho,
     /// então ele entra como reserva, nunca no lugar do catálogo.
     private const val EXTRAS_URL = BASE + "canais.txt"
+    /// Os canais que só aparecem depois do código, publicados à parte para
+    /// renomear ou trocar link sem publicar APK novo.
+    private const val RESTRITOS_URL = BASE + "restritos.txt"
 
     @Volatile
     var channels: List<Channel> = CATALOG
+        private set
+
+    /// Lista restrita em uso: a baixada, ou a de fábrica.
+    @Volatile
+    var restritos: List<Channel> = RESTRICTED
         private set
 
     /** Lista disponível agora, sem tocar na rede. */
@@ -36,6 +44,7 @@ object Remote {
         val base = ler(context, "catalogo.txt")
         val extras = ler(context, "canais.txt")
         if (base.isNotEmpty() || extras.isNotEmpty()) channels = merge(base, extras)
+        ler(context, "restritos.txt").takeIf { it.isNotEmpty() }?.let { restritos = comoAdulto(it) }
     }
 
     private fun ler(context: Context, nome: String): List<Channel> {
@@ -77,11 +86,17 @@ object Remote {
     suspend fun refresh(context: Context): Boolean = withContext(Dispatchers.IO) {
         val base = baixar(context, CATALOG_URL, "catalogo.txt")
         val extras = baixar(context, EXTRAS_URL, "canais.txt")
-        if (base.isEmpty() && extras.isEmpty()) return@withContext false
+        val novosRestritos = baixar(context, RESTRITOS_URL, "restritos.txt").map { it }
+        var restritosMudaram = false
+        if (novosRestritos.isNotEmpty() && comoAdulto(novosRestritos) != restritos) {
+            restritos = comoAdulto(novosRestritos)
+            restritosMudaram = true
+        }
+        if (base.isEmpty() && extras.isEmpty()) return@withContext restritosMudaram
 
         val merged = merge(base.ifEmpty { ler(context, "catalogo.txt") },
                            extras.ifEmpty { ler(context, "canais.txt") })
-        if (merged.isEmpty() || merged == channels) return@withContext false
+        if (merged.isEmpty() || merged == channels) return@withContext restritosMudaram
         channels = merged
         true
     }
@@ -105,6 +120,10 @@ object Remote {
         runCatching { File(context.filesDir, nome).writeText(text) }
         return parsed
     }
+
+    /** Sem categoria declarada, "Brazzers" cairia em Variedades pela regra do nome. */
+    private fun comoAdulto(canais: List<Channel>) =
+        canais.map { if (it.categoria == null) it.copy(categoria = "Adulto") else it }
 
     /**
      * One `chave: valor` per line. `canal:` opens a channel, `fonte:` adds a
