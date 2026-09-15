@@ -12,8 +12,8 @@ android {
         // Alcança os TV Box antigos ainda em uso.
         minSdk = 21
         targetSdk = 35
-        versionCode = 10504
-        versionName = "1.5.4"
+        versionCode = 10505
+        versionName = "1.5.5"
     }
 
     buildTypes {
