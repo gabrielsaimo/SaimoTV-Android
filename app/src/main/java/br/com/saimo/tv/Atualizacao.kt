@@ -19,9 +19,10 @@ import java.io.File
  * baixar o arquivo de novo — e num aparelho de TV isso praticamente não
  * acontece.
  *
- * A checagem é barata (um JSON de alguns KB) e acontece na abertura, com duas
- * travas para não incomodar: seis horas entre consultas e a versão que a pessoa
- * mandou pular, que não pergunta de novo.
+ * A checagem é barata (um JSON de alguns KB): acontece na abertura e de hora
+ * em hora com o app ligado, porque TV Box costuma ficar dias sem fechar o app.
+ * Não incomoda por dois lados: "Depois" cala a versão até o app abrir de novo,
+ * e a versão que a pessoa mandou pular não pergunta mais.
  */
 @UnstableApi
 object Atualizacao {
@@ -31,7 +32,10 @@ object Atualizacao {
     private const val PULADA = "pulada"
     private const val VISTO = "visto"
     private const val PENDENTE = "pendente"
-    private const val ESPERA_MS = 6L * 60 * 60 * 1000
+
+    /// Versão a que a pessoa respondeu "Depois" nesta abertura do app.
+    @Volatile
+    private var adiada: String? = null
 
     data class Versao(val tag: String, val numero: String, val notas: String, val apk: String)
 
@@ -45,13 +49,12 @@ object Atualizacao {
     suspend fun procurar(context: Context, manual: Boolean = false): Versao? =
         withContext(Dispatchers.IO) {
             val prefs = context.getSharedPreferences(ARQUIVO, Context.MODE_PRIVATE)
-            val agora = System.currentTimeMillis()
             val forcar = manual || prefs.getString(PENDENTE, null) != null
-            if (!forcar && agora - prefs.getLong(VISTO, 0) < ESPERA_MS) return@withContext null
-            prefs.edit().putLong(VISTO, agora).apply()
+            prefs.edit().putLong(VISTO, System.currentTimeMillis()).apply()
 
-            val versao = buscar() ?: return@withContext null
+            val versao = buscar() ?: buscarPeloSite() ?: return@withContext null
             if (!forcar && prefs.getString(PULADA, null) == versao.tag) return@withContext null
+            if (!forcar && adiada == versao.tag) return@withContext null
             if (!maisNova(versao.numero, BuildConfig.VERSION_NAME)) {
                 esquecerPendente(context)
                 return@withContext null
@@ -72,6 +75,10 @@ object Atualizacao {
      * configurações abria o app de novo e só via a oferta seis horas depois —
      * parecia que o app tinha fechado sozinho e a atualização sumido.
      */
+    fun adiar(versao: Versao) {
+        adiada = versao.tag
+    }
+
     fun marcarPendente(context: Context, versao: Versao) {
         context.getSharedPreferences(ARQUIVO, Context.MODE_PRIVATE)
             .edit().putString(PENDENTE, versao.tag).apply()
@@ -122,6 +129,25 @@ object Atualizacao {
         // com 1.0.0 ofereceria uma atualização para trás.
         val numero = numeroDaTag(tag) ?: return@runCatching null
         Versao(tag, numero, raiz.optString("body"), apk ?: return@runCatching null)
+    }.getOrNull()
+
+    /**
+     * Reserva para quando a API não responde. Sem conta, ela aceita 60
+     * consultas por hora por IP, e numa rede com muitos aparelhos atrás do mesmo
+     * IP isso acaba. A página /releases/latest não tem esse limite e redireciona
+     * para a tag; o APK da TV mora num endereço fixo dela.
+     */
+    private fun buscarPeloSite(): Versao? = runCatching {
+        val pedido = Request.Builder()
+            .url("https://github.com/$REPO/releases/latest")
+            .head()
+            .header("User-Agent", Playback.DEFAULT_USER_AGENT)
+            .build()
+        val final = Playback.client.newCall(pedido).execute().use { it.request.url }
+        if (!final.encodedPath.contains("/releases/tag/")) return@runCatching null
+        val tag = final.pathSegments.last()
+        val numero = numeroDaTag(tag) ?: return@runCatching null
+        Versao(tag, numero, "", "https://github.com/$REPO/releases/download/$tag/SaimoTV.apk")
     }.getOrNull()
 
     /** "v1.2.3" e "1.2" viram "1.2.3" e "1.2"; qualquer outra coisa, nulo. */

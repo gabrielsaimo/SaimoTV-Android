@@ -45,6 +45,9 @@ import kotlin.math.pow
 private const val REQUEST_GUIDE = 1
 private const val BANNER_MS = 6_000L
 private const val TICK_MS = 20_000L
+/// TV Box fica dias com o app aberto; sem isto a versão nova só aparecia
+/// para quem fechava e abria de novo.
+private const val ATUALIZACAO_MS = 60 * 60 * 1000L
 private const val HOLD_MS = 3_000L
 /// Uma fonte viva entrega imagem bem antes disto. Passou daqui sem tocar, é
 /// fonte morta que não deu erro — e sem este prazo o canal ficaria carregando
@@ -219,6 +222,7 @@ class MainActivity : AppCompatActivity() {
         play(0)
         refreshCatalog()
         handler.postDelayed(tick, TICK_MS)
+        handler.postDelayed(procurarDeHoraEmHora, ATUALIZACAO_MS)
         // Rede é uma só: 35 downloads do guia disputando banda com o canal que
         // acabou de abrir travam a imagem nos primeiros segundos. O guia entra
         // quando o vídeo já está rodando, ou em três segundos se não rodar.
@@ -250,6 +254,13 @@ class MainActivity : AppCompatActivity() {
      * canal já está no ar: atualizar é assunto de quem assiste, não do começo
      * da abertura.
      */
+    private val procurarDeHoraEmHora = object : Runnable {
+        override fun run() {
+            if (!baixando) ofertarAtualizacao()
+            handler.postDelayed(this, ATUALIZACAO_MS)
+        }
+    }
+
     private fun ofertarAtualizacao() {
         if (ofertando) return
         ofertando = true
@@ -271,6 +282,7 @@ class MainActivity : AppCompatActivity() {
                         .filter { it.isNotBlank() }.joinToString("\n\n"))
                 .setPositiveButton(R.string.update_agora) { _, _ -> baixarAtualizacao(versao) }
                 .setNegativeButton(R.string.update_depois) { _, _ ->
+                    Atualizacao.adiar(versao)
                     Atualizacao.esquecerPendente(this@MainActivity)
                 }
                 .setNeutralButton(R.string.update_pular) { _, _ ->
