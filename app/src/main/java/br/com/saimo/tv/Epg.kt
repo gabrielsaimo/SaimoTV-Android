@@ -47,7 +47,10 @@ data class Programme(
             } ?: return null
             // Programas diários usam o campo como contador corrido: um
             // telejornal em "T80 E221" é ruído, não informação.
-            val numbers = Regex("""\d+""").findAll(label).map { it.value.toInt() }.toList()
+            // toIntOrNull, e não toInt: a Pluto publica a data de estreia
+            // inteira neste campo ("20260915212508"), que não cabe num Int —
+            // o app fechava ao abrir canal da Pluto.
+            val numbers = Regex("""\d+""").findAll(label).mapNotNull { it.value.toIntOrNull() }.toList()
             val season = numbers.firstOrNull() ?: return null
             if (season > 40) return null
             if (numbers.size > 1 && numbers.last() > 200) return null
@@ -350,7 +353,13 @@ object Epg {
         val category = text(element, "category") ?: ""
         // O pôster vem em atributo, não em texto de elemento.
         val poster = between(element, "<icon", ">")?.let { attribute(it, "src") }?.let(::decodeEntities)
-        val episode = text(element, "episode-num")
+        // A Pluto usa o campo para a data de estreia ("original-air-date"):
+        // não é episódio nenhum, e sem isto viraria um rótulo sem sentido.
+        val episode = between(element, "<episode-num", "</episode-num>")
+            ?.takeIf { "original-air-date" !in it }
+            ?.substringAfter('>', "")
+            ?.let { decodeEntities(it).trim() }
+            ?.takeIf { it.isNotEmpty() }
         val year = text(element, "date")?.take(4)
         val description = text(element, "desc")?.takeIf { it.isNotBlank() }
         // O elenco vem como uma lista de <actor> dentro de <credits>.

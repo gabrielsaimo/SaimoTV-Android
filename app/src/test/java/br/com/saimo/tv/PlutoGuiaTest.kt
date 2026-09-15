@@ -31,4 +31,14 @@ class PlutoGuiaTest {
         assertTrue("TV Cultura" !in principais)
         assertTrue("A Feiticeira" in principais)
     }
+
+    /**
+     * A Pluto publica a data de estreia inteira em <episode-num>. Lida como
+     * número de episódio, ela estourava o Int e fechava o app ao abrir o canal.
+     */
+    @Test
+    fun `data de estreia da Pluto nao vira episodio nem derruba o app`() {
+        assertEquals(null, Programme("x", "", 0, 1, episode = "20260915212508").episodeLabel)
+        assertEquals("T1 E3", Programme("x", "", 0, 1, episode = "0.2.").episodeLabel)
+    }
 }
