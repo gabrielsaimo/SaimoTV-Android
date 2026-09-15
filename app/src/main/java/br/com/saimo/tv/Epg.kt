@@ -78,6 +78,15 @@ object Epg {
         "https://iptv-epg.org/files/epg-br.xml",
         "https://www.open-epg.com/files/brazil3.xml",
     )
+    /**
+     * Guia da própria Pluto TV, montado pelo i.mjh.nz. Casa pelo id da Pluto,
+     * que já está no link do canal (jmp2.uk/plu-<id>) ou no logo: pelo nome,
+     * "Pluto TV Novelas" pegaria programação de outro canal. Direto no
+     * raw.githubusercontent, sem o redirecionamento do i.mjh.nz.
+     */
+    private const val PLUTO_URL =
+        "https://raw.githubusercontent.com/matthuisman/i.mjh.nz/master/PlutoTV/br.xml"
+    private val PLUTO_ID = Regex("(?:plu-|images\\.pluto\\.tv/channels/)([0-9a-f]{24})")
     private const val CACHE_TTL_MS = 6 * 60 * 60 * 1000L
     private const val PAST_WINDOW_MS = 6 * 60 * 60 * 1000L
     private const val FUTURE_WINDOW_MS = 3 * 24 * 60 * 60 * 1000L
@@ -128,7 +137,10 @@ object Epg {
             readSignature(context) != signature()
         if (!stale) return@withContext
 
-        val names = Remote.channels.map { it.name }
+        val pluto = idsDaPluto(Remote.channels)
+        val principais = plutoPrincipais(Remote.channels)
+        // Canal da Pluto só usa o guia da Pluto; os outros nem tentam casá-lo.
+        val names = Remote.channels.map { it.name }.filterNot { it in principais }
         val from = System.currentTimeMillis() - PAST_WINDOW_MS
         val to = System.currentTimeMillis() + FUTURE_WINDOW_MS
         val merged = LinkedHashMap<String, List<Programme>>()
@@ -143,6 +155,14 @@ object Epg {
         // Cada fonte por conta própria: uma que quebre não leva as outras junto.
         merged.putAll(runCatching { MeuGuia.fetch(names, from, to) }.getOrNull().orEmpty())
         if (merged.isNotEmpty()) publish()
+
+        val daPluto = if (pluto.isEmpty()) emptyMap() else
+            runCatching { parseFeed(PLUTO_URL, emptyList(), from, to, HashMap(), pluto) }
+                .getOrNull().orEmpty()
+        daPluto.filterKeys { it in principais }.takeIf { it.isNotEmpty() }?.let {
+            merged.putAll(it)
+            publish()
+        }
 
         // Reserva do guiadetv: só para quem o meuguia não listou.
         val faltando = names.filter { merged[it] == null }
@@ -169,6 +189,14 @@ object Epg {
             publish()
         }
 
+        // Onde a Pluto é só reserva (TV Cultura, CNBC…), a grade dela é
+        // genérica: entra só se nenhum outro guia trouxe nada.
+        val reservas = daPluto.filterKeys { it !in principais && merged[it] == null }
+        if (reservas.isNotEmpty()) {
+            merged.putAll(reservas)
+            publish()
+        }
+
         if (merged.isEmpty()) return@withContext
         writeCache(context, merged)
     }
@@ -181,6 +209,35 @@ object Epg {
      * Preenche campo a campo: parar no primeiro programa que já tem pôster
      * deixava sem sinopse justamente os que o feed conseguiu ilustrar.
      */
+    /** id da Pluto -> nome do canal, pelo link de alguma fonte ou pelo logo. */
+    internal fun idsDaPluto(channels: List<Channel>): Map<String, String> {
+        val out = LinkedHashMap<String, String>()
+        for (channel in channels) {
+            val id = (channel.sources.map { it.url } + listOfNotNull(channel.logo))
+                .firstNotNullOfOrNull { PLUTO_ID.find(it)?.groupValues?.get(1) } ?: continue
+            out.putIfAbsentCompat(id, channel.name)
+        }
+        return out
+    }
+
+    /**
+     * Canais em que a Pluto é a fonte principal (a primeira, ou a Pluto só no
+     * logo). Nos outros ela é reserva, e a grade dela é genérica.
+     */
+    internal fun plutoPrincipais(channels: List<Channel>): Set<String> =
+        channels.filter { channel ->
+            val links = channel.sources.map { it.url }
+            val primeira = links.firstOrNull()?.let { PLUTO_ID.containsMatchIn(it) } == true
+            val soLogo = links.none { PLUTO_ID.containsMatchIn(it) } &&
+                channel.logo?.let { PLUTO_ID.containsMatchIn(it) } == true
+            primeira || soLogo
+        }.mapTo(HashSet()) { it.name }
+
+    // putIfAbsent do Map só existe do Android 7 em diante.
+    private fun <K, V> MutableMap<K, V>.putIfAbsentCompat(key: K, value: V) {
+        if (!containsKey(key)) put(key, value)
+    }
+
     private fun enrich(
         merged: MutableMap<String, List<Programme>>, byTitle: Map<String, Programme>,
     ) {
@@ -213,12 +270,14 @@ object Epg {
     internal fun parseFeed(
         url: String, wanted: List<String>, from: Long, to: Long,
         byTitle: MutableMap<String, Programme>,
+        /** id do feed -> canal, pulando o casamento por nome (guia da Pluto). */
+        ids: Map<String, String> = emptyMap(),
     ): Map<String, List<Programme>> {
         // display-name -> every id carrying it. Feeds repeat a channel under
         // names that normalise alike, and keeping only the first id binds to
         // whichever copy came first — sometimes the one with no programmes.
         val nameToIds = HashMap<String, MutableList<String>>()
-        var idToChannel: Map<String, String>? = null
+        var idToChannel: Map<String, String>? = ids.ifEmpty { null }
         val out = HashMap<String, MutableList<Programme>>()
 
         openStream(url).use { reader ->
@@ -481,10 +540,10 @@ object Epg {
     /// caractere que nenhum canal usa, então nunca colide com uma chave de canal.
     private const val SIGNATURE_KEY = "#catalogo"
 
-    /// O "v3" força o cache anterior a ser refeito. Além de sinopse e elenco,
-    /// esta versão reconhece a grade do Adult Swim publicada como TruTV.
+    /// Subir o "v4" força o cache anterior a ser refeito; o v4 trouxe o guia da
+    /// Pluto TV.
     private fun signature(): String =
-        "v3:" + Remote.channels.joinToString("|") { it.name }.hashCode().toString()
+        "v4:" + Remote.channels.joinToString("|") { it.name }.hashCode().toString()
 
     private fun readSignature(context: Context): String? = runCatching {
         JSONObject(cacheFile(context).readText()).optString(SIGNATURE_KEY).ifEmpty { null }
