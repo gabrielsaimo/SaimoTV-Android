@@ -1,6 +1,20 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+}
+
+/**
+ * Chave de assinatura, fora do Git (ver keystore.properties e a pasta chaves).
+ *
+ * A atualização por cima só instala quando a assinatura é a mesma, então a
+ * chave é a identidade do aplicativo: perdê-la obriga todo mundo a desinstalar
+ * e instalar de novo.
+ */
+val chave = Properties().apply {
+    val arquivo = rootProject.file("keystore.properties")
+    if (arquivo.exists()) arquivo.inputStream().use { load(it) }
 }
 
 android {
@@ -12,14 +26,39 @@ android {
         // Alcança os TV Box antigos ainda em uso.
         minSdk = 21
         targetSdk = 35
-        versionCode = 10508
-        versionName = "1.5.8"
+        versionCode = 10509
+        versionName = "1.5.9"
+    }
+
+    signingConfigs {
+        create("saimo") {
+            val arquivo = chave.getProperty("storeFile")
+            if (arquivo != null) {
+                storeFile = file(arquivo)
+                storePassword = chave.getProperty("storePassword")
+                keyAlias = chave.getProperty("keyAlias")
+                keyPassword = chave.getProperty("keyPassword")
+            }
+        }
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
-            signingConfig = signingConfigs.getByName("debug")
+            // Sem o keystore.properties (outra máquina), cai na de depuração —
+            // serve para compilar, mas o APK publicado tem de sair daqui.
+            signingConfig = if (chave.getProperty("storeFile") != null) {
+                signingConfigs.getByName("saimo")
+            } else {
+                signingConfigs.getByName("debug")
+            }
+        }
+        debug {
+            // Igual à publicada: instalar o teste por cima da versão de
+            // verdade, e vice-versa, sem "assinaturas não conferem".
+            if (chave.getProperty("storeFile") != null) {
+                signingConfig = signingConfigs.getByName("saimo")
+            }
         }
     }
 
