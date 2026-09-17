@@ -297,7 +297,7 @@ class VodActivity : AppCompatActivity() {
     }
 
     private suspend fun resultados(termo: String): List<Linha> =
-        Vod.buscar(this, termo).map { achado ->
+        Vod.buscar(this, termo).also { if (it.isEmpty()) Telemetria.buscouSemAchar("vod", termo) }.map { achado ->
             Linha(achado.nomeCompleto,
                 getString(if (achado.serie) R.string.vod_series else R.string.vod_filmes_um),
                 inicial(achado.titulo), capaDe = achado.serie,
@@ -568,6 +568,7 @@ class VodActivity : AppCompatActivity() {
         // Filme não é canal: pausa, volta e avança, então o controle padrão do
         // player fica à vista em vez da faixa de canal ao vivo.
         val novo = ExoPlayer.Builder(this).build()
+        Telemetria.observar(novo)
         // Pelo mesmo caminho do canal ao vivo: o provedor responde 302 para uma
         // URL com token e recusa cliente sem User-Agent, e é este cliente que
         // segue redirecionamento e ainda resolve por DNS-over-HTTPS.

@@ -202,6 +202,7 @@ class MainActivity : AppCompatActivity() {
             .build().apply {
                 playWhenReady = true
                 addListener(playerListener)
+                Telemetria.observar(this)
             }
         playerView.player = player
         playerView.useController = false

@@ -8,6 +8,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
+import androidx.media3.common.Player
+import androidx.media3.common.VideoSize
 import androidx.media3.common.util.UnstableApi
 import okhttp3.Call
 import okhttp3.Callback
@@ -48,7 +50,15 @@ object Telemetria {
     private var abertas = 0
     private var batidaMs = 300_000L
     private var tocando: Tocando? = null
-    private var contandoDesde = 0L
+    /// Só conta tempo com o vídeo andando: pausado ou carregando não é
+    /// assistir. `acumuladoMs` é o que já andou desde a última batida.
+    private var acumuladoMs = 0L
+    private var rodandoDesde = 0L
+    private var confirmado = false
+    private var pausado = false
+    private var qualidade: String? = null
+    private var travouDesde = 0L
+    private var ultimoPulo = 0L
     private var errosEnviados = 0
 
     private val id: String by lazy {
@@ -96,7 +106,10 @@ object Telemetria {
         enviar("hello", JSONObject()
             .put("version", BuildConfig.VERSION_NAME)
             .put("model", "${Build.MANUFACTURER} ${Build.MODEL}".trim())
-            .put("os", "Android ${Build.VERSION.RELEASE} (API ${Build.VERSION.SDK_INT})")) { corpo ->
+            .put("os", "Android ${Build.VERSION.RELEASE} (API ${Build.VERSION.SDK_INT})")
+            .putOpt("net", rede())
+            .put("screen", app.resources.displayMetrics.let { "${it.widthPixels}x${it.heightPixels}" })
+            .put("lang", java.util.Locale.getDefault().toLanguageTag())) { corpo ->
             corpo?.optLong("heartbeatSeconds")?.takeIf { it in 60..3600 }?.let { batidaMs = it * 1000 }
         }
         val prefs = app.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
@@ -104,7 +117,6 @@ object Telemetria {
             evento("crash", detail = pilha)
             prefs.edit().remove("crash").apply()
         }
-        contandoDesde = SystemClock.elapsedRealtime()
         handler.removeCallbacks(batida)
         handler.postDelayed(batida, batidaMs)
     }
@@ -116,17 +128,102 @@ object Telemetria {
     }
 
     private fun baterAgora() {
-        val agora = SystemClock.elapsedRealtime()
         val atual = tocando
-        val segundos = if (atual != null) (agora - contandoDesde) / 1000 else 0
-        contandoDesde = agora
+        val segundos = if (atual != null) rodandoMs() / 1000 else 0
+        acumuladoMs = 0
+        if (rodandoDesde > 0) rodandoDesde = SystemClock.elapsedRealtime()
         enviar("beat", JSONObject()
             .put("version", BuildConfig.VERSION_NAME)
             .put("seconds", segundos)
             .put("playing", atual?.let {
                 JSONObject().put("kind", it.kind).put("title", it.titulo).put("host", it.host)
+                    .put("paused", pausado).putOpt("quality", qualidade)
             } ?: JSONObject.NULL))
     }
+
+    private fun rodandoMs(): Long =
+        acumuladoMs + if (rodandoDesde > 0) SystemClock.elapsedRealtime() - rodandoDesde else 0
+
+    private fun limparVideo() {
+        acumuladoMs = 0
+        rodandoDesde = 0
+        confirmado = false
+        pausado = false
+        qualidade = null
+        travouDesde = 0
+    }
+
+    /**
+     * Acompanha o player: o monitor só conta tempo com o vídeo andando, bate
+     * na hora quando pausa ou volta, e registra travamento (carregar depois de
+     * já ter começado, menos logo depois de pular).
+     */
+    fun observar(player: Player) {
+        player.addListener(object : Player.Listener {
+            override fun onEvents(p: Player, events: Player.Events) = atualizar(p)
+
+            override fun onVideoSizeChanged(videoSize: VideoSize) {
+                if (videoSize.height > 0) qualidade = "${videoSize.height}p"
+            }
+
+            override fun onPositionDiscontinuity(
+                oldPosition: Player.PositionInfo, newPosition: Player.PositionInfo, reason: Int) {
+                if (reason == Player.DISCONTINUITY_REASON_SEEK) ultimoPulo = SystemClock.elapsedRealtime()
+            }
+        })
+    }
+
+    private fun atualizar(p: Player) {
+        val atual = tocando ?: return
+        val agora = SystemClock.elapsedRealtime()
+        val carregando = p.playbackState == Player.STATE_BUFFERING
+        if (p.playbackState == Player.STATE_READY) confirmado = true
+        val pausadoAgora = !p.playWhenReady
+        val andando = confirmado && p.isPlaying
+        if (andando && rodandoDesde == 0L) rodandoDesde = agora
+        if (!andando && rodandoDesde > 0) {
+            acumuladoMs += agora - rodandoDesde
+            rodandoDesde = 0
+        }
+        if (agora - ultimoPulo < 3000) {
+            travouDesde = 0
+        } else if (confirmado && carregando && !pausadoAgora) {
+            if (travouDesde == 0L) travouDesde = agora
+        } else if (travouDesde > 0) {
+            val ms = agora - travouDesde
+            travouDesde = 0
+            if (ms >= 500 && !pausadoAgora) {
+                enviar("event", JSONObject()
+                    .put("type", "stall").put("version", BuildConfig.VERSION_NAME)
+                    .put("kind", atual.kind).put("title", atual.titulo).putOpt("host", atual.host)
+                    .put("ms", ms).put("detail", "$ms ms"))
+            }
+        }
+        if (confirmado && pausadoAgora != pausado) {
+            pausado = pausadoAgora
+            baterAgora()
+        }
+    }
+
+    /** Busca confirmada que não achou nada: ideia do que falta no catálogo. */
+    fun buscouSemAchar(kind: String, termo: String) {
+        val texto = termo.trim()
+        if (texto.length < 3) return
+        enviar("event", JSONObject()
+            .put("type", "search_miss").put("version", BuildConfig.VERSION_NAME)
+            .put("kind", kind).put("query", texto))
+    }
+
+    private fun rede(): String? = runCatching {
+        val cm = app.getSystemService(Context.CONNECTIVITY_SERVICE) as android.net.ConnectivityManager
+        val caps = cm.getNetworkCapabilities(cm.activeNetwork) ?: return null
+        when {
+            caps.hasTransport(android.net.NetworkCapabilities.TRANSPORT_ETHERNET) -> "cabo"
+            caps.hasTransport(android.net.NetworkCapabilities.TRANSPORT_WIFI) -> "wifi"
+            caps.hasTransport(android.net.NetworkCapabilities.TRANSPORT_CELLULAR) -> "movel"
+            else -> "outra"
+        }
+    }.getOrNull()
 
     /**
      * Algo começou a tocar. `nova` é falso quando é só a próxima fonte do mesmo
@@ -135,18 +232,21 @@ object Telemetria {
     fun comecou(kind: String, titulo: String, url: String, fonte: Int, nova: Boolean = true) {
         if (!::app.isInitialized) return
         val anterior = tocando
-        val agora = SystemClock.elapsedRealtime()
-        if (anterior != null && anterior.titulo != titulo) {
-            val segundos = (agora - contandoDesde) / 1000
-            if (segundos >= MINIMO_PARA_CONTAR_S) baterAgora()
+        if (anterior != null && anterior.titulo != titulo && rodandoMs() / 1000 >= MINIMO_PARA_CONTAR_S) {
+            baterAgora()
         }
-        if (anterior?.titulo != titulo) contandoDesde = agora
+        if (anterior?.titulo != titulo) limparVideo()
+        // Fonte nova do mesmo título: só volta a contar quando ela abrir.
+        confirmado = false
+        travouDesde = 0
         tocando = Tocando(kind, titulo, host(url))
         if (nova) evento("play_start", kind, titulo, url, fonte)
     }
 
-    fun tocou(kind: String, titulo: String, url: String, fonte: Int, ms: Long) =
-        evento("play_ok", kind, titulo, url, fonte, "${ms} ms")
+    fun tocou(kind: String, titulo: String, url: String, fonte: Int, ms: Long) {
+        confirmado = true
+        evento("play_ok", kind, titulo, url, fonte, "${ms} ms", ms)
+    }
 
     fun falhou(kind: String, titulo: String, url: String, fonte: Int, detalhe: String) =
         evento("source_fail", kind, titulo, url, fonte, detalhe)
@@ -156,9 +256,9 @@ object Telemetria {
 
     fun parou() {
         if (!::app.isInitialized || tocando == null) return
-        val segundos = (SystemClock.elapsedRealtime() - contandoDesde) / 1000
-        if (segundos >= MINIMO_PARA_CONTAR_S) baterAgora()
+        if (rodandoMs() / 1000 >= MINIMO_PARA_CONTAR_S) baterAgora()
         tocando = null
+        limparVideo()
         evento("play_stop")
     }
 
@@ -169,7 +269,7 @@ object Telemetria {
     }
 
     private fun evento(tipo: String, kind: String? = null, titulo: String? = null, url: String? = null,
-                       fonte: Int? = null, detail: String? = null) {
+                       fonte: Int? = null, detail: String? = null, ms: Long? = null) {
         if (!::app.isInitialized) return
         enviar("event", JSONObject()
             .put("type", tipo)
@@ -178,7 +278,8 @@ object Telemetria {
             .putOpt("title", titulo)
             .putOpt("host", url?.let { host(it) })
             .putOpt("source", fonte)
-            .putOpt("detail", detail))
+            .putOpt("detail", detail)
+            .putOpt("ms", ms))
     }
 
     private fun host(url: String): String? =
