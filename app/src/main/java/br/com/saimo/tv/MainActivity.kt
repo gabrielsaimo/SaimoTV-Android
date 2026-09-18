@@ -53,6 +53,19 @@ private const val HOLD_MS = 3_000L
 /// fonte morta que não deu erro — e sem este prazo o canal ficaria carregando
 /// para sempre em vez de descer para a próxima.
 private const val SOURCE_TIMEOUT_MS = 12_000L
+/// Quantas vezes a fonte que está no ar é retomada antes de aceitar que caiu.
+///
+/// Erro de player não é prova de queda: no TV Box o wi-fi oscila, o CDN devolve
+/// 5xx solto e a janela ao vivo escapa depois de um engasgo. Trocar de origem
+/// nesses casos é pior que o defeito — recomeça o canal noutro ponto, com outro
+/// áudio, na frente de quem está assistindo. Só depois destas retomadas sem
+/// imagem é que a fonte seguinte entra.
+private const val RETOMADAS_MAX = 3
+/// Por quanto tempo a fonte continua sendo tratada como viva depois do último
+/// quadro que ela entregou.
+private const val CREDITO_DE_IMAGEM_MS = 30_000L
+/// De quanto em quanto tempo o relógio do vídeo é conferido.
+private const val VIGIA_MS = 2_000L
 
 /**
  * The whole app: a channel list and a player, driven entirely by the remote.
@@ -228,6 +241,7 @@ class MainActivity : AppCompatActivity() {
         // acabou de abrir travam a imagem nos primeiros segundos. O guia entra
         // quando o vídeo já está rodando, ou em três segundos se não rodar.
         handler.postDelayed({ startGuide() }, 3_000)
+        handler.postDelayed(vigiaDeImagem, VIGIA_MS)
     }
 
     /** Pega a lista publicada sem tirar do ar o canal que está tocando. */
@@ -376,6 +390,11 @@ class MainActivity : AppCompatActivity() {
     private var tentativaDesde = 0L
     private var tocouAvisado = false
     private var caiuAvisado = false
+    /// Retomadas gastas na fonte que está no ar. Zera a cada quadro novo.
+    private var retomadas = 0
+    /// Quando a fonte no ar entregou imagem pela última vez, e em que ponto.
+    private var ultimaImagem = 0L
+    private var ultimaPosicao = -1L
 
     private fun play(index: Int, source: Int = 0, apósFalha: Boolean = false) {
         val mesmoCanal = ordered.getOrNull(current)?.name == ordered.getOrNull(index.coerceIn(ordered.indices))?.name
@@ -385,6 +404,12 @@ class MainActivity : AppCompatActivity() {
         val chosen = channel.sources.getOrNull(sourceIndex) ?: channel.sources.first()
         tentativaDesde = android.os.SystemClock.elapsedRealtime()
         tocouAvisado = false
+        // Fonte nova, crédito zerado: o que a anterior entregou não vale para
+        // ela. A retomada da mesma fonte não passa por aqui — ela só chama
+        // `prepare()` — então zerar em toda abertura é o certo.
+        retomadas = 0
+        ultimaImagem = 0L
+        ultimaPosicao = -1L
         if (!apósFalha) caiuAvisado = false
         // Falha passando para a próxima fonte, ou a reconexão do mesmo canal,
         // não é mais uma abertura; escolher canal ou fonte à mão é.
@@ -422,6 +447,8 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 retries = 0
+                retomadas = 0
+                ultimaImagem = android.os.SystemClock.elapsedRealtime()
                 handler.removeCallbacks(sourceTimeout)
                 status.visibility = View.GONE
                 startGuide()
@@ -433,6 +460,29 @@ class MainActivity : AppCompatActivity() {
             val channel = ordered[current]
             Telemetria.falhou("live", channel.name, channel.sources.getOrNull(sourceIndex)?.url.orEmpty(),
                 sourceIndex + 1, error.errorCodeName)
+
+            val agora = android.os.SystemClock.elapsedRealtime()
+            // A fonte estava entregando imagem até agora há pouco: o erro foi
+            // tropeço de rede, não a origem morrendo.
+            val viva = ultimaImagem > 0L && agora - ultimaImagem < CREDITO_DE_IMAGEM_MS
+            // Ficar para trás da janela ao vivo é o player que perdeu o passo
+            // depois de um engasgo, não a fonte acabando. O certo é voltar para
+            // a borda do ao vivo — trocar de origem aqui tira quem está
+            // assistindo do lugar sem motivo nenhum.
+            val ficouParaTras = error.errorCode == PlaybackException.ERROR_CODE_BEHIND_LIVE_WINDOW
+
+            if ((viva || ficouParaTras) && retomadas < RETOMADAS_MAX) {
+                retomadas++
+                showStatus(getString(R.string.reconnecting))
+                player.seekToDefaultPosition()
+                player.prepare()
+                player.playWhenReady = true
+                // Se a retomada também não trouxer imagem, o relógio desce para
+                // a fonte seguinte sozinho.
+                handler.postDelayed(sourceTimeout, SOURCE_TIMEOUT_MS)
+                return
+            }
+
             // Each channel lists its sources in preference order; a dead or
             // expired link falls through to the next before giving up.
             if (sourceIndex + 1 < channel.sources.size) {
@@ -539,6 +589,29 @@ class MainActivity : AppCompatActivity() {
                 if (!listOpen) revealBanner()
                 super.onKeyDown(keyCode, event)
             }
+        }
+    }
+
+    /**
+     * Prova de vida da fonte, do jeito que quem assiste vê.
+     *
+     * Enquanto o relógio do vídeo anda, há imagem na tela — e nenhum erro que
+     * o player cuspa no caminho justifica trocar de origem.
+     */
+    private val vigiaDeImagem = object : Runnable {
+        override fun run() {
+            if (::player.isInitialized) {
+                val pos = player.currentPosition
+                // Relógio para trás é linha do tempo nova — a volta para a
+                // borda do ao vivo faz isso. Recomeça a contagem dali.
+                if (pos < ultimaPosicao - 1_000) ultimaPosicao = pos
+                if (player.isPlaying && pos > ultimaPosicao + 500) {
+                    ultimaPosicao = pos
+                    ultimaImagem = android.os.SystemClock.elapsedRealtime()
+                    retomadas = 0
+                }
+            }
+            handler.postDelayed(this, VIGIA_MS)
         }
     }
 

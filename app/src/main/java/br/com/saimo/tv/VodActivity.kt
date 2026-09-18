@@ -564,6 +564,10 @@ class VodActivity : AppCompatActivity() {
         pararFilme(avisar = false)
         val tentativaDesde = android.os.SystemClock.elapsedRealtime()
         var tocouAvisado = false
+        // Um erro no meio do filme não é fonte morta: é a origem tropeçando.
+        // Trocar aqui recomeça o filme noutro servidor, às vezes com outro
+        // áudio e outra qualidade, quando bastava pedir de novo o mesmo pedaço.
+        var retomadas = 0
         Telemetria.comecou("vod", nome, url, fonteAtual + 1, nova = !trocaPorFalha)
         // Filme não é canal: pausa, volta e avança, então o controle padrão do
         // player fica à vista em vez da faixa de canal ao vivo.
@@ -586,6 +590,16 @@ class VodActivity : AppCompatActivity() {
 
             override fun onPlayerError(error: androidx.media3.common.PlaybackException) {
                 Telemetria.falhou("vod", nome, url, fonteAtual + 1, error.errorCodeName)
+                // A fonte já tinha entregado imagem: tenta de novo nela, do
+                // ponto em que parou, antes de descer para a seguinte.
+                if (tocouAvisado && retomadas < 3) {
+                    retomadas++
+                    val ponto = novo.currentPosition
+                    novo.seekTo(ponto)
+                    novo.prepare()
+                    novo.playWhenReady = true
+                    return
+                }
                 if (fonteAtual + 1 < fontesAtuais.size) {
                     tocar(nome, fontesAtuais, fonteAtual + 1, deSerie = serieNoAr != null)
                 } else {
