@@ -99,6 +99,14 @@ class RemoteTest {
 class ClearKeyTest {
 
     @Test
+    fun `playlist txt do novo servidor e tratada como HLS`() {
+        val source = Source("https://exemplo.s21-cloudfront-net.lat/ss/adultswim.txt")
+        assertTrue(source.isHls)
+        assertTrue(!source.isDash)
+        assertTrue(!Source("https://exemplo.test/arquivo.txt").isHls)
+    }
+
+    @Test
     fun `toda fonte DASH tem KID e chave utilizaveis`() {
         val dash = CATALOG.flatMap { c -> c.sources.map { c.name to it } }
             .filter { it.second.isDash }

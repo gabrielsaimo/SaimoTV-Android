@@ -166,7 +166,7 @@ object Playback {
             source.isDash -> DashMediaSource.Factory(http)
                 .setDrmSessionManagerProvider { clearKeyManager(source) }
                 .createMediaSource(item)
-            source.url.contains(".m3u8", ignoreCase = true) ->
+            source.isHls ->
                 HlsMediaSource.Factory(http)
                     .setAllowChunklessPreparation(true)
                     .createMediaSource(item)
