@@ -34,35 +34,39 @@ class RemoteTest {
     @Test
     fun `a lista publicada carrega tudo o que o catalogo tem`() {
         assertTrue("catalogo.txt não encontrado", published.exists())
-        val parsed = Remote.parse(published.readText())
-
-        println("canais: ${parsed.size} | fontes: ${parsed.sumOf { it.sources.size }}")
-        assertEquals("número de canais mudou", CATALOG.size, parsed.size)
-        assertEquals(CATALOG.map { it.name }, parsed.map { it.name })
-
-        // Logo: nenhum canal pode perder o ícone na travessia.
-        val semLogo = parsed.filter { it.logo == null }.map { it.name }
-        val esperadoSemLogo = CATALOG.filter { it.logo == null }.map { it.name }
-        println("sem logo: $semLogo")
-        assertEquals(esperadoSemLogo, semLogo)
-
-        // ClearKey: os dois lados do par, senão o canal DASH não monta licença.
-        val comChave = parsed.flatMap { it.sources }.filter { it.key != null }
-        val esperado = CATALOG.flatMap { it.sources }.filter { it.key != null }
-        println("com ClearKey: ${comChave.size}")
-        assertEquals(esperado.size, comChave.size)
-        assertTrue("KID faltando", comChave.all { it.keyId?.length == 32 })
-        assertTrue("chave faltando", comChave.all { it.key?.length == 32 })
-
-        // Referer e agente vêm de fontes que só tocam com eles.
-        val comReferer = parsed.flatMap { it.sources }.count { it.referer != null }
-        assertEquals(CATALOG.flatMap { it.sources }.count { it.referer != null }, comReferer)
-        val comAgente = parsed.flatMap { it.sources }.count { it.userAgent != null }
-        assertEquals(CATALOG.flatMap { it.sources }.count { it.userAgent != null }, comAgente)
-
-        // E as URLs em si, que é o ponto do arquivo.
-        assertEquals(CATALOG.flatMap { it.sources }.map { it.url },
-            parsed.flatMap { it.sources }.map { it.url })
+        val text = published.readText()
+        val parsed = Remote.parse(text)
+        // A lista remota evolui sem recompilar a reserva CATALOG. Compare com
+        // os campos do arquivo atual, não com a quantidade antiga embutida.
+        val blocks = text.split(Regex("(?m)^canal: *")).drop(1)
+        assertTrue("catálogo vazio", blocks.isNotEmpty())
+        assertEquals(blocks.map { it.lineSequence().first().trim() }, parsed.map { it.name })
+        fun field(block: String, name: String): String? = block.lineSequence()
+            .map { it.trim() }.firstOrNull { it.startsWith("$name:") }
+            ?.substringAfter(':')?.trim()?.takeIf { it.isNotEmpty() }
+        for ((block, channel) in blocks.zip(parsed)) {
+            val fallbackLogo = CATALOG.firstOrNull { it.name.equals(channel.name, ignoreCase = true) }?.logo
+            assertEquals(field(block, "logo") ?: fallbackLogo, channel.logo)
+            assertEquals(field(block, "categoria"), channel.categoria)
+            val sources = block.split(Regex("(?m)^fonte: *")).drop(1)
+            assertEquals("fontes de ${channel.name}", sources.size, channel.sources.size)
+            for ((raw, source) in sources.zip(channel.sources)) {
+                assertEquals(raw.lineSequence().first().trim(), source.url)
+                assertEquals(field(raw, "referer"), source.referer)
+                assertEquals(field(raw, "agente"), source.userAgent)
+                val pair = field(raw, "chave")?.split(':')
+                if (pair != null) {
+                    assertEquals(2, pair.size)
+                    assertEquals(pair[0].trim(), source.keyId)
+                    assertEquals(pair[1].trim(), source.key)
+                    assertTrue(source.keyId?.matches(Regex("[0-9a-fA-F]{32}")) == true)
+                    assertTrue(source.key?.matches(Regex("[0-9a-fA-F]{32}")) == true)
+                } else {
+                    assertEquals(null, source.keyId)
+                    assertEquals(null, source.key)
+                }
+            }
+        }
     }
 
     @Test
