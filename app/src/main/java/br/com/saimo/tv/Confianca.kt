@@ -29,6 +29,31 @@ import javax.net.ssl.X509TrustManager
  */
 object Confianca {
 
+    /**
+     * GTS Root R4 (Google Trust Services).
+     *
+     * Os masters do EmbedPlayer ficam em `embedplayer2.xyz`, mas os pedaços
+     * de vídeo são distribuídos por `plosia11.xyz` até `plosia15.xyz`. Esses
+     * hosts usam certificados WE1 encadeados nesta raiz, ausente em muitos TV
+     * Box Android 5/6. O manifesto abria e a reprodução parava exatamente ao
+     * pedir o primeiro segmento mascarado como `.js`, `.css` ou `.woff`.
+     *
+     * sha256 34:9D:FA:40:58:C5:E2:63:12:3B:39:8A:E7:95:57:3C:4E:13:13:C8:3F:E6:8F:93:55:6C:D5:E8:03:1B:3C:7D
+     */
+    private const val GTS_ROOT_R4 = """-----BEGIN CERTIFICATE-----
+MIICCTCCAY6gAwIBAgINAgPlwGjvYxqccpBQUjAKBggqhkjOPQQDAzBHMQswCQYD
+VQQGEwJVUzEiMCAGA1UEChMZR29vZ2xlIFRydXN0IFNlcnZpY2VzIExMQzEUMBIG
+A1UEAxMLR1RTIFJvb3QgUjQwHhcNMTYwNjIyMDAwMDAwWhcNMzYwNjIyMDAwMDAw
+WjBHMQswCQYDVQQGEwJVUzEiMCAGA1UEChMZR29vZ2xlIFRydXN0IFNlcnZpY2Vz
+IExMQzEUMBIGA1UEAxMLR1RTIFJvb3QgUjQwdjAQBgcqhkjOPQIBBgUrgQQAIgNi
+AATzdHOnaItgrkO4NcWBMHtLSZ37wWHO5t5GvWvVYRg1rkDdc/eJkTBa6zzuhXyi
+QHY7qca4R9gq55KRanPpsXI5nymfopjTX15YhmUPoYRlBtHci8nHc8iMai/lxKvR
+HYqjQjBAMA4GA1UdDwEB/wQEAwIBhjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQW
+BBSATNbrdP9JNqPV2Py1PsVq8JQdjDAKBggqhkjOPQQDAwNpADBmAjEA6ED/g94D
+9J+uHXqnLrmvT/aDHQ4thQEd0dlq7A/Cr8deVl5c1RxYIigL9zC2L7F8AjEA8GE8
+p/SgguMh1YQdc4acLa/KNJvxn7kjNuK8YAOdgLOaVsjh4rsUecrNIdSUtUlD
+-----END CERTIFICATE-----"""
+
     /** sha256 96:BC:EC:06:26:49:76:F3:74:60:77:9A:CF:28:C5:A7:CF:E8:A3:C0:AA:E1:1A:8F:FC:EE:05:C0:BD:DF:08:C6 */
     private const val ISRG_ROOT_X1 = """-----BEGIN CERTIFICATE-----
 MIIFazCCA1OgAwIBAgIRAIIQz7DSQONZRGPgu2OCiwAwDQYJKoZIhvcNAQELBQAw
@@ -106,7 +131,7 @@ gA0z5Wajs6O7pdWLjwkspl1+4vAHCGht0nxpbl/f5Wpl
         val sistema = gerenteDe(null)
         val fabrica = CertificateFactory.getInstance("X.509")
         val loja = KeyStore.getInstance(KeyStore.getDefaultType()).apply { load(null, null) }
-        listOf(ISRG_ROOT_X1, ISRG_ROOT_X2, SSLCOM_ROOT_ECC).forEachIndexed { i, pem ->
+        listOf(ISRG_ROOT_X1, ISRG_ROOT_X2, SSLCOM_ROOT_ECC, GTS_ROOT_R4).forEachIndexed { i, pem ->
             loja.setCertificateEntry("saimo-$i", fabrica.generateCertificate(pem.byteInputStream()))
         }
         val embutidas = gerenteDe(loja)

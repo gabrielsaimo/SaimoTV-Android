@@ -35,6 +35,8 @@
     <string name="vod_filmes_um">Filme</string>
     <string name="vod_faltam">faltam %1$d min de %2$d</string>
     <string name="vod_series">Séries</string>
+    <string name="vod_animes">Animes</string>
+    <string name="vod_doramas">Doramas</string>
     <string name="vod_extras">Extras</string>
     <string name="vod_favoritos">Favoritos</string>
     <string name="vod_favoritos_dica">o que você marcou</string>

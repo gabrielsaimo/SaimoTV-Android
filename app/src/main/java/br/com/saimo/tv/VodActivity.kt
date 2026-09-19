@@ -49,6 +49,7 @@ class VodActivity : AppCompatActivity() {
         data class Titulos(val filmes: Boolean, val letra: String, val reservado: Boolean = false) : Passo
         data class Temporadas(val letra: String, val serie: Serie) : Passo
         data class Episodios(val letra: String, val serie: Serie, val temporada: Int) : Passo
+        data class Colecao(val tipo: String) : Passo
         data class Fontes(
             val titulo: String,
             val detalhe: String,
@@ -185,6 +186,7 @@ class VodActivity : AppCompatActivity() {
             is Passo.Titulos -> titulos(passo.filmes, passo.letra, passo.reservado)
             is Passo.Temporadas -> temporadas(passo.letra, passo.serie)
             is Passo.Episodios -> episodios(passo.temporada)
+            is Passo.Colecao -> colecao(passo.tipo)
             is Passo.Fontes -> fontes(passo)
             is Passo.Resultados -> resultados(passo.termo)
             is Passo.Favoritos -> favoritos()
@@ -197,7 +199,8 @@ class VodActivity : AppCompatActivity() {
         // duas colunas ainda dobram o que se vê sem apertar o texto.
         (lista.layoutManager as GridLayoutManager).spanCount = when (passo) {
             is Passo.Letras -> 6
-            is Passo.Titulos, is Passo.Episodios, is Passo.Resultados, is Passo.Favoritos -> 2
+            is Passo.Titulos, is Passo.Episodios, is Passo.Colecao,
+            is Passo.Resultados, is Passo.Favoritos -> 2
             else -> 1
         }
         trilha.text = trilhaDe(passo)
@@ -220,6 +223,8 @@ class VodActivity : AppCompatActivity() {
         is Passo.Temporadas -> "${getString(R.string.vod_series)} › ${passo.serie.nomeCompleto}"
         is Passo.Episodios -> "${passo.serie.nomeCompleto} › " +
             getString(R.string.vod_temporada, passo.temporada)
+        is Passo.Colecao -> getString(
+            if (passo.tipo == "animes") R.string.vod_animes else R.string.vod_doramas)
         is Passo.Fontes -> "${passo.titulo} › ${getString(R.string.vod_escolha_fonte)}"
         is Passo.Resultados -> getString(R.string.vod_resultados, passo.termo)
         is Passo.Favoritos -> getString(R.string.vod_favoritos)
@@ -332,6 +337,8 @@ class VodActivity : AppCompatActivity() {
         if (gavetas.isEmpty()) gavetas = Vod.indice(this)
         val filmes = gavetas.sumOf { it.filmes }
         val series = gavetas.sumOf { it.series }
+        val animes = Vod.colecao(this, "animes").size
+        val doramas = Vod.colecao(this, "doramas").size
         // Favoritos em primeiro: quem marcou um título marcou para voltar nele.
         return favoritosNoInicio() + listOf(
             Linha(getString(R.string.vod_filmes), resources.getQuantityString(R.plurals.vod_titulos, filmes, filmes), "F") {
@@ -339,6 +346,12 @@ class VodActivity : AppCompatActivity() {
             },
             Linha(getString(R.string.vod_series), resources.getQuantityString(R.plurals.vod_titulos, series, series), "S") {
                 ir(Passo.Letras(filmes = false))
+            },
+            Linha(getString(R.string.vod_animes), resources.getQuantityString(R.plurals.vod_titulos, animes, animes), "A") {
+                ir(Passo.Colecao("animes"))
+            },
+            Linha(getString(R.string.vod_doramas), resources.getQuantityString(R.plurals.vod_titulos, doramas, doramas), "D") {
+                ir(Passo.Colecao("doramas"))
             },
             Linha(getString(R.string.vod_buscar), getString(R.string.vod_buscar_dica), "?") {
                 abrirBusca()
@@ -443,10 +456,21 @@ class VodActivity : AppCompatActivity() {
             }
         }
 
+    /** Animes e doramas já vêm com os episódios no mesmo arquivo. */
+    private suspend fun colecao(tipo: String): List<Linha> =
+        Vod.colecao(this, tipo).sortedBy { it.titulo.lowercase() }.map { item ->
+            Linha(item.nomeCompleto, getString(R.string.vod_eps, item.episodios.size),
+                inicial(item.titulo), capaDe = true) {
+                episodiosDaSerie = item.episodios
+                val serie = Serie(item.titulo, item.ano, -1, item.episodios.size)
+                ir(Passo.Temporadas("", serie))
+            }
+        }
+
     private suspend fun temporadas(letra: String, serie: Serie): List<Linha> {
         serieNoAr = serie
         letraNoAr = letra
-        episodiosDaSerie = Vod.episodios(this, letra, serie)
+        if (serie.pedaco >= 0) episodiosDaSerie = Vod.episodios(this, letra, serie)
         return episodiosDaSerie.map { it.temporada }.distinct().sorted().map { numero ->
             val quantos = episodiosDaSerie.count { it.temporada == numero }
             Linha(getString(R.string.vod_temporada, numero),

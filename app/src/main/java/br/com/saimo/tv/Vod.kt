@@ -24,6 +24,16 @@ data class Episodio(
     val urls: List<String>,
 )
 
+data class SerieColecao(
+    val titulo: String,
+    val ano: String,
+    val tmdbId: String,
+    val episodios: List<Episodio>,
+) {
+    val nomeCompleto: String
+        get() = if (ano.isBlank()) titulo else "$titulo ($ano)"
+}
+
 /**
  * Filmes e séries, baixados por pedaço conforme a pessoa navega.
  *
@@ -226,6 +236,46 @@ object Vod {
         return out
     }
 
+    /** Coleções pequenas publicadas pelo gerador RedeFlix, já com episódios. */
+    suspend fun colecao(context: Context, tipo: String): List<SerieColecao> {
+        require(tipo == "animes" || tipo == "doramas")
+        val nome = "redeflix/links-$tipo.txt"
+        // Essas listas mudam semanalmente; tenta a rede antes do cache local.
+        val texto = withContext(Dispatchers.IO) { baixar(context, nome) }
+            ?: arquivo(context, nome) ?: return emptyList()
+        data class Parcial(
+            val titulo: String,
+            val ano: String,
+            val tmdbId: String,
+            val episodios: MutableList<Episodio> = mutableListOf(),
+        )
+        val out = mutableListOf<Parcial>()
+        var atual: Parcial? = null
+        for (linha in texto.lineSequence()) {
+            if (linha.isBlank()) continue
+            if (linha.startsWith("@")) {
+                val campos = linha.drop(1).split("\t")
+                val titulo = campos.getOrNull(0).orEmpty().trim()
+                atual = if (titulo.isBlank()) null else Parcial(
+                    titulo, campos.getOrNull(1).orEmpty().trim(),
+                    campos.getOrNull(2).orEmpty().trim()).also(out::add)
+                continue
+            }
+            val destino = atual ?: continue
+            val campos = linha.split("\t")
+            if (campos.size < 4) continue
+            val urls = campos[3].split(",").map(String::trim).filter(String::isNotEmpty)
+            if (urls.isEmpty()) continue
+            destino.episodios += Episodio(
+                campos[0].toIntOrNull() ?: 0,
+                campos[1].toIntOrNull() ?: 0,
+                campos[2].ifBlank { "dub" },
+                urls)
+        }
+        return out.filter { it.episodios.isNotEmpty() }
+            .map { SerieColecao(it.titulo, it.ano, it.tmdbId, it.episodios) }
+    }
+
     /// O item guarda "base:resto"; o endereço inteiro sairia dezenas de vezes
     /// maior, e o começo é sempre o mesmo punhado de servidores.
     private fun montar(valor: String): String {
@@ -260,6 +310,7 @@ object Vod {
     private suspend fun arquivo(context: Context, nome: String): String? = withContext(Dispatchers.IO) {
         val pasta = File(context.filesDir, "vod").apply { mkdirs() }
         val local = File(pasta, nome.replace("%23", "hash"))
+        local.parentFile?.mkdirs()
         if (local.exists() && local.length() > 0) return@withContext local.readText()
         baixar(context, nome)
     }
@@ -268,6 +319,7 @@ object Vod {
     private fun baixar(context: Context, nome: String): String? {
         val pasta = File(context.filesDir, "vod").apply { mkdirs() }
         val local = File(pasta, nome.replace("%23", "hash"))
+        local.parentFile?.mkdirs()
         val texto = runCatching {
             val request = Request.Builder().url(BASE + nome)
                 .header("User-Agent", Playback.DEFAULT_USER_AGENT)

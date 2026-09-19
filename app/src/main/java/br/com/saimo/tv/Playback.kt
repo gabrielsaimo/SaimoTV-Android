@@ -149,11 +149,24 @@ object Playback {
     }
 
     fun mediaSource(context: Context, source: Source): MediaSource {
+        val embedPlayer = runCatching {
+            Uri.parse(source.url).host?.equals("embedplayer2.xyz", ignoreCase = true) == true
+        }.getOrDefault(false)
+        val cabecalhos = linkedMapOf<String, String>()
+        source.referer?.let { cabecalhos["Referer"] = it }
+        // Os segmentos de vídeo vêm de plosia*.xyz mascarados como arquivos
+        // web e são publicados para a origem do player. Enviar a origem do
+        // master também deixa o pedido consistente em aparelhos nos quais o
+        // CDN aplica a validação de hotlink.
+        if (embedPlayer && source.referer == null) {
+            cabecalhos["Referer"] = "https://embedplayer2.xyz/"
+            cabecalhos["Origin"] = "https://embedplayer2.xyz"
+        }
         val upstream: DataSource.Factory = OkHttpDataSource.Factory(client)
             .setUserAgent(source.userAgent ?: DEFAULT_USER_AGENT)
             .apply {
                 // Some CDNs only serve the manifest when a matching Referer is sent.
-                source.referer?.let { setDefaultRequestProperties(mapOf("Referer" to it)) }
+                if (cabecalhos.isNotEmpty()) setDefaultRequestProperties(cabecalhos)
             }
         val http: DataSource.Factory = ResolvingDataSource.Factory(upstream) { dataSpec ->
             val original = dataSpec.uri.toString()
