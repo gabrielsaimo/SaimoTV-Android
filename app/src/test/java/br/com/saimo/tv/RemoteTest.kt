@@ -103,7 +103,7 @@ class ClearKeyTest {
         val source = Source("https://exemplo.s21-cloudfront-net.lat/ss/adultswim.txt")
         assertTrue(source.isHls)
         assertTrue(!source.isDash)
-        assertTrue(!Source("https://exemplo.test/arquivo.txt").isHls)
+        assertTrue(Source("https://embedplayer2.xyz/cdn/hls/conteudo/master.txt").isHls)
     }
 
     @Test

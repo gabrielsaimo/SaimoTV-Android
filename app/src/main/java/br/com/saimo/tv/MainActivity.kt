@@ -23,6 +23,7 @@ import androidx.media3.common.ForwardingPlayer
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
+import androidx.media3.common.VideoSize
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.DefaultLoadControl
 import androidx.media3.exoplayer.ExoPlayer
@@ -88,6 +89,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var bannerNumber: TextView
     private lateinit var bannerChannel: TextView
     private lateinit var bannerProgramme: TextView
+    private lateinit var bannerResolution: TextView
     private lateinit var bannerProgress: ProgressBar
     private lateinit var bannerSource: TextView
     private lateinit var bannerTimes: TextView
@@ -158,6 +160,7 @@ class MainActivity : AppCompatActivity() {
         bannerNumber = findViewById(R.id.bannerNumber)
         bannerChannel = findViewById(R.id.bannerChannel)
         bannerProgramme = findViewById(R.id.bannerProgramme)
+        bannerResolution = findViewById(R.id.bannerResolution)
         bannerProgress = findViewById(R.id.bannerProgress)
         bannerSource = findViewById(R.id.bannerSource)
         bannerTimes = findViewById(R.id.bannerTimes)
@@ -404,6 +407,8 @@ class MainActivity : AppCompatActivity() {
         val chosen = channel.sources.getOrNull(sourceIndex) ?: channel.sources.first()
         tentativaDesde = android.os.SystemClock.elapsedRealtime()
         tocouAvisado = false
+        bannerResolution.text = ""
+        bannerResolution.visibility = View.GONE
         // Fonte nova, crédito zerado: o que a anterior entregou não vale para
         // ela. A retomada da mesma fonte não passa por aqui — ela só chama
         // `prepare()` — então zerar em toda abertura é o certo.
@@ -437,6 +442,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val playerListener = object : Player.Listener {
+        override fun onVideoSizeChanged(videoSize: VideoSize) {
+            val rotulo = rotuloResolucao(videoSize.width, videoSize.height)
+            bannerResolution.text = rotulo
+            bannerResolution.visibility = if (rotulo.isEmpty()) View.GONE else View.VISIBLE
+        }
+
         override fun onPlaybackStateChanged(state: Int) {
             if (state == Player.STATE_READY) {
                 if (!tocouAvisado) {
@@ -582,8 +593,14 @@ class MainActivity : AppCompatActivity() {
                 // teclado virtual para texto livre seria pior de usar.
                 typeDigit(keyCode - KeyEvent.KEYCODE_0); true
             }
-            KeyEvent.KEYCODE_MENU -> {
-                Favorites.toggle(this, ordered[current].name); reorder(); revealBanner(); true
+            KeyEvent.KEYCODE_MENU, KeyEvent.KEYCODE_SETTINGS, KeyEvent.KEYCODE_CAPTIONS -> {
+                if (listOpen && keyCode == KeyEvent.KEYCODE_MENU) {
+                    Favorites.toggle(this, ordered.getOrNull(listaFoco)?.name ?: ordered[current].name)
+                    reorder()
+                } else {
+                    TrackMenu.show(this, player)
+                }
+                true
             }
             else -> {
                 if (!listOpen) revealBanner()

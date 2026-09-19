@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
+import androidx.media3.common.VideoSize
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import androidx.recyclerview.widget.GridLayoutManager
@@ -90,6 +91,7 @@ class VodActivity : AppCompatActivity() {
     private lateinit var ficha: View
     private lateinit var fichaNome: TextView
     private lateinit var fichaDetalhe: TextView
+    private lateinit var fichaResolucao: TextView
     private lateinit var fichaTempo: TextView
     private lateinit var fichaCapa: ImageView
     private var player: ExoPlayer? = null
@@ -134,6 +136,7 @@ class VodActivity : AppCompatActivity() {
         ficha = findViewById(R.id.vodFicha)
         fichaNome = findViewById(R.id.vodFichaNome)
         fichaDetalhe = findViewById(R.id.vodFichaDetalhe)
+        fichaResolucao = findViewById(R.id.vodFichaResolucao)
         fichaTempo = findViewById(R.id.vodFichaTempo)
         fichaCapa = findViewById(R.id.vodFichaCapa)
         // A ficha acompanha a barra de controle: aparece com ela e some junto.
@@ -145,6 +148,7 @@ class VodActivity : AppCompatActivity() {
                     View.GONE
                 }
             })
+        playerView.setShowSubtitleButton(true)
 
         lista.layoutManager = GridLayoutManager(this, 1)
         lista.adapter = adapter
@@ -580,6 +584,12 @@ class VodActivity : AppCompatActivity() {
         // Fonte morta não pode virar tela preta: cai para a seguinte, como o
         // canal já faz.
         novo.addListener(object : androidx.media3.common.Player.Listener {
+            override fun onVideoSizeChanged(videoSize: VideoSize) {
+                val rotulo = rotuloResolucao(videoSize.width, videoSize.height)
+                fichaResolucao.text = rotulo
+                fichaResolucao.visibility = if (rotulo.isEmpty()) View.GONE else View.VISIBLE
+            }
+
             override fun onPlaybackStateChanged(state: Int) {
                 if (state == androidx.media3.common.Player.STATE_READY && !tocouAvisado) {
                     tocouAvisado = true
@@ -636,6 +646,8 @@ class VodActivity : AppCompatActivity() {
         }
         fichaDetalhe.text = detalhe
         fichaDetalhe.visibility = if (detalhe.isEmpty()) View.GONE else View.VISIBLE
+        fichaResolucao.text = ""
+        fichaResolucao.visibility = View.GONE
         atualizarTempo()
         ficha.visibility = View.VISIBLE
         adiarEsconder()
@@ -786,6 +798,7 @@ class VodActivity : AppCompatActivity() {
         relogio.removeCallbacks(esconderBarra)
         seletor.visibility = View.GONE
         ficha.visibility = View.GONE
+        fichaResolucao.visibility = View.GONE
         player?.release()
         player = null
         playerView.player = null
@@ -823,6 +836,13 @@ class VodActivity : AppCompatActivity() {
         if (event.action != KeyEvent.ACTION_DOWN || player == null ||
             teclado.visibility == View.VISIBLE) {
             return super.dispatchKeyEvent(event)
+        }
+        if (event.keyCode == KeyEvent.KEYCODE_MENU ||
+            event.keyCode == KeyEvent.KEYCODE_SETTINGS ||
+            event.keyCode == KeyEvent.KEYCODE_CAPTIONS ||
+            event.keyCode == KeyEvent.KEYCODE_INFO) {
+            player?.let { TrackMenu.show(this, it) }
+            return true
         }
         if (seletor.visibility == View.VISIBLE) {
             when (event.keyCode) {

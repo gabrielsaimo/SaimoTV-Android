@@ -76,6 +76,21 @@
                     android:textSize="28sp" />
 
                 <TextView
+                    android:id="@+id/bannerResolution"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/bg_chip"
+                    android:fontFamily="sans-serif-medium"
+                    android:paddingStart="14dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="14dp"
+                    android:paddingBottom="4dp"
+                    android:textColor="@color/accent"
+                    android:textSize="15sp"
+                    android:visibility="gone" />
+
+                <TextView
                     android:id="@+id/bannerLive"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

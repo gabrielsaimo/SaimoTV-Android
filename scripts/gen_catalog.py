@@ -27,6 +27,12 @@ data class Source(
     val key: String? = null,
 ) {
     val isDash: Boolean get() = url.contains(".mpd", ignoreCase = true)
+    // Alguns provedores publicam um manifesto #EXTM3U como text/plain e com
+    // extensão .txt. No catálogo este é um endereço de mídia, não um arquivo
+    // de dados, portanto deve entrar explicitamente no demuxer HLS.
+    val isHls: Boolean get() =
+        url.contains(".m3u8", ignoreCase = true) ||
+            url.substringBefore('?').endsWith(".txt", ignoreCase = true)
 }
 
 data class Channel(

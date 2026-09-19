@@ -169,6 +169,21 @@
                 android:textSize="19sp" />
 
             <TextView
+                android:id="@+id/vodFichaResolucao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_chip"
+                android:fontFamily="sans-serif-medium"
+                android:paddingStart="12dp"
+                android:paddingTop="3dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="3dp"
+                android:textColor="@color/accent"
+                android:textSize="16sp"
+                android:visibility="gone" />
+
+            <TextView
                 android:id="@+id/vodFichaTempo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

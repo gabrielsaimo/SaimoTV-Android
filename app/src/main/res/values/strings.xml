@@ -72,4 +72,8 @@
     <string name="channel_number">Canal %1$s…</string>
     <string name="times">%1$s – %2$s · faltam %3$d min</string>
     <string name="up_next">A seguir: %1$s</string>
+    <string name="faixas_titulo">Qualidade, áudio e legendas</string>
+    <string name="faixa_qualidade">Qualidade da imagem</string>
+    <string name="faixa_audio">Idioma do áudio</string>
+    <string name="faixa_legendas">Legendas</string>
 </resources>
