@@ -239,6 +239,7 @@ object Vod {
     /** Coleções pequenas publicadas pelo gerador RedeFlix, já com episódios. */
     suspend fun colecao(context: Context, tipo: String): List<SerieColecao> {
         require(tipo == "animes" || tipo == "doramas")
+        if (bases.isEmpty()) indice(context)
         val nome = "redeflix/links-$tipo.txt"
         // Essas listas mudam semanalmente; tenta a rede antes do cache local.
         val texto = withContext(Dispatchers.IO) { baixar(context, nome) }
@@ -264,7 +265,8 @@ object Vod {
             val destino = atual ?: continue
             val campos = linha.split("\t")
             if (campos.size < 4) continue
-            val urls = campos[3].split(",").map(String::trim).filter(String::isNotEmpty)
+            val urls = campos[3].split(",").map(String::trim).map(::montar)
+                .filter(String::isNotEmpty)
             if (urls.isEmpty()) continue
             destino.episodios += Episodio(
                 campos[0].toIntOrNull() ?: 0,
