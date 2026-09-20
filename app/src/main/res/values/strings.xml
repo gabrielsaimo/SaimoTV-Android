@@ -38,6 +38,8 @@
     <string name="vod_animes">Animes</string>
     <string name="vod_doramas">Doramas</string>
     <string name="vod_extras">Extras</string>
+    <string name="vod_continuar">Continue assistindo</string>
+    <string name="vod_acervo">Todo o acervo</string>
     <string name="vod_favoritos">Favoritos</string>
     <string name="vod_favoritos_dica">o que você marcou</string>
     <string name="vod_buscar">Buscar</string>

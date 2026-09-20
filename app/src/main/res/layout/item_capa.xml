@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Uma capa na fileira.
+
+     Tamanho fixo, na proporção 2:3 dos pôsteres: a fileira não muda de altura
+     enquanto as imagens chegam, e nada pula na tela de quem está olhando.
+
+     Enquanto a capa não chega — ou quando não existe — a inicial do título
+     segura o lugar, do mesmo jeito que na lista por letra. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="124dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:background="@drawable/row_focus"
+    android:focusable="true"
+    android:orientation="vertical"
+    android:padding="6dp">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="168dp"
+        android:background="@drawable/bg_logo">
+
+        <TextView
+            android:id="@+id/capaInicial"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:textColor="@color/accent"
+            android:textSize="34sp" />
+
+        <ImageView
+            android:id="@+id/capaImagem"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop"
+            android:visibility="gone" />
+
+        <!-- Onde o filme parou, na borda de baixo da capa. -->
+        <ProgressBar
+            android:id="@+id/capaProgresso"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_gravity="bottom"
+            android:max="1000"
+            android:progressDrawable="@drawable/progress_track"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/capaNome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:minLines="2"
+        android:textColor="@color/text_primary"
+        android:textSize="14sp" />
+</LinearLayout>

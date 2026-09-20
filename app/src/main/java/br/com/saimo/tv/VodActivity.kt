@@ -20,6 +20,7 @@ import androidx.media3.common.VideoSize
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.dispose
 import coil.load
@@ -109,6 +110,10 @@ class VodActivity : AppCompatActivity() {
 
     private val pilha = ArrayDeque<Passo>()
     private val adapter = Adapter()
+    /// A primeira tela é de fileiras de capa; as outras continuam em lista.
+    private val filasAdapter = Inicio.Adapter(
+        escopo = lifecycleScope,
+        capaDe = { titulo, serie -> Capas.capa(titulo, serie) })
     private var gavetas: List<Vod.Gaveta> = emptyList()
     private var episodiosDaSerie: List<Episodio> = emptyList()
 
@@ -180,6 +185,16 @@ class VodActivity : AppCompatActivity() {
     private fun mostrar(passo: Passo) = lifecycleScope.launch(semDerrubar) {
         estado.text = getString(R.string.vod_carregando)
         estado.visibility = View.VISIBLE
+
+        if (passo is Passo.Inicio) {
+            mostrarInicio()
+            return@launch
+        }
+        if (lista.adapter !== adapter) {
+            lista.layoutManager = GridLayoutManager(this@VodActivity, 1)
+            lista.adapter = adapter
+        }
+
         val linhas: List<Linha> = when (passo) {
             is Passo.Inicio -> inicio()
             is Passo.Letras -> letras(passo)
@@ -356,6 +371,149 @@ class VodActivity : AppCompatActivity() {
             Linha(getString(R.string.vod_buscar), getString(R.string.vod_buscar_dica), "?") {
                 abrirBusca()
             }) + reservados()
+    }
+
+    /**
+     * A primeira tela: fileiras de capa, como numa TV.
+     *
+     * A ordem é a de quem chega: primeiro o que a pessoa já estava vendo,
+     * depois o que ela marcou, depois as novidades, e o acervo inteiro por
+     * último — quem veio procurar uma coisa específica usa a busca, que
+     * continua a um botão de distância.
+     *
+     * Fileira vazia não entra. Uma faixa com título e nada embaixo é pior que
+     * a ausência dela.
+     */
+    private suspend fun mostrarInicio() {
+        if (gavetas.isEmpty()) gavetas = Vod.indice(this)
+        val filas = mutableListOf<Inicio.Fila>()
+
+        continuar()?.let { filas += it }
+        favoritosEmCapa()?.let { filas += it }
+
+        for (fila in Destaques.filas(this)) {
+            val cartoes = fila.itens.map { item -> cartaoDe(item) }
+            if (cartoes.isNotEmpty()) filas += Inicio.Fila(fila.titulo, cartoes)
+        }
+
+        filas += acervo()
+
+        estado.visibility = if (filas.isEmpty()) View.VISIBLE else View.GONE
+        if (filas.isEmpty()) estado.text = getString(R.string.vod_vazio)
+        if (lista.adapter !== filasAdapter) {
+            lista.layoutManager = LinearLayoutManager(this)
+            lista.adapter = filasAdapter
+        }
+        filasAdapter.trocar(filas)
+        trilha.visibility = View.GONE
+        lista.post { lista.requestFocus() }
+    }
+
+    /** Um destaque vira cartão: a capa já veio pronta, a ação reusa a busca. */
+    private fun cartaoDe(item: Destaques.Item) = Inicio.Cartao(
+        titulo = item.titulo,
+        capa = item.capa,
+        inicial = inicial(item.titulo),
+        progresso = if (item.serie) null
+                    else Progresso.fracao(this, Progresso.chaveFilme(item.titulo)),
+    ) {
+        lifecycleScope.launch(semDerrubar) { abrirDestaque(item) }
+    }
+
+    /**
+     * Abre um destaque.
+     *
+     * Filme e série passam pelo mesmo caminho da busca. Anime e dorama moram
+     * nas coleções, que já vêm com os episódios dentro: achando o título ali,
+     * dá para ir direto às temporadas em vez de despejar a coleção inteira na
+     * frente de quem só queria aquele.
+     */
+    private suspend fun abrirDestaque(item: Destaques.Item) {
+        if (item.daColecao) {
+            val achado = Vod.colecao(this, item.colecao)
+                .firstOrNull { it.titulo.equals(item.titulo, ignoreCase = true) }
+            if (achado == null) {
+                ir(Passo.Colecao(item.colecao))
+                return
+            }
+            episodiosDaSerie = achado.episodios
+            ir(Passo.Temporadas("", Serie(achado.titulo, achado.ano, -1, achado.episodios.size)))
+            return
+        }
+        abrirAchado(Vod.Achado(item.titulo, item.serie, item.letra, item.ano))
+    }
+
+    /**
+     * Onde a pessoa parou, do mais recente para o mais antigo.
+     *
+     * É a fileira que mais importa e a única que não vem do repositório: ela é
+     * feita do que está gravado neste aparelho.
+     */
+    private fun continuar(): Inicio.Fila? {
+        val itens = Progresso.emAndamento(this).take(20)
+        if (itens.isEmpty()) return null
+        val cartoes = itens.map { andamento ->
+            Inicio.Cartao(
+                titulo = andamento.rotulo,
+                capa = "",
+                inicial = inicial(andamento.titulo),
+                progresso = andamento.fracao,
+                procurarCapa = andamento.serie,
+            ) {
+                lifecycleScope.launch(semDerrubar) {
+                    // A letra não é guardada junto do progresso; a busca a
+                    // devolve, e é ela quem sabe achar o título no acervo.
+                    val achados = Vod.buscar(this@VodActivity, andamento.titulo)
+                    val alvo = achados.firstOrNull {
+                        it.titulo.equals(andamento.titulo, ignoreCase = true)
+                    } ?: achados.firstOrNull()
+                    if (alvo != null) abrirAchado(alvo)
+                }
+            }
+        }
+        return Inicio.Fila(getString(R.string.vod_continuar), cartoes)
+    }
+
+    /** Os favoritos em capa, na mesma fileira. */
+    private fun favoritosEmCapa(): Inicio.Fila? {
+        val itens = VodFavoritos.lista(this)
+        if (itens.isEmpty()) return null
+        return Inicio.Fila(getString(R.string.vod_favoritos), itens.map { item ->
+            Inicio.Cartao(
+                titulo = item.nomeCompleto,
+                capa = "",
+                inicial = inicial(item.titulo),
+                progresso = if (item.serie) null
+                            else Progresso.fracao(this, Progresso.chaveFilme(item.titulo)),
+                procurarCapa = item.serie,
+            ) {
+                lifecycleScope.launch(semDerrubar) {
+                    abrirAchado(Vod.Achado(item.titulo, item.serie, item.letra, item.ano))
+                }
+            }
+        })
+    }
+
+    /** O acervo inteiro, para quem quer navegar em vez de escolher do que tem. */
+    private suspend fun acervo(): Inicio.Fila {
+        val filmes = gavetas.sumOf { it.filmes }
+        val series = gavetas.sumOf { it.series }
+        val cartoes = mutableListOf(
+            Inicio.Cartao(getString(R.string.vod_filmes), "", "F") { ir(Passo.Letras(filmes = true)) },
+            Inicio.Cartao(getString(R.string.vod_series), "", "S") { ir(Passo.Letras(filmes = false)) },
+            Inicio.Cartao(getString(R.string.vod_animes), "", "A") { ir(Passo.Colecao("animes")) },
+            Inicio.Cartao(getString(R.string.vod_doramas), "", "D") { ir(Passo.Colecao("doramas")) },
+            Inicio.Cartao(getString(R.string.vod_buscar), "", "?") { abrirBusca() },
+        )
+        val reservados = gavetas.sumOf { it.reservados }
+        if (reservados > 0 && Unlock.unlocked) {
+            cartoes += Inicio.Cartao(getString(R.string.vod_extras), "", "+") {
+                ir(Passo.Letras(filmes = true, reservado = true))
+            }
+        }
+        contagem.text = resources.getQuantityString(
+            R.plurals.vod_titulos, filmes + series, filmes + series)
+        return Inicio.Fila(getString(R.string.vod_acervo), cartoes)
     }
 
     /// A linha só existe quando há o que abrir: uma seção vazia na primeira
