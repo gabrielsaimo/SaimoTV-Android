@@ -153,6 +153,14 @@ object Playback {
             Uri.parse(source.url).host?.equals("embedplayer2.xyz", ignoreCase = true) == true
         }.getOrDefault(false)
         val cabecalhos = linkedMapOf<String, String>()
+        // Todo navegador e todo player manda `Accept`; o OkHttp não manda
+        // nenhum, e há servidor que trata a ausência como cliente suspeito.
+        // O EmbedPlayer, que serve os doramas e animes novos, responde 200 com
+        // o corpo "security error" no lugar da playlist — o ExoPlayer então
+        // reclama que a resposta não começa com #EXTM3U, e a fonte cai. Medido
+        // fonte a fonte: com o cabeçalho a playlist vem, sem ele não vem, e
+        // Referer e Origin não fazem diferença nenhuma.
+        cabecalhos["Accept"] = "*/*"
         source.referer?.let { cabecalhos["Referer"] = it }
         // Os segmentos de vídeo vêm de plosia*.xyz mascarados como arquivos
         // web e são publicados para a origem do player. Enviar a origem do
