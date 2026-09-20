@@ -136,8 +136,9 @@ object Vod {
             val fontes = campos.drop(1).mapNotNull { parte ->
                 val marca = parte.indexOf('=')
                 if (marca <= 0) return@mapNotNull null
-                parte.take(marca) to parte.substring(marca + 1)
-                    .split(",").filter { it.isNotBlank() }.map(::montar).filter { it.isNotEmpty() }
+                parte.take(marca) to FontesDesativadas.peneirar(
+                    parte.substring(marca + 1)
+                        .split(",").filter { it.isNotBlank() }.map(::montar).filter { it.isNotEmpty() })
             }.filter { it.second.isNotEmpty() }.toMap()
             if (fontes.isEmpty()) null else Filme(campos[0], fontes)
         }.toList()
@@ -245,7 +246,8 @@ object Vod {
             if (!dentro) continue
             val campos = linha.split("\t")
             if (campos.size < 4) continue
-            val urls = campos[3].split(",").filter { it.isNotBlank() }.map(::montar).filter { it.isNotEmpty() }
+            val urls = FontesDesativadas.peneirar(
+                campos[3].split(",").filter { it.isNotBlank() }.map(::montar).filter { it.isNotEmpty() })
             if (urls.isEmpty()) continue
             out += Episodio(
                 campos[0].toIntOrNull() ?: 0,
@@ -285,8 +287,9 @@ object Vod {
             val destino = atual ?: continue
             val campos = linha.split("\t")
             if (campos.size < 4) continue
-            val urls = campos[3].split(",").map(String::trim).map(::montar)
-                .filter(String::isNotEmpty)
+            val urls = FontesDesativadas.peneirar(
+                campos[3].split(",").map(String::trim).map(::montar)
+                    .filter(String::isNotEmpty))
             if (urls.isEmpty()) continue
             destino.episodios += Episodio(
                 campos[0].toIntOrNull() ?: 0,

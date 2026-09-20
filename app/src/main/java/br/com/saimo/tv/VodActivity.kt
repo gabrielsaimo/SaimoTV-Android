@@ -87,6 +87,8 @@ class VodActivity : AppCompatActivity() {
     private lateinit var seletorTemporada: TextView
     private lateinit var seletorLista: RecyclerView
     private val seletorAdapter = Adapter()
+    private lateinit var campoDeBusca: android.widget.EditText
+    private lateinit var secoes: android.widget.LinearLayout
     private lateinit var teclado: View
     private lateinit var termo: TextView
     private lateinit var teclas: android.widget.GridLayout
@@ -125,6 +127,9 @@ class VodActivity : AppCompatActivity() {
         setContentView(R.layout.activity_vod)
 
         lista = findViewById(R.id.vodLista)
+        campoDeBusca = findViewById(R.id.vodBusca)
+        secoes = findViewById(R.id.vodSecoes)
+        montarFerramentas()
         titulo = findViewById(R.id.vodTitulo)
         trilha = findViewById(R.id.vodTrilha)
         contagem = findViewById(R.id.vodContagem)
@@ -290,6 +295,84 @@ class VodActivity : AppCompatActivity() {
         }
         botao.layoutParams = parametros
         return botao
+    }
+
+    /**
+     * As ferramentas de busca, no alto do acervo.
+     *
+     * O campo e as seções ficavam no fim de uma lista que era preciso
+     * percorrer — e são justamente as duas coisas que alguém quer ao abrir o
+     * acervo. Em cima, o direcional chega nelas de imediato.
+     *
+     * O campo é um `EditText` de verdade: no TV Box, apertar OK nele abre o
+     * teclado do sistema, que já aceita voz no controle de quem tem. O teclado
+     * desenhado à mão continua existindo como caminho alternativo, para os
+     * aparelhos que não trazem teclado nenhum na tela.
+     */
+    private fun montarFerramentas() {
+        campoDeBusca.setOnEditorActionListener { _, acao, evento ->
+            val enter = acao == android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH ||
+                evento?.keyCode == KeyEvent.KEYCODE_ENTER
+            if (enter) buscarDoCampo()
+            enter
+        }
+        // Buscar ao digitar seria uma busca por letra em trinta mil títulos a
+        // cada tecla; no TV Box isso trava. Vale quando a pessoa termina.
+        campoDeBusca.setOnKeyListener { _, codigo, evento ->
+            if (codigo == KeyEvent.KEYCODE_DPAD_CENTER && evento.action == KeyEvent.ACTION_UP &&
+                campoDeBusca.text.isNotBlank()) {
+                buscarDoCampo(); true
+            } else false
+        }
+
+        val atalhos = listOf(
+            getString(R.string.vod_filmes) to { ir(Passo.Letras(filmes = true)) },
+            getString(R.string.vod_series) to { ir(Passo.Letras(filmes = false)) },
+            getString(R.string.vod_animes) to { ir(Passo.Colecao("animes")) },
+            getString(R.string.vod_doramas) to { ir(Passo.Colecao("doramas")) },
+            getString(R.string.vod_favoritos) to { ir(Passo.Favoritos) },
+        )
+        secoes.removeAllViews()
+        for ((nome, acao) in atalhos) {
+            secoes.addView(pilula(nome) { acao() })
+        }
+        if (Unlock.unlocked) {
+            secoes.addView(pilula(getString(R.string.vod_extras)) {
+                ir(Passo.Letras(filmes = true, reservado = true))
+            })
+        }
+    }
+
+    private fun pilula(texto: String, aoTocar: () -> Unit): View {
+        val botao = android.widget.TextView(this).apply {
+            this.text = texto
+            textSize = 17f
+            setTextColor(ContextCompat.getColor(this@VodActivity, R.color.text_primary))
+            setBackgroundResource(R.drawable.bg_campo)
+            isFocusable = true
+            setPadding(26, 12, 26, 12)
+            setOnClickListener { aoTocar() }
+        }
+        val regras = android.widget.LinearLayout.LayoutParams(
+            android.widget.LinearLayout.LayoutParams.WRAP_CONTENT,
+            android.widget.LinearLayout.LayoutParams.WRAP_CONTENT)
+        regras.marginStart = 10
+        botao.layoutParams = regras
+        return botao
+    }
+
+    private fun buscarDoCampo() {
+        val alvo = campoDeBusca.text.toString().trim()
+        if (alvo.length < 2) return
+        esconderTeclado()
+        ir(Passo.Resultados(alvo))
+    }
+
+    private fun esconderTeclado() {
+        val servico = getSystemService(android.content.Context.INPUT_METHOD_SERVICE)
+            as android.view.inputmethod.InputMethodManager
+        servico.hideSoftInputFromWindow(campoDeBusca.windowToken, 0)
+        campoDeBusca.clearFocus()
     }
 
     private fun abrirBusca() {

@@ -245,6 +245,7 @@ class MainActivity : AppCompatActivity() {
         // quando o vídeo já está rodando, ou em três segundos se não rodar.
         handler.postDelayed({ startGuide() }, 3_000)
         handler.postDelayed(vigiaDeImagem, VIGIA_MS)
+        handler.post(vigiaDeFontes)
     }
 
     /** Pega a lista publicada sem tirar do ar o canal que está tocando. */
@@ -632,6 +633,22 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Relê a lista de servidores desligados de dois em dois minutos.
+     *
+     * Desligar um provedor no painel tem que valer sem ninguém fechar o app:
+     * quem está assistindo quando a fonte morre é justamente quem precisa que
+     * ela suma. Quando a lista muda, a lista de canais é remontada na hora.
+     */
+    private val vigiaDeFontes = object : Runnable {
+        override fun run() {
+            lifecycleScope.launch(semDerrubar) {
+                if (FontesDesativadas.atualizar()) reorder()
+            }
+            handler.postDelayed(this, 120_000)
+        }
+    }
+
     private val sourceTimeout = Runnable {
         val channel = ordered.getOrNull(current) ?: return@Runnable
         Telemetria.falhou("live", channel.name, channel.sources.getOrNull(sourceIndex)?.url.orEmpty(),
@@ -734,7 +751,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun reorder() {
         val playing = ordered.getOrNull(current)?.name
-        ordered = Categorias.ordenar(Unlock.channels())
+        // O que o painel desligou some aqui, antes de a lista chegar à tela:
+        // canal sem nenhuma fonte não abriria mesmo.
+        ordered = FontesDesativadas.peneirarCanais(Categorias.ordenar(Unlock.channels()))
         val found = ordered.indexOfFirst { it.name == playing }
         // Ao trancar com um desses no ar, o nome ficaria à vista na faixa;
         // volta para o primeiro canal comum antes de a lista encolher.
