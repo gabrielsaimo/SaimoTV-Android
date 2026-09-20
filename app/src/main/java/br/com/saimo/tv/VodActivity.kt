@@ -115,6 +115,8 @@ class VodActivity : AppCompatActivity() {
         escopo = lifecycleScope,
         capaDe = { titulo, serie -> Capas.capa(titulo, serie) })
     private var gavetas: List<Vod.Gaveta> = emptyList()
+    /// Os nomes do acervo comum, peneira do "continue assistindo".
+    private var nomesDoAcervo: Set<String> = emptySet()
     private var episodiosDaSerie: List<Episodio> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -386,6 +388,7 @@ class VodActivity : AppCompatActivity() {
      */
     private suspend fun mostrarInicio() {
         if (gavetas.isEmpty()) gavetas = Vod.indice(this)
+        if (nomesDoAcervo.isEmpty()) nomesDoAcervo = Vod.nomesDoAcervo(this)
         val filas = mutableListOf<Inicio.Fila>()
 
         continuar()?.let { filas += it }
@@ -448,9 +451,17 @@ class VodActivity : AppCompatActivity() {
      *
      * É a fileira que mais importa e a única que não vem do repositório: ela é
      * feita do que está gravado neste aparelho.
+     *
+     * Só entra o que existe no acervo comum. Os extras ficam de fora do índice
+     * de busca de propósito, e a mesma regra vale aqui: a tela inicial abre sem
+     * código nenhum e não pode ser por onde um título reservado reaparece.
+     * Enquanto o índice não chegou, a fileira fica vazia — mostrar de menos é o
+     * erro certo a cometer.
      */
     private fun continuar(): Inicio.Fila? {
-        val itens = Progresso.emAndamento(this).take(20)
+        val itens = Progresso.emAndamento(this)
+            .filter { it.titulo in nomesDoAcervo }
+            .take(20)
         if (itens.isEmpty()) return null
         val cartoes = itens.map { andamento ->
             Inicio.Cartao(

@@ -171,6 +171,26 @@ object Vod {
      * memória depois da primeira busca, que é quando a pessoa vai fazer a
      * segunda.
      */
+    /**
+     * Os nomes do acervo comum, para peneirar listas locais.
+     *
+     * Os extras ficam de fora do índice de busca de propósito — o que não
+     * aparece sem o código também não pode aparecer numa busca comum. Quem
+     * monta uma fileira a partir do que está gravado no aparelho, como o
+     * "continue assistindo", precisa da mesma peneira: a tela inicial abre sem
+     * código nenhum e não pode ser por onde um título reservado reaparece.
+     */
+    suspend fun nomesDoAcervo(context: Context): Set<String> {
+        val texto = indiceBusca ?: arquivo(context, "busca.txt")?.also { indiceBusca = it }
+            ?: return emptySet()
+        val out = HashSet<String>()
+        for (linha in texto.lineSequence()) {
+            val nome = linha.substringBefore('\t')
+            if (nome.isNotBlank()) out += nome
+        }
+        return out
+    }
+
     suspend fun buscar(context: Context, termo: String): List<Achado> {
         val alvo = normalizar(termo)
         if (alvo.length < 2) return emptyList()
