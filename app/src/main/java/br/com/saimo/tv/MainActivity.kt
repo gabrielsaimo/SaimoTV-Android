@@ -754,7 +754,7 @@ class MainActivity : AppCompatActivity() {
         if (isFinishing || isDestroyed) return
         handler.removeCallbacks(openOnHold)
         val itens = canal.sources.mapIndexed { i, fonte ->
-            getString(R.string.fontes_item, i + 1,
+            "${fonte.quality ?: "Qualidade não informada"} · " + getString(R.string.fontes_item, i + 1,
                 fonte.url.toUri().host?.removePrefix("www.") ?: fonte.url.take(40))
         }.toTypedArray()
         val marcada = if (index == current) sourceIndex else -1

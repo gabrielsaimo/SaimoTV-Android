@@ -10,6 +10,7 @@ data class Source(
     /// Par KID:chave do ClearKey, em hexadecimal, para as fontes DASH.
     val keyId: String? = null,
     val key: String? = null,
+    val quality: String? = null,
 ) {
     val isDash: Boolean get() = url.contains(".mpd", ignoreCase = true)
     val isHls: Boolean get() =

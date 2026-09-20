@@ -25,6 +25,7 @@ data class Source(
     /// Par KID:chave do ClearKey, em hexadecimal, para as fontes DASH.
     val keyId: String? = null,
     val key: String? = null,
+    val quality: String? = null,
 ) {
     val isDash: Boolean get() = url.contains(".mpd", ignoreCase = true)
     // Alguns provedores publicam um manifesto #EXTM3U como text/plain e com
@@ -82,8 +83,8 @@ def parse_txt(nome, categoria_padrao=None):
         elif campo == "fonte":
             fonte = {"url": valor, "referer": None, "userAgent": None, "key": None}
             channels[-1]["sources"].append(fonte)
-        elif fonte is not None and campo in ("referer", "agente", "chave"):
-            fonte[{"agente": "userAgent", "chave": "key"}.get(campo, campo)] = valor
+        elif fonte is not None and campo in ("referer", "agente", "chave", "qualidade"):
+            fonte[{"agente": "userAgent", "chave": "key", "qualidade": "quality"}.get(campo, campo)] = valor
     return [c for c in channels if c["sources"]]
 
 
@@ -99,6 +100,8 @@ def emit(out, missing, channels):
             out.append(f'                url = {quote(source["url"])},')
             if source["referer"]:
                 out.append(f'                referer = {quote(source["referer"])},')
+            if source.get("quality"):
+                out.append(f'                quality = {quote(source["quality"])},')
             if source["userAgent"]:
                 out.append(f'                userAgent = {quote(source["userAgent"])},')
             if source["key"]:

@@ -165,6 +165,9 @@ object Remote {
                 "logo" -> logo = value
                 "categoria" -> categoria = value
                 "fonte" -> sources += Source(value)
+                "qualidade" -> if (sources.isNotEmpty()) {
+                    sources[sources.size - 1] = sources.last().copy(quality = value)
+                }
                 "referer" -> if (sources.isNotEmpty()) {
                     sources[sources.size - 1] = sources.last().copy(referer = value)
                 }
