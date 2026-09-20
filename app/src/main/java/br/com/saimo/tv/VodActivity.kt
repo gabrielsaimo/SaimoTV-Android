@@ -119,6 +119,8 @@ class VodActivity : AppCompatActivity() {
     private var gavetas: List<Vod.Gaveta> = emptyList()
     /// Os nomes do acervo comum, peneira do "continue assistindo".
     private var nomesDoAcervo: Set<String> = emptySet()
+    /// O gênero escolhido na régua, ou vazio para todos.
+    private var genero = ""
     private var episodiosDaSerie: List<Episodio> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -213,8 +215,9 @@ class VodActivity : AppCompatActivity() {
             is Passo.Resultados -> resultados(passo.termo)
             is Passo.Favoritos -> favoritos()
         }
-        estado.visibility = if (linhas.isEmpty()) View.VISIBLE else View.GONE
-        if (linhas.isEmpty()) estado.text = getString(R.string.vod_vazio)
+        val visiveis = porGenero(linhas, passo)
+        estado.visibility = if (visiveis.isEmpty()) View.VISIBLE else View.GONE
+        if (visiveis.isEmpty()) estado.text = getString(R.string.vod_vazio)
 
         // Letras cabem lado a lado; título e episódio precisam da linha inteira.
         // Letra é curta e cabe muita numa linha; título precisa de largura, mas
@@ -229,12 +232,12 @@ class VodActivity : AppCompatActivity() {
         // Contar duas seções ou vinte e sete letras não diz nada a ninguém; o
         // número só ajuda quando são títulos.
         contagem.text = when {
-            linhas.isEmpty() || passo is Passo.Inicio || passo is Passo.Letras -> ""
+            visiveis.isEmpty() || passo is Passo.Inicio || passo is Passo.Letras -> ""
             passo is Passo.Fontes ->
-                resources.getQuantityString(R.plurals.vod_fontes, linhas.size, linhas.size)
-            else -> resources.getQuantityString(R.plurals.vod_titulos, linhas.size, linhas.size)
+                resources.getQuantityString(R.plurals.vod_fontes, visiveis.size, visiveis.size)
+            else -> resources.getQuantityString(R.plurals.vod_titulos, visiveis.size, visiveis.size)
         }
-        adapter.trocar(linhas)
+        adapter.trocar(visiveis)
         lista.post { lista.getChildAt(0)?.requestFocus() ?: lista.requestFocus() }
     }
 
@@ -341,6 +344,42 @@ class VodActivity : AppCompatActivity() {
                 ir(Passo.Letras(filmes = true, reservado = true))
             })
         }
+        montarGeneros()
+    }
+
+    /**
+     * A régua de gêneros, depois das seções.
+     *
+     * O catálogo não tem gênero: ele vem de um arquivo publicado à parte. Por
+     * isso a régua só existe depois que esse arquivo chega — oferecer um filtro
+     * que devolve vazio é pior que não oferecer.
+     */
+    private fun montarGeneros() {
+        lifecycleScope.launch(semDerrubar) {
+            Generos.carregar(this@VodActivity)
+            if (Generos.todos.isEmpty() || isFinishing || isDestroyed) return@launch
+            secoes.addView(separador())
+            secoes.addView(pilula(getString(R.string.vod_todos)) { escolherGenero("") })
+            for (nome in Generos.todos) {
+                secoes.addView(pilula(nome) { escolherGenero(nome) })
+            }
+        }
+    }
+
+    private fun escolherGenero(nome: String) {
+        genero = if (genero == nome) "" else nome
+        mostrar(pilha.last())
+    }
+
+    /** Uma barrinha entre as seções e os gêneros: são duas coisas diferentes. */
+    private fun separador(): View {
+        val linha = View(this)
+        val regras = android.widget.LinearLayout.LayoutParams(2, 44)
+        regras.marginStart = 16
+        regras.marginEnd = 6
+        linha.layoutParams = regras
+        linha.setBackgroundColor(ContextCompat.getColor(this, R.color.text_secondary))
+        return linha
     }
 
     private fun pilula(texto: String, aoTocar: () -> Unit): View {
@@ -496,6 +535,26 @@ class VodActivity : AppCompatActivity() {
     }
 
     /** Um destaque vira cartão: a capa já veio pronta, a ação reusa a busca. */
+    /**
+     * As linhas que sobram depois do gênero escolhido.
+     *
+     * Só vale onde a linha é um título: letra, temporada e escolha de fonte
+     * não têm gênero, e some-las seria deixar a tela vazia sem motivo.
+     */
+    private fun porGenero(linhas: List<Linha>, passo: Passo): List<Linha> {
+        if (genero.isEmpty() || !Generos.prontos) return linhas
+        val deTitulo = passo is Passo.Titulos || passo is Passo.Colecao ||
+            passo is Passo.Resultados || passo is Passo.Favoritos
+        if (!deTitulo) return linhas
+        return linhas.filter { linha ->
+            val serie = linha.capaDe ?: return@filter true
+            Generos.tem(semAno(linha.texto), serie, genero)
+        }
+    }
+
+    /// A lista de gêneros guarda o título como o acervo o escreve.
+    private fun semAno(texto: String) = texto.replace(Regex("\\s*\\(\\d{4}\\)\\s*$"), "").trim()
+
     private fun cartaoDe(item: Destaques.Item) = Inicio.Cartao(
         titulo = item.titulo,
         capa = item.capa,
