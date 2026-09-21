@@ -48,6 +48,8 @@ class VodActivity : AppCompatActivity() {
         object Inicio : Passo
         data class Letras(val filmes: Boolean, val reservado: Boolean = false) : Passo
         data class Titulos(val filmes: Boolean, val letra: String, val reservado: Boolean = false) : Passo
+        /// Filmes ou séries inteiros, sem passar por letra.
+        data class Tudo(val filmes: Boolean) : Passo
         data class Temporadas(val letra: String, val serie: Serie) : Passo
         data class Episodios(val letra: String, val serie: Serie, val temporada: Int) : Passo
         data class Colecao(val tipo: String) : Passo
@@ -89,6 +91,8 @@ class VodActivity : AppCompatActivity() {
     private val seletorAdapter = Adapter()
     private lateinit var campoDeBusca: android.widget.EditText
     private lateinit var secoes: android.widget.LinearLayout
+    private lateinit var generosBarra: View
+    private lateinit var generosLista: android.widget.LinearLayout
     private lateinit var teclado: View
     private lateinit var termo: TextView
     private lateinit var teclas: android.widget.GridLayout
@@ -115,7 +119,7 @@ class VodActivity : AppCompatActivity() {
     /// A primeira tela é de fileiras de capa; as outras continuam em lista.
     private val filasAdapter = Inicio.Adapter(
         escopo = lifecycleScope,
-        capaDe = { titulo, serie -> Capas.capa(titulo, serie) })
+        capaDe = { titulo, serie -> Generos.capa(titulo, serie) })
     private var gavetas: List<Vod.Gaveta> = emptyList()
     /// Os nomes do acervo comum, peneira do "continue assistindo".
     private var nomesDoAcervo: Set<String> = emptySet()
@@ -131,12 +135,18 @@ class VodActivity : AppCompatActivity() {
         lista = findViewById(R.id.vodLista)
         campoDeBusca = findViewById(R.id.vodBusca)
         secoes = findViewById(R.id.vodSecoes)
+        generosBarra = findViewById(R.id.vodGenerosBarra)
+        generosLista = findViewById(R.id.vodGeneros)
         montarFerramentas()
         titulo = findViewById(R.id.vodTitulo)
         trilha = findViewById(R.id.vodTrilha)
         contagem = findViewById(R.id.vodContagem)
         estado = findViewById(R.id.vodEstado)
         browse = findViewById(R.id.browse)
+        // Sem isto o sistema dá o foco ao primeiro focável — o campo de busca —
+        // e o teclado abre sozinho em cima da tela que a pessoa veio ver.
+        browse.isFocusableInTouchMode = true
+        browse.requestFocus()
         playerView = findViewById(R.id.vodPlayer)
         seletor = findViewById(R.id.vodSeletor)
         seletorSerie = findViewById(R.id.vodSeletorSerie)
@@ -175,7 +185,26 @@ class VodActivity : AppCompatActivity() {
 
     // MARK: - Navegação
 
+    /**
+     * Onde cada degrau estava quando alguém saiu dele.
+     *
+     * Com trinta e quatro mil filmes numa lista só, descer, abrir um título e
+     * voltar ao topo é perder o lugar de verdade — e obrigar a descer tudo de
+     * novo. A posição é guardada ao sair e devolvida ao voltar.
+     */
+    private val ondeParou = mutableMapOf<String, Int>()
+
+    private fun marcaDe(passo: Passo): String = passo.toString()
+
+    private fun guardarPosicao() {
+        val passo = pilha.lastOrNull() ?: return
+        val gerente = lista.layoutManager as? GridLayoutManager ?: return
+        val primeiro = gerente.findFirstVisibleItemPosition()
+        if (primeiro >= 0) ondeParou[marcaDe(passo)] = primeiro
+    }
+
     private fun ir(passo: Passo) {
+        guardarPosicao()
         pilha.addLast(passo)
         mostrar(passo)
     }
@@ -186,6 +215,8 @@ class VodActivity : AppCompatActivity() {
             return true
         }
         if (pilha.size <= 1) return false
+        // O degrau que está saindo não interessa mais; guardar a posição dele
+        // aqui sobrescreveria a do degrau de baixo, que é o que vai voltar.
         pilha.removeLast()
         mostrar(pilha.last())
         return true
@@ -207,6 +238,7 @@ class VodActivity : AppCompatActivity() {
         val linhas: List<Linha> = when (passo) {
             is Passo.Inicio -> inicio()
             is Passo.Letras -> letras(passo)
+            is Passo.Tudo -> tudo(passo.filmes)
             is Passo.Titulos -> titulos(passo.filmes, passo.letra, passo.reservado)
             is Passo.Temporadas -> temporadas(passo.letra, passo.serie)
             is Passo.Episodios -> episodios(passo.temporada)
@@ -225,7 +257,7 @@ class VodActivity : AppCompatActivity() {
         (lista.layoutManager as GridLayoutManager).spanCount = when (passo) {
             is Passo.Letras -> 6
             is Passo.Titulos, is Passo.Episodios, is Passo.Colecao,
-            is Passo.Resultados, is Passo.Favoritos -> 2
+            is Passo.Resultados, is Passo.Favoritos, is Passo.Tudo -> 2
             else -> 1
         }
         trilha.text = trilhaDe(passo)
@@ -237,13 +269,27 @@ class VodActivity : AppCompatActivity() {
                 resources.getQuantityString(R.plurals.vod_fontes, visiveis.size, visiveis.size)
             else -> resources.getQuantityString(R.plurals.vod_titulos, visiveis.size, visiveis.size)
         }
+        atualizarBarraDeGeneros()
         adapter.trocar(visiveis)
-        lista.post { lista.getChildAt(0)?.requestFocus() ?: lista.requestFocus() }
+        val volta = ondeParou[marcaDe(passo)] ?: 0
+        lista.post {
+            if (volta in visiveis.indices) {
+                (lista.layoutManager as? GridLayoutManager)?.scrollToPosition(volta)
+                // Um quadro depois: a célula só existe depois de a lista rolar.
+                lista.post {
+                    lista.findViewHolderForAdapterPosition(volta)?.itemView?.requestFocus()
+                        ?: lista.requestFocus()
+                }
+            } else {
+                lista.getChildAt(0)?.requestFocus() ?: lista.requestFocus()
+            }
+        }
     }
 
     private fun trilhaDe(passo: Passo): String = when (passo) {
         is Passo.Inicio -> ""
         is Passo.Letras -> secao(passo.filmes, passo.reservado)
+        is Passo.Tudo -> secao(passo.filmes)
         is Passo.Titulos -> "${secao(passo.filmes, passo.reservado)} › ${passo.letra}"
         is Passo.Temporadas -> "${getString(R.string.vod_series)} › ${passo.serie.nomeCompleto}"
         is Passo.Episodios -> "${passo.serie.nomeCompleto} › " +
@@ -329,8 +375,8 @@ class VodActivity : AppCompatActivity() {
         }
 
         val atalhos = listOf(
-            getString(R.string.vod_filmes) to { ir(Passo.Letras(filmes = true)) },
-            getString(R.string.vod_series) to { ir(Passo.Letras(filmes = false)) },
+            getString(R.string.vod_filmes) to { ir(Passo.Tudo(filmes = true)) },
+            getString(R.string.vod_series) to { ir(Passo.Tudo(filmes = false)) },
             getString(R.string.vod_animes) to { ir(Passo.Colecao("animes")) },
             getString(R.string.vod_doramas) to { ir(Passo.Colecao("doramas")) },
             getString(R.string.vod_favoritos) to { ir(Passo.Favoritos) },
@@ -358,29 +404,42 @@ class VodActivity : AppCompatActivity() {
         lifecycleScope.launch(semDerrubar) {
             Generos.carregar(this@VodActivity)
             if (Generos.todos.isEmpty() || isFinishing || isDestroyed) return@launch
-            secoes.addView(separador())
-            secoes.addView(pilula(getString(R.string.vod_todos)) { escolherGenero("") })
+            // Fileira própria: na mesma linha das seções, a barra ficava longa
+            // demais e empurrava o campo de busca para fora da tela.
+            generosLista.removeAllViews()
+            generosLista.addView(pilula(getString(R.string.vod_todos)) { escolherGenero("") })
             for (nome in Generos.todos) {
-                secoes.addView(pilula(nome) { escolherGenero(nome) })
+                generosLista.addView(pilula(nome) { escolherGenero(nome) })
             }
+            atualizarBarraDeGeneros()
         }
+    }
+
+    /**
+     * A régua de gêneros só existe onde ela filtra alguma coisa.
+     *
+     * Na tela inicial as fileiras são curadoria — "em alta", "lançamentos" — e
+     * peneirá-las por gênero deixa faixas com um cartão ou nenhum. Nas seções,
+     * que são o acervo inteiro, é onde o gênero serve.
+     */
+    private fun atualizarBarraDeGeneros() {
+        val passo = pilha.lastOrNull()
+        val cabe = Generos.todos.isNotEmpty() &&
+            (passo is Passo.Tudo || passo is Passo.Titulos || passo is Passo.Colecao)
+        generosBarra.visibility = if (cabe) View.VISIBLE else View.GONE
     }
 
     private fun escolherGenero(nome: String) {
         genero = if (genero == nome) "" else nome
-        mostrar(pilha.last())
+        // `mostrar` cuida das outras telas; o início tem caminho próprio.
+        if (pilha.last() is Passo.Inicio) {
+            lifecycleScope.launch(semDerrubar) { mostrarInicio() }
+        } else {
+            mostrar(pilha.last())
+        }
     }
 
-    /** Uma barrinha entre as seções e os gêneros: são duas coisas diferentes. */
-    private fun separador(): View {
-        val linha = View(this)
-        val regras = android.widget.LinearLayout.LayoutParams(2, 44)
-        regras.marginStart = 16
-        regras.marginEnd = 6
-        linha.layoutParams = regras
-        linha.setBackgroundColor(ContextCompat.getColor(this, R.color.text_secondary))
-        return linha
-    }
+
 
     private fun pilula(texto: String, aoTocar: () -> Unit): View {
         val botao = android.widget.TextView(this).apply {
@@ -481,7 +540,7 @@ class VodActivity : AppCompatActivity() {
         // Favoritos em primeiro: quem marcou um título marcou para voltar nele.
         return favoritosNoInicio() + listOf(
             Linha(getString(R.string.vod_filmes), resources.getQuantityString(R.plurals.vod_titulos, filmes, filmes), "F") {
-                ir(Passo.Letras(filmes = true))
+                ir(Passo.Tudo(filmes = true))
             },
             Linha(getString(R.string.vod_series), resources.getQuantityString(R.plurals.vod_titulos, series, series), "S") {
                 ir(Passo.Letras(filmes = false))
@@ -529,6 +588,7 @@ class VodActivity : AppCompatActivity() {
             lista.layoutManager = LinearLayoutManager(this)
             lista.adapter = filasAdapter
         }
+        generosBarra.visibility = View.GONE
         filasAdapter.trocar(filas)
         trilha.visibility = View.GONE
         lista.post { lista.requestFocus() }
@@ -544,16 +604,13 @@ class VodActivity : AppCompatActivity() {
     private fun porGenero(linhas: List<Linha>, passo: Passo): List<Linha> {
         if (genero.isEmpty() || !Generos.prontos) return linhas
         val deTitulo = passo is Passo.Titulos || passo is Passo.Colecao ||
-            passo is Passo.Resultados || passo is Passo.Favoritos
+            passo is Passo.Resultados || passo is Passo.Favoritos || passo is Passo.Tudo
         if (!deTitulo) return linhas
         return linhas.filter { linha ->
             val serie = linha.capaDe ?: return@filter true
-            Generos.tem(semAno(linha.texto), serie, genero)
+            Generos.tem(linha.texto, serie, genero)
         }
     }
-
-    /// A lista de gêneros guarda o título como o acervo o escreve.
-    private fun semAno(texto: String) = texto.replace(Regex("\\s*\\(\\d{4}\\)\\s*$"), "").trim()
 
     private fun cartaoDe(item: Destaques.Item) = Inicio.Cartao(
         titulo = item.titulo,
@@ -767,6 +824,27 @@ class VodActivity : AppCompatActivity() {
             }
         }
 
+    /**
+     * O acervo inteiro de um tipo, sem escolher letra antes.
+     *
+     * A lista sai do índice de busca, que tem todos os nomes; abrir um título
+     * continua indo ao arquivo da letra dele. São vinte e dois mil filmes numa
+     * lista só, o que o RecyclerView aguenta porque desenha apenas o que está
+     * à vista.
+     */
+    private suspend fun tudo(filmes: Boolean): List<Linha> =
+        Vod.todos(this, serie = !filmes).map { achado ->
+            Linha(achado.nomeCompleto,
+                getString(if (achado.serie) R.string.vod_series else R.string.vod_filmes_um),
+                inicial(achado.titulo), capaDe = achado.serie,
+                progresso = if (achado.serie) null
+                            else Progresso.fracao(this, Progresso.chaveFilme(achado.titulo)),
+                favorito = VodFavoritos.Item(
+                    achado.titulo, achado.serie, achado.letra, achado.ano)) {
+                lifecycleScope.launch(semDerrubar) { abrirAchado(achado) }
+            }
+        }
+
     /** Animes e doramas já vêm com os episódios no mesmo arquivo. */
     private suspend fun colecao(tipo: String): List<Linha> =
         Vod.colecao(this, tipo).sortedBy { it.titulo.lowercase() }.map { item ->
@@ -971,7 +1049,7 @@ class VodActivity : AppCompatActivity() {
         fichaCapa.setImageDrawable(null)
         fichaCapa.visibility = View.GONE
         lifecycleScope.launch(semDerrubar) {
-            val capa = Capas.capa(nome, deSerie) ?: return@launch
+            val capa = Generos.capa(nome, deSerie) ?: return@launch
             if (fichaNome.text != nome) return@launch
             fichaCapa.visibility = View.VISIBLE
             fichaCapa.load(capa) {
@@ -1314,7 +1392,16 @@ class VodActivity : AppCompatActivity() {
             // A busca sai só para o que está na tela, e o resultado é descartado
             // se a linha já tiver sido reusada por outro título enquanto isso.
             lifecycleScope.launch(semDerrubar) {
-                val capa = Capas.capa(linha.texto, serie) ?: return@launch
+                val capa = Generos.capa(linha.texto, serie)
+                if (capa == null) {
+                    // Sem ficha no TMDB: a marca de "sem imagem" no lugar,
+                    // que é honesto e não custa busca nenhuma.
+                    if (holder.pedido == linha.texto) {
+                        holder.capa.visibility = View.VISIBLE
+                        holder.capa.setImageResource(R.drawable.sem_capa)
+                    }
+                    return@launch
+                }
                 if (holder.pedido != linha.texto) return@launch
                 holder.capa.visibility = View.VISIBLE
                 holder.capa.load(capa) {

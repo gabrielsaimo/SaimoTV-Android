@@ -192,6 +192,28 @@ object Vod {
         return out
     }
 
+    /**
+     * O acervo inteiro de um tipo, sem passar por letra.
+     *
+     * O catálogo é publicado por letra porque nenhum TV Box abre um arquivo de
+     * vinte megabytes — mas o índice de busca tem todos os nomes em 780 KB, e é
+     * dele que sai a lista completa. Abrir um título continua indo ao arquivo
+     * da letra dele, como sempre; o que muda é não obrigar ninguém a escolher
+     * uma letra antes de ver o que existe.
+     */
+    suspend fun todos(context: Context, serie: Boolean): List<Achado> {
+        val texto = indiceBusca ?: arquivo(context, "busca.txt")?.also { indiceBusca = it }
+            ?: return emptyList()
+        val out = mutableListOf<Achado>()
+        for (linha in texto.lineSequence()) {
+            val campos = linha.split("\t")
+            if (campos.size < 3 || campos[0].isEmpty()) continue
+            if ((campos[1] == "s") != serie) continue
+            out += Achado(campos[0], serie, campos[2], campos.getOrNull(3).orEmpty())
+        }
+        return out
+    }
+
     suspend fun buscar(context: Context, termo: String): List<Achado> {
         val alvo = normalizar(termo)
         if (alvo.length < 2) return emptyList()

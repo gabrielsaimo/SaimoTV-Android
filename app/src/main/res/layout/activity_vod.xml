@@ -9,6 +9,8 @@
         android:id="@+id/browse"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:orientation="vertical">
 
         <LinearLayout
@@ -83,6 +85,25 @@
                     android:orientation="horizontal" />
             </HorizontalScrollView>
         </LinearLayout>
+
+        <!-- Os gêneros em fileira própria: junto das seções, a linha ficava
+             longa demais e o campo de busca sumia para fora da tela. -->
+        <HorizontalScrollView
+            android:id="@+id/vodGenerosBarra"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="46dp"
+            android:paddingEnd="46dp"
+            android:paddingBottom="12dp"
+            android:scrollbars="none"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/vodGeneros"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
 
         <TextView
             android:id="@+id/vodTrilha"
