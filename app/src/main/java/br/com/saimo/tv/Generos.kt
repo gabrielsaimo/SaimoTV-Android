@@ -1,7 +1,9 @@
 package br.com.saimo.tv
 
 import android.content.Context
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.Request
 import java.io.File
@@ -34,6 +36,9 @@ object Generos {
 
     val prontos: Boolean get() = mapa.isNotEmpty()
 
+    @Volatile
+    private var baixando = false
+
     private fun chave(titulo: String, serie: Boolean) = (if (serie) "s|" else "f|") + titulo
 
     /**
@@ -54,9 +59,29 @@ object Generos {
     fun tem(titulo: String, serie: Boolean, genero: String): Boolean =
         genero.isEmpty() || genero in de(titulo, serie)
 
+    /**
+     * Lê as fichas e, quando o arquivo local está velho, busca o novo depois.
+     *
+     * Antes o download de 3,7 MB vinha primeiro: numa TV Box em wi-fi, isso é
+     * a tela inteira sem capa nenhuma até o arquivo chegar, todo dia. Agora o
+     * que está em disco entra na hora e o arquivo novo, quando chega, refaz os
+     * mapas — a capa que faltava aparece sozinha na próxima rolagem.
+     */
     suspend fun carregar(context: Context) = withContext(Dispatchers.IO) {
         if (prontos) return@withContext
+        val local = arquivoLocal(context)
+        val guardado = runCatching { if (local.exists()) local.readText() else null }.getOrNull()
+        if (!guardado.isNullOrBlank()) {
+            montar(guardado)
+            if (velho(local)) baixarDepois(context)
+            return@withContext
+        }
         val texto = texto(context) ?: return@withContext
+        montar(texto)
+    }
+
+    /** Monta os mapas a partir do conteúdo do arquivo. */
+    private fun montar(texto: String) {
         val novo = HashMap<String, List<String>>(40_000)
         val novasCapas = HashMap<String, String>(40_000)
         val vistos = sortedSetOf<String>()
@@ -81,6 +106,26 @@ object Generos {
         todos = vistos.toList()
     }
 
+    private fun arquivoLocal(context: Context) =
+        File(File(context.filesDir, "vod").apply { mkdirs() }, ARQUIVO)
+
+    private fun velho(local: File) =
+        System.currentTimeMillis() - local.lastModified() >= VALIDADE_MS
+
+    /** Baixa o arquivo novo sem segurar a tela, e refaz os mapas quando chega. */
+    private fun baixarDepois(context: Context) {
+        if (baixando) return
+        baixando = true
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val novo = baixar(context)
+                if (!novo.isNullOrBlank()) montar(novo)
+            } finally {
+                baixando = false
+            }
+        }
+    }
+
     /**
      * O pôster de um título, pelo id que o gerador já resolveu.
      *
@@ -92,13 +137,14 @@ object Generos {
     fun capa(titulo: String, serie: Boolean): String? =
         capas[chave(titulo, serie)] ?: capas[chave(semAno(titulo), serie)]
 
-    private fun texto(context: Context): String? {
-        val pasta = File(context.filesDir, "vod").apply { mkdirs() }
-        val local = File(pasta, ARQUIVO)
-        val fresco = local.exists() && local.length() > 0 &&
-            System.currentTimeMillis() - local.lastModified() < VALIDADE_MS
-        if (fresco) return runCatching { local.readText() }.getOrNull()
+    /** A primeira vez: não há nada em disco, então só resta esperar a rede. */
+    private fun texto(context: Context): String? =
+        baixar(context) ?: runCatching {
+            val local = arquivoLocal(context)
+            if (local.exists()) local.readText() else null
+        }.getOrNull()
 
+    private fun baixar(context: Context): String? {
         val baixado = runCatching {
             val pedido = Request.Builder().url(Vod.BASE + ARQUIVO)
                 .header("User-Agent", Playback.DEFAULT_USER_AGENT)
@@ -108,11 +154,10 @@ object Generos {
                 if (!r.isSuccessful) null else r.body?.string()
             }
         }.getOrNull()
-
         if (!baixado.isNullOrBlank()) {
-            runCatching { local.writeText(baixado) }
+            runCatching { arquivoLocal(context).writeText(baixado) }
             return baixado
         }
-        return runCatching { if (local.exists()) local.readText() else null }.getOrNull()
+        return null
     }
 }

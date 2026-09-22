@@ -123,6 +123,8 @@ class VodActivity : AppCompatActivity() {
     private var gavetas: List<Vod.Gaveta> = emptyList()
     /// Os nomes do acervo comum, peneira do "continue assistindo".
     private var nomesDoAcervo: Set<String> = emptySet()
+    /// Os nomes de animes e doramas, que não entram no índice de busca.
+    private var nomesDasColecoes: Set<String> = emptySet()
     /// O gênero escolhido na régua, ou vazio para todos.
     private var genero = ""
     private var episodiosDaSerie: List<Episodio> = emptyList()
@@ -570,6 +572,12 @@ class VodActivity : AppCompatActivity() {
     private suspend fun mostrarInicio() {
         if (gavetas.isEmpty()) gavetas = Vod.indice(this)
         if (nomesDoAcervo.isEmpty()) nomesDoAcervo = Vod.nomesDoAcervo(this)
+        if (nomesDasColecoes.isEmpty()) {
+            nomesDasColecoes = listOf("animes", "doramas")
+                .flatMap { Vod.colecao(this, it) }
+                .map { it.titulo }
+                .toSet()
+        }
         val filas = mutableListOf<Inicio.Fila>()
 
         continuar()?.let { filas += it }
@@ -658,8 +666,11 @@ class VodActivity : AppCompatActivity() {
      * erro certo a cometer.
      */
     private fun continuar(): Inicio.Fila? {
+        // Anime e dorama não entram no índice de busca (eles moram nas
+        // coleções), então a peneira precisa conhecer os dois: sem isso, o
+        // episódio de dorama que a pessoa parou no meio sumia daqui.
         val itens = Progresso.emAndamento(this)
-            .filter { it.titulo in nomesDoAcervo }
+            .filter { it.titulo in nomesDoAcervo || it.titulo in nomesDasColecoes }
             .take(20)
         if (itens.isEmpty()) return null
         val cartoes = itens.map { andamento ->
@@ -669,6 +680,8 @@ class VodActivity : AppCompatActivity() {
                 inicial = inicial(andamento.titulo),
                 progresso = andamento.fracao,
                 procurarCapa = andamento.serie,
+                // O cartão diz "Série · T1 E3"; a capa é a da série.
+                nomeDaCapa = andamento.titulo,
             ) {
                 lifecycleScope.launch(semDerrubar) {
                     // A letra não é guardada junto do progresso; a busca a
@@ -677,7 +690,30 @@ class VodActivity : AppCompatActivity() {
                     val alvo = achados.firstOrNull {
                         it.titulo.equals(andamento.titulo, ignoreCase = true)
                     } ?: achados.firstOrNull()
-                    if (alvo != null) abrirAchado(alvo)
+                    if (alvo != null) {
+                        abrirAchado(alvo)
+                        return@launch
+                    }
+                    // Não está no acervo comum: procura nas coleções, que é
+                    // onde moram anime e dorama.
+                    val daColecao = listOf("animes", "doramas").firstNotNullOfOrNull { tipo ->
+                        Vod.colecao(this@VodActivity, tipo).firstOrNull {
+                            it.titulo.equals(andamento.titulo, ignoreCase = true)
+                        }
+                    }
+                    if (daColecao != null) {
+                        episodiosDaSerie = daColecao.episodios
+                        ir(Passo.Temporadas("",
+                            Serie(daColecao.titulo, daColecao.ano, -1, daColecao.episodios.size)))
+                        return@launch
+                    }
+                    // Nem no acervo nem nas coleções: dizer isso é melhor que
+                    // um clique que não faz nada.
+                    android.widget.Toast.makeText(
+                        this@VodActivity,
+                        getString(R.string.vod_sumiu, andamento.titulo),
+                        android.widget.Toast.LENGTH_LONG,
+                    ).show()
                 }
             }
         }

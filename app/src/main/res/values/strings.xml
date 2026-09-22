@@ -55,6 +55,7 @@
     <string name="vod_seletor_dica">ESQUERDA e DIREITA trocam a temporada · VOLTAR fecha</string>
     <string name="vod_legenda">OK escolhe · MENU favorita · VOLTAR sobe um nível</string>
     <string name="vod_carregando">Carregando…</string>
+    <string name="vod_sumiu">"%1$s" não está mais no acervo.</string>
     <string name="vod_vazio">Nada aqui</string>
     <plurals name="vod_titulos">
         <item quantity="one">%1$d título</item>

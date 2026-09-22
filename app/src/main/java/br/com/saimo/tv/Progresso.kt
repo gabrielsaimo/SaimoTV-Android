@@ -25,17 +25,27 @@ object Progresso {
     fun chaveEpisodio(serie: String, temporada: Int, numero: Int) =
         "s|$serie|$temporada|$numero"
 
+    /**
+     * Guarda onde parou.
+     *
+     * Duração desconhecida (0 ou C.TIME_UNSET) é "a fonte não diz quanto
+     * dura" — acontece no HLS do EmbedPlayer. Exigir a duração fazia o
+     * progresso nunca ser gravado nesses títulos; sem ela guarda-se o ponto do
+     * mesmo jeito, só não dá para desenhar a barra.
+     */
     fun salvar(context: Context, chave: String, posicao: Long, duracao: Long) {
-        if (chave.isBlank() || duracao <= 0) return
+        if (chave.isBlank() || posicao <= 0) return
+        val temDuracao = duracao > 0 && duracao != Long.MIN_VALUE
+        val guardada = if (temDuracao) duracao else 0L
         val prefs = context.getSharedPreferences(ARQUIVO, Context.MODE_PRIVATE)
-        if (posicao < MINIMO_MS || posicao > duracao - SOBRA_MS) {
+        if (posicao < MINIMO_MS || (temDuracao && posicao > duracao - SOBRA_MS)) {
             // Acabou de começar ou já terminou: nada a retomar.
             prefs.edit().remove(chave).remove("$chave|d").remove("$chave|t").apply()
             return
         }
         prefs.edit()
             .putLong(chave, posicao)
-            .putLong("$chave|d", duracao)
+            .putLong("$chave|d", guardada)
             .putLong("$chave|t", System.currentTimeMillis())
             .apply()
     }
@@ -57,7 +67,7 @@ object Progresso {
             if (chave.endsWith("|d") || chave.endsWith("|t")) continue
             val posicao = valor as? Long ?: continue
             val duracao = tudo["$chave|d"] as? Long ?: continue
-            if (posicao <= 0 || duracao <= 0) continue
+            if (posicao <= 0 || duracao < 0) continue
             val quando = tudo["$chave|t"] as? Long ?: 0L
             val campos = chave.split("|")
             val serie = campos.firstOrNull() == "s"
@@ -72,7 +82,8 @@ object Progresso {
                 titulo = titulo,
                 rotulo = rotulo,
                 serie = serie,
-                fracao = (posicao.toFloat() / duracao).coerceIn(0f, 1f),
+                // Sem duração não há fração que se possa mostrar.
+                fracao = if (duracao > 0) (posicao.toFloat() / duracao).coerceIn(0f, 1f) else 0f,
                 quando = quando,
             )
         }

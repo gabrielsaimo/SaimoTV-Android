@@ -51,6 +51,9 @@ object Inicio {
         /// o título é série. Nulo nos cartões que não são título — "Filmes",
         /// "Buscar" e companhia, que não têm capa nenhuma para procurar.
         val procurarCapa: Boolean? = null,
+        /// O nome com que se procura a capa, quando não é o que está escrito
+        /// no cartão: o episódio mostra "Série · T1 E3" e a capa é a da série.
+        val nomeDaCapa: String? = null,
         val aoEscolher: () -> Unit,
     )
 
@@ -165,8 +168,9 @@ object Inicio {
                 holder.imagem.visibility = View.GONE
                 val serie = cartao.procurarCapa ?: return
                 val buscar = capaDe ?: return
+                val nome = cartao.nomeDaCapa ?: cartao.titulo
                 escopo?.launch {
-                    val achada = buscar(cartao.titulo, serie) ?: return@launch
+                    val achada = buscar(nome, serie) ?: return@launch
                     if (holder.pedido != cartao.titulo) return@launch
                     holder.imagem.visibility = View.VISIBLE
                     holder.imagem.load(achada) { crossfade(true) }
