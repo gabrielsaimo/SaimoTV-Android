@@ -55,6 +55,19 @@
     <string name="vod_seletor_dica">ESQUERDA e DIREITA trocam a temporada · VOLTAR fecha</string>
     <string name="vod_legenda">OK escolhe · MENU favorita · VOLTAR sobe um nível</string>
     <string name="vod_carregando">Carregando…</string>
+    <!-- Ficha do título: sinopse, números, quem assina e elenco. -->
+    <string name="vod_ficha">Ficha</string>
+    <string name="vod_ficha_dica">sinopse, elenco e mais</string>
+    <string name="vod_ficha_assistir">Assistir</string>
+    <string name="vod_ficha_vazia">Sem ficha para este título.</string>
+    <string name="vod_ficha_sinopse">Sinopse</string>
+    <string name="vod_ficha_direcao">Direção</string>
+    <string name="vod_ficha_criacao">Criação</string>
+    <string name="vod_ficha_roteiro">Roteiro</string>
+    <string name="vod_ficha_producao">Produção</string>
+    <string name="vod_ficha_minutos">%1$d min</string>
+    <string name="vod_ficha_minutos_ep">%1$d min/ep</string>
+    <string name="vod_ficha_sem_acervo">Nada desta pessoa no acervo.</string>
     <string name="vod_sumiu">"%1$s" não está mais no acervo.</string>
     <string name="vod_vazio">Nada aqui</string>
     <plurals name="vod_titulos">

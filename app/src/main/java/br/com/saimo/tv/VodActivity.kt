@@ -62,6 +62,15 @@ class VodActivity : AppCompatActivity() {
         ) : Passo
         data class Resultados(val termo: String) : Passo
         object Favoritos : Passo
+        /// A ficha de um título: sinopse, duração, gêneros e elenco.
+        data class Ficha(
+            val titulo: String,
+            val serie: Boolean,
+            val ano: String,
+            val letra: String,
+        ) : Passo
+        /// O que um ator fez e que existe neste acervo.
+        data class Filmografia(val ator: Int, val nome: String) : Passo
     }
 
     private data class Linha(
@@ -248,6 +257,8 @@ class VodActivity : AppCompatActivity() {
             is Passo.Fontes -> fontes(passo)
             is Passo.Resultados -> resultados(passo.termo)
             is Passo.Favoritos -> favoritos()
+            is Passo.Ficha -> fichaDoTitulo(passo)
+            is Passo.Filmografia -> filmografia(passo.ator)
         }
         val visiveis = porGenero(linhas, passo)
         estado.visibility = if (visiveis.isEmpty()) View.VISIBLE else View.GONE
@@ -259,7 +270,8 @@ class VodActivity : AppCompatActivity() {
         (lista.layoutManager as GridLayoutManager).spanCount = when (passo) {
             is Passo.Letras -> 6
             is Passo.Titulos, is Passo.Episodios, is Passo.Colecao,
-            is Passo.Resultados, is Passo.Favoritos, is Passo.Tudo -> 2
+            is Passo.Resultados, is Passo.Favoritos, is Passo.Tudo,
+            is Passo.Filmografia -> 2
             else -> 1
         }
         trilha.text = trilhaDe(passo)
@@ -296,6 +308,8 @@ class VodActivity : AppCompatActivity() {
         is Passo.Temporadas -> "${getString(R.string.vod_series)} › ${passo.serie.nomeCompleto}"
         is Passo.Episodios -> "${passo.serie.nomeCompleto} › " +
             getString(R.string.vod_temporada, passo.temporada)
+        is Passo.Ficha -> passo.titulo
+        is Passo.Filmografia -> passo.nome
         is Passo.Colecao -> getString(
             if (passo.tipo == "animes") R.string.vod_animes else R.string.vod_doramas)
         is Passo.Fontes -> "${passo.titulo} › ${getString(R.string.vod_escolha_fonte)}"
@@ -773,6 +787,81 @@ class VodActivity : AppCompatActivity() {
         })
     }
 
+    /**
+     * A ficha de um título, em linhas: sinopse, números, quem assina, elenco.
+     *
+     * A tela é uma lista de linhas — é o que esta activity sabe desenhar e o
+     * que o direcional sabe percorrer. Cada ator é uma linha que abre o que
+     * ele tem aqui dentro, que é a única filmografia que vale de dentro do
+     * aplicativo.
+     */
+    private suspend fun fichaDoTitulo(passo: Passo.Ficha): List<Linha> {
+        val ficha = Detalhes.de(passo.titulo, passo.serie)
+        val linhas = mutableListOf<Linha>()
+
+        linhas += Linha(getString(R.string.vod_ficha_assistir), passo.titulo, "▶") {
+            lifecycleScope.launch(semDerrubar) {
+                abrirAchado(Vod.Achado(passo.titulo, passo.serie, passo.letra, passo.ano))
+            }
+        }
+
+        if (ficha == null || ficha.vazia) {
+            linhas += Linha(getString(R.string.vod_ficha_vazia), null, "?") {}
+            return linhas
+        }
+
+        val numeros = buildList {
+            if (ficha.ano.isNotBlank()) add(ficha.ano)
+            ficha.duracao?.let {
+                add(if (passo.serie) getString(R.string.vod_ficha_minutos_ep, it)
+                    else getString(R.string.vod_ficha_minutos, it))
+            }
+            ficha.classificacao?.takeIf { it.isNotBlank() }?.let { add(it) }
+            if (ficha.nota > 0) add("★ %.1f".format(ficha.nota))
+        }.joinToString("  ·  ")
+        if (numeros.isNotBlank()) {
+            linhas += Linha(numeros, ficha.generos.joinToString(", ").ifBlank { null }, "i") {}
+        }
+
+        if (ficha.sinopse.isNotBlank()) {
+            linhas += Linha(getString(R.string.vod_ficha_sinopse), ficha.sinopse, "¶") {}
+        }
+        if (ficha.assinatura.isNotBlank()) {
+            linhas += Linha(
+                getString(if (passo.serie) R.string.vod_ficha_criacao
+                          else R.string.vod_ficha_direcao),
+                ficha.assinatura, "✎") {}
+        }
+        if (ficha.roteiro.isNotBlank()) {
+            linhas += Linha(getString(R.string.vod_ficha_roteiro), ficha.roteiro, "✎") {}
+        }
+        if (ficha.produtora.isNotBlank()) {
+            linhas += Linha(getString(R.string.vod_ficha_producao), ficha.produtora, "©") {}
+        }
+        for (pessoa in ficha.elenco) {
+            linhas += Linha(pessoa.nome, pessoa.papel.ifBlank { null },
+                pessoa.nome.take(1).uppercase()) {
+                ir(Passo.Filmografia(pessoa.id, pessoa.nome))
+            }
+        }
+        return linhas
+    }
+
+    /** O que um ator fez e que existe no acervo, pronto para abrir. */
+    private suspend fun filmografia(ator: Int): List<Linha> {
+        val achados = Detalhes.acervoDe(this, ator)
+        if (achados.isEmpty()) {
+            return listOf(Linha(getString(R.string.vod_ficha_sem_acervo), null, "?") {})
+        }
+        return achados.map { achado ->
+            Linha(achado.nomeCompleto,
+                getString(if (achado.serie) R.string.vod_series else R.string.vod_filmes_um),
+                inicial(achado.titulo), capaDe = achado.serie) {
+                lifecycleScope.launch(semDerrubar) { abrirAchado(achado) }
+            }
+        }
+    }
+
     private fun favoritos(): List<Linha> = VodFavoritos.lista(this).map { item ->
         Linha(item.nomeCompleto,
             getString(if (item.serie) R.string.vod_series else R.string.vod_filmes_um),
@@ -784,6 +873,21 @@ class VodActivity : AppCompatActivity() {
                 abrirAchado(Vod.Achado(item.titulo, item.serie, item.letra, item.ano))
             }
         }
+    }
+
+    /// Abre a ficha do título em foco. Linha que não é título não tem ficha.
+    private fun fichaEmFoco() {
+        val item = linhaEmFoco()?.favorito ?: return
+        ir(Passo.Ficha(item.titulo, item.serie, item.ano, item.letra))
+    }
+
+    private fun linhaEmFoco(): Linha? {
+        val foco = currentFocus ?: return null
+        val posicao = lista.getChildAdapterPosition(
+            generateSequence(foco) { it.parent as? View }
+                .firstOrNull { it.parent === lista } ?: return null)
+        if (posicao == RecyclerView.NO_POSITION) return null
+        return adapter.linha(posicao)
     }
 
     /// A tecla age sobre a linha em foco, e é o adaptador quem sabe qual é.
@@ -896,7 +1000,13 @@ class VodActivity : AppCompatActivity() {
         serieNoAr = serie
         letraNoAr = letra
         if (serie.pedaco >= 0) episodiosDaSerie = Vod.episodios(this, letra, serie)
-        return episodiosDaSerie.map { it.temporada }.distinct().sorted().map { numero ->
+        // A ficha na frente das temporadas: nem todo controle tem tecla INFO,
+        // e saber do que a série trata não pode depender de descobrir o atalho.
+        val ficha = Linha(getString(R.string.vod_ficha),
+            getString(R.string.vod_ficha_dica), "i") {
+            ir(Passo.Ficha(serie.titulo, serie = true, ano = serie.ano, letra = letra))
+        }
+        return listOf(ficha) + episodiosDaSerie.map { it.temporada }.distinct().sorted().map { numero ->
             val quantos = episodiosDaSerie.count { it.temporada == numero }
             Linha(getString(R.string.vod_temporada, numero),
                 getString(R.string.vod_eps, quantos), numero.toString()) {
@@ -928,15 +1038,28 @@ class VodActivity : AppCompatActivity() {
             }
         }
 
-    private fun fontes(passo: Passo.Fontes): List<Linha> = passo.opcoes.map { opcao ->
-        Linha(
-            getString(R.string.vod_fonte_opcao, rotulo(opcao.versao), opcao.numero, opcao.total),
-            origem(opcao.url), opcao.numero.toString()) {
-                tocar(passo.titulo, listOf(opcao.url),
-                    detalhe = detalheDaFonte(passo.detalhe, opcao),
-                    deSerie = passo.deSerie, chave = passo.chave)
-            }
+    private fun fontes(passo: Passo.Fontes): List<Linha> {
+        val opcoes = passo.opcoes.map { opcao ->
+            Linha(
+                getString(R.string.vod_fonte_opcao, rotulo(opcao.versao), opcao.numero, opcao.total),
+                origem(opcao.url), opcao.numero.toString()) {
+                    tocar(passo.titulo, listOf(opcao.url),
+                        detalhe = detalheDaFonte(passo.detalhe, opcao),
+                        deSerie = passo.deSerie, chave = passo.chave)
+                }
+        }
+        // Escolher a fonte é o último momento antes de o filme começar: é aqui
+        // que ainda dá para conferir do que ele trata.
+        if (passo.deSerie) return opcoes
+        val ficha = Linha(getString(R.string.vod_ficha),
+            getString(R.string.vod_ficha_dica), "i") {
+            ir(Passo.Ficha(passo.titulo, serie = false, ano = "", letra = letraDe(passo.titulo)))
+        }
+        return opcoes + ficha
     }
+
+    /// A letra de um título é a inicial que o acervo usa para guardá-lo.
+    private fun letraDe(titulo: String): String = inicial(titulo)
 
     private fun abrirFilme(filme: Filme) {
         escolherFonte(
@@ -1280,6 +1403,14 @@ class VodActivity : AppCompatActivity() {
             (event.keyCode == KeyEvent.KEYCODE_MENU ||
              event.keyCode == KeyEvent.KEYCODE_BOOKMARK)) {
             favoritarEmFoco()
+            return true
+        }
+        // INFO abre a ficha do título em foco: sinopse, duração, gêneros e
+        // elenco, sem precisar abrir o filme para descobrir do que se trata.
+        if (event.action == KeyEvent.ACTION_DOWN && player == null &&
+            teclado.visibility != View.VISIBLE &&
+            event.keyCode == KeyEvent.KEYCODE_INFO) {
+            fichaEmFoco()
             return true
         }
         if (event.action != KeyEvent.ACTION_DOWN || player == null ||

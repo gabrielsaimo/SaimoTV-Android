@@ -26,8 +26,8 @@ android {
         // Alcança os TV Box antigos ainda em uso.
         minSdk = 21
         targetSdk = 35
-        versionCode = 10706
-        versionName = "1.7.6"
+        versionCode = 10707
+        versionName = "1.7.7"
     }
 
     signingConfigs {

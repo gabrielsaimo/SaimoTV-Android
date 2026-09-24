@@ -30,6 +30,13 @@ object Generos {
     private var mapa: Map<String, List<String>> = emptyMap()
     /// Título -> endereço inteiro do pôster, quando o TMDB conhece o título.
     private var capas: Map<String, String> = emptyMap()
+    /// Título -> id do TMDB. Com o id em mãos, a ficha completa de um título
+    /// é um pedido só, sem busca por nome nem desempate.
+    private var ids: Map<String, Int> = emptyMap()
+    /// O caminho inverso: id do TMDB -> título do acervo. É assim que a
+    /// filmografia de um ator vira uma lista clicável — só entra o que existe
+    /// aqui dentro.
+    private var porId: Map<Int, String> = emptyMap()
     /// Todos os gêneros que aparecem no acervo, em ordem alfabética.
     var todos: List<String> = emptyList()
         private set
@@ -55,6 +62,13 @@ object Generos {
     private val ANO_NO_FIM = Regex("\\s*\\(\\d{4}\\)\\s*$")
 
     fun semAno(titulo: String): String = titulo.replace(ANO_NO_FIM, "").trim()
+
+    /** O id do TMDB de um título, quando o gerador o resolveu. */
+    fun id(titulo: String, serie: Boolean): Int? =
+        ids[chave(titulo, serie)] ?: ids[chave(semAno(titulo), serie)]
+
+    /** O título do acervo que corresponde a um id do TMDB, se houver. */
+    fun titulo(id: Int, serie: Boolean): String? = porId[if (serie) -id else id]
 
     fun tem(titulo: String, serie: Boolean, genero: String): Boolean =
         genero.isEmpty() || genero in de(titulo, serie)
@@ -84,6 +98,8 @@ object Generos {
     private fun montar(texto: String) {
         val novo = HashMap<String, List<String>>(40_000)
         val novasCapas = HashMap<String, String>(40_000)
+        val novosIds = HashMap<String, Int>(40_000)
+        val novoPorId = HashMap<Int, String>(40_000)
         val vistos = sortedSetOf<String>()
         var base = ""
         // tipo \t título \t id do TMDB \t pôster \t gêneros
@@ -95,6 +111,14 @@ object Generos {
             val chave = "${campos[0]}|${campos[1]}"
             val poster = campos[3]
             if (poster.isNotBlank()) novasCapas[chave] = base + poster
+            val id = campos[2].toIntOrNull()
+            if (id != null && id > 0) {
+                novosIds[chave] = id
+                val marca = if (campos[0] == "s") -id else id
+                // Um mesmo id pode aparecer duas vezes no acervo (o mesmo
+                // filme em duas grafias); o primeiro basta.
+                if (!novoPorId.containsKey(marca)) novoPorId[marca] = campos[1]
+            }
             val lista = campos[4].split(",").filter { it.isNotBlank() }
             if (lista.isNotEmpty()) {
                 novo[chave] = lista
@@ -103,6 +127,8 @@ object Generos {
         }
         mapa = novo
         capas = novasCapas
+        ids = novosIds
+        porId = novoPorId
         todos = vistos.toList()
     }
 
