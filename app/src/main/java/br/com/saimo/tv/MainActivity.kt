@@ -203,7 +203,8 @@ class MainActivity : AppCompatActivity() {
         Favorites.load(this)
         // A lista publicada de ontem já está em disco: abre com ela e troca
         // quando a de hoje chegar, para o app nunca abrir sem canais.
-        Remote.loadCached(this)
+        // Já lida pela tela inicial na maioria das vezes: não relê o disco.
+        if (Remote.channels === CATALOG) Remote.loadCached(this)
         channels.layoutManager = LinearLayoutManager(this)
         channels.adapter = adapter
         // As linhas têm todas a mesma altura, então o RecyclerView pode pular a

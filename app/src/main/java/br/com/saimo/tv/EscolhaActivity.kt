@@ -76,7 +76,12 @@ class EscolhaActivity : AppCompatActivity() {
         cabecalhoPadrao()
 
         lifecycleScope.launch(semDerrubar) {
-            Remote.loadCached(this@EscolhaActivity)
+            // Ler 990 canais do disco leva segundos num TV Box fraco: fora da
+            // linha da tela, para ela aparecer já.
+            kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                if (Remote.channels === CATALOG) Remote.loadCached(this@EscolhaActivity)
+            }
+            montarFilas()
             Epg.carregarCache(this@EscolhaActivity)
             montarFilas()
         }

@@ -44,7 +44,10 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            // R8: APK menor e código mais enxuto — abre mais rápido no TV Box.
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             // Sem o keystore.properties (outra máquina), cai na de depuração —
             // serve para compilar, mas o APK publicado tem de sair daqui.
             signingConfig = if (chave.getProperty("storeFile") != null) {

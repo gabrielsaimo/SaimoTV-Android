@@ -89,7 +89,6 @@ object Inicio {
                     initialPrefetchItemCount = 6
                 }
             holder.capas.setRecycledViewPool(if (viewType == Tipo.LARGO.ordinal) depositoLargos else depositoCapas)
-            holder.capas.setHasFixedSize(true)
             holder.capas.isFocusable = false
             return holder
         }
