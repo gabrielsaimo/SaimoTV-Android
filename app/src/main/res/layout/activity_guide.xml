@@ -211,6 +211,22 @@
                         android:textSize="18sp" />
 
                     <TextView
+                        android:id="@+id/fichaLembrar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="14dp"
+                        android:background="@drawable/row_focus"
+                        android:focusable="true"
+                        android:gravity="center_vertical"
+                        android:paddingStart="24dp"
+                        android:paddingTop="12dp"
+                        android:paddingEnd="24dp"
+                        android:paddingBottom="12dp"
+                        android:textColor="@color/text_primary"
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+
+                    <TextView
                         android:id="@+id/fichaFechar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

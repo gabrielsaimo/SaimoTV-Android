@@ -29,6 +29,7 @@ import java.util.Locale
  * schedule on the right. Left and right move between the two, up and down move
  * within, and OK on a channel tunes to it.
  */
+@androidx.media3.common.util.UnstableApi
 class GuideActivity : AppCompatActivity() {
 
     private lateinit var channelList: RecyclerView
@@ -217,6 +218,22 @@ class GuideActivity : AppCompatActivity() {
         }
 
         ficha.visibility = View.VISIBLE
+        // Programa que ainda vai começar: "me avise". Na hora, um painel
+        // aparece por cima do que estiver na tela, e um OK leva ao canal.
+        val lembrar = findViewById<TextView>(R.id.fichaLembrar)
+        if (!noAr && programa.start > agora && canal != null) {
+            val lembrete = Lembretes.Lembrete(canal.name, programa.title, programa.start)
+            fun pintar() {
+                val marcado = Lembretes.tem(canal.name, programa.start)
+                lembrar.text = getString(if (marcado) R.string.lembrete_marcado else R.string.lembrete_marcar)
+                Icones.inicio(lembrar, if (marcado) R.drawable.ic_bell_off else R.drawable.ic_bell)
+            }
+            pintar()
+            lembrar.visibility = View.VISIBLE
+            lembrar.setOnClickListener { Lembretes.alternar(lembrete); pintar(); programmes.refresh() }
+        } else {
+            lembrar.visibility = View.GONE
+        }
         fichaAssistir.post { fichaAssistir.requestFocus() }
     }
 
