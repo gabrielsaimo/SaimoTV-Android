@@ -15,6 +15,9 @@ import java.util.Locale
 import java.util.TimeZone
 import java.util.zip.GZIPInputStream
 
+private val TEMPORADA_S = Regex("^S(\\d+)")
+private val NUMEROS = Regex("""\d+""")
+
 data class Programme(
     val title: String,
     val category: String,
@@ -34,7 +37,7 @@ data class Programme(
     val episodeLabel: String?
         get() {
             val raw = episode?.takeIf { it.isNotBlank() } ?: return null
-            val label = if ("." !in raw) raw.replace(Regex("^S(\\d+)"), "T$1") else {
+            val label = if ("." !in raw) raw.replace(TEMPORADA_S, "T$1") else {
                 val fields = raw.split(".").map { it.substringBefore("/") }
                 val season = fields.getOrNull(0)?.trim()?.toIntOrNull()?.plus(1)
                 val number = fields.getOrNull(1)?.trim()?.toIntOrNull()?.plus(1)
@@ -50,7 +53,7 @@ data class Programme(
             // toIntOrNull, e não toInt: a Pluto publica a data de estreia
             // inteira neste campo ("20260915212508"), que não cabe num Int —
             // o app fechava ao abrir canal da Pluto.
-            val numbers = Regex("""\d+""").findAll(label).mapNotNull { it.value.toIntOrNull() }.toList()
+            val numbers = NUMEROS.findAll(label).mapNotNull { it.value.toIntOrNull() }.toList()
             val season = numbers.firstOrNull() ?: return null
             if (season > 40) return null
             if (numbers.size > 1 && numbers.last() > 200) return null
@@ -93,6 +96,7 @@ object Epg {
     private const val CACHE_TTL_MS = 6 * 60 * 60 * 1000L
     private const val PAST_WINDOW_MS = 6 * 60 * 60 * 1000L
     private const val FUTURE_WINDOW_MS = 3 * 24 * 60 * 60 * 1000L
+    private const val LEVE_WINDOW_MS = 30 * 60 * 60 * 1000L
 
     /** Feed names that differ from ours. */
     private val ALIASES = mapOf(
@@ -157,7 +161,11 @@ object Epg {
         // Canal da Pluto só usa o guia da Pluto; os outros nem tentam casá-lo.
         val names = Remote.channels.map { it.name }.filterNot { it in principais }
         val from = System.currentTimeMillis() - PAST_WINDOW_MS
-        val to = System.currentTimeMillis() + FUTURE_WINDOW_MS
+        // Em aparelho de 1 GB, três dias de grade com sinopse são dezenas de MB
+        // no heap enquanto o canal toca — o bastante para o sistema matar o
+        // app. Um dia e pouco cobre o que alguém consulta no guia.
+        val to = System.currentTimeMillis() +
+            if (Aparelho.poucaMemoria) LEVE_WINDOW_MS else FUTURE_WINDOW_MS
         val merged = LinkedHashMap<String, List<Programme>>()
 
         suspend fun publish() {
@@ -192,7 +200,12 @@ object Epg {
         // guia simplesmente não aparecia.
         val byTitle = HashMap<String, Programme>()
         for (url in FEEDS) {
-            val parsed = runCatching { parseFeed(url, names, from, to, byTitle) }
+            // Com pouca memória, os feeds só completam quem ficou sem guia: ler
+            // os canais que o meuguia já cobriu serviu só para as imagens, e é
+            // o que fazia o pico.
+            val alvo = if (Aparelho.poucaMemoria) names.filter { merged[it] == null } else names
+            if (alvo.isEmpty()) break
+            val parsed = runCatching { parseFeed(url, alvo, from, to, byTitle) }
                 .getOrNull() ?: continue
             for ((channel, programmes) in parsed) {
                 if (merged[channel] == null) merged[channel] = programmes
@@ -377,8 +390,7 @@ object Epg {
         // O elenco vem como uma lista de <actor> dentro de <credits>.
         val cast = between(element, "<credits", "</credits>")
             ?.let { bloco ->
-                Regex("<actor[^>]*>(.*?)</actor>", RegexOption.DOT_MATCHES_ALL)
-                    .findAll(bloco)
+                ATOR.findAll(bloco)
                     .map { decodeEntities(it.groupValues[1]).trim() }
                     .filter { it.isNotEmpty() }
                     .toList()
@@ -501,16 +513,26 @@ object Epg {
 
     // MARK: - Shared helpers
 
+    /**
+     * Chamada para cada canal e cada programa dos feeds — dezenas de milhares
+     * de vezes. Com três `Regex` novos por chamada, só compilar padrões dava
+     * 150 MB de memória nativa por carga do guia; aqui é um passe de letras.
+     */
     fun normalise(text: String): String {
-        var value = decodeEntities(text).replace(Regex("""^[A-Z]{2}\s*[-|]\s*"""), "")
-        value = Normalizer.normalize(value, Normalizer.Form.NFD)
-            .replace(Regex("""\p{Mn}+"""), "")
-        val tokens = value.lowercase(Locale.ROOT)
-            .replace(Regex("""[^a-z0-9]+"""), " ").trim().split(" ")
-            .filter { it.isNotEmpty() }.toMutableList()
+        val value = Normalizer.normalize(decodeEntities(text).replaceFirst(PREFIXO_PAIS, ""), Normalizer.Form.NFD)
+        val limpo = StringBuilder(value.length)
+        for (ch in value) {
+            if (Character.getType(ch) == Character.NON_SPACING_MARK.toInt()) continue
+            val c = ch.lowercaseChar()
+            limpo.append(if (c in 'a'..'z' || c in '0'..'9') c else ' ')
+        }
+        val tokens = limpo.split(' ').filter { it.isNotEmpty() }.toMutableList()
         while (tokens.size > 1 && tokens.last() in NOISE) tokens.removeAt(tokens.size - 1)
         return tokens.joinToString(" ")
     }
+
+    private val ATOR = Regex("<actor[^>]*>(.*?)</actor>", RegexOption.DOT_MATCHES_ALL)
+    private val PREFIXO_PAIS = Regex("""^[A-Z]{2}\s*[-|]\s*""")
 
     fun decodeEntities(text: String): String =
         if ('&' !in text) text
@@ -566,59 +588,100 @@ object Epg {
     private fun signature(): String =
         "v4:" + Remote.channels.joinToString("|") { it.name }.hashCode().toString()
 
-    private fun readSignature(context: Context): String? = runCatching {
-        JSONObject(cacheFile(context).readText()).optString(SIGNATURE_KEY).ifEmpty { null }
-    }.getOrNull()
+    /// A assinatura mora num arquivo à parte: antes, conferir se o cache
+    /// valia relia os 7 MB do guia inteiro só para achar uma linha.
+    private fun signatureFile(context: Context) = File(context.cacheDir, "epg.sig")
+
+    private fun readSignature(context: Context): String? =
+        runCatching { signatureFile(context).readText() }.getOrNull()?.ifEmpty { null }
 
     private fun cacheAge(context: Context): Long {
         val file = cacheFile(context)
         return if (file.exists()) System.currentTimeMillis() - file.lastModified() else Long.MAX_VALUE
     }
 
+    /**
+     * O guia guardado, lido em fluxo.
+     *
+     * São ~7 MB de JSON. Ler como texto e montar a árvore inteira custava
+     * dezenas de MB de uma vez — num TV Box de 1 GB o sistema matava o app
+     * logo ao abrir. Em fluxo, só os programas ficam na memória.
+     */
     private fun readCache(context: Context): Map<String, List<Programme>>? = runCatching {
-        val root = JSONObject(cacheFile(context).readText())
+        val arquivo = cacheFile(context)
+        if (!arquivo.exists()) return@runCatching null
         val cutoff = System.currentTimeMillis() - PAST_WINDOW_MS
+        val limite = if (Aparelho.poucaMemoria) System.currentTimeMillis() + LEVE_WINDOW_MS else Long.MAX_VALUE
+        // Gênero e nomes se repetem milhares de vezes: uma cópia só de cada.
+        val iguais = HashMap<String, String>()
+        fun unico(v: String) = iguais.getOrPut(v) { v }
         val out = HashMap<String, List<Programme>>()
-        for (name in root.keys()) {
-            if (name == SIGNATURE_KEY) continue
-            val array = root.getJSONArray(name)
-            val list = (0 until array.length()).map { index ->
-                val item = array.getJSONObject(index)
-                Programme(item.getString("t"), item.optString("c"),
-                    item.getLong("s"), item.getLong("e"),
-                    item.optString("p").ifEmpty { null },
-                    item.optString("n").ifEmpty { null },
-                    item.optString("y").ifEmpty { null },
-                    item.optString("d").ifEmpty { null },
-                    item.optJSONArray("a")?.let { atores ->
-                        (0 until atores.length()).map { atores.getString(it) }
-                    } ?: emptyList())
-            }.filter { it.stop > cutoff }
-            if (list.isNotEmpty()) out[name] = list
+        android.util.JsonReader(arquivo.bufferedReader()).use { r ->
+            r.beginObject()
+            while (r.hasNext()) {
+                val name = r.nextName()
+                if (name == SIGNATURE_KEY) { r.skipValue(); continue }
+                val lista = ArrayList<Programme>()
+                r.beginArray()
+                while (r.hasNext()) {
+                    var t = ""; var c = ""; var ini = 0L; var fim = 0L
+                    var p: String? = null; var n: String? = null; var y: String? = null; var d: String? = null
+                    val atores = ArrayList<String>(0)
+                    r.beginObject()
+                    while (r.hasNext()) {
+                        when (r.nextName()) {
+                            "t" -> t = r.nextString()
+                            "c" -> c = unico(r.nextString())
+                            "s" -> ini = r.nextLong()
+                            "e" -> fim = r.nextLong()
+                            "p" -> p = r.nextString().ifEmpty { null }
+                            "n" -> n = r.nextString().ifEmpty { null }
+                            "y" -> y = r.nextString().ifEmpty { null }
+                            "d" -> d = r.nextString().ifEmpty { null }
+                            "a" -> { r.beginArray(); while (r.hasNext()) atores += unico(r.nextString()); r.endArray() }
+                            else -> r.skipValue()
+                        }
+                    }
+                    r.endObject()
+                    if (fim > cutoff && ini < limite) {
+                        lista += Programme(t, c, ini, fim, p, n, y, d, if (atores.isEmpty()) emptyList() else atores)
+                    }
+                }
+                r.endArray()
+                if (lista.isNotEmpty()) out[name] = lista
+            }
+            r.endObject()
         }
         out.takeIf { it.isNotEmpty() }
     }.getOrNull()
 
     private fun writeCache(context: Context, data: Map<String, List<Programme>>) = runCatching {
-        val root = JSONObject()
-        for ((name, list) in data) {
-            val array = JSONArray()
-            for (programme in list) {
-                array.put(JSONObject().apply {
-                    put("t", programme.title)
-                    put("c", programme.category)
-                    put("s", programme.start)
-                    put("e", programme.stop)
-                    programme.poster?.let { put("p", it) }
-                    programme.episode?.let { put("n", it) }
-                    programme.year?.let { put("y", it) }
-                    programme.description?.let { put("d", it) }
-                    if (programme.cast.isNotEmpty()) put("a", JSONArray(programme.cast))
-                })
+        val destino = cacheFile(context)
+        val temporario = File(destino.path + ".novo")
+        android.util.JsonWriter(temporario.bufferedWriter()).use { w ->
+            w.beginObject()
+            for ((name, list) in data) {
+                w.name(name).beginArray()
+                for (programme in list) {
+                    w.beginObject()
+                    w.name("t").value(programme.title)
+                    w.name("c").value(programme.category)
+                    w.name("s").value(programme.start)
+                    w.name("e").value(programme.stop)
+                    programme.poster?.let { w.name("p").value(it) }
+                    programme.episode?.let { w.name("n").value(it) }
+                    programme.year?.let { w.name("y").value(it) }
+                    programme.description?.let { w.name("d").value(it) }
+                    if (programme.cast.isNotEmpty()) {
+                        w.name("a").beginArray(); programme.cast.forEach { w.value(it) }; w.endArray()
+                    }
+                    w.endObject()
+                }
+                w.endArray()
             }
-            root.put(name, array)
+            w.endObject()
         }
-        root.put(SIGNATURE_KEY, signature())
-        cacheFile(context).writeText(root.toString())
+        temporario.renameTo(destino)
+        signatureFile(context).writeText(signature())
     }
 }

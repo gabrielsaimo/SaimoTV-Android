@@ -29,20 +29,29 @@ object GuiaDeTv {
 
     /// Mesmo limite do MeuGuia: rolar a lista depressa não pode virar seis
     /// downloads de uma vez roubando banda do canal que acabou de abrir.
-    private val gate = Semaphore(6)
+    private val PADRAO = Regex(
+        "^(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2}):(\\d{2}):\\d{2}[^\"]*\"" +
+            "[\\s\\S]*?<a[^>]*href=\"[^\"]*programa/[^\"]+\"[^>]*>[\\s\\S]*?" +
+            "([A-Za-zÀ-ÿ0-9][^<]{2,150})")
+    private val ESPACOS = Regex("\\s+")
+
+    /// Em aparelho de 1 GB, duas: cada página vira String e lista inteiras.
+    private val gate by lazy { Semaphore(if (Aparelho.poucaMemoria) 2 else 6) }
 
     suspend fun fetch(names: List<String>, from: Long, to: Long): Map<String, List<Programme>> =
         coroutineScope {
             names.mapNotNull { name -> CODES[name]?.let { name to it } }
                 .map { (name, slug) ->
                     async(Dispatchers.IO) {
-                        val html = gate.withPermit {
+                        // O parse dentro da vez: fora dela, as páginas baixadas
+                        // esperavam juntas na memória.
+                        val lista = gate.withPermit {
                             runCatching {
-                                Epg.download("https://www.guiadetv.com/canal/$slug")
+                                parse(Epg.download("https://www.guiadetv.com/canal/$slug"))
+                                    .filter { it.stop > from && it.start < to }
                             }.getOrNull()
                         }
-                        name to (html?.let { parse(it) }?.filter { it.stop > from && it.start < to }
-                            ?: emptyList())
+                        name to (lista ?: emptyList())
                     }
                 }
                 .awaitAll()
@@ -57,18 +66,18 @@ object GuiaDeTv {
      */
     fun parse(html: String): List<Programme> {
         val zone = TimeZone.getTimeZone("America/Sao_Paulo")
-        val padrao = Regex(
-            "data-dt=\"(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2}):(\\d{2}):\\d{2}[^\"]*\"" +
-                "[\\s\\S]*?<a[^>]*href=\"[^\"]*programa/[^\"]+\"[^>]*>[\\s\\S]*?" +
-                "([A-Za-zÀ-ÿ0-9][^<]{2,150})")
-
         val vistos = LinkedHashMap<Long, String>()
-        for (m in padrao.findAll(html)) {
+        // Um pedaço por horário, em vez de um padrão sobre a página inteira: o
+        // regex do Android (ICU) copia toda a entrada para memória nativa, que
+        // só volta no próximo GC — com várias páginas, eram 80 MB fora do heap,
+        // e o sistema matava o app com o canal no ar.
+        for (pedaco in html.split("data-dt=\"").drop(1)) {
+            val m = PADRAO.find(pedaco) ?: continue
             val (ano, mes, dia, hora, minuto) = m.destructured
             val calendario = Calendar.getInstance(zone)
             calendario.clear()
             calendario.set(ano.toInt(), mes.toInt() - 1, dia.toInt(), hora.toInt(), minuto.toInt(), 0)
-            val titulo = Epg.decodeEntities(m.groupValues[6]).trim().replace(Regex("\\s+"), " ")
+            val titulo = Epg.decodeEntities(m.groupValues[6]).trim().replace(ESPACOS, " ")
             if (titulo.length < 2) continue
             // O mesmo instante pode repetir na página — o link do programa
             // carrega metadados extras que também casam com o padrão.

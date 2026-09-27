@@ -35,20 +35,23 @@ object MeuGuia {
 
     /// Seis por vez. Trinta e três downloads de uma vez roubam a banda do vídeo
     /// que acabou de abrir, e o canal engasga logo nos primeiros segundos.
-    private val gate = Semaphore(6)
+    /// Em aparelho de 1 GB, duas: cada página vira String e lista inteiras.
+    private val gate by lazy { Semaphore(if (Aparelho.poucaMemoria) 2 else 6) }
 
     suspend fun fetch(names: List<String>, from: Long, to: Long): Map<String, List<Programme>> =
         coroutineScope {
             names.mapNotNull { name -> CODES[name]?.let { name to it } }
                 .map { (name, code) ->
                     async(Dispatchers.IO) {
-                        val html = gate.withPermit {
+                        // O parse dentro da vez: fora dela, as páginas baixadas
+                        // esperavam juntas na memória.
+                        val lista = gate.withPermit {
                             runCatching {
-                                Epg.download("https://meuguia.tv/programacao/canal/$code")
+                                parse(Epg.download("https://meuguia.tv/programacao/canal/$code"))
+                                    .filter { it.stop > from && it.start < to }
                             }.getOrNull()
                         }
-                        name to (html?.let { parse(it) }?.filter { it.stop > from && it.start < to }
-                            ?: emptyList())
+                        name to (lista ?: emptyList())
                     }
                 }
                 .awaitAll()

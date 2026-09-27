@@ -177,10 +177,9 @@ abstract class TelaComMenu : AppCompatActivity() {
     }
 
     override fun setContentView(layoutResID: Int) {
-        val raiz = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            clipChildren = false
-        }
+        // Recorta cada parte no próprio espaço: a imagem larga da ficha, sem
+        // isso, desenhava por cima do menu.
+        val raiz = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         val barra = MenuGlobal.criar(this, aba, { aoFocarMenu() }, aoMenuInicio)
         barraMenu = barra
         raiz.addView(barra)
