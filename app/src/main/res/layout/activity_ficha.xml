@@ -29,21 +29,31 @@
         android:layout_gravity="bottom"
         android:background="@drawable/bg_ficha_baixo" />
 
-    <LinearLayout
+    <ScrollView
+        android:id="@+id/fichaRolagem"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipChildren="false"
+        android:descendantFocusability="afterDescendants"
+        android:fillViewport="true"
+        android:focusable="false"
+        android:scrollbars="none">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:clipChildren="false"
         android:clipToPadding="false"
         android:orientation="vertical"
         android:paddingStart="56dp"
         android:paddingTop="28dp"
         android:paddingEnd="56dp"
-        android:paddingBottom="14dp">
+        android:paddingBottom="40dp">
 
         <LinearLayout
+            android:id="@+id/fichaTopo"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:minHeight="430dp"
             android:clipChildren="false"
             android:orientation="horizontal">
 
@@ -149,6 +159,37 @@
                         android:textSize="18sp" />
 
                     <TextView
+                        android:id="@+id/fichaVersao"
+                        android:layout_width="wrap_content"
+                        android:layout_height="52dp"
+                        android:layout_marginStart="14dp"
+                        android:background="@drawable/botao_ficha"
+                        android:focusable="true"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:paddingStart="22dp"
+                        android:paddingEnd="22dp"
+                        android:textColor="@color/texto_botao_ficha"
+                        android:textSize="17sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/fichaTrailer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="52dp"
+                        android:layout_marginStart="14dp"
+                        android:background="@drawable/botao_ficha"
+                        android:focusable="true"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:paddingStart="22dp"
+                        android:paddingEnd="22dp"
+                        android:text="@string/ficha_trailer"
+                        android:textColor="@color/texto_botao_ficha"
+                        android:textSize="17sp"
+                        android:visibility="gone" />
+
+                    <TextView
                         android:id="@+id/fichaFavoritar"
                         android:layout_width="wrap_content"
                         android:layout_height="52dp"
@@ -170,13 +211,52 @@
                     android:layout_marginTop="16dp"
                     android:ellipsize="end"
                     android:lineSpacingMultiplier="1.2"
-                    android:maxLines="3"
+                    android:maxLines="4"
                     android:textColor="#E6FFFFFF"
-                    android:textSize="15sp" />
+                    android:textSize="17sp" />
 
 
 
             </LinearLayout>
+        </LinearLayout>
+
+        <!-- Episódios da série: temporadas em pílulas, episódios em cartões. -->
+        <LinearLayout
+            android:id="@+id/fichaEpisodiosBloco"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:clipChildren="false"
+            android:orientation="vertical"
+            android:visibility="gone">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/player_episodios"
+                android:textColor="@color/text_primary"
+                android:textSize="22sp" />
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:clipToPadding="false"
+                android:scrollbars="none">
+                <LinearLayout
+                    android:id="@+id/fichaTemporadas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/fichaEpisodios"
+                android:descendantFocusability="afterDescendants"
+                android:layout_width="match_parent"
+                android:layout_height="262dp"
+                android:layout_marginTop="10dp"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:paddingEnd="24dp" />
         </LinearLayout>
 
         <!-- "Elenco" e, na mesma linha, quem dirigiu, escreveu e produziu:
@@ -220,7 +300,32 @@
             android:clipToPadding="false"
             android:paddingStart="6dp"
             android:paddingEnd="24dp" />
+
+        <LinearLayout
+            android:id="@+id/fichaParecidosBloco"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:clipChildren="false"
+            android:orientation="vertical"
+            android:visibility="gone">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/ficha_parecidos"
+                android:textColor="@color/text_primary"
+                android:textSize="22sp" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/fichaParecidos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:clipChildren="false"
+                android:clipToPadding="false" />
+        </LinearLayout>
     </LinearLayout>
+    </ScrollView>
 
     <ProgressBar
         android:id="@+id/fichaCarregando"

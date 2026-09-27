@@ -196,29 +196,9 @@ object Detalhes {
     /** Um trabalho da pessoa que existe no acervo, com a capa que o TMDB já mandou. */
     data class Trabalho(val achado: Vod.Achado, val capa: String?, val papel: String)
 
-    /// Nome -> título do acervo, montado uma vez: são 47 mil linhas, e reler
-    /// o índice a cada ator aberto era o que deixava a tela lenta.
-    @Volatile
-    private var acervoPorNome: Map<String, Vod.Achado>? = null
-
-    /**
-     * Prepara o índice enquanto a pessoa lê a ficha: quando ela escolher um
-     * ator, o cruzamento já não espera as 47 mil linhas.
-     */
+    /** Mantido para quem chamava: o índice agora é o da busca, sem cópia. */
     suspend fun aquecer(context: Context) {
-        withContext(Dispatchers.IO) { runCatching { acervoPorNome(context) } }
-    }
-
-    private suspend fun acervoPorNome(context: Context): Map<String, Vod.Achado> {
-        acervoPorNome?.let { return it }
-        val mapa = HashMap<String, Vod.Achado>(60_000)
-        for (serie in listOf(false, true)) {
-            for (achado in Vod.todos(context, serie)) {
-                mapa[(if (achado.serie) "s:" else "f:") + achado.titulo] = achado
-            }
-        }
-        acervoPorNome = mapa
-        return mapa
+        withContext(Dispatchers.IO) { runCatching { Vod.entradas(context) } }
     }
 
     /**
@@ -246,17 +226,13 @@ object Detalhes {
             // vem primeiro, e não a ordem em que o TMDB devolveu.
             trabalhos.sortByDescending { it.optDouble("popularity", 0.0) }
 
-            val porNome = acervoPorNome(context)
             val vistos = HashSet<String>()
             val saida = mutableListOf<Trabalho>()
             for (trabalho in trabalhos) {
                 val idDoTitulo = trabalho.optInt("id").takeIf { it > 0 } ?: continue
                 val serie = trabalho.optString("media_type") == "tv"
                 val titulo = Generos.titulo(idDoTitulo, serie) ?: continue
-                val marca = if (serie) "s:" else "f:"
-                val achado = porNome[marca + titulo]
-                    ?: porNome[marca + Generos.semAno(titulo)]
-                    ?: continue
+                val achado = Vod.achar(context, titulo, serie) ?: continue
                 if (!vistos.add(achado.nomeCompleto + achado.serie)) continue
                 val capa = trabalho.optString("poster_path").takeIf { it.isNotBlank() && it != "null" }
                     ?.let { IMAGENS + "w185" + it }
@@ -335,7 +311,6 @@ object Detalhes {
             if (id <= 0) return@withContext emptyList()
             Generos.carregar(context)
             val tipo = if (serie) "tv" else "movie"
-            val porNome = acervoPorNome(context)
             val vistos = HashSet<String>()
             val saida = mutableListOf<Trabalho>()
             for (rota in listOf("recommendations", "similar")) {
@@ -344,8 +319,7 @@ object Detalhes {
                 for (i in 0 until lista.length()) {
                     val item = lista.optJSONObject(i) ?: continue
                     val titulo = Generos.titulo(item.optInt("id"), serie) ?: continue
-                    val marca = if (serie) "s:" else "f:"
-                    val achado = porNome[marca + titulo] ?: porNome[marca + Generos.semAno(titulo)] ?: continue
+                    val achado = Vod.achar(context, titulo, serie) ?: continue
                     if (!vistos.add(achado.nomeCompleto)) continue
                     val capa = item.optString("poster_path").takeIf { it.isNotBlank() && it != "null" }
                         ?.let { IMAGENS + "w185" + it } ?: Generos.capa(achado.nomeCompleto, serie)

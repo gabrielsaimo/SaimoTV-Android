@@ -489,7 +489,7 @@ class VodActivity : AppCompatActivity() {
             // demais e empurrava o campo de busca para fora da tela.
             generosLista.removeAllViews()
             generosLista.addView(pilula(getString(R.string.vod_todos)) { escolherGenero("") })
-            for (nome in Generos.todos) {
+            for (nome in Generos.todosEmOrdem) {
                 generosLista.addView(pilula(nome) { escolherGenero(nome) })
             }
             atualizarBarraDeGeneros()

@@ -144,7 +144,9 @@ class AtorActivity : AppCompatActivity() {
  * grade tem quantas colunas couberem: com largura fixa, cinco colunas não
  * cabiam ao lado do perfil e os cartões se sobrepunham.
  */
-private class CapasAdapter(
+internal class CapasAdapter(
+    /// Largura fixa do cartão, para usar numa fileira que corre para o lado.
+    private val largura: Int = 0,
     private val aoEscolher: (Vod.Achado) -> Unit,
 ) : RecyclerView.Adapter<CapasAdapter.Holder>() {
 
@@ -169,6 +171,8 @@ private class CapasAdapter(
         view.onFocusChangeListener = FichaActivity.crescerNoFoco
         val holder = Holder(view)
         if (alturaDaCapa > 0) holder.quadro.layoutParams.height = alturaDaCapa
+        if (largura > 0) view.layoutParams = (view.layoutParams ?: RecyclerView.LayoutParams(largura,
+            ViewGroup.LayoutParams.WRAP_CONTENT)).also { it.width = largura }
         return holder
     }
 

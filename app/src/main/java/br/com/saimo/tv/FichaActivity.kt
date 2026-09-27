@@ -83,6 +83,15 @@ class FichaActivity : AppCompatActivity() {
 
     private lateinit var alvo: Alvo
     private lateinit var favoritar: TextView
+    private lateinit var assistirBotao: TextView
+    private var resolvido: Titulos.Resolvido? = null
+    private var temporadaVista = 0
+    private val episodios = EpisodiosAdapter { ep -> tocarEpisodio(ep) }
+    private val parecidos by lazy {
+        CapasAdapter(largura = (resources.displayMetrics.density * 140).toInt()) { achado ->
+            abrir(this, Alvo(achado.titulo, achado.serie, achado.letra, achado.ano))
+        }
+    }
     private val elenco = ElencoAdapter { pessoa -> AtorActivity.abrir(this, pessoa) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,7 +100,23 @@ class FichaActivity : AppCompatActivity() {
         setContentView(R.layout.activity_ficha)
 
         val assistir = findViewById<TextView>(R.id.fichaAssistir)
+        assistirBotao = assistir
         favoritar = findViewById(R.id.fichaFavoritar)
+        // O topo ocupa a primeira tela inteira; episódios, elenco e parecidos
+        // aparecem rolando para baixo com o direcional.
+        findViewById<View>(R.id.fichaTopo).minimumHeight =
+            (resources.displayMetrics.heightPixels * 0.66f).toInt()
+        findViewById<View>(R.id.fichaVersao).setOnFocusChangeListener(crescerNoFoco)
+        findViewById<View>(R.id.fichaTrailer).setOnFocusChangeListener(crescerNoFoco)
+        findViewById<RecyclerView>(R.id.fichaEpisodios).apply {
+            layoutManager = LinearLayoutManager(this@FichaActivity, RecyclerView.HORIZONTAL, false)
+            adapter = episodios
+        }
+        findViewById<RecyclerView>(R.id.fichaParecidos).apply {
+            layoutManager = LinearLayoutManager(this@FichaActivity, RecyclerView.HORIZONTAL, false)
+            parecidos.alturaDaCapa = (resources.displayMetrics.density * 210).toInt()
+            adapter = parecidos
+        }
 
         findViewById<TextView>(R.id.fichaTipo).text = getString(when (alvo.colecao) {
             "animes" -> R.string.vod_ficha_tipo_anime
@@ -137,9 +162,150 @@ class FichaActivity : AppCompatActivity() {
         // À direita do último botão não há nada: sem isto a busca espacial
         // descia na diagonal para o meio do elenco.
         favoritar.nextFocusRightId = R.id.fichaFavoritar
+        // Descer dos botões cai nos episódios, quando houver; senão no elenco.
+        for (id in listOf(R.id.fichaAssistir, R.id.fichaVersao, R.id.fichaTrailer, R.id.fichaFavoritar)) {
+            findViewById<View>(id).nextFocusDownId = View.NO_ID
+        }
 
-        assistir.requestFocus()
+        // Depois do primeiro layout: antes disso a rolagem toma o foco para si
+        // e a tela abre sem nada focado — um controle que não responde.
+        assistir.post { assistir.requestFocus() }
         carregar()
+        resolver()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Voltando do player, o botão e a lista mostram onde a pessoa parou.
+        if (resolvido != null) { atualizarAssistir(); episodios.notifyDataSetChanged() }
+    }
+
+    /** Onde o título mora e o que tem para tocar: versões, temporadas, episódios. */
+    private fun resolver() {
+        lifecycleScope.launch(semDerrubar) {
+            val r = Titulos.resolver(this@FichaActivity, alvo) ?: return@launch
+            if (isFinishing || isDestroyed) return@launch
+            resolvido = r
+            atualizarAssistir()
+            val versoes = r.filme?.fontes?.keys ?: r.episodios.flatMap { it.versoes }.toSet()
+            if (versoes.size > 1) {
+                findViewById<TextView>(R.id.fichaVersao).apply {
+                    visibility = View.VISIBLE
+                    text = getString(R.string.ficha_versao, Titulos.rotulo(Preferencias.versao))
+                    setOnClickListener { escolherVersao(versoes) }
+                }
+            }
+            if (r.serie) montarTemporadas(r)
+            carregarExtras(r)
+        }
+    }
+
+    private fun atualizarAssistir() {
+        val r = resolvido ?: return
+        if (!r.serie) {
+            assistirBotao.text = getString(textoDoAssistir())
+            return
+        }
+        val ep = Titulos.ondeContinuar(this, r) ?: return
+        val comecou = Progresso.ultimoEpisodio(this, r.nomeChave) != null
+        assistirBotao.text = getString(if (comecou) R.string.ficha_continuar_ep else R.string.ficha_assistir_ep,
+            ep.temporada, ep.numero)
+    }
+
+    private fun escolherVersao(versoes: Set<String>) {
+        Painel.mostrar(this, getString(R.string.player_versao), versoes.sortedBy { if (it == "dub") 0 else 1 }.map { v ->
+            Painel.Item(Titulos.rotulo(v), marcado = v == Preferencias.versao) {
+                Preferencias.versao = v
+                findViewById<TextView>(R.id.fichaVersao).text = getString(R.string.ficha_versao, Titulos.rotulo(v))
+            }
+        })
+    }
+
+    private fun montarTemporadas(r: Titulos.Resolvido) {
+        val temporadas = r.temporadas
+        if (temporadas.isEmpty()) return
+        findViewById<View>(R.id.fichaEpisodiosBloco).visibility = View.VISIBLE
+        val barra = findViewById<LinearLayout>(R.id.fichaTemporadas)
+        barra.removeAllViews()
+        val atual = Titulos.ondeContinuar(this, r)?.temporada ?: temporadas.first()
+        for (t in temporadas) {
+            barra.addView(TextView(this).apply {
+                id = View.generateViewId()
+                if (t == atual) {
+                    // Descer dos botões cai na temporada em que a pessoa está,
+                    // não na que calhar de estar embaixo do botão.
+                    for (b in listOf(R.id.fichaAssistir, R.id.fichaVersao, R.id.fichaTrailer, R.id.fichaFavoritar)) {
+                        this@FichaActivity.findViewById<View>(b).nextFocusDownId = id
+                    }
+                }
+                nextFocusDownId = R.id.fichaEpisodios
+                text = getString(R.string.vod_temporada, t)
+                tag = t
+                textSize = 17f
+                setTextColor(androidx.core.content.ContextCompat.getColorStateList(context, R.color.texto_botao_ficha))
+                setBackgroundResource(R.drawable.botao_player)
+                isFocusable = true
+                val d = resources.displayMetrics.density
+                setPadding((20 * d).toInt(), (8 * d).toInt(), (20 * d).toInt(), (8 * d).toInt())
+                layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT).apply { marginEnd = (10 * d).toInt() }
+                // Focar a temporada já troca a lista: sem OK a mais.
+                setOnFocusChangeListener { _, foco -> if (foco) mostrarTemporada(r, t) }
+                setOnClickListener { mostrarTemporada(r, t) }
+            })
+        }
+        mostrarTemporada(r, atual)
+    }
+
+    private fun mostrarTemporada(r: Titulos.Resolvido, temporada: Int) {
+        if (temporada == temporadaVista) return
+        temporadaVista = temporada
+        // Subir de um episódio volta à pílula desta temporada — e não à que
+        // estiver em cima dele, que trocaria a lista sem ninguém pedir.
+        val barra = findViewById<LinearLayout>(R.id.fichaTemporadas)
+        episodios.acima = barra.findViewWithTag<View>(temporada)?.id ?: View.NO_ID
+        for (i in 0 until barra.childCount) barra.getChildAt(i).isSelected = barra.getChildAt(i).tag == temporada
+        val lista = r.episodios.filter { it.temporada == temporada }
+        episodios.trocar(r, lista, emptyMap())
+        val atual = Titulos.ondeContinuar(this, r)
+        val indice = lista.indexOfFirst { it == atual }.coerceAtLeast(0)
+        findViewById<RecyclerView>(R.id.fichaEpisodios).scrollToPosition(indice)
+        lifecycleScope.launch(semDerrubar) {
+            val info = Detalhes.temporada(r.tmdbId, temporada).associateBy { it.numero }
+            if (temporadaVista == temporada) episodios.trocar(r, lista, info)
+        }
+    }
+
+    private fun tocarEpisodio(ep: Titulos.Ep) {
+        PlayerActivity.abrir(this, alvo, ep.temporada, ep.numero)
+    }
+
+    /** Trailer e "mais como este": vêm do TMDB depois que a tela já está de pé. */
+    private fun carregarExtras(r: Titulos.Resolvido) {
+        lifecycleScope.launch(semDerrubar) {
+            val chave = Detalhes.trailer(r.tmdbId, r.serie)
+            if (chave != null && !isFinishing) {
+                findViewById<TextView>(R.id.fichaTrailer).apply {
+                    visibility = View.VISIBLE
+                    setOnClickListener { abrirTrailer(chave) }
+                }
+            }
+        }
+        lifecycleScope.launch(semDerrubar) {
+            val lista = Detalhes.parecidos(this@FichaActivity, r.tmdbId, r.serie)
+            if (lista.isEmpty() || isFinishing) return@launch
+            findViewById<View>(R.id.fichaParecidosBloco).visibility = View.VISIBLE
+            parecidos.trocar(lista)
+        }
+    }
+
+    /** O trailer abre no app do YouTube da TV; sem ele, no navegador. */
+    private fun abrirTrailer(chave: String) {
+        val tentativas = listOf(
+            Intent(Intent.ACTION_VIEW, android.net.Uri.parse("vnd.youtube:$chave")),
+            Intent(Intent.ACTION_VIEW, android.net.Uri.parse("https://www.youtube.com/watch?v=$chave")))
+        for (t in tentativas) if (runCatching { startActivity(t) }.isSuccess) return
+        android.widget.Toast.makeText(this, R.string.ficha_sem_trailer, android.widget.Toast.LENGTH_SHORT).show()
     }
 
     private fun textoDoAssistir(): Int = when {
@@ -291,7 +457,10 @@ class FichaActivity : AppCompatActivity() {
      */
     /** Toca direto: o filme de onde parou, a série no episódio em que está. */
     private fun assistir() {
-        PlayerActivity.abrir(this, alvo)
+        val r = resolvido
+        val ep = r?.let { Titulos.ondeContinuar(this, it) }
+        if (ep != null) PlayerActivity.abrir(this, alvo, ep.temporada, ep.numero)
+        else PlayerActivity.abrir(this, alvo)
     }
 
     companion object {
@@ -352,4 +521,65 @@ private class ElencoAdapter(
     }
 
     override fun getItemCount() = pessoas.size
+}
+
+/** Os episódios da temporada, em cartões com a imagem da cena. */
+@androidx.media3.common.util.UnstableApi
+private class EpisodiosAdapter(
+    private val aoEscolher: (Titulos.Ep) -> Unit,
+) : RecyclerView.Adapter<EpisodiosAdapter.Holder>() {
+
+    private var r: Titulos.Resolvido? = null
+    var acima: Int = View.NO_ID
+    private var itens: List<Titulos.Ep> = emptyList()
+    private var info: Map<Int, Detalhes.EpisodioTmdb> = emptyMap()
+
+    fun trocar(resolvido: Titulos.Resolvido, lista: List<Titulos.Ep>, dados: Map<Int, Detalhes.EpisodioTmdb>) {
+        r = resolvido; itens = lista; info = dados
+        notifyDataSetChanged()
+    }
+
+    class Holder(view: View) : RecyclerView.ViewHolder(view) {
+        val imagem: ImageView = view.findViewById(R.id.epImagem)
+        val numero: TextView = view.findViewById(R.id.epNumeroGrande)
+        val visto: TextView = view.findViewById(R.id.epVisto)
+        val progresso: ProgressBar = view.findViewById(R.id.epProgresso)
+        val titulo: TextView = view.findViewById(R.id.epTitulo)
+        val detalhe: TextView = view.findViewById(R.id.epDetalhe)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_episodio, parent, false)
+        view.setOnFocusChangeListener { v, foco ->
+            val escala = if (foco) 1.05f else 1f
+            v.animate().scaleX(escala).scaleY(escala).setDuration(120).start()
+        }
+        return Holder(view)
+    }
+
+    override fun onBindViewHolder(holder: Holder, position: Int) {
+        val ep = itens[position]
+        val dados = info[ep.numero]
+        val contexto = holder.itemView.context
+        holder.numero.text = ep.numero.toString()
+        holder.titulo.text = listOfNotNull("${ep.numero}.", dados?.nome?.takeIf { it.isNotBlank() }
+            ?: contexto.getString(R.string.vod_episodio, ep.numero)).joinToString(" ")
+        holder.detalhe.text = listOfNotNull(dados?.duracao?.let { "$it min" },
+            ep.versoes.joinToString(" / ") { Titulos.rotulo(it) },
+            dados?.sinopse?.takeIf { it.isNotBlank() }).joinToString(" · ")
+        val fracao = r?.let { Progresso.fracao(contexto, it.chave(ep)) }
+        holder.visto.visibility = if (fracao != null && fracao >= 1f) View.VISIBLE else View.GONE
+        holder.progresso.visibility = if (fracao != null && fracao < 1f) View.VISIBLE else View.GONE
+        fracao?.let { holder.progresso.progress = (it * 1000).toInt() }
+        if (dados?.imagem != null) {
+            holder.imagem.visibility = View.VISIBLE
+            holder.imagem.load(dados.imagem) { crossfade(150) }
+        } else {
+            holder.imagem.dispose(); holder.imagem.setImageDrawable(null)
+        }
+        holder.itemView.setOnClickListener { aoEscolher(ep) }
+        holder.itemView.nextFocusUpId = acima
+    }
+
+    override fun getItemCount() = itens.size
 }

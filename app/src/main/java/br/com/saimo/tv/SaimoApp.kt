@@ -80,8 +80,10 @@ class SaimoApp : Application(), ImageLoaderFactory {
             // Num Fire TV de 1 GB o teto cai à metade: logo e capa voltam do
             // disco sem rede, e o que sobra de memória fica para o vídeo.
             .memoryCache {
+                // Teto em bytes, não em porcentagem: com largeHeap a porcentagem
+                // vira 40 MB de capas num aparelho de 1 GB, e o sistema mata o app.
                 MemoryCache.Builder(this)
-                    .maxSizePercent(if (Aparelho.poucaMemoria) 0.08 else 0.15)
+                    .maxSizeBytes(if (Aparelho.poucaMemoria) 18 * 1024 * 1024 else 64 * 1024 * 1024)
                     .build()
             }
             // Em disco, as imagens sobrevivem ao reinício e a grade abre cheia.

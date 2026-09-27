@@ -206,13 +206,31 @@ object Vod {
      * milhares de vezes por tecla. Agora acontece uma vez, na primeira busca,
      * e as seguintes só comparam texto.
      */
-    class Entrada(val achado: Achado, val chave: String, val palavras: List<String>) {
+    class Entrada(val achado: Achado, val chave: String) {
         val titulo get() = achado.titulo
         val serie get() = achado.serie
     }
 
     @Volatile
     private var indice: List<Entrada>? = null
+
+    @Volatile
+    private var porTitulo: Pair<HashMap<String, Achado>, HashMap<String, Achado>>? = null
+
+    /**
+     * Um título do acervo pelo nome exato, sem copiar o índice: os mapas
+     * apontam para os mesmos objetos da busca.
+     */
+    suspend fun achar(context: Context, titulo: String, serie: Boolean): Achado? {
+        val mapas = porTitulo ?: run {
+            val f = HashMap<String, Achado>(40_000)
+            val s = HashMap<String, Achado>(12_000)
+            for (e in entradas(context)) (if (e.serie) s else f).putIfAbsent(e.titulo, e.achado)
+            (f to s).also { porTitulo = it }
+        }
+        val mapa = if (serie) mapas.second else mapas.first
+        return mapa[titulo] ?: mapa[Generos.semAno(titulo)]
+    }
 
     suspend fun entradas(context: Context): List<Entrada> = withContext(Dispatchers.IO) {
         indice?.let { return@withContext it }
@@ -226,7 +244,7 @@ object Vod {
             val ano = campos.getOrNull(3).orEmpty()
             val achado = Achado(campos[0], campos[1] == "s", campos[2], ano)
             val chave = normalizar(Generos.semAno(campos[0]))
-            out += Entrada(achado, chave, chave.split(' ').filter { it.isNotEmpty() })
+            out += Entrada(achado, chave)
         }
         indice = out
         out
@@ -254,7 +272,8 @@ object Vod {
                 val ja = pontos.mapTo(HashSet()) { it.second }
                 for (entrada in entradas(context)) {
                     if (entrada in ja) continue
-                    if (pedacos.all { p -> entrada.palavras.any { quase(it, p) } }) pontos += 50 to entrada
+                    val palavras = entrada.chave.split(' ')
+                    if (pedacos.all { p -> palavras.any { quase(it, p) } }) pontos += 50 to entrada
                 }
             }
             pontos.sortWith(compareBy({ it.first }, { it.second.chave.length }))
@@ -266,7 +285,7 @@ object Vod {
         e.chave.startsWith(alvo) -> 1
         e.chave.contains(" $alvo") -> 2
         e.chave.contains(alvo) -> 3
-        pedacos.size > 1 && pedacos.all { p -> e.palavras.any { it.startsWith(p) } } -> 4
+        pedacos.size > 1 && pedacos.all { p -> e.chave.startsWith(p) || e.chave.contains(" $p") } -> 4
         else -> Int.MAX_VALUE
     }
 
@@ -494,7 +513,7 @@ object Vod {
 
         runCatching { local.writeText(texto) }
         // O índice de busca montado em memória é do arquivo antigo.
-        if (nome == "busca.txt") indice = null
+        if (nome == "busca.txt") { indice = null; porTitulo = null }
         return texto
     }
 }
