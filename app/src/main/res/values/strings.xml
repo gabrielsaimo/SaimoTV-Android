@@ -123,7 +123,7 @@
     <string name="vod_dublado">Dublado</string>
     <string name="vod_legendado">Legendado</string>
     <string name="star">★</string>
-    <string name="list_legend">OK assiste · segure OK para favoritar · direita: outros servidores</string>
+    <string name="list_legend">OK assiste · esquerda: seções · CH+/CH− pula de seção · segure OK favorita · direita: servidores</string>
     <string name="fontes_titulo">Fontes · %1$s</string>
     <string name="fontes_item">Fonte %1$d · %2$s</string>
     <string name="guide_info">%1$d de %2$d canais com guia</string>
@@ -282,4 +282,5 @@
     <string name="banner_dica">OK canais · segure OK para opções · direita guia · cima/baixo troca</string>
     <string name="faixas_so_uma">Este vídeo tem só um áudio e nenhuma legenda.</string>
     <string name="inicio_dica">OK abre · segure OK num título para favoritar e mais opções · VOLTAR vai ao menu</string>
+    <string name="previa_sem_guia">Sem programação disponível</string>
 </resources>

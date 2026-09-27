@@ -184,7 +184,9 @@ class MainActivity : AppCompatActivity() {
 
         listHeader.setOnClickListener { openNumpad() }
         vodEntrada = findViewById(R.id.vodEntrada)
-        Icones.inicio(vodEntrada as TextView, R.drawable.ic_home)
+        // O menu do topo substitui o atalho "voltar ao início" da lista.
+        vodEntrada.visibility = View.GONE
+        montarMenuGlobal()
         vodEntrada.setOnClickListener {
             // A tela inicial está sempre por baixo: voltar a ela é fechar esta.
             EscolhaActivity.voltar(this)
@@ -498,7 +500,13 @@ class MainActivity : AppCompatActivity() {
             }
             KeyEvent.KEYCODE_LAST_CHANNEL -> { canalAnterior(); true }
             KeyEvent.KEYCODE_DPAD_LEFT -> {
-                if (!listOpen) { openList(); true } else super.onKeyDown(keyCode, event)
+                when {
+                    !listOpen -> { openList(); true }
+                    // Na lista, esquerda sobe para as seções: dali, esquerda e
+                    // direita pulam de Esportes para Notícias sem descer 900 canais.
+                    channels.hasFocus() -> { focarSecaoAtual(); true }
+                    else -> super.onKeyDown(keyCode, event)
+                }
             }
             KeyEvent.KEYCODE_BACK, KeyEvent.KEYCODE_ESCAPE -> {
                 if (listOpen) { closeList(); true } else super.onKeyDown(keyCode, event)
@@ -515,14 +523,17 @@ class MainActivity : AppCompatActivity() {
             KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_CHANNEL_UP, KeyEvent.KEYCODE_MEDIA_PREVIOUS -> {
                 when {
                     !listOpen -> { play((current - 1 + ordered.size) % ordered.size); true }
-                    channels.hasFocus() -> { moverFoco(-1); true }
+                    // Canal+ / Canal− na lista pulam de seção em seção.
+                    channels.hasFocus() && keyCode == KeyEvent.KEYCODE_CHANNEL_UP -> { pularSecao(-1); true }
+                    channels.hasFocus() -> { moverFoco(-passo(event)); true }
                     else -> super.onKeyDown(keyCode, event)
                 }
             }
             KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_CHANNEL_DOWN, KeyEvent.KEYCODE_MEDIA_NEXT -> {
                 when {
                     !listOpen -> { play((current + 1) % ordered.size); true }
-                    channels.hasFocus() -> { moverFoco(1); true }
+                    channels.hasFocus() && keyCode == KeyEvent.KEYCODE_CHANNEL_DOWN -> { pularSecao(1); true }
+                    channels.hasFocus() -> { moverFoco(passo(event)); true }
                     else -> super.onKeyDown(keyCode, event)
                 }
             }
@@ -825,6 +836,35 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /** Cartão do canal focado na lista e a aba da seção dele acesa. */
+    private fun mostrarPrevia(index: Int) {
+        val canal = ordered.getOrNull(index) ?: return
+        val previa = findViewById<View>(R.id.previa)
+        val par = Epg.nowNext(canal.name)
+        val agora = par?.first
+        val depois = par?.second
+        findViewById<TextView>(R.id.previaCanal).text =
+            listOfNotNull(numeroDe(canal).takeIf { it > 0 }?.toString(), canal.name).joinToString("  ")
+        findViewById<TextView>(R.id.previaAgora).text = agora?.title ?: getString(R.string.previa_sem_guia)
+        findViewById<TextView>(R.id.previaDetalhe).text = listOfNotNull(
+            agora?.let { getString(R.string.times, clock.format(Date(it.start)), clock.format(Date(it.stop)),
+                ((it.stop - System.currentTimeMillis()) / 60_000L).coerceAtLeast(0)) },
+            depois?.let { getString(R.string.up_next, it.title) },
+        ).joinToString("\n")
+        previa.visibility = if (listPanel.visibility == View.VISIBLE) View.VISIBLE else View.GONE
+        val secao = Categorias.secao(canal)
+        val caixa = findViewById<android.widget.LinearLayout>(R.id.listSecoesItens)
+        for (i in 0 until caixa.childCount) {
+            val chip = caixa.getChildAt(i)
+            val esta = chip.tag == secao
+            if (chip.isSelected != esta) chip.isSelected = esta
+            if (esta && !chip.hasFocus()) {
+                (caixa.parent as? android.widget.HorizontalScrollView)?.smoothScrollTo(
+                    (chip.left - 40).coerceAtLeast(0), 0)
+            }
+        }
+    }
+
     private fun focarSecaoAtual() {
         val secao = ordered.getOrNull(listaFoco)?.let { Categorias.secao(it) }
         val caixa = findViewById<android.widget.LinearLayout>(R.id.listSecoesItens)
@@ -875,7 +915,27 @@ class MainActivity : AppCompatActivity() {
 
     // MARK: - Overlays
 
+    /**
+     * O mesmo menu do topo das outras telas, por cima do vídeo — aparece com a
+     * lista de canais e some com ela, para nada ficar sobre a imagem.
+     */
+    private var menuGlobal: View? = null
+
+    private fun montarMenuGlobal() {
+        val raiz = findViewById<ViewGroup>(android.R.id.content).getChildAt(0) as? android.widget.FrameLayout ?: return
+        val barra = MenuGlobal.criar(this, Aba.AO_VIVO)
+        barra.setBackgroundResource(R.drawable.bg_top_scrim)
+        barra.visibility = View.GONE
+        raiz.addView(barra, android.widget.FrameLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+        menuGlobal = barra
+        // A lista começa abaixo do menu.
+        listPanel.setPadding(listPanel.paddingLeft, (46 * resources.displayMetrics.density).toInt(),
+            listPanel.paddingRight, listPanel.paddingBottom)
+    }
+
     private fun openList() {
+        menuGlobal?.visibility = View.VISIBLE
         listaAbertaEm = SystemClock.elapsedRealtime()
         handler.removeCallbacks(hideBanner)
         banner.visibility = View.GONE
@@ -906,10 +966,38 @@ class MainActivity : AppCompatActivity() {
      * "recupera" pulando pro topo — daí o loop subindo. Aqui a posição é
      * contada por nós, então cada tecla sempre sabe exatamente para onde ir.
      */
+    /**
+     * Segurar a seta acelera: um por um no começo, depois de três em três,
+     * depois de dez em dez — descer 900 canais um a um não é navegar.
+     */
+    private fun passo(event: KeyEvent?): Int {
+        val r = event?.repeatCount ?: 0
+        return when { r > 24 -> 10; r > 8 -> 3; else -> 1 }
+    }
+
+    /** Vai ao primeiro canal da seção anterior/seguinte. */
+    private fun pularSecao(sentido: Int) {
+        val secoes = ordered.map { Categorias.secao(it) }
+        val atual = secoes.getOrNull(listaFoco) ?: return
+        val alvo = if (sentido > 0) {
+            (listaFoco until ordered.size).firstOrNull { secoes[it] != atual }
+        } else {
+            val inicioAtual = (listaFoco downTo 0).lastOrNull { secoes[it] == atual } ?: 0
+            if (inicioAtual == 0) null
+            else { val anterior = secoes[inicioAtual - 1]; (inicioAtual - 1 downTo 0).lastOrNull { secoes[it] == anterior } }
+        } ?: return
+        focusRow(alvo)
+        showStatus(secoes[alvo])
+        handler.removeCallbacks(esconderStatus)
+        handler.postDelayed(esconderStatus, 1_200)
+    }
+
+    private val esconderStatus = Runnable { status.visibility = View.GONE }
+
     private fun moverFoco(delta: Int) {
-        val alvo = listaFoco + delta
-        if (alvo < 0) { focarSecaoAtual(); return }
-        if (alvo >= ordered.size) return
+        val alvo = (listaFoco + delta).coerceAtMost(ordered.size - 1)
+        if (listaFoco + delta < 0) { if (listaFoco == 0) focarSecaoAtual() else focusRow(0); return }
+        if (alvo == listaFoco) return
         listaFoco = alvo
         focusRow(alvo)
     }
@@ -927,6 +1015,7 @@ class MainActivity : AppCompatActivity() {
     private fun focusRow(index: Int, attempts: Int = 8, geracao: Int = ++focoGeracao) {
         if (geracao != focoGeracao) return
         listaFoco = index
+        mostrarPrevia(index)
         (channels.layoutManager as LinearLayoutManager)
             .scrollToPositionWithOffset(index, channels.height / 3)
         channels.post {
@@ -941,6 +1030,8 @@ class MainActivity : AppCompatActivity() {
         if (listPanel.width > 0) listPanel.width.toFloat() else 430 * resources.displayMetrics.density
 
     private fun closeList() {
+        menuGlobal?.visibility = View.GONE
+        findViewById<View>(R.id.previa).visibility = View.GONE
         numpad.visibility = View.GONE
         listPanel.animate().translationX(-panelWidth()).setDuration(160)
             .withEndAction {
