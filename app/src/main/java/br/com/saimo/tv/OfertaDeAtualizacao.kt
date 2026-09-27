@@ -62,6 +62,21 @@ class OfertaDeAtualizacao(
     }
 
     /**
+     * Confere sem interromper: com canal no ar, uma janela no meio do jogo é
+     * pior que esperar. Havendo versão nova, só um aviso discreto — a oferta
+     * de verdade aparece na abertura ou em Ajustes.
+     */
+    fun avisarSemInterromper() {
+        if (ofertando || baixando) return
+        tela.lifecycleScope.launch(semDerrubar) {
+            val versao = Atualizacao.procurar(tela) ?: return@launch
+            if (tela.isFinishing || tela.isDestroyed) return@launch
+            android.widget.Toast.makeText(tela,
+                tela.getString(R.string.update_discreto, versao.numero), android.widget.Toast.LENGTH_LONG).show()
+        }
+    }
+
+    /**
      * Voltando das configurações com a permissão já ligada (nos aparelhos em
      * que o sistema não matou o app no caminho), retoma a atualização.
      */

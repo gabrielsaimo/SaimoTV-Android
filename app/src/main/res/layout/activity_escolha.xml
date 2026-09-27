@@ -130,6 +130,22 @@
         </LinearLayout>
     </LinearLayout>
 
+    <!-- Ajustes: pequeno, embaixo, fora do caminho dos dois cartões. -->
+    <TextView
+        android:id="@+id/escolhaAjustes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_margin="24dp"
+        android:background="@drawable/bg_campo"
+        android:focusable="true"
+        android:paddingStart="22dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="22dp"
+        android:paddingBottom="10dp"
+        android:text="@string/escolha_ajustes"
+        android:textColor="@color/text_primary"
+        android:textSize="17sp" />
     <!-- Andamento do download da versão nova, quando houver. -->
     <TextView
         android:id="@+id/escolhaStatus"

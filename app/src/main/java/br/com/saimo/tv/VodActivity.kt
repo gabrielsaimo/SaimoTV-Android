@@ -140,7 +140,8 @@ class VodActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        // Tela acesa só com vídeo tocando (o player cuida disso): parada no
+        // menu, a TV descansa e o protetor de tela entra, como deve.
         setContentView(R.layout.activity_vod)
 
         lista = findViewById(R.id.vodLista)
@@ -459,6 +460,7 @@ class VodActivity : AppCompatActivity() {
             getString(R.string.vod_animes) to { ir(Passo.Colecao("animes")) },
             getString(R.string.vod_doramas) to { ir(Passo.Colecao("doramas")) },
             getString(R.string.vod_favoritos) to { ir(Passo.Favoritos) },
+            getString(R.string.ajustes) to { AjustesActivity.abrir(this) },
         )
         secoes.removeAllViews()
         for ((nome, acao) in atalhos) {
@@ -1188,10 +1190,7 @@ class VodActivity : AppCompatActivity() {
             val capa = Generos.capa(nome, deSerie) ?: return@launch
             if (fichaNome.text != nome) return@launch
             fichaCapa.visibility = View.VISIBLE
-            fichaCapa.load(capa) {
-                diskCachePolicy(coil.request.CachePolicy.DISABLED)
-                crossfade(true)
-            }
+            fichaCapa.load(capa) { crossfade(true) }
         }
         fichaDetalhe.text = detalhe
         fichaDetalhe.visibility = if (detalhe.isEmpty()) View.GONE else View.VISIBLE
@@ -1557,8 +1556,7 @@ class VodActivity : AppCompatActivity() {
                 if (holder.pedido != linha.texto) return@launch
                 holder.capa.visibility = View.VISIBLE
                 holder.capa.load(capa) {
-                    // Nada de capa em disco: cada abertura busca de novo.
-                    diskCachePolicy(coil.request.CachePolicy.DISABLED)
+                    // Capa em disco: voltar à lista não baixa tudo de novo.
                     crossfade(true)
                 }
             }

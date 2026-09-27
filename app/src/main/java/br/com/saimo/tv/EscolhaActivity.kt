@@ -47,6 +47,7 @@ class EscolhaActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.escolhaVersao).text =
             getString(R.string.escolha_versao, BuildConfig.VERSION_NAME)
 
+        findViewById<View>(R.id.escolhaAjustes).setOnClickListener { AjustesActivity.abrir(this) }
         tv.setOnClickListener { abrir(TV) }
         filmes.setOnClickListener { abrir(FILMES) }
         for (cartao in listOf(tv, filmes)) {
@@ -70,7 +71,14 @@ class EscolhaActivity : AppCompatActivity() {
 
         // A fileira do Saimo na tela inicial da TV, refeita por trás.
         lifecycleScope.launch(semDerrubar) { CanalNaTv.publicar(applicationContext) }
+        val veioDeLink = intent?.action == Intent.ACTION_VIEW || intent?.action == Intent.ACTION_SEARCH
         atenderLink(intent)
+        // "Ir direto ao último canal", escolhido em Ajustes: esta tela fica por
+        // baixo, e VOLTAR do canal cai nela.
+        if (savedInstanceState == null && !veioDeLink && Preferencias.abrirEm == "canal" &&
+            Preferencias.ultimoCanal != null) {
+            startActivity(Intent(this, MainActivity::class.java))
+        }
     }
 
     override fun onNewIntent(intent: Intent) {

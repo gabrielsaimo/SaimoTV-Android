@@ -280,7 +280,6 @@ class MainActivity : AppCompatActivity() {
     /** Pega a lista publicada sem tirar do ar o canal que está tocando. */
     private fun refreshCatalog() {
         lifecycleScope.launch(semDerrubar) {
-            atualizacao.ofertar()
             if (!Remote.refresh(this@MainActivity)) return@launch
             reorder()
             updateBanner()
@@ -299,7 +298,7 @@ class MainActivity : AppCompatActivity() {
      */
     private val procurarDeHoraEmHora = object : Runnable {
         override fun run() {
-            if (!atualizacao.baixando) atualizacao.ofertar()
+            if (!atualizacao.baixando) atualizacao.avisarSemInterromper()
             handler.postDelayed(this, ATUALIZACAO_MS)
         }
     }

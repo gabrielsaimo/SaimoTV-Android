@@ -30,7 +30,9 @@ object Lembretes {
 
     private lateinit var app: Context
     private val handler = Handler(Looper.getMainLooper())
-    private var atual: Activity? = null
+    /// A tela à vista agora — o timer para desligar também usa.
+    internal var atual: Activity? = null
+        private set
 
     fun iniciar(application: Application) {
         app = application
