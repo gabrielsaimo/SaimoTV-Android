@@ -4,23 +4,30 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/surface">
+    android:background="@android:color/transparent">
 
-    <ImageView
-        android:id="@+id/inicioFundo"
+    <!-- Imagem do título focado e os degradês que a escurecem: aparecem
+         juntos, e sem título focado fica só o fundo do app. -->
+    <FrameLayout
+        android:id="@+id/inicioFundoGrupo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:alpha="0"
-        android:contentDescription="@null"
-        android:scaleType="centerCrop" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/bg_destaque_lado" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/bg_destaque_baixo" />
+        android:alpha="0">
+        <ImageView
+            android:id="@+id/inicioFundo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_destaque_lado" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_destaque_baixo" />
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -89,15 +96,6 @@
             android:paddingBottom="120dp" />
     </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|start"
-        android:layout_marginStart="56dp"
-        android:layout_marginBottom="18dp"
-        android:text="@string/inicio_dica"
-        android:textColor="@color/text_faint"
-        android:textSize="14sp" />
     <TextView
         android:id="@+id/paginaStatus"
         android:layout_width="wrap_content"

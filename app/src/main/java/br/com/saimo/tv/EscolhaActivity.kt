@@ -38,7 +38,12 @@ import java.util.Locale
  * TV e da busca por voz.
  */
 @UnstableApi
-class EscolhaActivity : AppCompatActivity() {
+class EscolhaActivity : TelaComMenu() {
+
+    override val aba = Aba.INICIO
+    override fun aoFocarMenu() = cabecalhoPadrao()
+    override val aoMenuInicio: (() -> Unit) = { focarPrimeiro() }
+
 
     private lateinit var status: TextView
     private lateinit var filas: RecyclerView
@@ -46,7 +51,6 @@ class EscolhaActivity : AppCompatActivity() {
     private lateinit var titulo: TextView
     private lateinit var meta: TextView
     private lateinit var sinopse: TextView
-    private lateinit var menu: LinearLayout
     private val atualizacao by lazy { OfertaDeAtualizacao(this) { mostrarStatus(it) } }
     private var jaIniciou = false
     private val handler = Handler(Looper.getMainLooper())
@@ -67,12 +71,10 @@ class EscolhaActivity : AppCompatActivity() {
         titulo = findViewById(R.id.inicioTitulo)
         meta = findViewById(R.id.inicioMeta)
         sinopse = findViewById(R.id.inicioSinopse)
-        menu = findViewById(R.id.inicioMenu)
 
         filas.layoutManager = LinearLayoutManager(this)
         filas.adapter = adaptador
         filas.setItemViewCacheSize(4)
-        montarMenu()
         cabecalhoPadrao()
 
         lifecycleScope.launch(semDerrubar) {
@@ -85,7 +87,6 @@ class EscolhaActivity : AppCompatActivity() {
             Epg.carregarCache(this@EscolhaActivity)
             montarFilas()
         }
-        handler.post(relogio)
 
         // A versão nova é oferecida aqui, antes de qualquer vídeo começar.
         filas.postDelayed({ if (!isFinishing) atualizacao.ofertar() }, 2_500)
@@ -101,7 +102,10 @@ class EscolhaActivity : AppCompatActivity() {
         }
     }
 
-    private fun cabecalhoPadrao() = painelDestaque.padrao(saudacao(), getString(R.string.escolha_titulo))
+    private fun cabecalhoPadrao() {
+        painelDestaque.padrao(saudacao(), getString(R.string.escolha_titulo))
+        sinopse.text = getString(R.string.inicio_dica)
+    }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
@@ -124,68 +128,27 @@ class EscolhaActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    private val relogio = object : Runnable {
-        override fun run() {
-            findViewById<TextView>(R.id.inicioRelogio).text = hora.format(Date())
-            handler.postDelayed(this, 20_000)
-        }
-    }
-
-    // MARK: - Menu do topo
-
-    private fun montarMenu() {
-        val abas = listOf<Pair<String, () -> Unit>>(
-            getString(R.string.menu_inicio) to { focarPrimeiro() },
-            getString(R.string.menu_ao_vivo) to { abrirAoVivo() },
-            getString(R.string.vod_filmes) to { PaginaActivity.abrir(this, GradeActivity.FILMES) },
-            getString(R.string.vod_series) to { PaginaActivity.abrir(this, GradeActivity.SERIES) },
-            getString(R.string.vod_animes) to { PaginaActivity.abrir(this, GradeActivity.ANIMES) },
-            getString(R.string.vod_doramas) to { PaginaActivity.abrir(this, GradeActivity.DORAMAS) },
-            getString(R.string.vod_favoritos) to { GradeActivity.abrir(this, GradeActivity.FAVORITOS) },
-            getString(R.string.menu_buscar) to { BuscaActivity.abrir(this) },
-            getString(R.string.menu_ajustes) to { AjustesActivity.abrir(this) },
-        )
-        val d = resources.displayMetrics.density
-        abas.forEachIndexed { i, (nome, acao) ->
-            menu.addView(TextView(this).apply {
-                text = nome
-                textSize = 17f
-                maxLines = 1
-                typeface = android.graphics.Typeface.create("sans-serif-medium", android.graphics.Typeface.NORMAL)
-                setTextColor(ContextCompat.getColorStateList(context, R.color.texto_botao_ficha))
-                setBackgroundResource(R.drawable.aba_menu)
-                isFocusable = true
-                isSelected = i == 0
-                setPadding((14 * d).toInt(), (7 * d).toInt(), (14 * d).toInt(), (7 * d).toInt())
-                layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT).apply { marginEnd = (2 * d).toInt() }
-                setOnClickListener { acao() }
-                setOnFocusChangeListener { _, foco -> if (foco) cabecalhoPadrao() }
-                when (nome) {
-                    getString(R.string.menu_buscar) -> Icones.inicio(this, R.drawable.ic_search)
-                    getString(R.string.menu_ajustes) -> Icones.so(this, R.drawable.ic_settings)
-                    getString(R.string.menu_ao_vivo) -> Icones.inicio(this, R.drawable.ic_live_tv)
-                }
-            })
-        }
-    }
-
     private fun abrirAoVivo() {
         startActivity(Intent(this, MainActivity::class.java))
     }
 
-    private fun focarPrimeiro() {
+    private fun focarPrimeiro(tentativas: Int = 10) {
         filas.scrollToPosition(0)
         filas.post {
             val fileira = filas.findViewHolderForAdapterPosition(0)?.itemView
             val capas = fileira?.findViewById<RecyclerView>(R.id.filaCapas)
-            if (capas?.getChildAt(0)?.requestFocus() != true) menu.getChildAt(0)?.requestFocus()
+            if (capas?.getChildAt(0)?.requestFocus() == true) return@post
+            // A fileira ainda não desenhou as capas: tenta de novo no próximo
+            // quadro, em vez de largar o foco no menu.
+            if (tentativas > 0) filas.postDelayed({ focarPrimeiro(tentativas - 1) }, 60)
+            else MenuGlobal.focar(barraMenu, Aba.INICIO)
         }
     }
 
     // MARK: - Fileiras
 
     private var primeiraVez = true
+    private val abertaEm = System.currentTimeMillis()
 
     private suspend fun montarFilas() {
         Generos.carregar(this)
@@ -198,8 +161,12 @@ class EscolhaActivity : AppCompatActivity() {
             if (cartoes.isNotEmpty()) lista += Inicio.Fila(fila.titulo, cartoes)
         }
         if (isFinishing || isDestroyed) return
+        // Refazer as fileiras recria as capas e o foco escaparia para o menu.
+        // Nos primeiros segundos (a pessoa ainda não mexeu), ele volta à
+        // primeira capa; depois disso, fica onde a pessoa deixou.
+        val devolver = primeiraVez || (filas.hasFocus() && System.currentTimeMillis() - abertaEm < 8_000)
         adaptador.trocar(lista)
-        if (primeiraVez) {
+        if (devolver) {
             primeiraVez = false
             filas.post { focarPrimeiro() }
         }
@@ -308,9 +275,9 @@ class EscolhaActivity : AppCompatActivity() {
             KeyEvent.KEYCODE_BACK, KeyEvent.KEYCODE_ESCAPE -> {
                 // Primeiro VOLTAR sobe para o menu; o segundo, de lá, pede
                 // confirmação — sair do app sem querer é o erro mais comum.
-                if (!menu.hasFocus()) {
+                if (!MenuGlobal.temFoco(barraMenu)) {
                     filas.scrollToPosition(0)
-                    menu.getChildAt(0)?.requestFocus()
+                    MenuGlobal.focar(barraMenu, Aba.INICIO)
                     return true
                 }
                 val agora = System.currentTimeMillis()

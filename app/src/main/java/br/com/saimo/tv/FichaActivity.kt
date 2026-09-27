@@ -79,7 +79,7 @@ data class Alvo(
  * venha a pessoa de onde vier.
  */
 @androidx.media3.common.util.UnstableApi
-class FichaActivity : AppCompatActivity() {
+class FichaActivity : TelaComMenu() {
 
     private lateinit var alvo: Alvo
     private lateinit var favoritar: TextView

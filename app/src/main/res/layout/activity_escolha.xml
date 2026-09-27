@@ -4,23 +4,30 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/surface">
+    android:background="@android:color/transparent">
 
-    <ImageView
-        android:id="@+id/inicioFundo"
+    <!-- Imagem do título focado e os degradês que a escurecem: aparecem
+         juntos, e sem título focado fica só o fundo do app. -->
+    <FrameLayout
+        android:id="@+id/inicioFundoGrupo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:alpha="0"
-        android:contentDescription="@null"
-        android:scaleType="centerCrop" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/bg_destaque_lado" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/bg_destaque_baixo" />
+        android:alpha="0">
+        <ImageView
+            android:id="@+id/inicioFundo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_destaque_lado" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_destaque_baixo" />
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,48 +35,13 @@
         android:clipChildren="false"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingStart="48dp"
-            android:paddingTop="24dp"
-            android:paddingEnd="48dp">
-            <ImageView
-                android:layout_width="34dp"
-                android:layout_height="34dp"
-                android:layout_marginEnd="12dp"
-                android:contentDescription="@null"
-                android:src="@mipmap/ic_launcher" />
-            <HorizontalScrollView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:clipToPadding="false"
-                android:scrollbars="none">
-                <LinearLayout
-                    android:id="@+id/inicioMenu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal" />
-            </HorizontalScrollView>
-            <TextView
-                android:id="@+id/inicioRelogio"
-                android:layout_marginStart="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/text_primary"
-                android:textSize="20sp" />
-        </LinearLayout>
-
         <!-- O destaque: o que está focado agora. -->
         <LinearLayout
             android:id="@+id/inicioDestaque"
             android:layout_width="620dp"
             android:layout_height="150dp"
             android:layout_marginStart="56dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="4dp"
             android:orientation="vertical">
             <TextView
                 android:id="@+id/inicioTitulo"
@@ -112,15 +84,6 @@
             android:paddingBottom="120dp" />
     </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|start"
-        android:layout_marginStart="56dp"
-        android:layout_marginBottom="18dp"
-        android:text="@string/inicio_dica"
-        android:textColor="@color/text_faint"
-        android:textSize="14sp" />
     <TextView
         android:id="@+id/escolhaStatus"
         android:layout_width="wrap_content"

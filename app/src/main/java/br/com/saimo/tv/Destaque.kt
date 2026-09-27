@@ -64,12 +64,15 @@ class Destaque(
     private fun trocarFundo(endereco: String?) {
         if (endereco == fundoAtual) return
         fundoAtual = endereco
+        // Anima o grupo (imagem + degradês) quando existe: sem título, só o
+        // fundo do app fica à vista.
+        val alvo = (fundo.parent as? android.view.View)?.takeIf { it.id == R.id.inicioFundoGrupo } ?: fundo
         if (endereco == null) {
-            fundo.animate().alpha(0f).setDuration(200).start()
+            alvo.animate().alpha(0f).setDuration(200).start()
             return
         }
         fundo.load(endereco) {
-            listener(onSuccess = { _, _ -> fundo.animate().alpha(1f).setDuration(300).start() })
+            listener(onSuccess = { _, _ -> alvo.animate().alpha(1f).setDuration(300).start() })
         }
     }
 }

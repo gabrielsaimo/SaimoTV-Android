@@ -28,7 +28,8 @@ import kotlinx.coroutines.launch
  * O cruzamento com o acervo é pelo id do TMDB: nome igual não engana, e
  * refilmagem não vira o original.
  */
-class AtorActivity : AppCompatActivity() {
+@androidx.media3.common.util.UnstableApi
+class AtorActivity : TelaComMenu() {
 
     private val capas = CapasAdapter { achado ->
         FichaActivity.abrir(this, Alvo(achado.titulo, achado.serie, achado.letra, achado.ano))

@@ -28,7 +28,10 @@ import kotlinx.coroutines.launch
  * capa, com o microfone para quem tem e o teclado físico para quem tem.
  */
 @UnstableApi
-class BuscaActivity : AppCompatActivity() {
+class BuscaActivity : TelaComMenu() {
+
+    override val aba = Aba.BUSCAR
+
 
     companion object {
         private const val TERMO = "busca.termo"
@@ -73,7 +76,7 @@ class BuscaActivity : AppCompatActivity() {
         grade.addView(tecla(getString(R.string.busca_limpar), 2) { digitado.clear(); atualizar(true) })
         val temVoz = packageManager.queryIntentActivities(Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0).isNotEmpty()
         if (temVoz) grade.addView(tecla(getString(R.string.busca_voz), 1) { ouvir() }.also { Icones.so(it as TextView, R.drawable.ic_mic, 1.2f) })
-        grade.post { grade.getChildAt(0)?.requestFocus() }
+        focarQuandoPronto { grade.getChildAt(0) }
     }
 
     private fun tecla(texto: String, colunas: Int, acao: () -> Unit): View = TextView(this).apply {

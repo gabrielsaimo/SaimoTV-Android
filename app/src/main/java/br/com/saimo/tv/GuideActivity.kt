@@ -30,7 +30,10 @@ import java.util.Locale
  * within, and OK on a channel tunes to it.
  */
 @androidx.media3.common.util.UnstableApi
-class GuideActivity : AppCompatActivity() {
+class GuideActivity : TelaComMenu() {
+
+    override val aba = Aba.AO_VIVO
+
 
     private lateinit var channelList: RecyclerView
     private lateinit var programmeList: RecyclerView

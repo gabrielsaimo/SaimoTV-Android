@@ -27,7 +27,10 @@ import java.io.File
  * aparelho para pedir ajuda.
  */
 @UnstableApi
-class AjustesActivity : AppCompatActivity() {
+class AjustesActivity : TelaComMenu() {
+
+    override val aba = Aba.AJUSTES
+
 
     companion object {
         fun abrir(context: Context) = context.startActivity(Intent(context, AjustesActivity::class.java))
@@ -50,7 +53,7 @@ class AjustesActivity : AppCompatActivity() {
         lista.layoutManager = LinearLayoutManager(this)
         lista.adapter = adaptador
         adaptador.linhas = linhas()
-        lista.post { lista.findViewHolderForAdapterPosition(1)?.itemView?.requestFocus() }
+        focarQuandoPronto { lista.findViewHolderForAdapterPosition(1)?.itemView }
     }
 
     private fun simNao(v: Boolean) = getString(if (v) R.string.ajustes_ligado else R.string.ajustes_desligado)

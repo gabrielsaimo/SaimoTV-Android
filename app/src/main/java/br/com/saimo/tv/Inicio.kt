@@ -69,9 +69,29 @@ object Inicio {
         /// Onde cada fileira estava, para voltar no mesmo lugar.
         private val posicoes = mutableMapOf<String, Int>()
 
+        /**
+         * Troca as fileiras mexendo só no que mudou.
+         *
+         * Redesenhar tudo recriava as capas e o foco de quem estava navegando
+         * escapava para o menu — acontecia quando as fileiras de gênero ou o
+         * guia chegavam segundos depois da tela abrir.
+         */
         fun trocar(novas: List<Fila>) {
+            val velhas = filas
             filas = novas
-            notifyDataSetChanged()
+            if (velhas.isEmpty()) { notifyDataSetChanged(); return }
+            val comum = minOf(velhas.size, novas.size)
+            for (i in 0 until comum) {
+                val a = velhas[i]; val b = novas[i]
+                val igual = a.titulo == b.titulo && a.tipo == b.tipo &&
+                    a.cartoes.size == b.cartoes.size &&
+                    a.cartoes.indices.all { a.cartoes[it].titulo == b.cartoes[it].titulo &&
+                        a.cartoes[it].subtitulo == b.cartoes[it].subtitulo &&
+                        a.cartoes[it].progresso == b.cartoes[it].progresso }
+                if (!igual) notifyItemChanged(i)
+            }
+            if (novas.size > velhas.size) notifyItemRangeInserted(velhas.size, novas.size - velhas.size)
+            else if (novas.size < velhas.size) notifyItemRangeRemoved(novas.size, velhas.size - novas.size)
         }
 
         inner class Holder(view: View) : RecyclerView.ViewHolder(view) {

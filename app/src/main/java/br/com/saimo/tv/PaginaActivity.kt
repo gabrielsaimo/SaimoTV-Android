@@ -24,12 +24,22 @@ import java.util.Calendar
  * última fileira, para quem quer procurar sem saber o nome.
  */
 @UnstableApi
-class PaginaActivity : AppCompatActivity() {
+class PaginaActivity : TelaComMenu() {
+
+    override val aba: Aba get() = when (intent.getStringExtra(TIPO)) {
+        GradeActivity.SERIES -> Aba.SERIES
+        GradeActivity.ANIMES -> Aba.ANIMES
+        GradeActivity.DORAMAS -> Aba.DORAMAS
+        else -> Aba.FILMES
+    }
+
 
     companion object {
         private const val TIPO = "pagina.tipo"
-        fun abrir(context: Context, tipo: String) =
-            context.startActivity(Intent(context, PaginaActivity::class.java).putExtra(TIPO, tipo))
+        fun intent(context: Context, tipo: String): Intent =
+            Intent(context, PaginaActivity::class.java).putExtra(TIPO, tipo)
+
+        fun abrir(context: Context, tipo: String) = context.startActivity(intent(context, tipo))
 
         /// Os gêneros mais procurados primeiro; o resto entra depois, em ordem.
         private val ORDEM_GENEROS = listOf(
@@ -67,7 +77,8 @@ class PaginaActivity : AppCompatActivity() {
             GradeActivity.DORAMAS -> R.string.vod_doramas
             else -> R.string.vod_filmes
         })
-        findViewById<TextView>(R.id.paginaNome).text = nome
+        // O menu do topo já diz em que página se está.
+        findViewById<TextView>(R.id.paginaNome).visibility = android.view.View.GONE
         destaque.padrao(nome, getString(R.string.vod_carregando))
         lifecycleScope.launch(semDerrubar) { montar() }
     }
@@ -130,9 +141,9 @@ class PaginaActivity : AppCompatActivity() {
         adaptador.trocar(lista)
         if (!montou) {
             montou = true
-            filas.post {
-                val capas = filas.findViewHolderForAdapterPosition(0)?.itemView?.findViewById<RecyclerView>(R.id.filaCapas)
-                capas?.getChildAt(0)?.requestFocus()
+            focarQuandoPronto {
+                filas.findViewHolderForAdapterPosition(0)?.itemView
+                    ?.findViewById<RecyclerView>(R.id.filaCapas)?.getChildAt(0)
             }
         }
     }

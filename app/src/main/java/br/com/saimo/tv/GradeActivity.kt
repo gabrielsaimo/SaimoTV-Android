@@ -31,7 +31,16 @@ import kotlinx.coroutines.withContext
  * descem com a seta), o gênero e a ordem no alto.
  */
 @UnstableApi
-class GradeActivity : AppCompatActivity() {
+class GradeActivity : TelaComMenu() {
+
+    override val aba: Aba get() = when (intent.getStringExtra(TIPO)) {
+        FAVORITOS -> Aba.FAVORITOS
+        SERIES -> Aba.SERIES
+        ANIMES -> Aba.ANIMES
+        DORAMAS -> Aba.DORAMAS
+        else -> Aba.FILMES
+    }
+
 
     companion object {
         const val FILMES = "filmes"
@@ -42,9 +51,11 @@ class GradeActivity : AppCompatActivity() {
         private const val TIPO = "grade.tipo"
         private const val GENERO = "grade.genero"
 
+        fun intent(context: Context, tipo: String, genero: String = ""): Intent =
+            Intent(context, GradeActivity::class.java).putExtra(TIPO, tipo).putExtra(GENERO, genero)
+
         fun abrir(context: Context, tipo: String, genero: String = "") =
-            context.startActivity(Intent(context, GradeActivity::class.java)
-                .putExtra(TIPO, tipo).putExtra(GENERO, genero))
+            context.startActivity(intent(context, tipo, genero))
 
         private val ANO = Regex("\\((\\d{4})\\)\\s*$")
     }
@@ -151,7 +162,7 @@ class GradeActivity : AppCompatActivity() {
         letras.visibility = if (adaptadorLetras.letras.isEmpty()) View.GONE else View.VISIBLE
         atualizarBotoes()
         capas.scrollToPosition(0)
-        capas.post { capas.getChildAt(0)?.requestFocus() }
+        focarQuandoPronto { capas.getChildAt(0) }
     }
 
     private fun atualizarBotoes() {
