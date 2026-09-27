@@ -78,6 +78,11 @@ private const val VIGIA_MS = 2_000L
 @UnstableApi
 class MainActivity : AppCompatActivity() {
 
+    companion object {
+        /** Nome do canal a sintonizar ao abrir (link saimo://canal). */
+        const val EXTRA_CANAL = "br.com.saimo.tv.CANAL"
+    }
+
     private lateinit var player: ExoPlayer
     private var mediaSession: MediaSession? = null
     private lateinit var playerView: PlayerView
@@ -229,7 +234,10 @@ class MainActivity : AppCompatActivity() {
                 .build()
         }.onFailure { Log.w("SaimoTV", "sessão de mídia indisponível", it) }.getOrNull()
 
-        play(0)
+        // Abre no canal pedido por link, ou no último assistido — não no
+        // primeiro da lista, que obrigava a zapear até onde se estava.
+        val pedido = intent.getStringExtra(EXTRA_CANAL) ?: Preferencias.ultimoCanal
+        play(ordered.indexOfFirst { it.name == pedido }.coerceAtLeast(0))
         refreshCatalog()
         handler.postDelayed(tick, TICK_MS)
         handler.postDelayed(procurarDeHoraEmHora, ATUALIZACAO_MS)
@@ -323,8 +331,20 @@ class MainActivity : AppCompatActivity() {
     private var ultimaImagem = 0L
     private var ultimaPosicao = -1L
 
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        val nome = intent.getStringExtra(EXTRA_CANAL) ?: return
+        val indice = ordered.indexOfFirst { it.name == nome }
+        if (indice >= 0) play(indice)
+    }
+
     private fun play(index: Int, source: Int = 0, apósFalha: Boolean = false) {
         val mesmoCanal = ordered.getOrNull(current)?.name == ordered.getOrNull(index.coerceIn(ordered.indices))?.name
+        val novo = ordered.getOrNull(index.coerceIn(ordered.indices))?.name
+        if (novo != null && novo != Preferencias.ultimoCanal) {
+            Preferencias.canalAnterior = Preferencias.ultimoCanal
+            Preferencias.ultimoCanal = novo
+        }
         current = index.coerceIn(ordered.indices)
         sourceIndex = source
         val channel = ordered[current]

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Painel que entra pela direita: opaco o bastante para ler, com o vídeo
+     ainda à vista do lado. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="#F20B0E14" />
+    <corners android:topLeftRadius="24dp" android:bottomLeftRadius="24dp" />
+</shape>

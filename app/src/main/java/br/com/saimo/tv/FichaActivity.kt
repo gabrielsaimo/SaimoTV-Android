@@ -78,6 +78,7 @@ data class Alvo(
  * quem sabe escolher fonte e temporada. Assim o caminho até o vídeo é um só,
  * venha a pessoa de onde vier.
  */
+@androidx.media3.common.util.UnstableApi
 class FichaActivity : AppCompatActivity() {
 
     private lateinit var alvo: Alvo
@@ -142,7 +143,7 @@ class FichaActivity : AppCompatActivity() {
     }
 
     private fun textoDoAssistir(): Int = when {
-        alvo.serie -> R.string.vod_ficha_temporadas
+        alvo.serie -> R.string.vod_ficha_assistir_filme
         (Progresso.fracao(this, Progresso.chaveFilme(alvo.titulo)) ?: 0f) > 0f ->
             R.string.vod_ficha_continuar
         else -> R.string.vod_ficha_assistir_filme
@@ -288,11 +289,9 @@ class FichaActivity : AppCompatActivity() {
      * ou as temporadas da série, e as telas empilhadas por cima dela — esta
      * ficha e as de ator que vieram antes — fecham no caminho.
      */
+    /** Toca direto: o filme de onde parou, a série no episódio em que está. */
     private fun assistir() {
-        val volta = alvo.em(Intent(this, VodActivity::class.java))
-            .setAction(VodActivity.ABRIR)
-            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-        startActivity(volta)
+        PlayerActivity.abrir(this, alvo)
     }
 
     companion object {

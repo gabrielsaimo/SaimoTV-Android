@@ -2,6 +2,7 @@ package br.com.saimo.tv
 
 import android.content.Context
 import android.content.Intent
+import androidx.media3.common.util.UnstableApi
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
@@ -25,6 +26,7 @@ import java.util.Calendar
  * da última vez, então para quem sempre vê a mesma coisa continua sendo um OK
  * só. Voltar de qualquer um dos dois lados cai aqui, e voltar daqui sai do app.
  */
+@UnstableApi
 class EscolhaActivity : AppCompatActivity() {
 
     private lateinit var tv: View
@@ -65,6 +67,38 @@ class EscolhaActivity : AppCompatActivity() {
         // A versão nova é oferecida aqui também: quem só assiste filmes nunca
         // passava pela tela de canais, que era a única que avisava.
         tv.postDelayed({ if (!isFinishing) atualizacao.ofertar() }, 2_500)
+
+        // A fileira do Saimo na tela inicial da TV, refeita por trás.
+        lifecycleScope.launch(semDerrubar) { CanalNaTv.publicar(applicationContext) }
+        atenderLink(intent)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        atenderLink(intent)
+    }
+
+    /**
+     * Link vindo de fora do app: o "Continuar assistindo" e a fileira do
+     * Saimo na tela inicial, e a busca por voz do sistema. Esta tela fica por
+     * baixo, para VOLTAR cair num lugar conhecido.
+     */
+    private fun atenderLink(intent: Intent?) {
+        when (intent?.action) {
+            Intent.ACTION_VIEW -> {
+                if (intent.data?.host == "inicio") return
+                Links.abrir(this, intent.data)
+                intent.data = null
+            }
+            Intent.ACTION_SEARCH -> {
+                val termo = intent.getStringExtra(android.app.SearchManager.QUERY)?.trim().orEmpty()
+                if (termo.isNotEmpty()) {
+                    startActivity(Intent(this, VodActivity::class.java).putExtra(VodActivity.BUSCA, termo))
+                }
+                intent.action = null
+            }
+        }
     }
 
     override fun onStart() {

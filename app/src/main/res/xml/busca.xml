@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- O acervo do Saimo na busca da própria TV (microfone da tela inicial). -->
+<searchable xmlns:android="http://schemas.android.com/apk/res/android"
+    android:label="@string/app_name"
+    android:hint="@string/busca_sistema_rotulo"
+    android:searchSettingsDescription="@string/busca_sistema_rotulo"
+    android:includeInGlobalSearch="true"
+    android:searchSuggestAuthority="br.com.saimo.tv.busca"
+    android:searchSuggestIntentAction="android.intent.action.VIEW"
+    android:searchSuggestSelection=" ?"
+    android:voiceSearchMode="showVoiceSearchButton|launchRecognizer" />

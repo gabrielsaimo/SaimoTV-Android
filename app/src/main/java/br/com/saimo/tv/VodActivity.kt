@@ -41,6 +41,8 @@ class VodActivity : AppCompatActivity() {
     companion object {
         /** Pedido vindo da ficha: abrir o título para assistir. */
         const val ABRIR = "br.com.saimo.tv.ABRIR"
+        /** Termo vindo da busca por voz do sistema. */
+        const val BUSCA = "br.com.saimo.tv.BUSCA"
     }
 
     private data class OpcaoFonte(
@@ -204,6 +206,11 @@ class VodActivity : AppCompatActivity() {
 
     /** "Assistir" na ficha: abre as fontes do filme ou as temporadas da série. */
     private fun atenderPedido(intent: Intent?) {
+        intent?.getStringExtra(BUSCA)?.let { termo ->
+            intent.removeExtra(BUSCA)
+            ir(Passo.Resultados(termo))
+            return
+        }
         if (intent?.action != ABRIR) return
         val alvo = Alvo.de(intent) ?: return
         intent.action = null
@@ -754,32 +761,35 @@ class VodActivity : AppCompatActivity() {
                 // O cartão diz "Série · T1 E3"; a capa é a da série.
                 nomeDaCapa = andamento.titulo,
             ) {
+                val endereco = andamento.endereco
+                if (endereco != null) {
+                    // O endereço foi guardado quando o vídeo começou: abre o
+                    // episódio certo direto, sem busca, temporada e fonte.
+                    val (t, e) = if (andamento.terminado) andamento.temporada to andamento.episodio + 1
+                                 else andamento.temporada to andamento.episodio
+                    PlayerActivity.abrir(this@VodActivity, endereco.alvo, t, e)
+                    return@Cartao
+                }
                 lifecycleScope.launch(semDerrubar) {
-                    // A letra não é guardada junto do progresso; a busca a
-                    // devolve, e é ela quem sabe achar o título no acervo.
                     val achados = Vod.buscar(this@VodActivity, andamento.titulo)
                     val alvo = achados.firstOrNull {
                         it.titulo.equals(andamento.titulo, ignoreCase = true)
                     } ?: achados.firstOrNull()
                     if (alvo != null) {
-                        abrirAchado(alvo)
+                        PlayerActivity.abrir(this@VodActivity, Alvo(alvo.titulo, alvo.serie, alvo.letra, alvo.ano),
+                            andamento.temporada, andamento.episodio)
                         return@launch
                     }
-                    // Não está no acervo comum: procura nas coleções, que é
-                    // onde moram anime e dorama.
                     val daColecao = listOf("animes", "doramas").firstNotNullOfOrNull { tipo ->
                         Vod.colecao(this@VodActivity, tipo).firstOrNull {
                             it.titulo.equals(andamento.titulo, ignoreCase = true)
-                        }
+                        }?.let { tipo to it }
                     }
                     if (daColecao != null) {
-                        episodiosDaSerie = daColecao.episodios
-                        ir(Passo.Temporadas("",
-                            Serie(daColecao.titulo, daColecao.ano, -1, daColecao.episodios.size)))
+                        PlayerActivity.abrir(this@VodActivity, Alvo(daColecao.second.titulo, true, "",
+                            daColecao.second.ano, daColecao.first), andamento.temporada, andamento.episodio)
                         return@launch
                     }
-                    // Nem no acervo nem nas coleções: dizer isso é melhor que
-                    // um clique que não faz nada.
                     android.widget.Toast.makeText(
                         this@VodActivity,
                         getString(R.string.vod_sumiu, andamento.titulo),

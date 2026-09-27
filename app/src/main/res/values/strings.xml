@@ -133,4 +133,69 @@
     <string name="faixa_qualidade">Qualidade da imagem</string>
     <string name="faixa_audio">Idioma do áudio</string>
     <string name="faixa_legendas">Legendas</string>
+    <!-- Player de filmes e séries. -->
+    <string name="painel_dica">OK escolhe · VOLTAR fecha</string>
+    <string name="player_abrindo">Abrindo…</string>
+    <string name="player_outro_servidor">Tentando outro servidor…</string>
+    <string name="player_carregando">Carregando…</string>
+    <string name="player_reconectando">Reconectando…</string>
+    <string name="player_erro_titulo">Não deu para abrir este vídeo</string>
+    <string name="player_erro_texto">Os servidores deste título não responderam agora. Tente de novo em alguns minutos.</string>
+    <string name="player_erro_texto_serie">Os servidores deste episódio não responderam agora. Tente de novo, ou vá para o próximo.</string>
+    <string name="player_sumiu_titulo">Título indisponível</string>
+    <string name="player_sumiu_texto">Este título saiu do acervo ou mudou de lugar.</string>
+    <string name="player_tentar_de_novo">Tentar de novo</string>
+    <string name="player_pular_para_proximo">Ir para o próximo episódio</string>
+    <string name="player_voltar">Voltar</string>
+    <string name="player_retomar_titulo">Continuar de onde parou?</string>
+    <string name="player_continuar_de">▶  Continuar de %1$s</string>
+    <string name="player_do_inicio">↺  Começar do início</string>
+    <string name="player_ainda_titulo">Ainda está assistindo?</string>
+    <string name="player_ainda_texto">Pausamos para não gastar sua internet à toa.</string>
+    <string name="player_continuar">Continuar assistindo</string>
+    <string name="player_sair">Sair</string>
+    <string name="player_pular_abertura">Pular abertura  ⏭</string>
+    <string name="player_pular_recap">Pular recapitulação  ⏭</string>
+    <string name="player_pular_previa">Pular prévia  ⏭</string>
+    <string name="player_proximo_em">Próximo episódio em %1$d s</string>
+    <string name="player_proximo">Próximo episódio</string>
+    <string name="player_assistir_agora">▶  Assistir agora</string>
+    <string name="player_ver_creditos">Ver créditos</string>
+    <string name="player_pausar">❚❚  Pausar</string>
+    <string name="player_tocar">▶  Continuar</string>
+    <string name="player_episodios">Episódios</string>
+    <string name="player_proximo_ep">Próximo ⏭</string>
+    <string name="player_audio_legenda">Áudio e legendas</string>
+    <string name="player_qualidade">Qualidade</string>
+    <string name="player_recomecar">↺  Do início</string>
+    <string name="player_versao">Versão</string>
+    <string name="player_servidores_n">%1$d servidor(es)</string>
+    <string name="player_trocar_temporada">Temporada %1$d  ▸  trocar</string>
+    <string name="player_temporadas_n">%1$d temporadas</string>
+    <string name="player_temporadas">Temporadas</string>
+    <string name="player_visto">✓ Visto</string>
+    <string name="player_visto_pct">%1$d%% visto</string>
+    <string name="player_audio_item">Áudio: %1$s</string>
+    <string name="player_legenda_item">Legenda: %1$s</string>
+    <string name="player_sem_legenda">Sem legenda</string>
+    <string name="player_tamanho_legenda">Tamanho da legenda</string>
+    <string name="player_idioma_padrao">Original</string>
+    <string name="player_qualidade_auto">Automática</string>
+    <string name="player_qualidade_auto_dica">ajusta à sua internet</string>
+    <string name="player_qualidade_unica">Este vídeo tem uma qualidade só</string>
+    <string name="player_qualidade_reduzida">Internet lenta: qualidade reduzida para o vídeo não travar</string>
+    <string-array name="tamanhos_legenda">
+        <item>Pequena</item>
+        <item>Média</item>
+        <item>Grande</item>
+        <item>Enorme</item>
+    </string-array>
+    <!-- Busca do sistema (Google TV). -->
+    <string name="busca_sistema_rotulo">Filmes e séries do Saimo TV</string>
+    <string name="lembrete_titulo">Começando agora: %1$s</string>
+    <string name="lembrete_sub">no canal %1$s</string>
+    <string name="lembrete_assistir">▶  Ir para %1$s</string>
+    <string name="lembrete_depois">Agora não</string>
+    <string name="lembrete_marcar">🔔  Me avisar quando começar</string>
+    <string name="lembrete_marcado">🔕  Cancelar aviso</string>
 </resources>

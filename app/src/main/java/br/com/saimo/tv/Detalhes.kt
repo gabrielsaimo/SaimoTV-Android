@@ -269,6 +269,108 @@ object Detalhes {
             saida
         }
 
+    /** Um episódio como o TMDB descreve: nome, imagem, resumo, duração. */
+    data class EpisodioTmdb(
+        val numero: Int,
+        val nome: String,
+        val sinopse: String,
+        val imagem: String?,
+        val duracao: Int?,
+    )
+
+    private val temporadas = HashMap<String, List<EpisodioTmdb>>()
+
+    /** Os episódios de uma temporada, para a lista da ficha ter nome e imagem. */
+    suspend fun temporada(id: Int, numero: Int): List<EpisodioTmdb> = withContext(Dispatchers.IO) {
+        if (id <= 0) return@withContext emptyList()
+        val chave = "$id|$numero"
+        synchronized(temporadas) { temporadas[chave] }?.let { return@withContext it }
+        val json = pedir("$BASE/tv/$id/season/$numero?api_key=$CHAVE&language=pt-BR")
+            ?: return@withContext emptyList()
+        val lista = json.optJSONArray("episodes") ?: return@withContext emptyList()
+        val out = (0 until lista.length()).mapNotNull { i ->
+            val ep = lista.optJSONObject(i) ?: return@mapNotNull null
+            EpisodioTmdb(
+                numero = ep.optInt("episode_number"),
+                nome = ep.optString("name").takeIf { it != "null" }.orEmpty(),
+                sinopse = ep.optString("overview").takeIf { it != "null" }.orEmpty(),
+                // w300: a imagem ocupa um cartão pequeno na lista.
+                imagem = ep.optString("still_path").takeIf { it.isNotBlank() && it != "null" }
+                    ?.let { IMAGENS + "w300" + it },
+                duracao = ep.optInt("runtime").takeIf { it > 0 },
+            )
+        }
+        synchronized(temporadas) { temporadas[chave] = out }
+        out
+    }
+
+    /**
+     * A chave do trailer no YouTube, dublado de preferência.
+     *
+     * O TMDB guarda vídeos por idioma; o trailer em português existe para boa
+     * parte dos lançamentos, e o original em inglês cobre o resto.
+     */
+    suspend fun trailer(id: Int, serie: Boolean): String? = withContext(Dispatchers.IO) {
+        if (id <= 0) return@withContext null
+        val tipo = if (serie) "tv" else "movie"
+        for (idioma in listOf("pt-BR", "en-US")) {
+            val lista = pedir("$BASE/$tipo/$id/videos?api_key=$CHAVE&language=$idioma")
+                ?.optJSONArray("results") ?: continue
+            val videos = (0 until lista.length()).mapNotNull { lista.optJSONObject(it) }
+                .filter { it.optString("site") == "YouTube" }
+            val melhor = videos.firstOrNull { it.optString("type") == "Trailer" }
+                ?: videos.firstOrNull { it.optString("type") == "Teaser" }
+            melhor?.optString("key")?.takeIf { it.isNotBlank() }?.let { return@withContext it }
+        }
+        null
+    }
+
+    /**
+     * "Mais como este": o que o TMDB recomenda **e existe no acervo**.
+     *
+     * Mesmo cruzamento da filmografia: pelo id, então só aparece o que abre.
+     */
+    suspend fun parecidos(context: Context, id: Int, serie: Boolean): List<Trabalho> =
+        withContext(Dispatchers.IO) {
+            if (id <= 0) return@withContext emptyList()
+            Generos.carregar(context)
+            val tipo = if (serie) "tv" else "movie"
+            val porNome = acervoPorNome(context)
+            val vistos = HashSet<String>()
+            val saida = mutableListOf<Trabalho>()
+            for (rota in listOf("recommendations", "similar")) {
+                val lista = pedir("$BASE/$tipo/$id/$rota?api_key=$CHAVE&language=pt-BR")
+                    ?.optJSONArray("results") ?: continue
+                for (i in 0 until lista.length()) {
+                    val item = lista.optJSONObject(i) ?: continue
+                    val titulo = Generos.titulo(item.optInt("id"), serie) ?: continue
+                    val marca = if (serie) "s:" else "f:"
+                    val achado = porNome[marca + titulo] ?: porNome[marca + Generos.semAno(titulo)] ?: continue
+                    if (!vistos.add(achado.nomeCompleto)) continue
+                    val capa = item.optString("poster_path").takeIf { it.isNotBlank() && it != "null" }
+                        ?.let { IMAGENS + "w185" + it } ?: Generos.capa(achado.nomeCompleto, serie)
+                    saida += Trabalho(achado, capa, "")
+                    if (saida.size >= 20) return@withContext saida
+                }
+            }
+            saida
+        }
+
+    /** Pessoas pelo nome, para a busca achar atores também. */
+    suspend fun pessoas(termo: String): List<Pessoa> = withContext(Dispatchers.IO) {
+        if (termo.trim().length < 3) return@withContext emptyList()
+        val q = java.net.URLEncoder.encode(termo.trim(), "UTF-8")
+        val lista = pedir("$BASE/search/person?api_key=$CHAVE&language=pt-BR&query=$q")
+            ?.optJSONArray("results") ?: return@withContext emptyList()
+        (0 until minOf(lista.length(), 10)).mapNotNull { i ->
+            val p = lista.optJSONObject(i) ?: return@mapNotNull null
+            if (p.optString("known_for_department") != "Acting") return@mapNotNull null
+            Pessoa(p.optInt("id"), p.optString("name"), "",
+                p.optString("profile_path").takeIf { it.isNotBlank() && it != "null" }
+                    ?.let { IMAGENS + "w185" + it })
+        }
+    }
+
     private fun classificacaoBR(json: JSONObject, serie: Boolean): String? {
         if (serie) {
             val lista = json.optJSONObject("content_ratings")?.optJSONArray("results")

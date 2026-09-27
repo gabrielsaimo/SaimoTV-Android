@@ -37,8 +37,10 @@ class SaimoApp : Application(), ImageLoaderFactory {
 
     override fun onCreate() {
         super.onCreate()
+        Preferencias.iniciar(this)
         Aparelho.conhecer(this)
         Telemetria.iniciar(this)
+        Lembretes.iniciar(this)
     }
 
     /**
@@ -86,9 +88,13 @@ class SaimoApp : Application(), ImageLoaderFactory {
             .diskCache {
                 DiskCache.Builder()
                     .directory(cacheDir.resolve("imagens"))
-                    .maxSizeBytes(48L * 1024 * 1024)
+                    .maxSizeBytes(160L * 1024 * 1024)
                     .build()
             }
+            // Metade da memória por capa nos aparelhos de 1 GB: numa capa de
+            // pôster a diferença de cor não se vê do sofá.
+            .bitmapConfig(if (Aparelho.poucaMemoria) android.graphics.Bitmap.Config.RGB_565
+                          else android.graphics.Bitmap.Config.ARGB_8888)
             .crossfade(false)
             .respectCacheHeaders(false)
             .build()

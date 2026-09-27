@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- O player de filmes e séries: o vídeo e, por cima, só o que for preciso
+     no momento — barra, pular abertura, próximo episódio, painéis. -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/playerRaiz"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+
+    <androidx.media3.ui.PlayerView
+        android:id="@+id/playerVideo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="false"
+        app:resize_mode="fit"
+        app:show_buffering="never"
+        app:shutter_background_color="#000000"
+        app:use_controller="false" />
+
+    <!-- Carregando / trocando de servidor. -->
+    <LinearLayout
+        android:id="@+id/playerCarregando"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+        <ProgressBar
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:indeterminateTint="@color/accent" />
+        <TextView
+            android:id="@+id/playerStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:shadowColor="#CC000000"
+            android:shadowRadius="8"
+            android:textColor="@color/text_primary"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <!-- Topo: título e episódio. -->
+    <LinearLayout
+        android:id="@+id/playerTopo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:background="@drawable/bg_top_scrim"
+        android:orientation="horizontal"
+        android:paddingStart="56dp"
+        android:paddingTop="36dp"
+        android:paddingEnd="56dp"
+        android:paddingBottom="70dp"
+        android:visibility="gone">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/playerTitulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-medium"
+                android:maxLines="1"
+                android:textColor="@color/text_primary"
+                android:textSize="32sp" />
+            <TextView
+                android:id="@+id/playerSubtitulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/text_secondary"
+                android:textSize="20sp" />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/playerResolucao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/bg_selo"
+            android:paddingStart="12dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="4dp"
+            android:textColor="@color/text_primary"
+            android:textSize="15sp"
+            android:visibility="gone" />
+        <TextView
+            android:id="@+id/playerRelogio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:textColor="@color/text_primary"
+            android:textSize="22sp" />
+    </LinearLayout>
+
+    <!-- Base: linha do tempo e botões. -->
+    <LinearLayout
+        android:id="@+id/playerBase"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@drawable/bg_bottom_scrim"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:paddingStart="48dp"
+        android:paddingTop="90dp"
+        android:paddingEnd="48dp"
+        android:paddingBottom="36dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/playerBolha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:background="@drawable/bg_card"
+            android:fontFamily="sans-serif-medium"
+            android:paddingStart="16dp"
+            android:paddingTop="6dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="6dp"
+            android:textColor="@color/text_primary"
+            android:textSize="22sp"
+            android:visibility="invisible" />
+
+        <LinearLayout
+            android:id="@+id/playerLinha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/foco_barra"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="10dp"
+            android:paddingTop="12dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="12dp">
+            <TextView
+                android:id="@+id/playerAgora"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="84dp"
+                android:textColor="@color/text_primary"
+                android:textSize="19sp" />
+            <ProgressBar
+                android:id="@+id/playerProgresso"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="8dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_weight="1"
+                android:max="1000"
+                android:progressDrawable="@drawable/barra_tempo" />
+            <TextView
+                android:id="@+id/playerTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:minWidth="84dp"
+                android:textColor="@color/text_secondary"
+                android:textSize="19sp" />
+        </LinearLayout>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:clipToPadding="false"
+            android:scrollbars="none">
+            <LinearLayout
+                android:id="@+id/playerBotoes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
+    </LinearLayout>
+
+    <!-- Pular abertura / recapitulação. -->
+    <TextView
+        android:id="@+id/playerPular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="56dp"
+        android:layout_marginBottom="56dp"
+        android:background="@drawable/botao_ficha"
+        android:focusable="true"
+        android:fontFamily="sans-serif-medium"
+        android:paddingStart="28dp"
+        android:paddingTop="14dp"
+        android:paddingEnd="28dp"
+        android:paddingBottom="14dp"
+        android:textColor="@color/texto_botao_ficha"
+        android:textSize="21sp"
+        android:visibility="gone" />
+
+    <!-- Próximo episódio. -->
+    <LinearLayout
+        android:id="@+id/playerProximo"
+        android:layout_width="520dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="48dp"
+        android:layout_marginBottom="48dp"
+        android:background="@drawable/bg_modal"
+        android:orientation="vertical"
+        android:padding="22dp"
+        android:visibility="gone">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/proximoImagem"
+                android:layout_width="176dp"
+                android:layout_height="99dp"
+                android:background="@drawable/bg_logo"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/proximoContagem"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/accent"
+                    android:textSize="17sp" />
+                <TextView
+                    android:id="@+id/proximoTitulo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:ellipsize="end"
+                    android:fontFamily="sans-serif-medium"
+                    android:maxLines="2"
+                    android:textColor="@color/text_primary"
+                    android:textSize="21sp" />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/proximoAgora"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/botao_ficha"
+                android:focusable="true"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:text="@string/player_assistir_agora"
+                android:textColor="@color/texto_botao_ficha"
+                android:textSize="19sp" />
+            <TextView
+                android:id="@+id/proximoCancelar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:background="@drawable/botao_ficha"
+                android:focusable="true"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:text="@string/player_ver_creditos"
+                android:textColor="@color/texto_botao_ficha"
+                android:textSize="19sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Aviso central: continuar de onde parou, erro, ainda assistindo. -->
+    <FrameLayout
+        android:id="@+id/playerAviso"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#B3000000"
+        android:visibility="gone">
+        <LinearLayout
+            android:layout_width="620dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_modal"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="36dp">
+            <TextView
+                android:id="@+id/avisoTitulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:textColor="@color/text_primary"
+                android:textSize="27sp" />
+            <TextView
+                android:id="@+id/avisoTexto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:textColor="@color/text_secondary"
+                android:textSize="18sp" />
+            <LinearLayout
+                android:id="@+id/avisoBotoes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="26dp"
+                android:orientation="vertical" />
+        </LinearLayout>
+    </FrameLayout>
+</FrameLayout>

@@ -92,6 +92,8 @@ dependencies {
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
+    // "Continuar assistindo" na tela inicial do Google TV.
+    implementation("androidx.tvprovider:tvprovider:1.0.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
     implementation("io.coil-kt:coil:2.7.0")
     // OkHttp traz DNS-over-HTTPS pronto, que é o que contorna resolvedor

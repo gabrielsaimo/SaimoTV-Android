@@ -20,7 +20,10 @@ object Favorites {
     fun toggle(context: Context, name: String) {
         if (!cache.remove(name)) cache.add(name)
         context.getSharedPreferences(FILE, Context.MODE_PRIVATE)
-            .edit().putStringSet(KEY, cache).apply()
+            // Uma cópia, sempre: entregar o mesmo conjunto que as preferências
+            // já guardam faz o Android achar que nada mudou e não gravar em
+            // disco — o favorito valia até o app fechar e sumia depois.
+            .edit().putStringSet(KEY, HashSet(cache)).apply()
     }
 
     /** Favourites first, then alphabetical. */

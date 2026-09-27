@@ -327,6 +327,8 @@ object Telemetria {
 
     private fun enviar(rota: String, corpo: JSONObject, resposta: ((JSONObject?) -> Unit)? = null) {
         if (!::app.isInitialized) return
+        // Desligado em Ajustes: nada sai do aparelho.
+        if (!Preferencias.telemetria) return
         runCatching {
             corpo.put("deviceId", id).put("platform", PLATAFORMA)
             val pedido = Request.Builder().url("$BASE/$rota")
