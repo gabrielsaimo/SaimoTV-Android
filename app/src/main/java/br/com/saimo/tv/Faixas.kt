@@ -1,0 +1,95 @@
+package br.com.saimo.tv
+
+import android.app.Activity
+import androidx.media3.common.C
+import androidx.media3.common.TrackSelectionOverride
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.ExoPlayer
+import java.util.Locale
+
+/**
+ * Áudio, legenda e qualidade, nos painéis de TV — para canal e para filme.
+ *
+ * Substitui o diálogo do Media3, que abria outro diálogo dentro dele, com
+ * letra de celular e rádio minúsculo.
+ */
+@UnstableApi
+object Faixas {
+
+    fun audioELegenda(tela: Activity, p: ExoPlayer, aoMudarEstilo: () -> Unit = {}) {
+        val itens = mutableListOf<Painel.Item>()
+        val audios = p.currentTracks.groups.filter { it.type == C.TRACK_TYPE_AUDIO }
+        if (audios.size > 1) {
+            for (grupo in audios) {
+                val formato = grupo.getTrackFormat(0)
+                itens += Painel.Item(tela.getString(R.string.player_audio_item, idioma(tela, formato.language, formato.label)),
+                    formato.channelCount.takeIf { it > 2 }?.let { "$it canais" },
+                    marcado = grupo.isSelected) {
+                    p.trackSelectionParameters = p.trackSelectionParameters.buildUpon()
+                        .setOverrideForType(TrackSelectionOverride(grupo.mediaTrackGroup, 0)).build()
+                }
+            }
+        }
+        val legendas = p.currentTracks.groups.filter { it.type == C.TRACK_TYPE_TEXT }
+        val semLegenda = p.trackSelectionParameters.disabledTrackTypes.contains(C.TRACK_TYPE_TEXT) ||
+            legendas.none { it.isSelected }
+        if (legendas.isNotEmpty()) {
+            itens += Painel.Item(tela.getString(R.string.player_sem_legenda), marcado = semLegenda) {
+                Preferencias.legendaIdioma = ""
+                p.trackSelectionParameters = p.trackSelectionParameters.buildUpon()
+                    .setTrackTypeDisabled(C.TRACK_TYPE_TEXT, true).build()
+            }
+        }
+        for (grupo in legendas) {
+            val formato = grupo.getTrackFormat(0)
+            itens += Painel.Item(tela.getString(R.string.player_legenda_item, idioma(tela, formato.language, formato.label)),
+                marcado = grupo.isSelected && !semLegenda) {
+                Preferencias.legendaIdioma = formato.language.orEmpty()
+                p.trackSelectionParameters = p.trackSelectionParameters.buildUpon()
+                    .setTrackTypeDisabled(C.TRACK_TYPE_TEXT, false)
+                    .setOverrideForType(TrackSelectionOverride(grupo.mediaTrackGroup, 0)).build()
+            }
+        }
+        val tamanhos = tela.resources.getStringArray(R.array.tamanhos_legenda)
+        itens += Painel.Item(tela.getString(R.string.player_tamanho_legenda),
+            tamanhos[Preferencias.legenda.coerceIn(tamanhos.indices)]) {
+            Painel.mostrar(tela, tela.getString(R.string.player_tamanho_legenda), tamanhos.mapIndexed { i, nome ->
+                Painel.Item(nome, marcado = i == Preferencias.legenda) { Preferencias.legenda = i; aoMudarEstilo() }
+            })
+        }
+        Painel.mostrar(tela, tela.getString(R.string.player_audio_legenda), itens,
+            if (audios.size <= 1 && legendas.isEmpty()) tela.getString(R.string.faixas_so_uma) else null)
+    }
+
+    fun qualidade(tela: Activity, p: ExoPlayer) {
+        val alturas = p.currentTracks.groups.filter { it.type == C.TRACK_TYPE_VIDEO }
+            .flatMap { g -> (0 until g.length).map { g.getTrackFormat(it).height } }
+            .filter { it > 0 }.distinct().sortedDescending()
+        val limite = p.trackSelectionParameters.maxVideoHeight
+        val itens = mutableListOf(Painel.Item(tela.getString(R.string.player_qualidade_auto),
+            tela.getString(R.string.player_qualidade_auto_dica), marcado = limite == Int.MAX_VALUE) {
+            p.trackSelectionParameters = p.trackSelectionParameters.buildUpon().clearVideoSizeConstraints().build()
+        })
+        for (altura in alturas) {
+            itens += Painel.Item(rotuloAltura(altura), marcado = limite == altura) {
+                p.trackSelectionParameters = p.trackSelectionParameters.buildUpon()
+                    .setMaxVideoSize(Int.MAX_VALUE, altura).build()
+            }
+        }
+        if (alturas.size <= 1) itens += Painel.Item(tela.getString(R.string.player_qualidade_unica)) {}
+        Painel.mostrar(tela, tela.getString(R.string.player_qualidade), itens)
+    }
+
+    fun rotuloAltura(altura: Int) = when {
+        altura >= 2000 -> "4K"
+        altura >= 1000 -> "Full HD (1080p)"
+        altura >= 700 -> "HD (720p)"
+        else -> "${altura}p"
+    }
+
+    private fun idioma(tela: Activity, codigo: String?, rotulo: String?): String {
+        if (!rotulo.isNullOrBlank()) return rotulo
+        if (codigo.isNullOrBlank() || codigo == "und") return tela.getString(R.string.player_idioma_padrao)
+        return Locale(codigo).getDisplayLanguage(Locale("pt", "BR")).replaceFirstChar { it.uppercase() }
+    }
+}

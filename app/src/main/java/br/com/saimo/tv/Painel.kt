@@ -27,6 +27,8 @@ object Painel {
         val texto: String,
         val detalhe: String? = null,
         val marcado: Boolean = false,
+        /// Ícone Material antes do texto; 0 é sem ícone.
+        val icone: Int = 0,
         /// Falso mantém o painel aberto depois da escolha (ex.: alternar algo).
         val fecha: Boolean = true,
         val acao: () -> Unit,
@@ -93,6 +95,7 @@ object Painel {
         override fun onBindViewHolder(holder: Holder, position: Int) {
             val item = itens[position]
             holder.texto.text = item.texto
+            Icones.inicio(holder.texto, item.icone)
             holder.detalhe.text = item.detalhe.orEmpty()
             holder.detalhe.visibility = if (item.detalhe.isNullOrBlank()) View.GONE else View.VISIBLE
             holder.marca.visibility = if (item.marcado) View.VISIBLE else View.GONE

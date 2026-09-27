@@ -69,10 +69,10 @@ class BuscaActivity : AppCompatActivity() {
         val teclas = ('A'..'Z').map { it.toString() } + (0..9).map { it.toString() }
         for (t in teclas) grade.addView(tecla(t, 1) { digitar(t.lowercase()) })
         grade.addView(tecla(getString(R.string.busca_espaco), 2) { digitar(" ") })
-        grade.addView(tecla(getString(R.string.busca_apagar), 1) { apagar() })
+        grade.addView(tecla(getString(R.string.busca_apagar), 1) { apagar() }.also { Icones.so(it as TextView, R.drawable.ic_backspace, 1.2f) })
         grade.addView(tecla(getString(R.string.busca_limpar), 2) { digitado.clear(); atualizar(true) })
         val temVoz = packageManager.queryIntentActivities(Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0).isNotEmpty()
-        if (temVoz) grade.addView(tecla(getString(R.string.busca_voz), 1) { ouvir() })
+        if (temVoz) grade.addView(tecla(getString(R.string.busca_voz), 1) { ouvir() }.also { Icones.so(it as TextView, R.drawable.ic_mic, 1.2f) })
         grade.post { grade.getChildAt(0)?.requestFocus() }
     }
 
@@ -210,7 +210,7 @@ class BuscaActivity : AppCompatActivity() {
         }
         estado.visibility = View.GONE
         adaptador.trocar(listOf(Inicio.Fila(getString(R.string.busca_recentes), recentes.map { t ->
-            Inicio.Cartao(t, "", "↺", subtitulo = null) {
+            Inicio.Cartao(t, "", t.take(1).uppercase(), subtitulo = null) {
                 digitado.clear(); digitado.append(t); atualizar(true)
             }
         }, Inicio.Tipo.LARGO)))

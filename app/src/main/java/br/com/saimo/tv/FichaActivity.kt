@@ -133,6 +133,8 @@ class FichaActivity : AppCompatActivity() {
         Generos.capa(alvo.nomeCompleto, alvo.serie)?.let { mostrarCapa(it) }
 
         assistir.text = getString(textoDoAssistir())
+        Icones.inicio(assistir, R.drawable.ic_play)
+        Icones.inicio(findViewById(R.id.fichaTrailer), R.drawable.ic_movie)
         assistir.setOnClickListener { assistir() }
         assistir.setOnFocusChangeListener(crescerNoFoco)
         favoritar.setOnFocusChangeListener(crescerNoFoco)
@@ -192,6 +194,7 @@ class FichaActivity : AppCompatActivity() {
                 findViewById<TextView>(R.id.fichaVersao).apply {
                     visibility = View.VISIBLE
                     text = getString(R.string.ficha_versao, Titulos.rotulo(Preferencias.versao))
+                    Icones.inicio(this, R.drawable.ic_translate)
                     setOnClickListener { escolherVersao(versoes) }
                 }
             }
@@ -210,6 +213,7 @@ class FichaActivity : AppCompatActivity() {
         val comecou = Progresso.ultimoEpisodio(this, r.nomeChave) != null
         assistirBotao.text = getString(if (comecou) R.string.ficha_continuar_ep else R.string.ficha_assistir_ep,
             ep.temporada, ep.numero)
+        Icones.inicio(assistirBotao, R.drawable.ic_play)
     }
 
     private fun escolherVersao(versoes: Set<String>) {
@@ -360,7 +364,7 @@ class FichaActivity : AppCompatActivity() {
 
         val selos = findViewById<LinearLayout>(R.id.fichaSelos)
         selos.removeAllViews()
-        if (ficha.nota > 0) selo(selos, "★ %.1f".format(ficha.nota), 0xFFFFD166.toInt())
+        if (ficha.nota > 0) selo(selos, "%.1f".format(ficha.nota), 0xFFFFD166.toInt(), R.drawable.ic_star)
         if (ficha.ano.isNotBlank()) selo(selos, ficha.ano)
         ficha.duracao?.let {
             selo(selos, if (alvo.serie) getString(R.string.vod_ficha_minutos_ep, it)
@@ -427,7 +431,7 @@ class FichaActivity : AppCompatActivity() {
         else -> 0xFFA8B4C0.toInt()
     }
 
-    private fun selo(onde: LinearLayout, texto: String, cor: Int = 0xFFE6E6E6.toInt()) {
+    private fun selo(onde: LinearLayout, texto: String, cor: Int = 0xFFE6E6E6.toInt(), icone: Int = 0) {
         val dp = { v: Int ->
             TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, v.toFloat(), resources.displayMetrics)
                 .toInt()
@@ -442,12 +446,14 @@ class FichaActivity : AppCompatActivity() {
             layoutParams = LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,
             ).apply { marginEnd = dp(8) }
+            if (icone != 0) Icones.inicio(this, icone, 1.0f)
         })
     }
 
     private fun atualizarFavorito() {
         val marcado = VodFavoritos.contem(this, alvo.titulo, alvo.serie, alvo.ano)
         favoritar.text = getString(if (marcado) R.string.vod_ficha_favorito else R.string.vod_ficha_favoritar)
+        Icones.inicio(favoritar, if (marcado) R.drawable.ic_star else R.drawable.ic_star_outline)
     }
 
     /**

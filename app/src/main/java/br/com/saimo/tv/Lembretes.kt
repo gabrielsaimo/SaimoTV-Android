@@ -86,7 +86,7 @@ object Lembretes {
             ?: return
         prefs().edit().remove(vencido.chave).apply()
         Painel.mostrar(tela, tela.getString(R.string.lembrete_titulo, vencido.titulo), listOf(
-            Painel.Item(tela.getString(R.string.lembrete_assistir, vencido.canal)) {
+            Painel.Item(tela.getString(R.string.lembrete_assistir, vencido.canal), icone = R.drawable.ic_live_tv) {
                 tela.startActivity(Intent(tela, MainActivity::class.java)
                     .putExtra(MainActivity.EXTRA_CANAL, vencido.canal)
                     .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP))

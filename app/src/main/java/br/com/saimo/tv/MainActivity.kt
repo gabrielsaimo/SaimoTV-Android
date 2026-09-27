@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import android.provider.Settings
 import android.util.Log
 import android.view.KeyEvent
@@ -49,7 +50,6 @@ private const val TICK_MS = 20_000L
 /// TV Box fica dias com o app aberto; sem isto a versão nova só aparecia
 /// para quem fechava e abria de novo.
 private const val ATUALIZACAO_MS = 60 * 60 * 1000L
-private const val HOLD_MS = 3_000L
 /// Uma fonte viva entrega imagem bem antes disto. Passou daqui sem tocar, é
 /// fonte morta que não deu erro — e sem este prazo o canal ficaria carregando
 /// para sempre em vez de descer para a próxima.
@@ -139,6 +139,14 @@ class MainActivity : AppCompatActivity() {
 
     /// Favoritos primeiro, depois a ordem do catálogo.
     private var ordered: List<Channel> = CATALOG
+    /// Número de cada canal, fixo: sai da ordem por seção, sem contar os
+    /// favoritos. Favoritar um canal não renumera os outros — "canal 5" é o
+    /// mesmo hoje e amanhã, no controle e na voz.
+    private var numeros: Map<String, Int> = emptyMap()
+
+    private fun numeroDe(canal: Channel?): Int = canal?.let { numeros[it.name] } ?: 0
+
+    private fun indicePorNumero(numero: Int): Int = ordered.indexOfFirst { numeros[it.name] == numero }
     private var current = 0
     private var sourceIndex = 0
     private var retries = 0
@@ -176,6 +184,7 @@ class MainActivity : AppCompatActivity() {
 
         listHeader.setOnClickListener { openNumpad() }
         vodEntrada = findViewById(R.id.vodEntrada)
+        Icones.inicio(vodEntrada as TextView, R.drawable.ic_home)
         vodEntrada.setOnClickListener {
             // A tela inicial está sempre por baixo: voltar a ela é fechar esta.
             EscolhaActivity.voltar(this)
@@ -367,13 +376,9 @@ class MainActivity : AppCompatActivity() {
 
         // O aviso conta a tentativa inteira, não só o instante da troca: dizer
         // "fonte 1 falhou" por meio segundo e sumir não informa ninguém.
-        showStatus(when {
-            apósFalha -> getString(R.string.source_failed, sourceIndex,
-                                   sourceIndex + 1, channel.sources.size)
-            channel.sources.size > 1 ->
-                getString(R.string.loading_source, sourceIndex + 1, channel.sources.size)
-            else -> getString(R.string.loading)
-        })
+        // Quem assiste não precisa saber de fonte nem de servidor: só que o
+        // canal está chegando. O detalhe técnico mora no painel de opções.
+        showStatus(getString(if (apósFalha) R.string.loading_outra else R.string.loading))
         handler.removeCallbacks(sourceTimeout)
         handler.postDelayed(sourceTimeout, SOURCE_TIMEOUT_MS)
         player.setMediaSource(Playback.mediaSource(this, chosen))
@@ -447,7 +452,7 @@ class MainActivity : AppCompatActivity() {
             avisarQueCaiu(channel)
             retries++
             if (retries > 6) {
-                showStatus(getString(R.string.unavailable))
+                canalForaDoAr(channel)
                 return
             }
             showStatus(getString(R.string.reconnecting))
@@ -475,21 +480,15 @@ class MainActivity : AppCompatActivity() {
             // Um toque no OK mostra o que está no ar; segurar três segundos é
             // que abre a lista. O toque é o gesto que se dá o tempo todo, então
             // ele fica com a ação que não tira o vídeo da frente.
+            // OK abre a lista de canais: é o que mais se faz com o controle, e
+            // o que todo app de TV faz. O cartão do canal aparece com INFO ou
+            // a cada troca; as opções (áudio, fontes, favorito) no MENU.
             KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER -> {
                 if (listOpen) return super.onKeyDown(keyCode, event)
-                if (event == null || event.repeatCount == 0) {
-                    // Com a faixa já à vista, o segundo OK escolhe a fonte — é o
-                    // único jeito com um controle que só tem direcional e OK.
-                    if (banner.visibility == View.VISIBLE && banner.alpha > 0.5f) {
-                        escolherFonte(current)
-                        return true
-                    }
-                    heldOpen = false
-                    revealBanner()
-                    handler.postDelayed(openOnHold, HOLD_MS)
-                }
+                if (event == null || event.repeatCount == 0) openList()
                 true
             }
+            KeyEvent.KEYCODE_LAST_CHANNEL -> { canalAnterior(); true }
             KeyEvent.KEYCODE_DPAD_LEFT -> {
                 if (!listOpen) { openList(); true } else super.onKeyDown(keyCode, event)
             }
@@ -522,7 +521,8 @@ class MainActivity : AppCompatActivity() {
             KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> {
                 player.playWhenReady = !player.playWhenReady; true
             }
-            KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.KEYCODE_GUIDE, KeyEvent.KEYCODE_INFO -> {
+            KeyEvent.KEYCODE_INFO -> { if (!listOpen) revealBanner(); true }
+            KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.KEYCODE_GUIDE -> {
                 when {
                     !listOpen -> { openGuide(); true }
                     // Na lista, a direita abre as fontes do canal em foco.
@@ -537,15 +537,16 @@ class MainActivity : AppCompatActivity() {
                 // teclado virtual para texto livre seria pior de usar.
                 typeDigit(keyCode - KeyEvent.KEYCODE_0); true
             }
-            KeyEvent.KEYCODE_MENU, KeyEvent.KEYCODE_SETTINGS, KeyEvent.KEYCODE_CAPTIONS -> {
+            KeyEvent.KEYCODE_MENU, KeyEvent.KEYCODE_SETTINGS -> {
                 if (listOpen && keyCode == KeyEvent.KEYCODE_MENU) {
                     Favorites.toggle(this, ordered.getOrNull(listaFoco)?.name ?: ordered[current].name)
                     reorder()
                 } else {
-                    TrackMenu.show(this, player)
+                    opcoes()
                 }
                 true
             }
+            KeyEvent.KEYCODE_CAPTIONS -> { Faixas.audioELegenda(this, player); true }
             else -> {
                 if (!listOpen) revealBanner()
                 super.onKeyDown(keyCode, event)
@@ -600,7 +601,7 @@ class MainActivity : AppCompatActivity() {
             play(current, sourceIndex + 1, apósFalha = true)
         } else {
             avisarQueCaiu(channel)
-            showStatus(getString(R.string.unavailable))
+            canalForaDoAr(channel)
         }
     }
 
@@ -610,19 +611,15 @@ class MainActivity : AppCompatActivity() {
         Telemetria.caiu("live", channel.name, channel.sources.size)
     }
 
-    private var heldOpen = false
-    private val openOnHold = Runnable {
-        heldOpen = true
-        openList()
-    }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER) {
-            handler.removeCallbacks(openOnHold)
-            if (listPanel.visibility != View.VISIBLE || heldOpen) return true
-        }
+        // O OK que abriu a lista não pode, ao ser solto, escolher o canal em foco.
+        if ((keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER) &&
+            SystemClock.elapsedRealtime() - listaAbertaEm < 400) return true
         return super.onKeyUp(keyCode, event)
     }
+
+    private var listaAbertaEm = 0L
 
     private var typed = StringBuilder()
     private val commitTyped = Runnable {
@@ -634,7 +631,8 @@ class MainActivity : AppCompatActivity() {
             return@Runnable
         }
         val number = entered.toIntOrNull()
-        if (number != null && number in 1..ordered.size) play(number - 1)
+        val indice = number?.let { indicePorNumero(it) } ?: -1
+        if (indice >= 0) play(indice)
     }
 
     // MARK: - Teclado na tela
@@ -674,9 +672,10 @@ class MainActivity : AppCompatActivity() {
             return
         }
         val number = entered.toIntOrNull()
-        if (number != null && number in 1..ordered.size) {
+        val indice = number?.let { indicePorNumero(it) } ?: -1
+        if (indice >= 0) {
             closeList()
-            play(number - 1)
+            play(indice)
         } else {
             focusRow(current)
         }
@@ -697,12 +696,15 @@ class MainActivity : AppCompatActivity() {
         // O que o painel desligou some aqui, antes de a lista chegar à tela:
         // canal sem nenhuma fonte não abriria mesmo.
         ordered = FontesDesativadas.peneirarCanais(Categorias.ordenar(Unlock.channels()))
+        numeros = Categorias.ordenarFixo(ordered).mapIndexed { i, c -> c.name to i + 1 }.toMap()
+        adapter.numero = { numeroDe(it) }
         val found = ordered.indexOfFirst { it.name == playing }
         // Ao trancar com um desses no ar, o nome ficaria à vista na faixa;
         // volta para o primeiro canal comum antes de a lista encolher.
         if (found < 0 && playing != null) play(0) else current = found.coerceAtLeast(0)
         adapter.submit(ordered)
         adapter.select(current)
+        montarSecoes()
         listCount.text = ordered.size.toString()
     }
 
@@ -714,21 +716,117 @@ class MainActivity : AppCompatActivity() {
     private fun escolherFonte(index: Int) {
         val canal = ordered.getOrNull(index) ?: return
         if (isFinishing || isDestroyed) return
-        handler.removeCallbacks(openOnHold)
-        val itens = canal.sources.mapIndexed { i, fonte ->
-            "${fonte.quality ?: "Qualidade não informada"} · " + getString(R.string.fontes_item, i + 1,
-                fonte.url.toUri().host?.removePrefix("www.") ?: fonte.url.take(40))
-        }.toTypedArray()
         val marcada = if (index == current) sourceIndex else -1
-        android.app.AlertDialog.Builder(this)
-            .setTitle(getString(R.string.fontes_titulo, canal.name))
-            .setSingleChoiceItems(itens, marcada) { dialogo, escolhida ->
-                dialogo.dismiss()
+        Painel.mostrar(this, getString(R.string.fontes_titulo, canal.name), canal.sources.mapIndexed { i, fonte ->
+            Painel.Item(getString(R.string.fontes_item_amigavel, i + 1),
+                listOfNotNull(fonte.quality, fonte.url.toUri().host?.removePrefix("www.")).joinToString(" · "),
+                marcado = i == marcada) {
                 if (listPanel.visibility == View.VISIBLE) closeList()
                 retries = 0
-                play(index, escolhida)
+                play(index, i)
             }
-            .show()
+        }, getString(R.string.fontes_dica))
+    }
+
+    /** MENU com o vídeo na tela: tudo o que se pode fazer com o canal. */
+    private fun opcoes() {
+        val canal = ordered.getOrNull(current) ?: return
+        val favorito = Favorites.contains(canal.name)
+        val anterior = Preferencias.canalAnterior?.takeIf { n -> ordered.any { it.name == n } }
+        val itens = listOfNotNull(
+            Painel.Item(getString(R.string.opcoes_canais), icone = R.drawable.ic_list) { openList() },
+            Painel.Item(getString(R.string.guide), icone = R.drawable.ic_guide) { openGuide() },
+            anterior?.let { Painel.Item(getString(R.string.opcoes_anterior, it), icone = R.drawable.ic_history) { canalAnterior() } },
+            Painel.Item(getString(if (favorito) R.string.opcoes_desfavoritar else R.string.opcoes_favoritar),
+                icone = if (favorito) R.drawable.ic_star else R.drawable.ic_star_outline) {
+                Favorites.toggle(this, canal.name); reorder()
+            },
+            Painel.Item(getString(R.string.player_audio_legenda), icone = R.drawable.ic_subtitles) { Faixas.audioELegenda(this, player) },
+            Painel.Item(getString(R.string.player_qualidade), icone = R.drawable.ic_hd) { Faixas.qualidade(this, player) },
+            if (canal.sources.size > 1) Painel.Item(getString(R.string.opcoes_fontes),
+                getString(R.string.opcoes_fontes_dica, canal.sources.size), icone = R.drawable.ic_swap) { escolherFonte(current) } else null,
+            Painel.Item(getString(R.string.ajustes_timer),
+                if (TimerDeSono.ativo) getString(R.string.ajustes_timer_em, TimerDeSono.restanteMin()) else null,
+                icone = R.drawable.ic_timer) {
+                Painel.mostrar(this, getString(R.string.ajustes_timer), listOf(0, 30, 60, 90, 120).map { m ->
+                    Painel.Item(if (m == 0) getString(R.string.ajustes_desligado) else getString(R.string.ajustes_minutos, m)) {
+                        TimerDeSono.ligar(m)
+                    }
+                })
+            },
+            Painel.Item(getString(R.string.opcoes_inicio), icone = R.drawable.ic_home) { finish() },
+        )
+        Painel.mostrar(this, canal.name, itens, Epg.nowNext(canal.name)?.first?.title)
+    }
+
+    /**
+     * As pílulas de seção no alto da lista. Focar uma já leva a lista até a
+     * seção; descer entra no primeiro canal dela.
+     */
+    private fun montarSecoes() {
+        val caixa = findViewById<android.widget.LinearLayout>(R.id.listSecoesItens)
+        caixa.removeAllViews()
+        val d = resources.displayMetrics.density
+        val secoes = ordered.map { Categorias.secao(it) }.distinct()
+        for (secao in secoes) {
+            caixa.addView(TextView(this).apply {
+                text = secao
+                tag = secao
+                textSize = 15f
+                setTextColor(androidx.core.content.ContextCompat.getColorStateList(context, R.color.texto_botao_ficha))
+                setBackgroundResource(R.drawable.botao_player)
+                isFocusable = true
+                setPadding((14 * d).toInt(), (6 * d).toInt(), (14 * d).toInt(), (6 * d).toInt())
+                layoutParams = android.widget.LinearLayout.LayoutParams(
+                    android.widget.LinearLayout.LayoutParams.WRAP_CONTENT,
+                    android.widget.LinearLayout.LayoutParams.WRAP_CONTENT).apply { marginEnd = (6 * d).toInt() }
+                val primeiro = { ordered.indexOfFirst { Categorias.secao(it) == secao } }
+                setOnFocusChangeListener { _, foco ->
+                    if (foco) {
+                        listaFoco = primeiro().coerceAtLeast(0)
+                        (channels.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(listaFoco, 0)
+                    }
+                }
+                setOnClickListener { focusRow(primeiro().coerceAtLeast(0)) }
+                setOnKeyListener { _, codigo, evento ->
+                    if (evento.action == KeyEvent.ACTION_DOWN && codigo == KeyEvent.KEYCODE_DPAD_DOWN) {
+                        focusRow(primeiro().coerceAtLeast(0)); true
+                    } else false
+                }
+            })
+        }
+    }
+
+    private fun focarSecaoAtual() {
+        val secao = ordered.getOrNull(listaFoco)?.let { Categorias.secao(it) }
+        val caixa = findViewById<android.widget.LinearLayout>(R.id.listSecoesItens)
+        (caixa.findViewWithTag<View>(secao) ?: caixa.getChildAt(0) ?: vodEntrada).requestFocus()
+    }
+
+    /** Volta ao canal de antes — o "zap" entre dois canais, como no controle da TV. */
+    private fun canalAnterior() {
+        val nome = Preferencias.canalAnterior ?: return
+        val indice = ordered.indexOfFirst { it.name == nome }
+        if (indice >= 0) play(indice)
+    }
+
+    /**
+     * Nenhuma fonte abriu. Em vez de um aviso sem saída, o que dá para fazer:
+     * tentar de novo, ou ir a um canal parecido que esteja funcionando.
+     */
+    private fun canalForaDoAr(canal: Channel) {
+        showStatus(getString(R.string.unavailable))
+        if (isFinishing || isDestroyed) return
+        val secao = Categorias.de(canal)
+        val parecidos = ordered.filter { it.name != canal.name && Categorias.de(it) == secao }.take(4)
+        Painel.mostrar(this, getString(R.string.fora_titulo, canal.name), listOf(
+            Painel.Item(getString(R.string.player_tentar_de_novo), icone = R.drawable.ic_replay) { retries = 0; play(current, 0) },
+        ) + parecidos.map { c ->
+            Painel.Item(getString(R.string.fora_ir, c.name), Epg.nowNext(c.name)?.first?.title) {
+                retries = 0; play(ordered.indexOf(c))
+            }
+        } + Painel.Item(getString(R.string.opcoes_canais), icone = R.drawable.ic_list) { openList() },
+            getString(R.string.fora_sub))
     }
 
     private fun openGuide() {
@@ -750,6 +848,7 @@ class MainActivity : AppCompatActivity() {
     // MARK: - Overlays
 
     private fun openList() {
+        listaAbertaEm = SystemClock.elapsedRealtime()
         handler.removeCallbacks(hideBanner)
         banner.visibility = View.GONE
         adapter.refresh()
@@ -781,7 +880,7 @@ class MainActivity : AppCompatActivity() {
      */
     private fun moverFoco(delta: Int) {
         val alvo = listaFoco + delta
-        if (alvo < 0) { vodEntrada.requestFocus(); return }
+        if (alvo < 0) { focarSecaoAtual(); return }
         if (alvo >= ordered.size) return
         listaFoco = alvo
         focusRow(alvo)
@@ -826,13 +925,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateBanner() {
         val channel = ordered[current]
-        bannerNumber.text = (current + 1).toString()
+        bannerNumber.text = numeroDe(channel).takeIf { it > 0 }?.toString().orEmpty()
         bannerChannel.text = channel.name
         val fonte = channel.sources.getOrNull(sourceIndex)
-        bannerSource.text = fonte?.let {
-            getString(R.string.source_label, sourceIndex + 1, channel.sources.size,
-                it.url.toUri().host ?: it.url.take(40))
-        }.orEmpty()
+        // No lugar de "fonte 1/3 · servidor", o que o controle faz aqui.
+        bannerSource.text = if (fonte != null) getString(R.string.banner_dica) else ""
         bannerSource.visibility =
             if (bannerSource.text.isNullOrEmpty()) View.GONE else View.VISIBLE
         if (channel.logo != null) bannerLogo.load(channel.logo)
@@ -974,7 +1071,7 @@ class MainActivity : AppCompatActivity() {
         // "5" ou "canal 5" — o mesmo número que aparece do lado do nome na
         // lista, um a mais que o índice porque a lista começa em 1.
         termo.toIntOrNull()?.let { numero ->
-            if (numero in 1..ordered.size) return numero - 1
+            indicePorNumero(numero).takeIf { it >= 0 }?.let { return it }
         }
 
         ordered.indexOfFirst { normalizarVoz(it.name) == termo }
@@ -1004,6 +1101,7 @@ private class ChannelAdapter(
 
     private var items: List<Channel> = emptyList()
     private var selected = 0
+    var numero: (Channel) -> Int = { 0 }
 
     fun submit(list: List<Channel>) {
         items = list
@@ -1046,7 +1144,7 @@ private class ChannelAdapter(
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val channel = items[position]
-        holder.number.text = (position + 1).toString()
+        holder.number.text = numero(channel).takeIf { it > 0 }?.toString().orEmpty()
         holder.name.text = channel.name
         holder.star.visibility =
             if (Favorites.contains(channel.name)) View.VISIBLE else View.GONE

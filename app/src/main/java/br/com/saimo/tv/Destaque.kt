@@ -48,12 +48,14 @@ class Destaque(
         trabalho = escopo.launch(semDerrubar) {
             delay(400)
             val ficha = Detalhes.de(alvo.titulo, alvo.serie, alvo.tmdbId.takeIf { it > 0 }) ?: return@launch
-            meta.text = listOfNotNull(
-                ficha.nota.takeIf { it > 0 }?.let { "★ %.1f".format(it) },
+            val linha = listOfNotNull(
+                ficha.nota.takeIf { it > 0 }?.let { "%.1f".format(it) },
                 ficha.ano.takeIf { it.isNotBlank() },
                 ficha.temporadas?.let { tela.resources.getQuantityString(R.plurals.vod_ficha_temporadas_n, it, it) },
                 ficha.generos.take(3).joinToString(", ").takeIf { it.isNotBlank() },
             ).joinToString("  ·  ")
+            meta.text = if (ficha.nota > 0) Icones.emLinha(tela, R.drawable.ic_star, linha,
+                meta.textSize.toInt(), meta.currentTextColor) else linha
             sinopse.text = ficha.sinopse
             trocarFundo(ficha.fundo)
         }

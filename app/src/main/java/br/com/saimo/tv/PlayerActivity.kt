@@ -61,6 +61,8 @@ class PlayerActivity : AppCompatActivity() {
         private const val PRAZO_MS = 15_000L
         private const val ESCONDER_MS = 5_000L
         private const val CONTAGEM_S = 10
+        private const val ICONE_PLAY = "\u0000play"
+        private const val ICONE_REPLAY = "\u0000replay"
 
         fun abrir(context: Context, alvo: Alvo, temporada: Int = 0, episodio: Int = 0,
                   versao: String? = null, doInicio: Boolean = false) {
@@ -145,6 +147,7 @@ class PlayerActivity : AppCompatActivity() {
         estiloDaLegenda()
 
         pular.setOnClickListener { pularTrecho() }
+        Icones.inicio(findViewById(R.id.proximoAgora), R.drawable.ic_play)
         findViewById<View>(R.id.proximoAgora).setOnClickListener { irParaProximo(sozinho = false) }
         findViewById<View>(R.id.proximoCancelar).setOnClickListener { dispensarProximo() }
         linha.setOnKeyListener { _, codigo, evento ->
@@ -409,6 +412,7 @@ class PlayerActivity : AppCompatActivity() {
                     else -> R.string.player_pular_abertura
                 })
                 pular.tag = trecho
+                Icones.fim(pular, R.drawable.ic_skip_next)
                 pular.visibility = View.VISIBLE
                 if (base.visibility != View.VISIBLE) pular.requestFocus()
             }
@@ -537,10 +541,10 @@ class PlayerActivity : AppCompatActivity() {
         mostrarAviso(getString(R.string.player_retomar_titulo),
             ep?.let { "T${it.temporada} E${it.numero}" } ?: Generos.semAno(alvo.titulo),
             listOf(
-                getString(R.string.player_continuar_de, tempo(posicao)) to {
+                getString(R.string.player_continuar_de, tempo(posicao)) + ICONE_PLAY to {
                     esconderAviso(); player?.playWhenReady = true
                 },
-                getString(R.string.player_do_inicio) to {
+                getString(R.string.player_do_inicio) + ICONE_REPLAY to {
                     esconderAviso(); player?.seekTo(0); player?.playWhenReady = true
                 },
             ))
@@ -580,7 +584,7 @@ class PlayerActivity : AppCompatActivity() {
         caixa.removeAllViews()
         for ((rotulo, acao) in acoes) {
             caixa.addView(TextView(this).apply {
-                text = rotulo
+                text = rotulo.substringBefore('\u0000')
                 textSize = 20f
                 gravity = android.view.Gravity.CENTER
                 typeface = android.graphics.Typeface.create("sans-serif-medium", android.graphics.Typeface.NORMAL)
@@ -589,6 +593,10 @@ class PlayerActivity : AppCompatActivity() {
                 isFocusable = true
                 setPadding(0, dp(14), 0, dp(14))
                 setOnClickListener { acao() }
+                when {
+                    rotulo.endsWith(ICONE_PLAY) -> Icones.inicio(this, R.drawable.ic_play)
+                    rotulo.endsWith(ICONE_REPLAY) -> Icones.inicio(this, R.drawable.ic_replay)
+                }
                 layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT).apply { topMargin = dp(10) }
             })
@@ -617,22 +625,23 @@ class PlayerActivity : AppCompatActivity() {
         botoes.removeAllViews()
         val r = resolvido
         botao(if (player?.isPlaying == true) getString(R.string.player_pausar)
-              else getString(R.string.player_tocar), "pausa") { alternarPausa() }
+              else getString(R.string.player_tocar), "pausa",
+              if (player?.isPlaying == true) R.drawable.ic_pause else R.drawable.ic_play) { alternarPausa() }
         val atual = ep
         if (r != null && atual != null) {
-            botao(getString(R.string.player_episodios), "eps") { painelEpisodios() }
-            if (r.seguinte(atual) != null) botao(getString(R.string.player_proximo_ep), "prox") { irParaProximo(false) }
+            botao(getString(R.string.player_episodios), "eps", R.drawable.ic_episodes) { painelEpisodios() }
+            if (r.seguinte(atual) != null) botao(getString(R.string.player_proximo_ep), "prox", R.drawable.ic_skip_next) { irParaProximo(false) }
         }
         val versoes = (ep?.fontes ?: r?.filme?.fontes)?.keys.orEmpty()
         if (versoes.size > 1) {
-            botao(Titulos.rotulo(versao), "versao") { painelVersao() }
+            botao(Titulos.rotulo(versao), "versao", R.drawable.ic_translate) { painelVersao() }
         }
-        botao(getString(R.string.player_audio_legenda), "faixas") { painelFaixas() }
-        botao(getString(R.string.player_qualidade), "qualidade") { painelQualidade() }
-        botao(getString(R.string.player_recomecar), "inicio") { player?.seekTo(0); mostrarControles() }
+        botao(getString(R.string.player_audio_legenda), "faixas", R.drawable.ic_subtitles) { painelFaixas() }
+        botao(getString(R.string.player_qualidade), "qualidade", R.drawable.ic_hd) { painelQualidade() }
+        botao(getString(R.string.player_recomecar), "inicio", R.drawable.ic_replay) { player?.seekTo(0); mostrarControles() }
     }
 
-    private fun botao(texto: String, marca: String, acao: () -> Unit) {
+    private fun botao(texto: String, marca: String, icone: Int, acao: () -> Unit) {
         botoes.addView(TextView(this).apply {
             text = texto
             tag = marca
@@ -644,14 +653,18 @@ class PlayerActivity : AppCompatActivity() {
             isFocusable = true
             setPadding(dp(22), dp(10), dp(22), dp(10))
             setOnClickListener { acao(); adiarEsconder() }
+            Icones.inicio(this, icone)
             layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT).apply { marginEnd = dp(12) }
         })
     }
 
     private fun atualizarBotaoPausa() {
-        (botoes.findViewWithTag<TextView>("pausa"))?.text =
-            if (player?.playWhenReady == true) getString(R.string.player_pausar) else getString(R.string.player_tocar)
+        (botoes.findViewWithTag<TextView>("pausa"))?.let { b ->
+            val tocando = player?.playWhenReady == true
+            b.text = getString(if (tocando) R.string.player_pausar else R.string.player_tocar)
+            Icones.inicio(b, if (tocando) R.drawable.ic_pause else R.drawable.ic_play)
+        }
     }
 
     private fun alternarPausa() {
@@ -784,83 +797,9 @@ class PlayerActivity : AppCompatActivity() {
         })
     }
 
-    private fun painelFaixas() {
-        val p = player ?: return
-        val itens = mutableListOf<Painel.Item>()
-        val audios = p.currentTracks.groups.filter { it.type == C.TRACK_TYPE_AUDIO }
-        if (audios.size > 1) {
-            for (grupo in audios) {
-                val formato = grupo.getTrackFormat(0)
-                itens += Painel.Item(getString(R.string.player_audio_item, idioma(formato.language, formato.label)),
-                    formato.channelCount.takeIf { it > 2 }?.let { "$it canais" },
-                    marcado = grupo.isSelected) {
-                    p.trackSelectionParameters = p.trackSelectionParameters.buildUpon()
-                        .setOverrideForType(TrackSelectionOverride(grupo.mediaTrackGroup, 0)).build()
-                }
-            }
-        }
-        val legendas = p.currentTracks.groups.filter { it.type == C.TRACK_TYPE_TEXT }
-        val semLegenda = p.trackSelectionParameters.disabledTrackTypes.contains(C.TRACK_TYPE_TEXT) ||
-            legendas.none { it.isSelected }
-        itens += Painel.Item(getString(R.string.player_sem_legenda), marcado = semLegenda) {
-            Preferencias.legendaIdioma = ""
-            p.trackSelectionParameters = p.trackSelectionParameters.buildUpon()
-                .setTrackTypeDisabled(C.TRACK_TYPE_TEXT, true).build()
-        }
-        for (grupo in legendas) {
-            val formato = grupo.getTrackFormat(0)
-            itens += Painel.Item(getString(R.string.player_legenda_item, idioma(formato.language, formato.label)),
-                marcado = grupo.isSelected && !semLegenda) {
-                Preferencias.legendaIdioma = formato.language.orEmpty()
-                p.trackSelectionParameters = p.trackSelectionParameters.buildUpon()
-                    .setTrackTypeDisabled(C.TRACK_TYPE_TEXT, false)
-                    .setOverrideForType(TrackSelectionOverride(grupo.mediaTrackGroup, 0)).build()
-            }
-        }
-        val tamanhos = resources.getStringArray(R.array.tamanhos_legenda)
-        itens += Painel.Item(getString(R.string.player_tamanho_legenda),
-            tamanhos[Preferencias.legenda.coerceIn(tamanhos.indices)], fecha = true) {
-            Painel.mostrar(this, getString(R.string.player_tamanho_legenda), tamanhos.mapIndexed { i, nome ->
-                Painel.Item(nome, marcado = i == Preferencias.legenda) {
-                    Preferencias.legenda = i; estiloDaLegenda()
-                }
-            })
-        }
-        Painel.mostrar(this, getString(R.string.player_audio_legenda), itens)
-    }
+    private fun painelFaixas() { player?.let { Faixas.audioELegenda(this, it) { estiloDaLegenda() } } }
 
-    private fun idioma(codigo: String?, rotulo: String?): String {
-        if (!rotulo.isNullOrBlank()) return rotulo
-        if (codigo.isNullOrBlank() || codigo == "und") return getString(R.string.player_idioma_padrao)
-        return Locale(codigo).getDisplayLanguage(Locale("pt", "BR")).replaceFirstChar { it.uppercase() }
-    }
-
-    private fun painelQualidade() {
-        val p = player ?: return
-        val alturas = p.currentTracks.groups.filter { it.type == C.TRACK_TYPE_VIDEO }
-            .flatMap { g -> (0 until g.length).map { g.getTrackFormat(it).height } }
-            .filter { it > 0 }.distinct().sortedDescending()
-        val limite = p.trackSelectionParameters.maxVideoHeight
-        val itens = mutableListOf(Painel.Item(getString(R.string.player_qualidade_auto),
-            getString(R.string.player_qualidade_auto_dica), marcado = limite == Int.MAX_VALUE) {
-            p.trackSelectionParameters = p.trackSelectionParameters.buildUpon().clearVideoSizeConstraints().build()
-        })
-        for (altura in alturas) {
-            itens += Painel.Item(rotuloAltura(altura), marcado = limite == altura) {
-                p.trackSelectionParameters = p.trackSelectionParameters.buildUpon()
-                    .setMaxVideoSize(Int.MAX_VALUE, altura).build()
-            }
-        }
-        if (alturas.isEmpty()) itens += Painel.Item(getString(R.string.player_qualidade_unica), fecha = true) {}
-        Painel.mostrar(this, getString(R.string.player_qualidade), itens)
-    }
-
-    private fun rotuloAltura(altura: Int) = when {
-        altura >= 2000 -> "4K"
-        altura >= 1000 -> "Full HD (1080p)"
-        altura >= 700 -> "HD (720p)"
-        else -> "${altura}p"
-    }
+    private fun painelQualidade() { player?.let { Faixas.qualidade(this, it) } }
 
     private fun limitarQualidade(p: ExoPlayer) {
         p.trackSelectionParameters = p.trackSelectionParameters.buildUpon().setMaxVideoSize(1280, 720).build()

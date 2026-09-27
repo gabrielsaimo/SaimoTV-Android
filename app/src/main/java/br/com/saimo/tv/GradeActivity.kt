@@ -97,7 +97,7 @@ class GradeActivity : AppCompatActivity() {
 
         findViewById<TextView>(R.id.gradeGenero).setOnClickListener { escolherGenero() }
         findViewById<TextView>(R.id.gradeOrdem).setOnClickListener {
-            Painel.mostrar(this, getString(R.string.grade_ordem, "").trim(' ', '▾'), listOf(
+            Painel.mostrar(this, getString(R.string.grade_ordem, "").trim(' ', ':'), listOf(
                 Painel.Item(getString(R.string.grade_az), marcado = !novosPrimeiro) { novosPrimeiro = false; aplicar() },
                 Painel.Item(getString(R.string.grade_novos), marcado = novosPrimeiro) { novosPrimeiro = true; aplicar() },
             ))
@@ -157,10 +157,13 @@ class GradeActivity : AppCompatActivity() {
     private fun atualizarBotoes() {
         findViewById<TextView>(R.id.gradeGenero).apply {
             text = getString(R.string.grade_genero, genero.ifEmpty { getString(R.string.vod_todos) })
+            Icones.fim(this, R.drawable.ic_dropdown)
             visibility = if (Generos.todos.isEmpty() || tipo == FAVORITOS) View.GONE else View.VISIBLE
         }
-        findViewById<TextView>(R.id.gradeOrdem).text =
-            getString(R.string.grade_ordem, getString(if (novosPrimeiro) R.string.grade_novos else R.string.grade_az))
+        findViewById<TextView>(R.id.gradeOrdem).apply {
+            text = getString(R.string.grade_ordem, getString(if (novosPrimeiro) R.string.grade_novos else R.string.grade_az))
+            Icones.fim(this, R.drawable.ic_dropdown)
+        }
     }
 
     private fun escolherGenero() {
@@ -169,7 +172,7 @@ class GradeActivity : AppCompatActivity() {
         }) + Generos.todosEmOrdem.map { g ->
             Painel.Item(g, marcado = g == genero) { genero = g; aplicar() }
         }
-        Painel.mostrar(this, getString(R.string.grade_genero, "").trim(' ', '▾', ':'), itens)
+        Painel.mostrar(this, getString(R.string.grade_genero, "").trim(' ', ':'), itens)
     }
 
     private fun irParaLetra(letra: String) {

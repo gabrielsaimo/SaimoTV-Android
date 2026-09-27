@@ -240,6 +240,22 @@
             android:textColor="@color/accent"
             android:textSize="20sp" />
 
+        <!-- Seções: pular direto para Esportes, Notícias... sem descer a lista. -->
+        <HorizontalScrollView
+            android:id="@+id/listSecoes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="20dp"
+            android:clipToPadding="false"
+            android:scrollbars="none">
+            <LinearLayout
+                android:id="@+id/listSecoesItens"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/channels"
             android:layout_width="match_parent"

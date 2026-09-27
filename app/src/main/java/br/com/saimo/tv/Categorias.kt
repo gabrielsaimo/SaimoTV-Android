@@ -59,6 +59,10 @@ object Categorias {
             compareBy<Channel> { if (Favorites.contains(it.name)) -1 else posicao(de(it)) }
                 .thenBy { it.name.lowercase() })
 
+    /** A mesma ordem, sem favoritos no topo: é dela que saem os números fixos. */
+    fun ordenarFixo(canais: List<Channel>): List<Channel> =
+        canais.sortedWith(compareBy<Channel> { posicao(de(it)) }.thenBy { it.name.lowercase() })
+
     private fun posicao(categoria: String): Int =
         ORDEM.indexOf(categoria).let { if (it < 0) ORDEM.size else it }
 

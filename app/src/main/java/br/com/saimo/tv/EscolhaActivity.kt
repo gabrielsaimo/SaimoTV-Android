@@ -156,6 +156,11 @@ class EscolhaActivity : AppCompatActivity() {
                     LinearLayout.LayoutParams.WRAP_CONTENT).apply { marginEnd = (2 * d).toInt() }
                 setOnClickListener { acao() }
                 setOnFocusChangeListener { _, foco -> if (foco) cabecalhoPadrao() }
+                when (nome) {
+                    getString(R.string.menu_buscar) -> Icones.inicio(this, R.drawable.ic_search)
+                    getString(R.string.menu_ajustes) -> Icones.so(this, R.drawable.ic_settings)
+                    getString(R.string.menu_ao_vivo) -> Icones.inicio(this, R.drawable.ic_live_tv)
+                }
             })
         }
     }
@@ -210,7 +215,7 @@ class EscolhaActivity : AppCompatActivity() {
                 alvo = alvo,
                 aoMenu = {
                     Painel.mostrar(this, a.rotulo, listOfNotNull(
-                        alvo?.let { Painel.Item(getString(R.string.inicio_abrir_ficha)) { FichaActivity.abrir(this, it) } },
+                        alvo?.let { Painel.Item(getString(R.string.inicio_abrir_ficha), icone = R.drawable.ic_info) { FichaActivity.abrir(this, it) } },
                         Painel.Item(getString(R.string.inicio_remover_continuar)) {
                             Progresso.esquecer(this, a)
                             lifecycleScope.launch(semDerrubar) { montarFilas() }
