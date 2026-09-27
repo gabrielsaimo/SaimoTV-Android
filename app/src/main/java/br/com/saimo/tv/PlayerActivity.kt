@@ -325,7 +325,19 @@ class PlayerActivity : AppCompatActivity() {
                     travouDesde = SystemClock.elapsedRealtime()
                     mostrarCarregando(getString(R.string.player_carregando))
                 }
-                Player.STATE_ENDED -> terminou()
+                Player.STATE_ENDED -> {
+                    // "Acabou" antes de meio minuto não é fim de filme: é
+                    // servidor que devolveu arquivo vazio ou cortado. Vai
+                    // para o próximo em vez de fechar o player.
+                    val duracao = p.duration.takeIf { it > 0 && it != C.TIME_UNSET } ?: 0L
+                    if (p.currentPosition < 30_000 || duracao in 1 until 120_000) {
+                        Telemetria.falhou("vod", nomeTelemetria(), opcoes.getOrNull(fonte)?.url.orEmpty(),
+                            fonte + 1, "terminou em ${p.currentPosition / 1000} s")
+                        proximaFonte(0)
+                    } else {
+                        terminou()
+                    }
+                }
                 else -> Unit
             }
             if (p.isPlaying) retomadas = 0

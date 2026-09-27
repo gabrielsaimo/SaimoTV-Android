@@ -72,9 +72,31 @@ object Titulos {
             if (eps.isEmpty()) return null
             Resolvido(alvo, serie.nomeCompleto, null, agrupar(eps), tmdb)
         } else {
-            val filme = Vod.filme(context, achado) ?: return null
+            val filme = juntarGrafias(context, achado) ?: return null
             Resolvido(alvo, filme.titulo, filme, emptyList(), tmdb)
         }
+    }
+
+    /**
+     * O filme com as fontes de todas as grafias do mesmo título.
+     *
+     * O acervo junta listas de origens diferentes, e o mesmo filme aparece
+     * duas vezes: "Backrooms Um Nao-Lugar (2026)" com um servidor só (que
+     * estava desligado) e "Backrooms: Um Não-Lugar" com vários. Abrir a
+     * primeira dava "título indisponível" com o filme ali do lado. Aqui as
+     * duas viram uma — a pedida primeiro, as outras como reserva.
+     */
+    private suspend fun juntarGrafias(context: Context, achado: Vod.Achado): Filme? {
+        val chave = Vod.normalizar(Generos.semAno(achado.titulo))
+        val daLetra = Vod.filmes(context, achado.letra)
+        val iguais = daLetra.filter { Vod.normalizar(Generos.semAno(it.titulo)) == chave }
+        val pedido = daLetra.firstOrNull { it.titulo == achado.titulo }
+            ?: Vod.filme(context, achado)
+        val todos = listOfNotNull(pedido) + iguais.filter { it.titulo != pedido?.titulo }
+        if (todos.isEmpty()) return null
+        val fontes = linkedMapOf<String, List<String>>()
+        for (f in todos) for ((v, urls) in f.fontes) fontes[v] = (fontes[v].orEmpty() + urls).distinct()
+        return Filme(pedido?.titulo ?: achado.titulo, fontes)
     }
 
     private fun agrupar(eps: List<Episodio>): List<Ep> =
