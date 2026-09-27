@@ -170,6 +170,8 @@
     <string name="player_qualidade">Qualidade</string>
     <string name="player_recomecar">Do início</string>
     <string name="player_versao">Versão</string>
+    <string name="player_fonte_n">Fonte %1$d</string>
+    <string name="player_fontes">Fontes</string>
     <string name="player_servidores_n">%1$d servidor(es)</string>
     <string name="player_trocar_temporada">Temporada %1$d  ▸  trocar</string>
     <string name="player_temporadas_n">%1$d temporadas</string>

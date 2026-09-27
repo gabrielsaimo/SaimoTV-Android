@@ -286,6 +286,10 @@ class PlayerActivity : AppCompatActivity() {
     private fun proximaFonte(posicao: Long) {
         fonte++
         if (fonte >= opcoes.size) { desistir(); return }
+        (botoes.findViewWithTag<TextView>("fonte"))?.let { b ->
+            b.text = getString(R.string.player_fonte_n, fonte + 1)
+            Icones.inicio(b, R.drawable.ic_swap)
+        }
         tocarFonte(posicao, pausado = aviso.visibility == View.VISIBLE)
     }
 
@@ -648,6 +652,9 @@ class PlayerActivity : AppCompatActivity() {
         if (versoes.size > 1) {
             botao(Titulos.rotulo(versao), "versao", R.drawable.ic_translate) { painelVersao() }
         }
+        if (opcoes.size > 1) {
+            botao(getString(R.string.player_fonte_n, fonte + 1), "fonte", R.drawable.ic_swap) { painelFonte() }
+        }
         botao(getString(R.string.player_audio_legenda), "faixas", R.drawable.ic_subtitles) { painelFaixas() }
         botao(getString(R.string.player_qualidade), "qualidade", R.drawable.ic_hd) { painelQualidade() }
         botao(getString(R.string.player_recomecar), "inicio", R.drawable.ic_replay) { player?.seekTo(0); mostrarControles() }
@@ -803,6 +810,33 @@ class PlayerActivity : AppCompatActivity() {
                 opcoes = Titulos.ordem(fontes, versao)
                 fonte = 0
                 atualizarTitulos()
+                montarBotoes()
+                tocarFonte(ponto)
+            }
+        })
+    }
+
+    /**
+     * Todas as fontes do título, de todas as versões, para quem quer escolher.
+     *
+     * O player já troca sozinho quando uma fonte não abre; aqui é para a que
+     * abre mas está ruim — travando, em baixa qualidade, com áudio fora.
+     * A troca continua do mesmo ponto.
+     */
+    private fun painelFonte() {
+        Painel.mostrar(this, getString(R.string.player_fontes), opcoes.mapIndexed { i, opcao ->
+            val servidor = runCatching { android.net.Uri.parse(opcao.url).host }.getOrNull()
+                ?.removePrefix("www.").orEmpty()
+            Painel.Item(getString(R.string.player_fonte_n, i + 1),
+                listOf(Titulos.rotulo(opcao.versao), servidor).filter { it.isNotEmpty() }.joinToString(" · "),
+                marcado = i == fonte) {
+                if (i == fonte) return@Item
+                val ponto = player?.currentPosition ?: 0L
+                fonte = i
+                if (opcao.versao != versao) {
+                    versao = opcao.versao
+                    atualizarTitulos()
+                }
                 montarBotoes()
                 tocarFonte(ponto)
             }
