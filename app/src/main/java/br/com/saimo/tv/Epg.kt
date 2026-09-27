@@ -124,6 +124,8 @@ object Epg {
         val list = byChannel[channel] ?: return null
         val index = list.indexOfFirst { it.isOnAir(now) }
         if (index < 0) return null
+        // Alguns feeds preenchem o buraco com "No Data": é o mesmo que não ter guia.
+        if (list[index].title.isBlank() || list[index].title.equals("No Data", ignoreCase = true)) return null
         return list[index] to list.getOrNull(index + 1)
     }
 
