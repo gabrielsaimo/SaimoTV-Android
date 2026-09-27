@@ -107,7 +107,6 @@ class FichaActivity : TelaComMenu() {
         findViewById<View>(R.id.fichaTopo).minimumHeight =
             (resources.displayMetrics.heightPixels * 0.66f).toInt()
         findViewById<View>(R.id.fichaVersao).setOnFocusChangeListener(crescerNoFoco)
-        findViewById<View>(R.id.fichaTrailer).setOnFocusChangeListener(crescerNoFoco)
         findViewById<RecyclerView>(R.id.fichaEpisodios).apply {
             layoutManager = LinearLayoutManager(this@FichaActivity, RecyclerView.HORIZONTAL, false)
             adapter = episodios
@@ -134,7 +133,6 @@ class FichaActivity : TelaComMenu() {
 
         assistir.text = getString(textoDoAssistir())
         Icones.inicio(assistir, R.drawable.ic_play)
-        Icones.inicio(findViewById(R.id.fichaTrailer), R.drawable.ic_movie)
         assistir.setOnClickListener { assistir() }
         assistir.setOnFocusChangeListener(crescerNoFoco)
         favoritar.setOnFocusChangeListener(crescerNoFoco)
@@ -165,7 +163,7 @@ class FichaActivity : TelaComMenu() {
         // descia na diagonal para o meio do elenco.
         favoritar.nextFocusRightId = R.id.fichaFavoritar
         // Descer dos botões cai nos episódios, quando houver; senão no elenco.
-        for (id in listOf(R.id.fichaAssistir, R.id.fichaVersao, R.id.fichaTrailer, R.id.fichaFavoritar)) {
+        for (id in listOf(R.id.fichaAssistir, R.id.fichaVersao, R.id.fichaFavoritar)) {
             findViewById<View>(id).nextFocusDownId = View.NO_ID
         }
 
@@ -238,7 +236,7 @@ class FichaActivity : TelaComMenu() {
                 if (t == atual) {
                     // Descer dos botões cai na temporada em que a pessoa está,
                     // não na que calhar de estar embaixo do botão.
-                    for (b in listOf(R.id.fichaAssistir, R.id.fichaVersao, R.id.fichaTrailer, R.id.fichaFavoritar)) {
+                    for (b in listOf(R.id.fichaAssistir, R.id.fichaVersao, R.id.fichaFavoritar)) {
                         this@FichaActivity.findViewById<View>(b).nextFocusDownId = id
                     }
                 }
@@ -284,32 +282,14 @@ class FichaActivity : TelaComMenu() {
         PlayerActivity.abrir(this, alvo, ep.temporada, ep.numero)
     }
 
-    /** Trailer e "mais como este": vêm do TMDB depois que a tela já está de pé. */
+    /** "Mais como este": vem do TMDB depois que a tela já está de pé. */
     private fun carregarExtras(r: Titulos.Resolvido) {
-        lifecycleScope.launch(semDerrubar) {
-            val chave = Detalhes.trailer(r.tmdbId, r.serie)
-            if (chave != null && !isFinishing) {
-                findViewById<TextView>(R.id.fichaTrailer).apply {
-                    visibility = View.VISIBLE
-                    setOnClickListener { abrirTrailer(chave) }
-                }
-            }
-        }
         lifecycleScope.launch(semDerrubar) {
             val lista = Detalhes.parecidos(this@FichaActivity, r.tmdbId, r.serie)
             if (lista.isEmpty() || isFinishing) return@launch
             findViewById<View>(R.id.fichaParecidosBloco).visibility = View.VISIBLE
             parecidos.trocar(lista)
         }
-    }
-
-    /** O trailer abre no app do YouTube da TV; sem ele, no navegador. */
-    private fun abrirTrailer(chave: String) {
-        val tentativas = listOf(
-            Intent(Intent.ACTION_VIEW, android.net.Uri.parse("vnd.youtube:$chave")),
-            Intent(Intent.ACTION_VIEW, android.net.Uri.parse("https://www.youtube.com/watch?v=$chave")))
-        for (t in tentativas) if (runCatching { startActivity(t) }.isSuccess) return
-        android.widget.Toast.makeText(this, R.string.ficha_sem_trailer, android.widget.Toast.LENGTH_SHORT).show()
     }
 
     private fun textoDoAssistir(): Int = when {

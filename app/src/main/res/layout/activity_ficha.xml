@@ -174,22 +174,6 @@
                         android:visibility="gone" />
 
                     <TextView
-                        android:id="@+id/fichaTrailer"
-                        android:layout_width="wrap_content"
-                        android:layout_height="52dp"
-                        android:layout_marginStart="14dp"
-                        android:background="@drawable/botao_ficha"
-                        android:focusable="true"
-                        android:fontFamily="sans-serif-medium"
-                        android:gravity="center"
-                        android:paddingStart="22dp"
-                        android:paddingEnd="22dp"
-                        android:text="@string/ficha_trailer"
-                        android:textColor="@color/texto_botao_ficha"
-                        android:textSize="17sp"
-                        android:visibility="gone" />
-
-                    <TextView
                         android:id="@+id/fichaFavoritar"
                         android:layout_width="wrap_content"
                         android:layout_height="52dp"

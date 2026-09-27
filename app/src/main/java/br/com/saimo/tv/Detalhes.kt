@@ -281,27 +281,6 @@ object Detalhes {
     }
 
     /**
-     * A chave do trailer no YouTube, dublado de preferência.
-     *
-     * O TMDB guarda vídeos por idioma; o trailer em português existe para boa
-     * parte dos lançamentos, e o original em inglês cobre o resto.
-     */
-    suspend fun trailer(id: Int, serie: Boolean): String? = withContext(Dispatchers.IO) {
-        if (id <= 0) return@withContext null
-        val tipo = if (serie) "tv" else "movie"
-        for (idioma in listOf("pt-BR", "en-US")) {
-            val lista = pedir("$BASE/$tipo/$id/videos?api_key=$CHAVE&language=$idioma")
-                ?.optJSONArray("results") ?: continue
-            val videos = (0 until lista.length()).mapNotNull { lista.optJSONObject(it) }
-                .filter { it.optString("site") == "YouTube" }
-            val melhor = videos.firstOrNull { it.optString("type") == "Trailer" }
-                ?: videos.firstOrNull { it.optString("type") == "Teaser" }
-            melhor?.optString("key")?.takeIf { it.isNotBlank() }?.let { return@withContext it }
-        }
-        null
-    }
-
-    /**
      * "Mais como este": o que o TMDB recomenda **e existe no acervo**.
      *
      * Mesmo cruzamento da filmografia: pelo id, então só aparece o que abre.

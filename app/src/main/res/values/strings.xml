@@ -228,12 +228,10 @@
     <string name="timer_mais_30">Continuar por mais 30 minutos</string>
     <string name="timer_cancelar">Cancelar o desligamento</string>
     <string name="escolha_ajustes">Ajustes</string>
-    <string name="ficha_trailer">Trailer</string>
     <string name="ficha_parecidos">Mais como este</string>
     <string name="ficha_continuar_ep">Continuar T%1$d E%2$d</string>
     <string name="ficha_assistir_ep">Assistir T%1$d E%2$d</string>
     <string name="ficha_versao">%1$s</string>
-    <string name="ficha_sem_trailer">Não achamos o trailer</string>
     <string name="menu_inicio">Início</string>
     <string name="menu_ao_vivo">Ao vivo</string>
     <string name="menu_buscar">Buscar</string>
