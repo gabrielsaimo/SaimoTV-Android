@@ -207,14 +207,7 @@ class MainActivity : AppCompatActivity() {
         player = ExoPlayer.Builder(this)
             .setBandwidthMeter(bandwidth)
             .setLoadControl(
-                DefaultLoadControl.Builder()
-                    // Meio segundo de buffer basta para começar a mostrar; o
-                    // resto enche depois. Esperar dois segundos antes do
-                    // primeiro quadro é o que fazia a troca de canal parecer
-                    // lenta.
-                    .setBufferDurationsMs(12_000, 40_000, 500, 2_000)
-                    .setPrioritizeTimeOverSizeThresholds(true)
-                    .build())
+                controleDeBuffer())
             .build().apply {
                 playWhenReady = true
                 addListener(playerListener)
@@ -248,129 +241,59 @@ class MainActivity : AppCompatActivity() {
         handler.post(vigiaDeFontes)
     }
 
+    /**
+     * Quanto do canal guardar adiantado.
+     *
+     * Meio segundo de buffer basta para começar a mostrar; o resto enche
+     * depois. Esperar dois segundos antes do primeiro quadro é o que fazia a
+     * troca de canal parecer lenta.
+     *
+     * O teto é que muda com o aparelho. Quarenta segundos priorizando tempo
+     * sobre tamanho não têm limite em bytes: num canal Full HD a 8–15 Mbps são
+     * 40 a 75 MB, que num Fire TV Stick de 1 GB se somam ao resto do sistema
+     * até ele matar o app — com a lista aberta, depois de alguns minutos, que
+     * é o tempo de o buffer encher. Lá o teto é 20 segundos e 24 MB, o que
+     * ainda cobre qualquer engasgo de rede comum.
+     */
+    private fun controleDeBuffer(): DefaultLoadControl =
+        if (Aparelho.poucaMemoria) {
+            DefaultLoadControl.Builder()
+                .setBufferDurationsMs(8_000, 20_000, 500, 2_000)
+                .setTargetBufferBytes(24 * 1024 * 1024)
+                .setPrioritizeTimeOverSizeThresholds(false)
+                .build()
+        } else {
+            DefaultLoadControl.Builder()
+                .setBufferDurationsMs(12_000, 40_000, 500, 2_000)
+                .setPrioritizeTimeOverSizeThresholds(true)
+                .build()
+        }
+
     /** Pega a lista publicada sem tirar do ar o canal que está tocando. */
     private fun refreshCatalog() {
         lifecycleScope.launch(semDerrubar) {
-            ofertarAtualizacao()
+            atualizacao.ofertar()
             if (!Remote.refresh(this@MainActivity)) return@launch
             reorder()
             updateBanner()
         }
     }
 
-    /// Uma oferta por vez: a abertura e a volta das configurações podem pedir
-    /// juntas, e dois diálogos empilhados confundem quem está no controle.
-    private var ofertando = false
-    private var baixando = false
     /// Distingue a primeira abertura (que já oferece pelo refreshCatalog) da
     /// volta de outra tela, como as configurações.
     private var jaIniciou = false
 
+    private val atualizacao by lazy { OfertaDeAtualizacao(this) { showStatus(it) } }
+
     /**
-     * Oferece a versão nova, quando há uma.
-     *
-     * Pergunta em vez de trocar sozinho, e a checagem só acontece depois que o
-     * canal já está no ar: atualizar é assunto de quem assiste, não do começo
-     * da abertura.
+     * A checagem de hora em hora só acontece depois que o canal já está no ar:
+     * atualizar é assunto de quem assiste, não do começo da abertura.
      */
     private val procurarDeHoraEmHora = object : Runnable {
         override fun run() {
-            if (!baixando) ofertarAtualizacao()
+            if (!atualizacao.baixando) atualizacao.ofertar()
             handler.postDelayed(this, ATUALIZACAO_MS)
         }
-    }
-
-    private fun ofertarAtualizacao() {
-        if (ofertando) return
-        ofertando = true
-        lifecycleScope.launch(semDerrubar) {
-            val versao = try {
-                Atualizacao.procurar(this@MainActivity)
-            } finally {
-                ofertando = false
-            } ?: return@launch
-            // A consulta leva segundos; mostrar diálogo numa tela que já
-            // fechou é BadTokenException.
-            if (isFinishing || isDestroyed) return@launch
-            ofertando = true
-            android.app.AlertDialog.Builder(this@MainActivity)
-                .setTitle(getString(R.string.update_titulo, versao.numero))
-                .setMessage(
-                    listOf(getString(R.string.update_atual, BuildConfig.VERSION_NAME),
-                           versao.notas.take(400))
-                        .filter { it.isNotBlank() }.joinToString("\n\n"))
-                .setPositiveButton(R.string.update_agora) { _, _ -> baixarAtualizacao(versao) }
-                .setNegativeButton(R.string.update_depois) { _, _ ->
-                    Atualizacao.adiar(versao)
-                    Atualizacao.esquecerPendente(this@MainActivity)
-                }
-                .setNeutralButton(R.string.update_pular) { _, _ ->
-                    Atualizacao.pular(this@MainActivity, versao)
-                }
-                .setOnDismissListener { ofertando = false }
-                .show()
-        }
-    }
-
-    private fun baixarAtualizacao(versao: Atualizacao.Versao) {
-        Atualizacao.marcarPendente(this, versao)
-        if (!podeInstalar()) {
-            pedirPermissaoDeInstalar()
-            return
-        }
-        if (baixando) return
-        baixando = true
-        showStatus(getString(R.string.update_baixando, 0))
-        lifecycleScope.launch(semDerrubar) {
-            try {
-                val erro = Atualizacao.instalar(this@MainActivity, versao) { fracao ->
-                    runOnUiThread {
-                        showStatus(getString(R.string.update_baixando, (fracao * 100).toInt()))
-                    }
-                }
-                showStatus(erro ?: getString(R.string.update_instalando))
-            } finally {
-                baixando = false
-            }
-        }
-    }
-
-    /// Do Android 8 em diante instalar APK pede a chave "apps desconhecidos"
-    /// ligada para este app em particular; antes era uma chave só, do sistema,
-    /// que a própria tela de instalação já oferece.
-    private fun podeInstalar(): Boolean =
-        Build.VERSION.SDK_INT < 26 || packageManager.canRequestPackageInstalls()
-
-    /**
-     * Explica antes de mandar para as configurações.
-     *
-     * Deixar o instalador descobrir sozinho dava na pior experiência possível:
-     * a pessoa ligava a chave, o sistema matava o app por ter mudado a
-     * permissão, e parecia que a TV tinha travado no meio da atualização.
-     */
-    private fun pedirPermissaoDeInstalar() {
-        if (isFinishing || isDestroyed) return
-        android.app.AlertDialog.Builder(this)
-            .setTitle(R.string.update_permissao_titulo)
-            .setMessage(R.string.update_permissao_texto)
-            .setPositiveButton(R.string.update_permissao_abrir) { _, _ -> abrirPermissaoDeInstalar() }
-            .setNegativeButton(R.string.update_depois) { _, _ ->
-                Atualizacao.esquecerPendente(this)
-            }
-            .show()
-    }
-
-    /// Nem todo TV Box tem a tela específica do app; cai para a de segurança
-    /// e, sem ela, para a raiz das configurações.
-    private fun abrirPermissaoDeInstalar() {
-        val tentativas = listOf(
-            Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, "package:$packageName".toUri()),
-            Intent(Settings.ACTION_SECURITY_SETTINGS),
-            Intent(Settings.ACTION_SETTINGS))
-        for (tentativa in tentativas) {
-            if (runCatching { startActivity(tentativa) }.isSuccess) return
-        }
-        showStatus(getString(R.string.update_permissao_sem_tela))
     }
 
     private fun startGuide() {
@@ -945,9 +868,7 @@ class MainActivity : AppCompatActivity() {
         if (::player.isInitialized) player.playWhenReady = true
         // Voltando das configurações com a permissão já ligada (nos aparelhos
         // em que o sistema não matou o app no caminho), retoma a atualização.
-        if (jaIniciou && !baixando && Atualizacao.temPendente(this) && podeInstalar()) {
-            ofertarAtualizacao()
-        }
+        if (jaIniciou) atualizacao.retomarSePendente()
         jaIniciou = true
     }
 

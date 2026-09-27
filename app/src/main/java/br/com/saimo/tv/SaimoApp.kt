@@ -37,13 +37,33 @@ class SaimoApp : Application(), ImageLoaderFactory {
 
     override fun onCreate() {
         super.onCreate()
+        Aparelho.conhecer(this)
         Telemetria.iniciar(this)
+    }
+
+    /**
+     * O sistema avisa que a memória está acabando antes de matar alguém. Soltar
+     * as imagens guardadas aqui é o que tira este app da frente da fila: elas
+     * voltam do disco na próxima rolagem, sem ir à rede.
+     */
+    override fun onTrimMemory(level: Int) {
+        super.onTrimMemory(level)
+        if (level >= TRIM_MEMORY_RUNNING_LOW) {
+            runCatching { coil.Coil.imageLoader(this).memoryCache?.clear() }
+        }
     }
 
     override fun newImageLoader(): ImageLoader =
         ImageLoader.Builder(this)
             .okHttpClient {
                 Playback.client.newBuilder()
+                    // Capa vem toda do mesmo servidor, e o padrão do OkHttp é
+                    // cinco pedidos por servidor: doze capas na tela chegavam
+                    // em três levas. O vídeo usa outro cliente e não disputa.
+                    .dispatcher(okhttp3.Dispatcher().apply {
+                        maxRequests = 48
+                        maxRequestsPerHost = 16
+                    })
                     .addInterceptor { chain ->
                         // Alguns CDNs de pôster recusam cliente sem User-Agent.
                         chain.proceed(
@@ -55,7 +75,13 @@ class SaimoApp : Application(), ImageLoaderFactory {
             }
             // Um TV Box tem pouca RAM: um teto explícito evita que a rolagem da
             // lista empurre o player para fora da memória.
-            .memoryCache { MemoryCache.Builder(this).maxSizePercent(0.15).build() }
+            // Num Fire TV de 1 GB o teto cai à metade: logo e capa voltam do
+            // disco sem rede, e o que sobra de memória fica para o vídeo.
+            .memoryCache {
+                MemoryCache.Builder(this)
+                    .maxSizePercent(if (Aparelho.poucaMemoria) 0.08 else 0.15)
+                    .build()
+            }
             // Em disco, as imagens sobrevivem ao reinício e a grade abre cheia.
             .diskCache {
                 DiskCache.Builder()

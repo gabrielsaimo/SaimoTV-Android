@@ -102,7 +102,47 @@ object Telemetria {
         })
     }
 
+    /**
+     * Por que o sistema encerrou o app das últimas vezes.
+     *
+     * Um Fire TV de 1 GB sem memória não deixa exceção nenhuma: mata o
+     * processo, e para quem assiste o app "fechou sozinho". Do Android 11 em
+     * diante o sistema guarda o motivo de cada encerramento — memória baixa,
+     * travamento nativo, tela sem resposta —, e é daqui que ele chega ao
+     * monitor, na abertura seguinte. Só os encerramentos com o app à vista
+     * contam: o sistema fechar o app parado em segundo plano é o normal.
+     */
+    private fun motivosDeSaida() {
+        if (Build.VERSION.SDK_INT < 30) return
+        runCatching {
+            val gerente = app.getSystemService(Context.ACTIVITY_SERVICE) as android.app.ActivityManager
+            val prefs = app.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+            val ultimo = prefs.getLong("saida_vista", 0L)
+            var maisNovo = ultimo
+            for (saida in gerente.getHistoricalProcessExitReasons(app.packageName, 0, 5)) {
+                if (saida.timestamp <= ultimo) continue
+                maisNovo = maxOf(maisNovo, saida.timestamp)
+                val visivel = saida.importance <= android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIBLE
+                val motivo = when (saida.reason) {
+                    android.app.ApplicationExitInfo.REASON_LOW_MEMORY -> "memória baixa"
+                    android.app.ApplicationExitInfo.REASON_CRASH_NATIVE -> "travamento nativo"
+                    android.app.ApplicationExitInfo.REASON_ANR -> "sem resposta (ANR)"
+                    android.app.ApplicationExitInfo.REASON_EXCESSIVE_RESOURCE_USAGE -> "uso excessivo"
+                    android.app.ApplicationExitInfo.REASON_SIGNALED -> "encerrado por sinal"
+                    else -> null
+                } ?: continue
+                if (!visivel) continue
+                val memoria = saida.pss / 1024
+                evento("crash", detail = "${BuildConfig.VERSION_NAME} · encerrado pelo sistema: $motivo" +
+                    " · ${memoria} MB em uso · pouca memória=${Aparelho.poucaMemoria}" +
+                    (saida.description?.let { " · $it" } ?: ""))
+            }
+            if (maisNovo > ultimo) prefs.edit().putLong("saida_vista", maisNovo).apply()
+        }
+    }
+
     private fun abriu() {
+        motivosDeSaida()
         enviar("hello", JSONObject()
             .put("version", BuildConfig.VERSION_NAME)
             .put("model", "${Build.MANUFACTURER} ${Build.MODEL}".trim())

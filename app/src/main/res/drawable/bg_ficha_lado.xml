@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Escurece o fundo da esquerda para a direita: o texto da ficha fica sobre
+     preto, a imagem do filme aparece inteira do lado de lá. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <gradient
+        android:angle="0"
+        android:startColor="#F50B0E14"
+        android:centerColor="#C80B0E14"
+        android:endColor="#200B0E14" />
+</shape>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Claquete: filmes e séries. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="96dp"
+    android:height="96dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M3,10h18v9.5a1.5,1.5 0,0 1,-1.5 1.5h-15a1.5,1.5 0,0 1,-1.5 -1.5zM3,10l-0.6,-3.2a1.2,1.2 0,0 1,0.95 -1.4l15.3,-2.8a1.2,1.2 0,0 1,1.4 0.95l0.55,3" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:pathData="M7,4.3l2.4,3.9M12,3.4l2.4,3.9" />
+    <path
+        android:fillColor="#FF4FE3D0"
+        android:pathData="M10,13.2v4.6l4,-2.3z" />
+</vector>

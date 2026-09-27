@@ -55,6 +55,24 @@
     <string name="vod_seletor_dica">ESQUERDA e DIREITA trocam a temporada · VOLTAR fecha</string>
     <string name="vod_legenda">OK escolhe · MENU favorita · VOLTAR sobe um nível</string>
     <string name="vod_carregando">Carregando…</string>
+    <!-- A abertura: TV ao vivo ou filmes e séries. -->
+    <string name="escolha_titulo">O que vamos assistir?</string>
+    <string name="escolha_bom_dia">Bom dia</string>
+    <string name="escolha_boa_tarde">Boa tarde</string>
+    <string name="escolha_boa_noite">Boa noite</string>
+    <string name="escolha_tv">TV ao vivo</string>
+    <string name="escolha_tv_dica">canais abertos, esportes e notícias</string>
+    <string name="escolha_filmes">Filmes e Séries</string>
+    <string name="escolha_filmes_dica">filmes, séries, animes e doramas</string>
+    <plurals name="escolha_canais">
+        <item quantity="one">%1$d canal ao vivo</item>
+        <item quantity="other">%1$d canais ao vivo</item>
+    </plurals>
+    <plurals name="escolha_titulos">
+        <item quantity="one">%1$s título para assistir</item>
+        <item quantity="other">%1$s títulos para assistir</item>
+    </plurals>
+    <string name="escolha_versao">versão %1$s</string>
     <!-- Ficha do título: sinopse, números, quem assina e elenco. -->
     <string name="vod_ficha">Ficha</string>
     <string name="vod_ficha_dica">sinopse, elenco e mais</string>
@@ -67,6 +85,26 @@
     <string name="vod_ficha_producao">Produção</string>
     <string name="vod_ficha_minutos">%1$d min</string>
     <string name="vod_ficha_minutos_ep">%1$d min/ep</string>
+    <string name="vod_ficha_elenco">Elenco</string>
+    <string name="vod_ficha_assistir_filme">▶  Assistir</string>
+    <string name="vod_ficha_continuar">▶  Continuar</string>
+    <string name="vod_ficha_temporadas">▶  Ver episódios</string>
+    <string name="vod_ficha_favoritar">☆  Favoritar</string>
+    <string name="vod_ficha_favorito">★  Nos favoritos</string>
+    <string name="vod_ficha_tipo_filme">Filme</string>
+    <string name="vod_ficha_tipo_serie">Série</string>
+    <string name="vod_ficha_tipo_anime">Anime</string>
+    <string name="vod_ficha_tipo_dorama">Dorama</string>
+    <plurals name="vod_ficha_temporadas_n">
+        <item quantity="one">%1$d temporada</item>
+        <item quantity="other">%1$d temporadas</item>
+    </plurals>
+    <plurals name="vod_ator_no_acervo">
+        <item quantity="one">%1$d título no acervo</item>
+        <item quantity="other">%1$d títulos no acervo</item>
+    </plurals>
+    <string name="vod_ator_procurando">Procurando no acervo…</string>
+    <string name="vod_ator_so_acervo">Aparece aqui só o que dá para assistir neste app.</string>
     <string name="vod_ficha_sem_acervo">Nada desta pessoa no acervo.</string>
     <string name="vod_sumiu">"%1$s" não está mais no acervo.</string>
     <string name="vod_vazio">Nada aqui</string>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Funde o pé do fundo no preto, onde fica a fileira do elenco. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <gradient
+        android:angle="90"
+        android:startColor="#FF0B0E14"
+        android:centerColor="#B30B0E14"
+        android:endColor="#000B0E14" />
+</shape>

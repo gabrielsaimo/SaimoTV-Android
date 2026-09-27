@@ -45,6 +45,10 @@ object Detalhes {
         val produtora: String = "",
         val elenco: List<Pessoa> = emptyList(),
         val capa: String? = null,
+        /** A imagem larga do título, para o fundo da ficha. */
+        val fundo: String? = null,
+        /** Quantas temporadas a série tem, segundo o TMDB. */
+        val temporadas: Int? = null,
     ) {
         val vazia: Boolean
             get() = sinopse.isBlank() && elenco.isEmpty() && generos.isEmpty() && duracao == null
@@ -52,15 +56,23 @@ object Detalhes {
 
     private val guardadas = HashMap<String, Ficha>()
 
-    /** A ficha de um título do acervo, ou nula quando o TMDB não a conhece. */
-    suspend fun de(titulo: String, serie: Boolean): Ficha? = withContext(Dispatchers.IO) {
-        val marca = (if (serie) "s:" else "f:") + titulo
-        guardadas[marca]?.let { return@withContext it }
-        val id = Generos.id(titulo, serie) ?: return@withContext null
+    /**
+     * A ficha de um título do acervo, ou nula quando o TMDB não a conhece.
+     *
+     * [idConhecido] vem das coleções de anime e dorama, que publicam o id do
+     * TMDB no próprio arquivo — e acertam onde o arquivo de fichas erra: o
+     * anime "Kevin" casava ali com outra série de mesmo nome.
+     */
+    suspend fun de(titulo: String, serie: Boolean, idConhecido: Int? = null): Ficha? =
+        withContext(Dispatchers.IO) {
+        val marca = (if (serie) "s:" else "f:") + titulo + (idConhecido?.let { "#$it" } ?: "")
+        synchronized(guardadas) { guardadas[marca] }?.let { return@withContext it }
+        val id = idConhecido?.takeIf { it > 0 } ?: Generos.id(titulo, serie)
+            ?: return@withContext null
         val ficha = baixar(id, serie) ?: return@withContext null
         synchronized(guardadas) { guardadas[marca] = ficha }
         ficha
-    }
+        }
 
     private fun baixar(id: Int, serie: Boolean): Ficha? {
         val tipo = if (serie) "tv" else "movie"
@@ -125,7 +137,88 @@ object Detalhes {
             elenco = elenco,
             capa = json.optString("poster_path").takeIf { it.isNotBlank() && it != "null" }
                 ?.let { IMAGENS + "w342" + it },
+            // w780 e não original: o fundo fica escurecido e desfocado pelo
+            // degradê, e um TV Box de 1 GB não precisa decodificar 4K para isso.
+            fundo = json.optString("backdrop_path").takeIf { it.isNotBlank() && it != "null" }
+                ?.let { IMAGENS + "w780" + it },
+            temporadas = if (serie) json.optInt("number_of_seasons").takeIf { it > 0 } else null,
         )
+    }
+
+    /** Quem é a pessoa: foto grande, biografia, nascimento, de onde é. */
+    data class Perfil(
+        val nome: String,
+        val foto: String?,
+        val biografia: String,
+        val nascimento: String,
+        val falecimento: String,
+        val local: String,
+        val conhecidaPor: String,
+    )
+
+    private val perfis = HashMap<Int, Perfil>()
+
+    /**
+     * O perfil de uma pessoa. A biografia em português é curta ou falta para
+     * quase todo mundo que não é brasileiro, então sem ela vale a em inglês —
+     * melhor que um espaço vazio embaixo da foto.
+     */
+    suspend fun perfil(id: Int): Perfil? = withContext(Dispatchers.IO) {
+        synchronized(perfis) { perfis[id] }?.let { return@withContext it }
+        val json = pedir("$BASE/person/$id?api_key=$CHAVE&language=pt-BR") ?: return@withContext null
+        var biografia = json.optString("biography")
+        if (biografia.isBlank()) {
+            biografia = pedir("$BASE/person/$id?api_key=$CHAVE&language=en-US")
+                ?.optString("biography").orEmpty()
+        }
+        val perfil = Perfil(
+            nome = json.optString("name"),
+            foto = json.optString("profile_path").takeIf { it.isNotBlank() && it != "null" }
+                ?.let { IMAGENS + "h632" + it },
+            biografia = biografia,
+            nascimento = json.optString("birthday").takeIf { it != "null" }.orEmpty(),
+            falecimento = json.optString("deathday").takeIf { it != "null" }.orEmpty(),
+            local = json.optString("place_of_birth").takeIf { it != "null" }.orEmpty(),
+            conhecidaPor = when (json.optString("known_for_department")) {
+                "Acting" -> "Atuação"
+                "Directing" -> "Direção"
+                "Writing" -> "Roteiro"
+                "Production" -> "Produção"
+                "Sound" -> "Música"
+                "Camera" -> "Fotografia"
+                else -> ""
+            },
+        )
+        synchronized(perfis) { perfis[id] = perfil }
+        perfil
+    }
+
+    /** Um trabalho da pessoa que existe no acervo, com a capa que o TMDB já mandou. */
+    data class Trabalho(val achado: Vod.Achado, val capa: String?, val papel: String)
+
+    /// Nome -> título do acervo, montado uma vez: são 47 mil linhas, e reler
+    /// o índice a cada ator aberto era o que deixava a tela lenta.
+    @Volatile
+    private var acervoPorNome: Map<String, Vod.Achado>? = null
+
+    /**
+     * Prepara o índice enquanto a pessoa lê a ficha: quando ela escolher um
+     * ator, o cruzamento já não espera as 47 mil linhas.
+     */
+    suspend fun aquecer(context: Context) {
+        withContext(Dispatchers.IO) { runCatching { acervoPorNome(context) } }
+    }
+
+    private suspend fun acervoPorNome(context: Context): Map<String, Vod.Achado> {
+        acervoPorNome?.let { return it }
+        val mapa = HashMap<String, Vod.Achado>(60_000)
+        for (serie in listOf(false, true)) {
+            for (achado in Vod.todos(context, serie)) {
+                mapa[(if (achado.serie) "s:" else "f:") + achado.titulo] = achado
+            }
+        }
+        acervoPorNome = mapa
+        return mapa
     }
 
     /**
@@ -135,8 +228,12 @@ object Detalhes {
      * oitenta títulos dos quais setenta não abrem é uma lista que frustra. O
      * cruzamento é pelo id do TMDB, que o arquivo de fichas já traz para cada
      * título daqui — nome igual não engana, refilmagem não vira o original.
+     *
+     * A capa vem da própria resposta do TMDB, em 185 pixels: é pequena, chega
+     * rápido e existe para quase todo trabalho — a do arquivo de fichas falta
+     * para boa parte deles.
      */
-    suspend fun acervoDe(context: Context, ator: Int): List<Vod.Achado> =
+    suspend fun acervoDe(context: Context, ator: Int): List<Trabalho> =
         withContext(Dispatchers.IO) {
             val json = pedir("$BASE/person/$ator/combined_credits?api_key=$CHAVE&language=pt-BR")
                 ?: return@withContext emptyList()
@@ -149,12 +246,9 @@ object Detalhes {
             // vem primeiro, e não a ordem em que o TMDB devolveu.
             trabalhos.sortByDescending { it.optDouble("popularity", 0.0) }
 
-            val acervo = Vod.todos(context, serie = false) + Vod.todos(context, serie = true)
-            val porNome = HashMap<String, Vod.Achado>(acervo.size)
-            for (achado in acervo) porNome[(if (achado.serie) "s:" else "f:") + achado.titulo] = achado
-
+            val porNome = acervoPorNome(context)
             val vistos = HashSet<String>()
-            val saida = mutableListOf<Vod.Achado>()
+            val saida = mutableListOf<Trabalho>()
             for (trabalho in trabalhos) {
                 val idDoTitulo = trabalho.optInt("id").takeIf { it > 0 } ?: continue
                 val serie = trabalho.optString("media_type") == "tv"
@@ -164,7 +258,13 @@ object Detalhes {
                     ?: porNome[marca + Generos.semAno(titulo)]
                     ?: continue
                 if (!vistos.add(achado.nomeCompleto + achado.serie)) continue
-                saida += achado
+                val capa = trabalho.optString("poster_path").takeIf { it.isNotBlank() && it != "null" }
+                    ?.let { IMAGENS + "w185" + it }
+                    ?: Generos.capa(achado.nomeCompleto, achado.serie)
+                val papel = trabalho.optString("character").takeIf { it.isNotBlank() && it != "null" }
+                    ?: trabalho.optString("job").takeIf { it.isNotBlank() && it != "null" }
+                    ?: ""
+                saida += Trabalho(achado, capa, papel)
             }
             saida
         }
