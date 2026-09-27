@@ -76,9 +76,18 @@
             android:launchMode="singleTop"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".VodActivity"
+            android:name=".GradeActivity"
             android:exported="false"
-            android:launchMode="singleTop"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.Saimo" />
+        <activity
+            android:name=".PaginaActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.Saimo" />
+        <activity
+            android:name=".BuscaActivity"
+            android:exported="false"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="stateAlwaysHidden"
             android:theme="@style/Theme.Saimo" />

@@ -78,6 +78,11 @@ object Generos {
     /** O título do acervo que corresponde a um id do TMDB, se houver. */
     fun titulo(id: Int, serie: Boolean): String? = porId[if (serie) -id else id]?.titulo
 
+    /** Os gêneros do título como bits — para filtrar milhares sem refazer busca. */
+    fun bits(titulo: String, serie: Boolean): Int = registro(titulo, serie)?.generos ?: 0
+
+    fun bit(genero: String): Int = indiceGenero[genero]?.takeIf { it < 31 }?.let { 1 shl it } ?: 0
+
     fun tem(titulo: String, serie: Boolean, genero: String): Boolean {
         if (genero.isEmpty()) return true
         val i = indiceGenero[genero] ?: return false

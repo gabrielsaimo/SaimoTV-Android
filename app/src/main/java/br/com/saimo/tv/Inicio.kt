@@ -1,5 +1,6 @@
 package br.com.saimo.tv
 
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,23 +14,14 @@ import coil.load
 import kotlinx.coroutines.launch
 
 /**
- * A tela inicial do acervo, em fileiras de capa.
- *
- * Uma lista de nomes serve para procurar o que já se sabe que existe; não serve
- * para descobrir. Quem senta na frente da TV quer ver o que tem, e capa fala
- * mais rápido que texto. Então a primeira tela passa a ser o que toda TV faz:
- * fileiras que correm para o lado, o direcional andando dentro de uma e entre
- * elas, e nada mais para aprender.
+ * Fileiras de capa, como numa TV: a tela inicial, os resultados da busca.
  *
  * O peso foi o que mandou no desenho. Um TV Box de 2016 não aguenta dezenas de
  * imagens grandes:
  *
- * - as capas já chegam resolvidas no `destaques.txt`, então abrir a tela não
- *   dispara consulta nenhuma ao TMDB;
- * - as fileiras dividem um só depósito de células, e as capas de uma fileira
- *   que saiu da tela são devolvidas em vez de recriadas;
- * - cada célula tem tamanho fixo, na proporção do pôster, então nada pula
- *   enquanto as imagens chegam;
+ * - as capas já chegam resolvidas (destaques, fichas), sem consulta ao TMDB;
+ * - as fileiras dividem um só depósito de células;
+ * - cada célula tem tamanho fixo, então nada pula enquanto as imagens chegam;
  * - as capas ficam em disco: rolar para baixo e voltar não baixa de novo.
  */
 object Inicio {
@@ -38,7 +30,7 @@ object Inicio {
      * Um item da fileira.
      *
      * A ação vem junto de propósito: a fileira não sabe se aquilo é um filme,
-     * uma série, um anime ou um atalho para outra tela — ela desenha e chama.
+     * uma série, um canal ou um atalho — ela desenha e chama.
      */
     data class Cartao(
         val titulo: String,
@@ -47,31 +39,34 @@ object Inicio {
         val inicial: String,
         /// Quanto já foi visto, de 0 a 1. Nulo quando nunca foi aberto.
         val progresso: Float? = null,
-        /// Quando não veio capa pronta, diz se vale procurar uma no TMDB e se
-        /// o título é série. Nulo nos cartões que não são título — "Filmes",
-        /// "Buscar" e companhia, que não têm capa nenhuma para procurar.
+        /// Quando não veio capa pronta, diz se vale procurar uma e se é série.
         val procurarCapa: Boolean? = null,
-        /// O nome com que se procura a capa, quando não é o que está escrito
-        /// no cartão: o episódio mostra "Série · T1 E3" e a capa é a da série.
+        /// O nome com que se procura a capa, quando não é o que está no cartão.
         val nomeDaCapa: String? = null,
+        /// Linha de baixo do cartão largo (o programa no ar, no canal).
+        val subtitulo: String? = null,
+        /// O título por trás do cartão, para o destaque do topo e o MENU.
+        val alvo: Alvo? = null,
+        /// MENU sobre o cartão: favoritar, tirar do "continuar"...
+        val aoMenu: (() -> Unit)? = null,
         val aoEscolher: () -> Unit,
     )
 
-    data class Fila(val titulo: String, val cartoes: List<Cartao>)
+    enum class Tipo { CAPA, LARGO }
+
+    data class Fila(val titulo: String, val cartoes: List<Cartao>, val tipo: Tipo = Tipo.CAPA)
 
     class Adapter(
-        /// Só para procurar capa do que não veio com uma: os favoritos e o que
-        /// está pela metade não passam pelo gerador.
         private val escopo: kotlinx.coroutines.CoroutineScope? = null,
         private val capaDe: (suspend (String, Boolean) -> String?)? = null,
+        /// Chamado quando um cartão ganha o foco — é o que troca o destaque.
+        private val aoFocar: ((Cartao) -> Unit)? = null,
     ) : RecyclerView.Adapter<Adapter.Holder>() {
 
         private var filas: List<Fila> = emptyList()
-        /// Um depósito só para todas as fileiras: a capa que sai de uma entra
-        /// na outra sem inflar nada de novo.
-        private val deposito = RecyclerView.RecycledViewPool()
-        /// Onde cada fileira estava, para voltar no mesmo lugar depois de ir
-        /// abrir um título — e não jogar quem assiste de volta ao começo.
+        private val depositoCapas = RecyclerView.RecycledViewPool()
+        private val depositoLargos = RecyclerView.RecycledViewPool()
+        /// Onde cada fileira estava, para voltar no mesmo lugar.
         private val posicoes = mutableMapOf<String, Int>()
 
         fun trocar(novas: List<Fila>) {
@@ -84,14 +79,17 @@ object Inicio {
             val capas: RecyclerView = view.findViewById(R.id.filaCapas)
         }
 
+        override fun getItemViewType(position: Int) = filas[position].tipo.ordinal
+
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
             val holder = Holder(
                 LayoutInflater.from(parent.context).inflate(R.layout.item_fila, parent, false))
             holder.capas.layoutManager =
-                LinearLayoutManager(parent.context, LinearLayoutManager.HORIZONTAL, false)
-            holder.capas.setRecycledViewPool(deposito)
-            // Sem isto o RecyclerView guarda o foco ao rolar e o direcional
-            // pára de sair da fileira.
+                LinearLayoutManager(parent.context, LinearLayoutManager.HORIZONTAL, false).apply {
+                    initialPrefetchItemCount = 6
+                }
+            holder.capas.setRecycledViewPool(if (viewType == Tipo.LARGO.ordinal) depositoLargos else depositoCapas)
+            holder.capas.setHasFixedSize(true)
             holder.capas.isFocusable = false
             return holder
         }
@@ -99,8 +97,7 @@ object Inicio {
         override fun onBindViewHolder(holder: Holder, position: Int) {
             val fila = filas[position]
             holder.titulo.text = fila.titulo
-            val adaptador = Capas(fila.cartoes, escopo, capaDe)
-            holder.capas.adapter = adaptador
+            holder.capas.adapter = Capas(fila.cartoes, fila.tipo, escopo, capaDe, aoFocar)
             holder.capas.scrollToPosition(posicoes[fila.titulo] ?: 0)
             holder.capas.clearOnScrollListeners()
             holder.capas.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -117,54 +114,70 @@ object Inicio {
     /** As capas de uma fileira. */
     private class Capas(
         private val cartoes: List<Cartao>,
+        private val tipo: Tipo,
         private val escopo: kotlinx.coroutines.CoroutineScope?,
         private val capaDe: (suspend (String, Boolean) -> String?)?,
+        private val aoFocar: ((Cartao) -> Unit)?,
     ) : RecyclerView.Adapter<Capas.Holder>() {
 
         class Holder(view: View) : RecyclerView.ViewHolder(view) {
             val imagem: ImageView = view.findViewById(R.id.capaImagem)
             val inicial: TextView = view.findViewById(R.id.capaInicial)
             val nome: TextView = view.findViewById(R.id.capaNome)
+            val sub: TextView? = view.findViewById(R.id.capaSub)
             val progresso: ProgressBar = view.findViewById(R.id.capaProgresso)
-            /// Para descartar a capa que chegar depois de a célula ser reusada.
             var pedido: String? = null
+            var cartao: Cartao? = null
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-            val holder = Holder(
-                LayoutInflater.from(parent.context).inflate(R.layout.item_capa, parent, false))
-            // O mesmo crescer de quando um canal ganha o foco na tela inicial:
-            // com o controle na mão, tamanho diz onde se está melhor que cor.
+            val layout = if (tipo == Tipo.LARGO) R.layout.item_cartao_largo else R.layout.item_capa
+            val holder = Holder(LayoutInflater.from(parent.context).inflate(layout, parent, false))
             holder.itemView.setOnFocusChangeListener { view, focado ->
                 val escala = if (focado) 1.08f else 1f
                 view.animate().scaleX(escala).scaleY(escala).setDuration(110).start()
                 if (!focado) return@setOnFocusChangeListener
-                // Sem isto a lista de cima rola só o bastante para mostrar a
-                // capa, e o nome da fileira fica fora da tela — quem desce de
-                // uma fileira para a outra deixa de saber onde está.
+                holder.cartao?.let { aoFocar?.invoke(it) }
+                // A fileira inteira à vista, com o nome dela: quem desce de uma
+                // fileira para a outra continua sabendo onde está.
                 val fileira = view.parent?.let { it as? View }?.parent as? View
                 fileira?.post {
                     fileira.requestRectangleOnScreen(
                         android.graphics.Rect(0, 0, fileira.width, fileira.height), false)
                 }
             }
+            holder.itemView.setOnKeyListener { _, codigo, evento ->
+                if (evento.action == KeyEvent.ACTION_DOWN &&
+                    (codigo == KeyEvent.KEYCODE_MENU || codigo == KeyEvent.KEYCODE_BOOKMARK)) {
+                    holder.cartao?.aoMenu?.let { it(); true } ?: false
+                } else false
+            }
+            holder.itemView.setOnLongClickListener { holder.cartao?.aoMenu?.let { it(); true } ?: false }
             return holder
         }
 
         override fun onBindViewHolder(holder: Holder, position: Int) {
             val cartao = cartoes[position]
+            holder.cartao = cartao
             holder.nome.text = cartao.titulo
+            holder.sub?.text = cartao.subtitulo.orEmpty()
             holder.inicial.text = cartao.inicial
             holder.itemView.setOnClickListener { cartao.aoEscolher() }
 
             holder.progresso.visibility =
-                if (cartao.progresso == null) View.GONE else View.VISIBLE
+                if (cartao.progresso == null || cartao.progresso <= 0f) View.GONE else View.VISIBLE
             cartao.progresso?.let { holder.progresso.progress = (it * 1000).toInt() }
 
             holder.imagem.dispose()
             holder.imagem.setImageDrawable(null)
             holder.pedido = cartao.titulo
-            if (cartao.capa.isEmpty()) {
+            val direta = cartao.capa.ifEmpty {
+                // Sem capa pronta: o arquivo de fichas quase sempre sabe, e em
+                // memória — sem ir à rede.
+                val serie = cartao.procurarCapa
+                if (serie != null) Generos.capa(cartao.nomeDaCapa ?: cartao.titulo, serie).orEmpty() else ""
+            }
+            if (direta.isEmpty()) {
                 holder.imagem.visibility = View.GONE
                 val serie = cartao.procurarCapa ?: return
                 val buscar = capaDe ?: return
@@ -178,12 +191,7 @@ object Inicio {
                 return
             }
             holder.imagem.visibility = View.VISIBLE
-            holder.imagem.load(cartao.capa) {
-                // Ao contrário da lista por letra, aqui o endereço da capa é
-                // fixo e veio pronto: guardar em disco é de graça e poupa o
-                // aparelho de baixar tudo de novo a cada volta para esta tela.
-                crossfade(true)
-            }
+            holder.imagem.load(direta) { crossfade(true) }
         }
 
         override fun getItemCount() = cartoes.size

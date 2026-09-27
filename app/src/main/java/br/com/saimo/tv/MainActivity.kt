@@ -177,7 +177,8 @@ class MainActivity : AppCompatActivity() {
         listHeader.setOnClickListener { openNumpad() }
         vodEntrada = findViewById(R.id.vodEntrada)
         vodEntrada.setOnClickListener {
-            startActivity(Intent(this, VodActivity::class.java))
+            // A tela inicial está sempre por baixo: voltar a ela é fechar esta.
+            EscolhaActivity.voltar(this)
         }
         for ((id, digit) in listOf(
             R.id.pad0 to 0, R.id.pad1 to 1, R.id.pad2 to 2, R.id.pad3 to 3, R.id.pad4 to 4,

@@ -2,75 +2,90 @@ package br.com.saimo.tv
 
 import android.content.Context
 import android.content.Intent
-import androidx.media3.common.util.UnstableApi
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.KeyEvent
 import android.view.View
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.Dispatchers
+import androidx.media3.common.util.UnstableApi
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.util.Calendar
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 /**
- * A abertura: TV ao vivo, ou filmes e séries.
+ * A tela inicial.
  *
- * O app abria direto no último canal. Quem ligava a TV Box para ver um filme
- * esperava o canal conectar, o vídeo começar e o áudio sair, só para então
- * sair dele — e num aparelho de 1 GB esse canal ainda ficava ocupando memória
- * por baixo do catálogo inteiro.
+ * Antes eram dois cartões — TV ou filmes — e só depois de escolher se via
+ * alguma coisa. Agora é o que toda TV faz: um menu no topo, o título focado em
+ * destaque com a imagem dele ao fundo, e fileiras — o que a pessoa estava
+ * vendo, os canais ao vivo agora, os favoritos e as novidades. Tudo a um OK.
  *
- * Aqui são dois cartões e nada mais. O foco já começa no que a pessoa escolheu
- * da última vez, então para quem sempre vê a mesma coisa continua sendo um OK
- * só. Voltar de qualquer um dos dois lados cai aqui, e voltar daqui sai do app.
+ * Continua sendo a tela que o sistema abre (o nome da classe é o que o
+ * launcher guarda), e é ela que atende os links `saimo://` da tela inicial da
+ * TV e da busca por voz.
  */
 @UnstableApi
 class EscolhaActivity : AppCompatActivity() {
 
-    private lateinit var tv: View
-    private lateinit var filmes: View
     private lateinit var status: TextView
+    private lateinit var filas: RecyclerView
+    private lateinit var fundo: ImageView
+    private lateinit var titulo: TextView
+    private lateinit var meta: TextView
+    private lateinit var sinopse: TextView
+    private lateinit var menu: LinearLayout
     private val atualizacao by lazy { OfertaDeAtualizacao(this) { mostrarStatus(it) } }
     private var jaIniciou = false
+    private val handler = Handler(Looper.getMainLooper())
+    private val hora = SimpleDateFormat("HH:mm", Locale("pt", "BR"))
+    private var ultimoVoltar = 0L
+
+    private val adaptador by lazy {
+        Inicio.Adapter(escopo = lifecycleScope, capaDe = { t, s -> Generos.capa(t, s) },
+            aoFocar = { mostrarDestaque(it) })
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_escolha)
-
-        tv = findViewById(R.id.escolhaTv)
-        filmes = findViewById(R.id.escolhaFilmes)
         status = findViewById(R.id.escolhaStatus)
+        filas = findViewById(R.id.inicioFilas)
+        fundo = findViewById(R.id.inicioFundo)
+        titulo = findViewById(R.id.inicioTitulo)
+        meta = findViewById(R.id.inicioMeta)
+        sinopse = findViewById(R.id.inicioSinopse)
+        menu = findViewById(R.id.inicioMenu)
 
-        findViewById<TextView>(R.id.escolhaSaudacao).text = saudacao()
-        findViewById<TextView>(R.id.escolhaVersao).text =
-            getString(R.string.escolha_versao, BuildConfig.VERSION_NAME)
+        filas.layoutManager = LinearLayoutManager(this)
+        filas.adapter = adaptador
+        filas.setItemViewCacheSize(4)
+        montarMenu()
+        cabecalhoPadrao()
 
-        findViewById<View>(R.id.escolhaAjustes).setOnClickListener { AjustesActivity.abrir(this) }
-        tv.setOnClickListener { abrir(TV) }
-        filmes.setOnClickListener { abrir(FILMES) }
-        for (cartao in listOf(tv, filmes)) {
-            // Focável também no modo de toque: alguns TV Box com mouse aéreo
-            // abrem nele, e aí o foco inicial não seria aplicado.
-            cartao.isFocusableInTouchMode = true
-            // O crescimento no foco é a GPU, não uma nova medição de layout:
-            // resposta imediata sem custo, até num TV Box de 2016.
-            cartao.setOnFocusChangeListener { view, foco ->
-                val escala = if (foco) 1.06f else 1f
-                view.animate().scaleX(escala).scaleY(escala).setDuration(140).start()
-            }
+        lifecycleScope.launch(semDerrubar) {
+            Remote.loadCached(this@EscolhaActivity)
+            Epg.carregarCache(this@EscolhaActivity)
+            montarFilas()
         }
+        handler.post(relogio)
 
-        (if (ultima(this) == FILMES) filmes else tv).requestFocus()
-        contar()
-
-        // A versão nova é oferecida aqui também: quem só assiste filmes nunca
-        // passava pela tela de canais, que era a única que avisava.
-        tv.postDelayed({ if (!isFinishing) atualizacao.ofertar() }, 2_500)
-
-        // A fileira do Saimo na tela inicial da TV, refeita por trás.
+        // A versão nova é oferecida aqui, antes de qualquer vídeo começar.
+        filas.postDelayed({ if (!isFinishing) atualizacao.ofertar() }, 2_500)
         lifecycleScope.launch(semDerrubar) { CanalNaTv.publicar(applicationContext) }
+
         val veioDeLink = intent?.action == Intent.ACTION_VIEW || intent?.action == Intent.ACTION_SEARCH
         atenderLink(intent)
         // "Ir direto ao último canal", escolhido em Ajustes: esta tela fica por
@@ -81,16 +96,227 @@ class EscolhaActivity : AppCompatActivity() {
         }
     }
 
+    private fun cabecalhoPadrao() = painelDestaque.padrao(saudacao(), getString(R.string.escolha_titulo))
+
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
         atenderLink(intent)
     }
 
+    override fun onStart() {
+        super.onStart()
+        if (jaIniciou) {
+            atualizacao.retomarSePendente()
+            // Voltando do player ou da ficha: o "continuar" mudou.
+            lifecycleScope.launch(semDerrubar) { montarFilas() }
+        }
+        jaIniciou = true
+    }
+
+    override fun onDestroy() {
+        handler.removeCallbacksAndMessages(null)
+        super.onDestroy()
+    }
+
+    private val relogio = object : Runnable {
+        override fun run() {
+            findViewById<TextView>(R.id.inicioRelogio).text = hora.format(Date())
+            handler.postDelayed(this, 20_000)
+        }
+    }
+
+    // MARK: - Menu do topo
+
+    private fun montarMenu() {
+        val abas = listOf<Pair<String, () -> Unit>>(
+            getString(R.string.menu_inicio) to { focarPrimeiro() },
+            getString(R.string.menu_ao_vivo) to { abrirAoVivo() },
+            getString(R.string.vod_filmes) to { PaginaActivity.abrir(this, GradeActivity.FILMES) },
+            getString(R.string.vod_series) to { PaginaActivity.abrir(this, GradeActivity.SERIES) },
+            getString(R.string.vod_animes) to { PaginaActivity.abrir(this, GradeActivity.ANIMES) },
+            getString(R.string.vod_doramas) to { PaginaActivity.abrir(this, GradeActivity.DORAMAS) },
+            getString(R.string.vod_favoritos) to { GradeActivity.abrir(this, GradeActivity.FAVORITOS) },
+            getString(R.string.menu_buscar) to { BuscaActivity.abrir(this) },
+            getString(R.string.menu_ajustes) to { AjustesActivity.abrir(this) },
+        )
+        val d = resources.displayMetrics.density
+        abas.forEachIndexed { i, (nome, acao) ->
+            menu.addView(TextView(this).apply {
+                text = nome
+                textSize = 17f
+                maxLines = 1
+                typeface = android.graphics.Typeface.create("sans-serif-medium", android.graphics.Typeface.NORMAL)
+                setTextColor(ContextCompat.getColorStateList(context, R.color.texto_botao_ficha))
+                setBackgroundResource(R.drawable.aba_menu)
+                isFocusable = true
+                isSelected = i == 0
+                setPadding((14 * d).toInt(), (7 * d).toInt(), (14 * d).toInt(), (7 * d).toInt())
+                layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT).apply { marginEnd = (2 * d).toInt() }
+                setOnClickListener { acao() }
+                setOnFocusChangeListener { _, foco -> if (foco) cabecalhoPadrao() }
+            })
+        }
+    }
+
+    private fun abrirAoVivo() {
+        startActivity(Intent(this, MainActivity::class.java))
+    }
+
+    private fun focarPrimeiro() {
+        filas.scrollToPosition(0)
+        filas.post {
+            val fileira = filas.findViewHolderForAdapterPosition(0)?.itemView
+            val capas = fileira?.findViewById<RecyclerView>(R.id.filaCapas)
+            if (capas?.getChildAt(0)?.requestFocus() != true) menu.getChildAt(0)?.requestFocus()
+        }
+    }
+
+    // MARK: - Fileiras
+
+    private var primeiraVez = true
+
+    private suspend fun montarFilas() {
+        Generos.carregar(this)
+        val lista = mutableListOf<Inicio.Fila>()
+        continuar()?.let { lista += it }
+        aoVivo()?.let { lista += it }
+        favoritos()?.let { lista += it }
+        for (fila in Destaques.filas(this)) {
+            val cartoes = fila.itens.map { cartaoDe(it) }
+            if (cartoes.isNotEmpty()) lista += Inicio.Fila(fila.titulo, cartoes)
+        }
+        if (isFinishing || isDestroyed) return
+        adaptador.trocar(lista)
+        if (primeiraVez) {
+            primeiraVez = false
+            filas.post { focarPrimeiro() }
+        }
+    }
+
+    private fun continuar(): Inicio.Fila? {
+        val itens = Progresso.emAndamento(this).take(20)
+        if (itens.isEmpty()) return null
+        return Inicio.Fila(getString(R.string.vod_continuar), itens.map { a ->
+            val alvo = a.endereco?.alvo
+            Inicio.Cartao(
+                titulo = a.rotulo,
+                capa = "",
+                inicial = a.titulo.take(1).uppercase(),
+                progresso = a.fracao,
+                procurarCapa = a.serie,
+                nomeDaCapa = a.titulo,
+                alvo = alvo,
+                aoMenu = {
+                    Painel.mostrar(this, a.rotulo, listOfNotNull(
+                        alvo?.let { Painel.Item(getString(R.string.inicio_abrir_ficha)) { FichaActivity.abrir(this, it) } },
+                        Painel.Item(getString(R.string.inicio_remover_continuar)) {
+                            Progresso.esquecer(this, a)
+                            lifecycleScope.launch(semDerrubar) { montarFilas() }
+                        }))
+                },
+            ) {
+                if (alvo != null) {
+                    val (t, e) = if (a.terminado) a.temporada to a.episodio + 1 else a.temporada to a.episodio
+                    PlayerActivity.abrir(this, alvo, t, e)
+                } else {
+                    BuscaActivity.abrir(this, Generos.semAno(a.titulo))
+                }
+            }
+        })
+    }
+
+    /** Os canais favoritos — ou os abertos — com o que passa agora. */
+    private fun aoVivo(): Inicio.Fila? {
+        val todos = Remote.channels
+        if (todos.isEmpty()) return null
+        val ultimo = todos.firstOrNull { it.name == Preferencias.ultimoCanal }
+        val favoritos = todos.filter { Favorites.contains(it.name) }
+        val escolhidos = (listOfNotNull(ultimo) + favoritos.ifEmpty {
+            todos.filter { Categorias.de(it) == "TV Aberta" }
+        }).distinct().take(16)
+        val agora = System.currentTimeMillis()
+        return Inicio.Fila(getString(R.string.inicio_ao_vivo_agora), escolhidos.map { canal ->
+            val programa = Epg.nowNext(canal.name, agora)?.first
+            Inicio.Cartao(
+                titulo = canal.name,
+                capa = canal.logo.orEmpty(),
+                inicial = canal.name.take(1).uppercase(),
+                progresso = programa?.progress(agora),
+                subtitulo = programa?.title,
+            ) {
+                startActivity(Intent(this, MainActivity::class.java).putExtra(MainActivity.EXTRA_CANAL, canal.name))
+            }
+        }, Inicio.Tipo.LARGO)
+    }
+
+    private fun favoritos(): Inicio.Fila? {
+        val itens = VodFavoritos.lista(this)
+        if (itens.isEmpty()) return null
+        return Inicio.Fila(getString(R.string.vod_favoritos), itens.map { item ->
+            val alvo = Alvo(item.titulo, item.serie, item.letra, item.ano)
+            Inicio.Cartao(
+                titulo = item.nomeCompleto, capa = "", inicial = item.titulo.take(1).uppercase(),
+                procurarCapa = item.serie, alvo = alvo,
+                aoMenu = { alternarFavorito(alvo) },
+            ) { FichaActivity.abrir(this, alvo) }
+        })
+    }
+
+    private fun cartaoDe(item: Destaques.Item): Inicio.Cartao {
+        val alvo = Alvo(item.titulo, item.serie, item.letra, item.ano,
+            colecao = if (item.daColecao) item.colecao else "")
+        return Inicio.Cartao(
+            titulo = item.titulo, capa = item.capa, inicial = item.titulo.take(1).uppercase(),
+            progresso = if (item.serie) null else Progresso.fracao(this, Progresso.chaveFilme(item.titulo)),
+            alvo = alvo,
+            aoMenu = if (item.daColecao) null else ({ alternarFavorito(alvo) }),
+        ) { FichaActivity.abrir(this, alvo) }
+    }
+
+    private fun alternarFavorito(alvo: Alvo) {
+        val marcado = VodFavoritos.alternar(this, VodFavoritos.Item(alvo.titulo, alvo.serie, alvo.letra, alvo.ano))
+        Toast.makeText(this, if (marcado) R.string.vod_ficha_favorito else R.string.inicio_desfavoritar,
+            Toast.LENGTH_SHORT).show()
+        lifecycleScope.launch(semDerrubar) { montarFilas() }
+    }
+
+    // MARK: - Destaque
+
+    private val painelDestaque by lazy { Destaque(this, lifecycleScope, fundo, titulo, meta, sinopse) }
+
+    private fun mostrarDestaque(cartao: Inicio.Cartao) = painelDestaque.mostrar(cartao)
+
+    // MARK: - Teclas
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        when (keyCode) {
+            KeyEvent.KEYCODE_GUIDE, KeyEvent.KEYCODE_CHANNEL_UP,
+            KeyEvent.KEYCODE_CHANNEL_DOWN, KeyEvent.KEYCODE_TV -> { abrirAoVivo(); return true }
+            KeyEvent.KEYCODE_SEARCH -> { BuscaActivity.abrir(this); return true }
+            KeyEvent.KEYCODE_BACK, KeyEvent.KEYCODE_ESCAPE -> {
+                // Primeiro VOLTAR sobe para o menu; o segundo, de lá, pede
+                // confirmação — sair do app sem querer é o erro mais comum.
+                if (!menu.hasFocus()) {
+                    filas.scrollToPosition(0)
+                    menu.getChildAt(0)?.requestFocus()
+                    return true
+                }
+                val agora = System.currentTimeMillis()
+                if (agora - ultimoVoltar > 2_500) {
+                    ultimoVoltar = agora
+                    Toast.makeText(this, R.string.inicio_sair, Toast.LENGTH_SHORT).show()
+                    return true
+                }
+            }
+        }
+        return super.onKeyDown(keyCode, event)
+    }
+
     /**
      * Link vindo de fora do app: o "Continuar assistindo" e a fileira do
-     * Saimo na tela inicial, e a busca por voz do sistema. Esta tela fica por
-     * baixo, para VOLTAR cair num lugar conhecido.
+     * Saimo na tela inicial, e a busca por voz do sistema.
      */
     private fun atenderLink(intent: Intent?) {
         when (intent?.action) {
@@ -101,78 +327,20 @@ class EscolhaActivity : AppCompatActivity() {
             }
             Intent.ACTION_SEARCH -> {
                 val termo = intent.getStringExtra(android.app.SearchManager.QUERY)?.trim().orEmpty()
-                if (termo.isNotEmpty()) {
-                    startActivity(Intent(this, VodActivity::class.java).putExtra(VodActivity.BUSCA, termo))
-                }
+                if (termo.isNotEmpty()) BuscaActivity.abrir(this, termo)
                 intent.action = null
             }
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        if (jaIniciou) atualizacao.retomarSePendente()
-        jaIniciou = true
-    }
-
-    override fun onResume() {
-        super.onResume()
-        // Voltando de um dos lados, o foco fica no cartão de onde se veio.
-        if (!tv.hasFocus() && !filmes.hasFocus()) {
-            (if (ultima(this) == FILMES) filmes else tv).requestFocus()
-        }
-    }
-
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        // Atalhos de controle remoto: o botão de guia ou de canal vai direto
-        // para a TV, e o de "filmes"/busca vai para o acervo.
-        when (keyCode) {
-            KeyEvent.KEYCODE_GUIDE, KeyEvent.KEYCODE_CHANNEL_UP,
-            KeyEvent.KEYCODE_CHANNEL_DOWN, KeyEvent.KEYCODE_TV -> { abrir(TV); return true }
-            KeyEvent.KEYCODE_SEARCH -> { abrir(FILMES); return true }
-        }
-        return super.onKeyDown(keyCode, event)
-    }
-
-    private fun abrir(lado: String) {
-        getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().putString(ULTIMA, lado).apply()
-        val destino = if (lado == TV) MainActivity::class.java else VodActivity::class.java
-        startActivity(Intent(this, destino))
-    }
-
     /** "Boa noite" às dez da noite: a abertura fala como gente. */
     private fun saudacao(): String {
-        val hora = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-        return getString(when (hora) {
+        val h = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY)
+        return getString(when (h) {
             in 5..11 -> R.string.escolha_bom_dia
             in 12..17 -> R.string.escolha_boa_tarde
             else -> R.string.escolha_boa_noite
         })
-    }
-
-    /**
-     * Quantos canais e quantos títulos há: o número diz o que cada lado tem
-     * melhor que qualquer ícone. Os dois vêm do que já está em disco — nada
-     * aqui espera a rede para a tela aparecer.
-     */
-    private fun contar() {
-        lifecycleScope.launch(semDerrubar) {
-            val canais = withContext(Dispatchers.IO) {
-                Remote.loadCached(this@EscolhaActivity)
-                Remote.channels.size
-            }
-            if (canais > 0) {
-                findViewById<TextView>(R.id.escolhaTvDetalhe).text =
-                    resources.getQuantityString(R.plurals.escolha_canais, canais, canais)
-            }
-            val titulos = runCatching { Vod.indice(this@EscolhaActivity) }.getOrNull()
-                ?.sumOf { it.filmes + it.series } ?: 0
-            if (titulos > 0 && !isFinishing) {
-                findViewById<TextView>(R.id.escolhaFilmesDetalhe).text =
-                    resources.getQuantityString(R.plurals.escolha_titulos,
-                        titulos, "%,d".format(titulos).replace(',', '.'))
-            }
-        }
     }
 
     private fun mostrarStatus(texto: String) {
@@ -181,13 +349,8 @@ class EscolhaActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val PREFS = "escolha"
-        private const val ULTIMA = "ultima"
-        private const val TV = "tv"
-        private const val FILMES = "filmes"
-
-        private fun ultima(context: Context): String =
-            context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-                .getString(ULTIMA, TV) ?: TV
+        /** Volta à tela inicial, fechando o que estiver por cima dela. */
+        fun voltar(context: Context) = context.startActivity(Intent(context, EscolhaActivity::class.java)
+            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP))
     }
 }

@@ -127,6 +127,16 @@ object Epg {
         return list[index] to list.getOrNull(index + 1)
     }
 
+    /**
+     * Só o que já está em disco, sem baixar nada: é o que a tela inicial usa
+     * para dizer o que passa agora, sem disputar a rede nem a memória com o
+     * guia completo (que a tela de canais baixa quando precisa).
+     */
+    suspend fun carregarCache(context: Context): Boolean = withContext(Dispatchers.IO) {
+        if (byChannel.isNotEmpty()) return@withContext true
+        readCache(context)?.let { byChannel = it; true } ?: false
+    }
+
     suspend fun load(context: Context, onReady: () -> Unit) = withContext(Dispatchers.IO) {
         readCache(context)?.let {
             byChannel = it
