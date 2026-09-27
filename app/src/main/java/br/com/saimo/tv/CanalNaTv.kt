@@ -40,7 +40,7 @@ object CanalNaTv {
                 val logo = BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher)
                 canal = ajudante.publishDefaultChannel(
                     PreviewChannel.Builder()
-                        .setDisplayName("${fila.titulo} no Saimo")
+                        .setDisplayName(fila.titulo)
                         .setAppLinkIntentUri(Uri.parse("saimo://inicio"))
                         .setLogo(logo)
                         .build())
