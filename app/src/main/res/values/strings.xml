@@ -54,7 +54,7 @@
     <string name="vod_servidor_desconhecido">Servidor não identificado</string>
     <string name="vod_espaco">espaço</string>
     <string name="vod_seletor_dica">ESQUERDA e DIREITA trocam a temporada · VOLTAR fecha</string>
-    <string name="vod_legenda">OK escolhe · MENU favorita · VOLTAR sobe um nível</string>
+    <string name="vod_legenda">OK escolhe · segure OK para favoritar · VOLTAR sobe um nível</string>
     <string name="vod_carregando">Carregando…</string>
     <!-- A abertura: TV ao vivo ou filmes e séries. -->
     <string name="escolha_titulo">O que vamos assistir?</string>
@@ -123,7 +123,7 @@
     <string name="vod_dublado">Dublado</string>
     <string name="vod_legendado">Legendado</string>
     <string name="star">★</string>
-    <string name="list_legend">OK assiste · direita: outros servidores · MENU favorita</string>
+    <string name="list_legend">OK assiste · segure OK para favoritar · direita: outros servidores</string>
     <string name="fontes_titulo">Fontes · %1$s</string>
     <string name="fontes_item">Fonte %1$d · %2$s</string>
     <string name="guide_info">%1$d de %2$d canais com guia</string>
@@ -245,12 +245,12 @@
     <string name="inicio_desfavoritar">Tirar dos favoritos</string>
     <string name="inicio_abrir_ficha">Ver detalhes</string>
     <string name="inicio_canal_agora">agora: %1$s</string>
-    <string name="grade_dica">OK abre · MENU favorita · esquerda: letras</string>
+    <string name="grade_dica">OK abre · segure OK para favoritar · esquerda: letras</string>
     <string name="grade_genero">Gênero: %1$s</string>
     <string name="grade_ordem">Ordem: %1$s</string>
     <string name="grade_az">A–Z</string>
     <string name="grade_novos">Mais novos</string>
-    <string name="grade_vazio_favoritos">Nada nos favoritos ainda.\nSegure OK (ou aperte MENU) num título para favoritar.</string>
+    <string name="grade_vazio_favoritos">Nada nos favoritos ainda.\nSegure OK num título para favoritar.</string>
     <string name="busca_dica">Buscar filmes, séries, canais…</string>
     <string name="busca_ajuda">Dica: com teclado, é só digitar. Erros de digitação e falta de acento não atrapalham.</string>
     <string name="busca_recentes">Buscas recentes</string>
@@ -279,6 +279,7 @@
     <string name="fora_titulo">%1$s está fora do ar agora</string>
     <string name="fora_sub">Nenhum servidor respondeu. Tentamos de novo sozinhos daqui a pouco.</string>
     <string name="fora_ir">Ir para %1$s</string>
-    <string name="banner_dica">OK canais · direita guia · MENU opções · cima/baixo troca</string>
+    <string name="banner_dica">OK canais · segure OK para opções · direita guia · cima/baixo troca</string>
     <string name="faixas_so_uma">Este vídeo tem só um áudio e nenhuma legenda.</string>
+    <string name="inicio_dica">OK abre · segure OK num título para favoritar e mais opções · VOLTAR vai ao menu</string>
 </resources>

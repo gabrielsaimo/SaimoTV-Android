@@ -483,9 +483,16 @@ class MainActivity : AppCompatActivity() {
             // OK abre a lista de canais: é o que mais se faz com o controle, e
             // o que todo app de TV faz. O cartão do canal aparece com INFO ou
             // a cada troca; as opções (áudio, fontes, favorito) no MENU.
+            // Toque no OK: lista de canais. Segurar o OK: opções — é o MENU de
+            // quem não tem MENU no controle (o da Xiaomi, por exemplo). A
+            // decisão fica para quando o botão é solto (ver onKeyUp).
             KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER -> {
                 if (listOpen) return super.onKeyDown(keyCode, event)
-                if (event == null || event.repeatCount == 0) openList()
+                if (event != null && event.repeatCount == 0) {
+                    event.startTracking()
+                    okSegurado = false
+                    okApertado = true
+                }
                 true
             }
             KeyEvent.KEYCODE_LAST_CHANNEL -> { canalAnterior(); true }
@@ -612,10 +619,30 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
-        // O OK que abriu a lista não pode, ao ser solto, escolher o canal em foco.
+    private var okSegurado = false
+    private var okApertado = false
+
+    override fun onKeyLongPress(keyCode: Int, event: KeyEvent?): Boolean {
         if ((keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER) &&
-            SystemClock.elapsedRealtime() - listaAbertaEm < 400) return true
+            listPanel.visibility != View.VISIBLE && numpad.visibility != View.VISIBLE) {
+            okSegurado = true
+            opcoes()
+            return true
+        }
+        return super.onKeyLongPress(keyCode, event)
+    }
+
+    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER) {
+            // O OK que abriu a lista não pode, ao ser solto, escolher o canal em foco.
+            if (SystemClock.elapsedRealtime() - listaAbertaEm < 400) return true
+            if (okApertado) {
+                okApertado = false
+                if (!okSegurado && listPanel.visibility != View.VISIBLE) openList()
+                okSegurado = false
+                return true
+            }
+        }
         return super.onKeyUp(keyCode, event)
     }
 
