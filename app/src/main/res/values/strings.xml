@@ -279,7 +279,7 @@
     <string name="fora_titulo">%1$s está fora do ar agora</string>
     <string name="fora_sub">Nenhum servidor respondeu. Tentamos de novo sozinhos daqui a pouco.</string>
     <string name="fora_ir">Ir para %1$s</string>
-    <string name="banner_dica">OK canais · segure OK para opções · direita guia · cima/baixo troca</string>
+    <string name="banner_dica">OK fontes · esquerda canais · segure OK opções · direita guia · cima/baixo troca</string>
     <string name="faixas_so_uma">Este vídeo tem só um áudio e nenhuma legenda.</string>
     <string name="inicio_dica">OK abre · segure OK num título para favoritar e mais opções · VOLTAR vai ao menu</string>
     <string name="previa_sem_guia">Sem programação disponível</string>

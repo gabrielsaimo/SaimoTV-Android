@@ -26,6 +26,9 @@ import kotlinx.coroutines.launch
  */
 object Inicio {
 
+    /// A fileira do último cartão focado: rolar a tela só quando ela muda.
+    private var ultimaFileira = java.lang.ref.WeakReference<View>(null)
+
     /**
      * Um item da fileira.
      *
@@ -53,6 +56,25 @@ object Inicio {
     )
 
     enum class Tipo { CAPA, LARGO }
+
+    /**
+     * O gerente da lista de fileiras: não rola sozinho quando o foco muda.
+     *
+     * O padrão do RecyclerView rola até o cartão focado caber inteiro — e com
+     * o respiro de baixo, o cartão da fileira de baixo nunca cabia, então cada
+     * passo para o lado sacudia a tela inteira. Quem rola agora é o foco
+     * trocar de fileira, e só ele.
+     */
+    class Filas(context: android.content.Context) : LinearLayoutManager(context) {
+        override fun requestChildRectangleOnScreen(
+            parent: RecyclerView, child: View, rect: android.graphics.Rect, immediate: Boolean,
+        ) = false
+
+        override fun requestChildRectangleOnScreen(
+            parent: RecyclerView, child: View, rect: android.graphics.Rect, immediate: Boolean,
+            focusedChildVisible: Boolean,
+        ) = false
+    }
 
     data class Fila(val titulo: String, val cartoes: List<Cartao>, val tipo: Tipo = Tipo.CAPA)
 
@@ -152,20 +174,23 @@ object Inicio {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
             val layout = if (tipo == Tipo.LARGO) R.layout.item_cartao_largo else R.layout.item_capa
             val holder = Holder(LayoutInflater.from(parent.context).inflate(layout, parent, false))
+            Cartoes.arredondar(holder.imagem.parent as View)
+            // Sem crescer no foco: o contorno do row_focus já mostra onde está,
+            // e a capa aumentando empurrava as vizinhas a cada passo.
             holder.itemView.setOnFocusChangeListener { view, focado ->
-                val escala = if (focado) 1.08f else 1f
-                view.animate().scaleX(escala).scaleY(escala).setDuration(110).start()
                 if (!focado) return@setOnFocusChangeListener
                 holder.cartao?.let { aoFocar?.invoke(it) }
-                // A fileira inteira à vista, com o nome dela: quem desce de uma
-                // fileira para a outra continua sabendo onde está.
-                val fileira = view.parent?.let { it as? View }?.parent as? View
-                fileira?.post {
-                    fileira.requestRectangleOnScreen(
-                        android.graphics.Rect(0, 0, fileira.width, fileira.height), false)
-                }
+                // A fileira inteira à vista, com o nome dela — só quando o foco
+                // chega de outra fileira. Andar para o lado não mexe na tela.
+                val fileira = view.parent?.let { it as? View }?.parent as? View ?: return@setOnFocusChangeListener
+                if (fileira === ultimaFileira.get()) return@setOnFocusChangeListener
+                ultimaFileira = java.lang.ref.WeakReference(fileira)
+                // A fileira nova sobe para o topo da lista, sempre no mesmo lugar.
+                val lista = fileira.parent as? RecyclerView ?: return@setOnFocusChangeListener
+                lista.post { lista.smoothScrollBy(0, fileira.top - lista.paddingTop) }
             }
             holder.itemView.setOnKeyListener { _, codigo, evento ->
+                if (Cartoes.segurarNasPontas(holder, codigo, evento)) return@setOnKeyListener true
                 if (evento.action == KeyEvent.ACTION_DOWN &&
                     (codigo == KeyEvent.KEYCODE_MENU || codigo == KeyEvent.KEYCODE_BOOKMARK)) {
                     holder.cartao?.aoMenu?.let { it(); true } ?: false
@@ -189,6 +214,7 @@ object Inicio {
 
             holder.imagem.dispose()
             holder.imagem.setImageDrawable(null)
+            holder.inicial.visibility = View.VISIBLE
             holder.pedido = cartao.titulo
             val direta = cartao.capa.ifEmpty {
                 // Sem capa pronta: o arquivo de fichas quase sempre sabe, e em
@@ -204,13 +230,11 @@ object Inicio {
                 escopo?.launch {
                     val achada = buscar(nome, serie) ?: return@launch
                     if (holder.pedido != cartao.titulo) return@launch
-                    holder.imagem.visibility = View.VISIBLE
-                    holder.imagem.load(achada) { crossfade(true) }
+                    Cartoes.carregar(holder.imagem, holder.inicial, achada)
                 }
                 return
             }
-            holder.imagem.visibility = View.VISIBLE
-            holder.imagem.load(direta) { crossfade(true) }
+            Cartoes.carregar(holder.imagem, holder.inicial, direta)
         }
 
         override fun getItemCount() = cartoes.size

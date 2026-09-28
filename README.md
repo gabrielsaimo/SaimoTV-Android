@@ -20,6 +20,11 @@ versão nova sozinho e oferece a atualização na tela.
 - Busca única (canais, filmes, séries, atores) com teclado na tela, voz,
   tolerância a erro de digitação e histórico.
 - Ícones Material em tudo (nada de emoji, que vira quadrado em box antigo).
+- Carrosséis estáveis: a capa não cresce no foco (o contorno ciano mostra onde
+  está), andar para o lado nunca rola a tela, a seta para na ponta da fileira
+  e só cima/baixo trocam de fileira — a fileira nova sobe sempre para o mesmo
+  lugar. Capas com canto arredondado; logo PNG de canal sem a letra atrás
+  (`Cartoes.kt`, `Inicio.Filas`).
 
 **Canais ao vivo**
 - Lista com seções (TV Aberta, Esportes, Notícias…), prévia do programa do canal
@@ -53,7 +58,8 @@ Ao vivo:
 
 | Tecla | Ação |
 |---|---|
-| OK | abre a lista de canais |
+| OK | mostra a programação do canal (rodapé) |
+| OK com o rodapé na tela | escolhe a fonte |
 | segurar OK, ou MENU | opções: áudio, fontes, favorito, timer |
 | ↑ / ↓, CH+ / CH− | canal anterior / seguinte |
 | ← | lista de canais; dentro dela, as seções |

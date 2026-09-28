@@ -486,7 +486,8 @@ class MainActivity : AppCompatActivity() {
             // OK abre a lista de canais: é o que mais se faz com o controle, e
             // o que todo app de TV faz. O cartão do canal aparece com INFO ou
             // a cada troca; as opções (áudio, fontes, favorito) no MENU.
-            // Toque no OK: lista de canais. Segurar o OK: opções — é o MENU de
+            // Toque no OK: programação do canal (e, com ela na tela, as fontes).
+            // Segurar o OK: opções — é o MENU de
             // quem não tem MENU no controle (o da Xiaomi, por exemplo). A
             // decisão fica para quando o botão é solto (ver onKeyUp).
             KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER -> {
@@ -650,7 +651,12 @@ class MainActivity : AppCompatActivity() {
             if (SystemClock.elapsedRealtime() - listaAbertaEm < 400) return true
             if (okApertado) {
                 okApertado = false
-                if (!okSegurado && listPanel.visibility != View.VISIBLE) openList()
+                // OK sobre o vídeo mostra a programação do canal (o rodapé); com
+                // ela já na tela, abre as fontes. A lista é na seta esquerda.
+                if (!okSegurado && listPanel.visibility != View.VISIBLE) {
+                    if (banner.visibility == View.VISIBLE && banner.alpha > 0.5f) escolherFonte(current)
+                    else revealBanner()
+                }
                 okSegurado = false
                 return true
             }

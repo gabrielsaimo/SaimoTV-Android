@@ -58,7 +58,7 @@ class BuscaActivity : TelaComMenu() {
         campo = findViewById(R.id.buscaTermo)
         estado = findViewById(R.id.buscaEstado)
         resultados = findViewById(R.id.buscaResultados)
-        resultados.layoutManager = LinearLayoutManager(this)
+        resultados.layoutManager = Inicio.Filas(this)
         resultados.adapter = adaptador
         montarTeclado()
         intent.getStringExtra(TERMO)?.let { digitado.append(it) }

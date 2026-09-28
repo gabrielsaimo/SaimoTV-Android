@@ -238,10 +238,7 @@ class GradeActivity : TelaComMenu() {
                 view.findViewById<View>(R.id.capaImagem).parent.let { it as View }.layoutParams.height =
                     ((util - 12 * d) * 1.45f).toInt()
             }
-            view.setOnFocusChangeListener { v, foco ->
-                val escala = if (foco) 1.07f else 1f
-                v.animate().scaleX(escala).scaleY(escala).setDuration(100).start()
-            }
+            Cartoes.arredondar(view.findViewById<View>(R.id.capaImagem).parent as View)
             return Holder(view)
         }
 
@@ -254,14 +251,7 @@ class GradeActivity : TelaComMenu() {
             holder.progresso.visibility = if (fracao != null && fracao > 0f) View.VISIBLE else View.GONE
             fracao?.let { holder.progresso.progress = (it * 1000).toInt() }
             val capa = Generos.capa(alvo.nomeCompleto, alvo.serie) ?: Generos.capa(alvo.titulo, alvo.serie)
-            holder.imagem.dispose()
-            if (capa == null) {
-                holder.imagem.setImageDrawable(null)
-                holder.imagem.visibility = View.GONE
-            } else {
-                holder.imagem.visibility = View.VISIBLE
-                holder.imagem.load(capa) { crossfade(true) }
-            }
+            Cartoes.carregar(holder.imagem, holder.inicial, capa)
             holder.itemView.setOnClickListener { FichaActivity.abrir(this@GradeActivity, alvo) }
             holder.itemView.setOnLongClickListener { alternarFavorito(item); true }
             holder.itemView.setOnKeyListener { _, codigo, evento ->

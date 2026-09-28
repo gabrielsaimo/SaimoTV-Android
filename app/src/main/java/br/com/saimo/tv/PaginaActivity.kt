@@ -67,7 +67,7 @@ class PaginaActivity : TelaComMenu() {
         tipo = intent.getStringExtra(TIPO) ?: GradeActivity.FILMES
         setContentView(R.layout.activity_pagina)
         filas = findViewById(R.id.inicioFilas)
-        filas.layoutManager = LinearLayoutManager(this)
+        filas.layoutManager = Inicio.Filas(this)
         filas.adapter = adaptador
         destaque = Destaque(this, lifecycleScope, findViewById<ImageView>(R.id.inicioFundo),
             findViewById(R.id.inicioTitulo), findViewById(R.id.inicioMeta), findViewById(R.id.inicioSinopse))

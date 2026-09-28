@@ -72,7 +72,7 @@ class EscolhaActivity : TelaComMenu() {
         meta = findViewById(R.id.inicioMeta)
         sinopse = findViewById(R.id.inicioSinopse)
 
-        filas.layoutManager = LinearLayoutManager(this)
+        filas.layoutManager = Inicio.Filas(this)
         filas.adapter = adaptador
         filas.setItemViewCacheSize(4)
         cabecalhoPadrao()

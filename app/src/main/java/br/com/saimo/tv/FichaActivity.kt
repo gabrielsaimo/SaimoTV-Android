@@ -536,10 +536,6 @@ private class EpisodiosAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_episodio, parent, false)
-        view.setOnFocusChangeListener { v, foco ->
-            val escala = if (foco) 1.05f else 1f
-            v.animate().scaleX(escala).scaleY(escala).setDuration(120).start()
-        }
         return Holder(view)
     }
 
