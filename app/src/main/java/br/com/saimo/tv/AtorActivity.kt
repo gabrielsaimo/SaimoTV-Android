@@ -171,6 +171,7 @@ internal class CapasAdapter(
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_trabalho, parent, false)
         view.onFocusChangeListener = FichaActivity.crescerNoFoco
         val holder = Holder(view)
+        view.setOnKeyListener { _, codigo, evento -> Cartoes.segurarNasPontas(holder, codigo, evento) }
         if (alturaDaCapa > 0) holder.quadro.layoutParams.height = alturaDaCapa
         if (largura > 0) view.layoutParams = (view.layoutParams ?: RecyclerView.LayoutParams(largura,
             ViewGroup.LayoutParams.WRAP_CONTENT)).also { it.width = largura }

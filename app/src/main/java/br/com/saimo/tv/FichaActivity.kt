@@ -162,6 +162,7 @@ class FichaActivity : TelaComMenu() {
         // À direita do último botão não há nada: sem isto a busca espacial
         // descia na diagonal para o meio do elenco.
         favoritar.nextFocusRightId = R.id.fichaFavoritar
+        assistir.nextFocusLeftId = R.id.fichaAssistir
         // Descer dos botões cai nos episódios, quando houver; senão no elenco.
         for (id in listOf(R.id.fichaAssistir, R.id.fichaVersao, R.id.fichaFavoritar)) {
             findViewById<View>(id).nextFocusDownId = View.NO_ID
@@ -256,6 +257,9 @@ class FichaActivity : TelaComMenu() {
                 setOnClickListener { mostrarTemporada(r, t) }
             })
         }
+        // Nas pontas da fila de temporadas a seta para ali, como nas fileiras.
+        barra.getChildAt(0)?.let { it.nextFocusLeftId = it.id }
+        barra.getChildAt(barra.childCount - 1)?.let { it.nextFocusRightId = it.id }
         mostrarTemporada(r, atual)
     }
 
@@ -484,7 +488,9 @@ private class ElencoAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_ator, parent, false)
         view.onFocusChangeListener = FichaActivity.crescerNoFoco
-        return Holder(view)
+        val holder = Holder(view)
+        view.setOnKeyListener { _, codigo, evento -> Cartoes.segurarNasPontas(holder, codigo, evento) }
+        return holder
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
@@ -536,7 +542,9 @@ private class EpisodiosAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_episodio, parent, false)
-        return Holder(view)
+        val holder = Holder(view)
+        view.setOnKeyListener { _, codigo, evento -> Cartoes.segurarNasPontas(holder, codigo, evento) }
+        return holder
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
