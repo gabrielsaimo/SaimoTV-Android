@@ -2,7 +2,6 @@ import java.util.Properties
 
 plugins {
     id("com.android.application")
-    id("org.jetbrains.kotlin.android")
 }
 
 /**
@@ -19,13 +18,16 @@ val chave = Properties().apply {
 
 android {
     namespace = "br.com.saimo.tv"
-    compileSdk = 35
+    compileSdk {
+        version = release(37) { minorApiLevel = 2 }
+    }
 
     defaultConfig {
         applicationId = "br.com.saimo.tv"
-        // Alcança os TV Box antigos ainda em uso.
-        minSdk = 21
-        targetSdk = 35
+        // Android 6: o mínimo do Media3 e das bibliotecas androidx atuais.
+        // Até a 2.0.2 era o 5 (21); quem ainda tem Android 5 fica na 2.0.2.
+        minSdk = 23
+        targetSdk = 37
         versionCode = 20002
         versionName = "2.0.2"
     }
@@ -69,7 +71,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions { jvmTarget = "17" }
     buildFeatures {
         viewBinding = true
         // A atualização compara a versão instalada com a do release.
@@ -81,7 +82,7 @@ android {
 }
 
 dependencies {
-    val media3 = "1.4.1"
+    val media3 = "1.11.1"
     // HLS e DASH nativos: no Android o ExoPlayer decodifica HEVC em TS e faz
     // ClearKey sozinho, então nada de proxy nem ffmpeg como no macOS.
     implementation("androidx.media3:media3-exoplayer:$media3")
@@ -92,17 +93,22 @@ dependencies {
     // para "próximo/anterior canal" e "abrir X" por voz enquanto o app está na
     // tela — sem ela o sistema não tem para quem mandar o comando de voz.
     implementation("androidx.media3:media3-session:$media3")
-    implementation("androidx.core:core-ktx:1.13.1")
-    implementation("androidx.appcompat:appcompat:1.7.0")
-    implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation("androidx.core:core-ktx:1.19.1")
+    implementation("androidx.appcompat:appcompat:1.8.0")
+    implementation("androidx.recyclerview:recyclerview:1.4.0")
     // "Continuar assistindo" na tela inicial do Google TV.
-    implementation("androidx.tvprovider:tvprovider:1.0.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
-    implementation("io.coil-kt:coil:2.7.0")
+    implementation("androidx.tvprovider:tvprovider:1.1.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0")
+    implementation("io.coil-kt.coil3:coil:3.6.3")
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.6.3")
     // OkHttp traz DNS-over-HTTPS pronto, que é o que contorna resolvedor
     // filtrado sem eu ter de falar DNS na mão como no macOS.
     implementation("androidx.media3:media3-datasource-okhttp:$media3")
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation("com.squareup.okhttp3:okhttp-dnsoverhttps:4.12.0")
+    implementation("com.squareup.okhttp3:okhttp:5.5.0")
+    implementation("com.squareup.okhttp3:okhttp-dnsoverhttps:5.5.0")
     testImplementation("junit:junit:4.13.2")
+}
+
+kotlin {
+    compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17) }
 }

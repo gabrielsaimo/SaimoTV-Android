@@ -15,9 +15,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import coil.dispose
-import coil.load
-import coil.transform.CircleCropTransformation
+import coil3.dispose
+import coil3.load
+import coil3.transform.CircleCropTransformation
+import coil3.request.crossfade
+import coil3.request.transformations
 import kotlinx.coroutines.launch
 
 /**

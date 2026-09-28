@@ -3,10 +3,15 @@ package br.com.saimo.tv
 import android.app.Application
 import android.util.Log
 import androidx.media3.common.util.UnstableApi
-import coil.ImageLoader
-import coil.ImageLoaderFactory
-import coil.disk.DiskCache
-import coil.memory.MemoryCache
+import coil3.ImageLoader
+import coil3.PlatformContext
+import coil3.SingletonImageLoader
+import coil3.disk.DiskCache
+import coil3.memory.MemoryCache
+import coil3.network.okhttp.OkHttpNetworkFetcherFactory
+import coil3.request.bitmapConfig
+import coil3.request.crossfade
+import okio.Path.Companion.toOkioPath
 import kotlinx.coroutines.CoroutineExceptionHandler
 
 /**
@@ -33,7 +38,7 @@ val semDerrubar = CoroutineExceptionHandler { _, erro ->
  * Sharing the player's client keeps both on the same path.
  */
 @UnstableApi
-class SaimoApp : Application(), ImageLoaderFactory {
+class SaimoApp : Application(), SingletonImageLoader.Factory {
 
     override fun onCreate() {
         super.onCreate()
@@ -51,29 +56,31 @@ class SaimoApp : Application(), ImageLoaderFactory {
     override fun onTrimMemory(level: Int) {
         super.onTrimMemory(level)
         if (level >= TRIM_MEMORY_RUNNING_LOW) {
-            runCatching { coil.Coil.imageLoader(this).memoryCache?.clear() }
+            runCatching { SingletonImageLoader.get(this).memoryCache?.clear() }
         }
     }
 
-    override fun newImageLoader(): ImageLoader =
-        ImageLoader.Builder(this)
-            .okHttpClient {
-                Playback.client.newBuilder()
-                    // Capa vem toda do mesmo servidor, e o padrão do OkHttp é
-                    // cinco pedidos por servidor: doze capas na tela chegavam
-                    // em três levas. O vídeo usa outro cliente e não disputa.
-                    .dispatcher(okhttp3.Dispatcher().apply {
-                        maxRequests = 48
-                        maxRequestsPerHost = 16
-                    })
-                    .addInterceptor { chain ->
-                        // Alguns CDNs de pôster recusam cliente sem User-Agent.
-                        chain.proceed(
-                            chain.request().newBuilder()
-                                .header("User-Agent", Playback.DEFAULT_USER_AGENT)
-                                .build())
-                    }
-                    .build()
+    override fun newImageLoader(context: PlatformContext): ImageLoader =
+        ImageLoader.Builder(context)
+            .components {
+                add(OkHttpNetworkFetcherFactory(callFactory = {
+                    Playback.client.newBuilder()
+                        // Capa vem toda do mesmo servidor, e o padrão do OkHttp é
+                        // cinco pedidos por servidor: doze capas na tela chegavam
+                        // em três levas. O vídeo usa outro cliente e não disputa.
+                        .dispatcher(okhttp3.Dispatcher().apply {
+                            maxRequests = 48
+                            maxRequestsPerHost = 16
+                        })
+                        .addInterceptor { chain ->
+                            // Alguns CDNs de pôster recusam cliente sem User-Agent.
+                            chain.proceed(
+                                chain.request().newBuilder()
+                                    .header("User-Agent", Playback.DEFAULT_USER_AGENT)
+                                    .build())
+                        }
+                        .build()
+                }))
             }
             // Um TV Box tem pouca RAM: um teto explícito evita que a rolagem da
             // lista empurre o player para fora da memória.
@@ -82,14 +89,14 @@ class SaimoApp : Application(), ImageLoaderFactory {
             .memoryCache {
                 // Teto em bytes, não em porcentagem: com largeHeap a porcentagem
                 // vira 40 MB de capas num aparelho de 1 GB, e o sistema mata o app.
-                MemoryCache.Builder(this)
+                MemoryCache.Builder()
                     .maxSizeBytes(if (Aparelho.poucaMemoria) 18 * 1024 * 1024 else 64 * 1024 * 1024)
                     .build()
             }
             // Em disco, as imagens sobrevivem ao reinício e a grade abre cheia.
             .diskCache {
                 DiskCache.Builder()
-                    .directory(cacheDir.resolve("imagens"))
+                    .directory(cacheDir.resolve("imagens").toOkioPath())
                     .maxSizeBytes(160L * 1024 * 1024)
                     .build()
             }
@@ -98,6 +105,5 @@ class SaimoApp : Application(), ImageLoaderFactory {
             .bitmapConfig(if (Aparelho.poucaMemoria) android.graphics.Bitmap.Config.RGB_565
                           else android.graphics.Bitmap.Config.ARGB_8888)
             .crossfade(false)
-            .respectCacheHeaders(false)
             .build()
 }

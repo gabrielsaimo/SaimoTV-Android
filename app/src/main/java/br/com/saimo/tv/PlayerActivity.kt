@@ -28,7 +28,7 @@ import androidx.media3.session.MediaSession
 import androidx.media3.ui.CaptionStyleCompat
 import androidx.media3.ui.PlayerView
 import androidx.media3.ui.SubtitleView
-import coil.load
+import coil3.load
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date

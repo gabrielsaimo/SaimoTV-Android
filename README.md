@@ -1,7 +1,8 @@
 # Saimo TV — Android TV / Google TV
 
 Canais ao vivo com guia de programação, filmes, séries, animes e doramas, feitos
-para TV Box e controle remoto. Versão atual: **2.0.0**.
+para TV Box e controle remoto. Funciona do **Android 6** em diante (quem ainda
+tem Android 5 fica na 2.0.2).
 
 O APK sai no mesmo release dos outros apps:
 <https://github.com/gabrielsaimo/SaimoPlayer/releases/latest>. O app procura
@@ -109,6 +110,12 @@ Detecção de "pouca memória" em `Aparelho.kt` (isLowRamDevice ou até 1,5 GB).
 | `Remote`, `Catalog`, `FontesDesativadas` | lista de canais publicada |
 | `Telemetria` | contagem anônima de uso (desligável nos Ajustes) |
 
+## Versões
+
+Build com Gradle 9.8, Android Gradle Plugin 9.4 (Kotlin embutido, 2.4) e
+Android 37. Player Media3 1.11, imagens Coil 3.6, rede OkHttp 5.5 com
+DNS-over-HTTPS.
+
 ## Compilar
 
 SDK, Gradle e emuladores ficam no SSD
@@ -116,7 +123,7 @@ SDK, Gradle e emuladores ficam no SSD
 
 ```bash
 export ANDROID_HOME="/Volumes/SSD 1TB/DEV/AndroidDev/sdk" JAVA_HOME=/opt/homebrew/opt/openjdk@17
-gradle assembleDebug
+./gradlew assembleDebug
 adb install -r app/build/outputs/apk/debug/app-debug.apk
 ```
 

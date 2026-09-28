@@ -4,7 +4,7 @@ import android.app.Activity
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.media3.common.util.UnstableApi
-import coil.load
+import coil3.load
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
