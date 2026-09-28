@@ -4,14 +4,21 @@
     android:layout_width="118dp"
     android:layout_height="wrap_content"
     android:layout_marginEnd="6dp"
+    android:background="@drawable/row_focus"
     android:focusable="true"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingTop="8dp">
+    android:paddingStart="4dp"
+    android:paddingTop="8dp"
+    android:paddingEnd="4dp"
+    android:paddingBottom="8dp">
 
+    <!-- duplicateParentState aqui também: sem ele o anel, que está dentro,
+         nunca recebia o "focado" do cartão e a foto não mostrava onde se está. -->
     <FrameLayout
         android:layout_width="84dp"
-        android:layout_height="84dp">
+        android:layout_height="84dp"
+        android:duplicateParentState="true">
 
         <ImageView
             android:id="@+id/atorFoto"
