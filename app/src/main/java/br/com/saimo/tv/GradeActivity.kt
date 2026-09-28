@@ -35,6 +35,7 @@ class GradeActivity : TelaComMenu() {
 
     override val aba: Aba get() = when (intent.getStringExtra(TIPO)) {
         FAVORITOS -> Aba.FAVORITOS
+        EXTRAS -> Aba.EXTRAS
         SERIES -> Aba.SERIES
         ANIMES -> Aba.ANIMES
         DORAMAS -> Aba.DORAMAS
@@ -48,6 +49,7 @@ class GradeActivity : TelaComMenu() {
         const val ANIMES = "animes"
         const val DORAMAS = "doramas"
         const val FAVORITOS = "favoritos"
+        const val EXTRAS = "extras"
         private const val TIPO = "grade.tipo"
         private const val GENERO = "grade.genero"
 
@@ -85,6 +87,8 @@ class GradeActivity : TelaComMenu() {
         super.onCreate(savedInstanceState)
         tipo = intent.getStringExtra(TIPO) ?: FILMES
         genero = intent.getStringExtra(GENERO).orEmpty()
+        // Sem o código não há Extras — nem por um atalho antigo.
+        if (tipo == EXTRAS && !Unlock.unlocked) { finish(); return }
         setContentView(R.layout.activity_grade)
         capas = findViewById(R.id.gradeCapas)
         letras = findViewById(R.id.gradeLetras)
@@ -94,6 +98,7 @@ class GradeActivity : TelaComMenu() {
             ANIMES -> R.string.vod_animes
             DORAMAS -> R.string.vod_doramas
             FAVORITOS -> R.string.vod_favoritos
+            EXTRAS -> R.string.vod_extras
             else -> R.string.vod_filmes
         })
         val colunas = ((resources.displayMetrics.widthPixels / resources.displayMetrics.density - 140) / 150)
@@ -137,6 +142,11 @@ class GradeActivity : TelaComMenu() {
                     Item(Alvo(c.titulo, true, "", c.ano, tipo, c.tmdbId.toIntOrNull() ?: 0),
                         Vod.normalizar(c.titulo), anoDe(c.titulo, c.ano))
                 }
+                EXTRAS -> (listOf("#") + ('A'..'Z').map { it.toString() }).flatMap { letra ->
+                    Vod.filmes(this@GradeActivity, letra, reservados = true).map { f ->
+                        Item(Alvo(f.titulo, false, letra, ""), Vod.normalizar(f.titulo), anoDe(f.titulo, ""))
+                    }
+                }
                 else -> VodFavoritos.lista(this@GradeActivity).map { f ->
                     Item(Alvo(f.titulo, f.serie, f.letra, f.ano), Vod.normalizar(f.titulo), anoDe(f.titulo, f.ano))
                 }
@@ -169,7 +179,7 @@ class GradeActivity : TelaComMenu() {
         findViewById<TextView>(R.id.gradeGenero).apply {
             text = getString(R.string.grade_genero, genero.ifEmpty { getString(R.string.vod_todos) })
             Icones.fim(this, R.drawable.ic_dropdown)
-            visibility = if (Generos.todos.isEmpty() || tipo == FAVORITOS) View.GONE else View.VISIBLE
+            visibility = if (Generos.todos.isEmpty() || tipo == FAVORITOS || tipo == EXTRAS) View.GONE else View.VISIBLE
         }
         findViewById<TextView>(R.id.gradeOrdem).apply {
             text = getString(R.string.grade_ordem, getString(if (novosPrimeiro) R.string.grade_novos else R.string.grade_az))
@@ -193,7 +203,8 @@ class GradeActivity : TelaComMenu() {
     }
 
     private fun alternarFavorito(item: Item) {
-        if (item.alvo.colecao.isNotEmpty()) return
+        // Extras não vai para os favoritos: lá ele apareceria para todo mundo.
+        if (item.alvo.colecao.isNotEmpty() || tipo == EXTRAS) return
         val marcado = VodFavoritos.alternar(this,
             VodFavoritos.Item(item.alvo.titulo, item.alvo.serie, item.alvo.letra, item.alvo.ano))
         Toast.makeText(this, if (marcado) R.string.vod_ficha_favorito else R.string.inicio_desfavoritar,
@@ -251,8 +262,23 @@ class GradeActivity : TelaComMenu() {
             holder.progresso.visibility = if (fracao != null && fracao > 0f) View.VISIBLE else View.GONE
             fracao?.let { holder.progresso.progress = (it * 1000).toInt() }
             val capa = Generos.capa(alvo.nomeCompleto, alvo.serie) ?: Generos.capa(alvo.titulo, alvo.serie)
-            Cartoes.carregar(holder.imagem, holder.inicial, capa)
-            holder.itemView.setOnClickListener { FichaActivity.abrir(this@GradeActivity, alvo) }
+            if (tipo == EXTRAS) {
+                // Capa genérica: nada da imagem de origem aparece na grade.
+                holder.imagem.dispose()
+                holder.imagem.visibility = View.GONE
+                holder.inicial.setBackgroundResource(R.drawable.capa_generica)
+                holder.inicial.text = getString(R.string.vod_extras)
+                holder.inicial.setTextColor(android.graphics.Color.WHITE)
+                holder.inicial.textSize = 40f
+                holder.inicial.visibility = View.VISIBLE
+            } else {
+                Cartoes.carregar(holder.imagem, holder.inicial, capa)
+            }
+            holder.itemView.setOnClickListener {
+                // Extras vai direto ao player: sem ficha, sem favoritar.
+                if (tipo == EXTRAS) PlayerActivity.abrir(this@GradeActivity, alvo)
+                else FichaActivity.abrir(this@GradeActivity, alvo)
+            }
             holder.itemView.setOnLongClickListener { alternarFavorito(item); true }
             holder.itemView.setOnKeyListener { _, codigo, evento ->
                 if (evento.action == KeyEvent.ACTION_DOWN && codigo == KeyEvent.KEYCODE_MENU) {

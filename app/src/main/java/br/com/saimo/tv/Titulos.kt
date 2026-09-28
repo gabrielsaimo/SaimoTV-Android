@@ -29,6 +29,8 @@ object Titulos {
         val filme: Filme?,
         val episodios: List<Ep>,
         val tmdbId: Int,
+        /// Título do Extras: não deixa rastro (progresso, "continuar", Google TV).
+        val reservado: Boolean = false,
     ) {
         val serie: Boolean get() = filme == null
         val temporadas: List<Int> get() = episodios.map { it.temporada }.distinct().sorted()
@@ -72,8 +74,12 @@ object Titulos {
             if (eps.isEmpty()) return null
             Resolvido(alvo, serie.nomeCompleto, null, agrupar(eps), tmdb)
         } else {
-            val filme = juntarGrafias(context, achado) ?: return null
-            Resolvido(alvo, filme.titulo, filme, emptyList(), tmdb)
+            val filme = juntarGrafias(context, achado)
+            if (filme != null) return Resolvido(alvo, filme.titulo, filme, emptyList(), tmdb)
+            if (!Unlock.unlocked) return null
+            val reservado = Vod.filmes(context, alvo.letra, reservados = true)
+                .firstOrNull { it.titulo == alvo.titulo } ?: return null
+            Resolvido(alvo, reservado.titulo, reservado, emptyList(), 0, reservado = true)
         }
     }
 

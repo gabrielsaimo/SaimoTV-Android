@@ -133,6 +133,10 @@ object Vod {
     suspend fun filmes(context: Context, letra: String, reservados: Boolean = false,
                        fresco: Boolean = false): List<Filme> {
         val prefixo = if (reservados) "reservado" else "filmes"
+        // Os links vêm como "servidor:id"; sem a lista de servidores, montar
+        // devolve vazio e o arquivo inteiro sumia (acontecia no Extras, que
+        // abre sem passar pelo índice).
+        if (bases.isEmpty()) indice(context)
         val texto = arquivo(context, "$prefixo-${gaveta(letra)}.txt", fresco) ?: return emptyList()
         return texto.lineSequence().mapNotNull { linha ->
             val campos = linha.split("\t")

@@ -197,7 +197,7 @@ class PlayerActivity : AppCompatActivity() {
         proximo.visibility = View.GONE
         pular.visibility = View.GONE
         esconderAviso()
-        Progresso.comecou(this, r.chave(ep), r.endereco, ep?.temporada ?: 0, ep?.numero ?: 0)
+        if (!r.reservado) Progresso.comecou(this, r.chave(ep), r.endereco, ep?.temporada ?: 0, ep?.numero ?: 0)
         atualizarTitulos()
         montarBotoes()
         carregarMarcas()
@@ -547,6 +547,7 @@ class PlayerActivity : AppCompatActivity() {
         val p = player ?: return
         val r = resolvido ?: return
         if (!tocou) return
+        if (r.reservado) return
         Progresso.salvar(this, r.chave(ep), p.currentPosition, p.duration)
         ProximaNaTv.atualizar(this, r, ep, p.currentPosition, p.duration)
     }

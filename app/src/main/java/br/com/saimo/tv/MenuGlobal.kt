@@ -20,7 +20,7 @@ import java.util.Date
 import java.util.Locale
 
 /** A aba do menu do topo que cada tela representa. */
-enum class Aba { INICIO, AO_VIVO, FILMES, SERIES, ANIMES, DORAMAS, FAVORITOS, BUSCAR, AJUSTES, NENHUMA }
+enum class Aba { INICIO, AO_VIVO, FILMES, SERIES, ANIMES, DORAMAS, FAVORITOS, EXTRAS, BUSCAR, AJUSTES, NENHUMA }
 
 /**
  * O menu do topo, o mesmo em todas as telas.
@@ -67,6 +67,7 @@ object MenuGlobal {
             Triple(Aba.ANIMES, R.string.vod_animes, 0),
             Triple(Aba.DORAMAS, R.string.vod_doramas, 0),
             Triple(Aba.FAVORITOS, R.string.vod_favoritos, 0),
+            Triple(Aba.EXTRAS, R.string.vod_extras, 0),
             Triple(Aba.BUSCAR, R.string.menu_buscar, R.drawable.ic_search),
             Triple(Aba.AJUSTES, R.string.menu_ajustes, R.drawable.ic_settings),
         )
@@ -81,6 +82,8 @@ object MenuGlobal {
                 setBackgroundResource(R.drawable.aba_menu)
                 isFocusable = true
                 isSelected = aba == atual
+                // Extras só existe depois do código, e some de novo sem deixar vão.
+                if (aba == Aba.EXTRAS) visibility = if (Unlock.unlocked) View.VISIBLE else View.GONE
                 setPadding((11 * d).toInt(), (6 * d).toInt(), (11 * d).toInt(), (6 * d).toInt())
                 layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT).apply { marginEnd = (1 * d).toInt() }
@@ -125,6 +128,12 @@ object MenuGlobal {
 
     fun temFoco(barra: View?) = barra?.hasFocus() == true
 
+    /** Mostra ou esconde o Extras conforme o código: o menu já montado não se refaz sozinho. */
+    fun atualizar(barra: View?) {
+        val abas = barra?.findViewById<LinearLayout>(R.id.menuGlobalAbas) ?: return
+        abas.findViewWithTag<View>(Aba.EXTRAS)?.visibility = if (Unlock.unlocked) View.VISIBLE else View.GONE
+    }
+
     private fun ir(tela: Activity, aba: Aba, atual: Aba) {
         if (aba == atual) return
         val inicio = Intent(tela, EscolhaActivity::class.java)
@@ -137,6 +146,7 @@ object MenuGlobal {
             Aba.ANIMES -> PaginaActivity.intent(tela, GradeActivity.ANIMES)
             Aba.DORAMAS -> PaginaActivity.intent(tela, GradeActivity.DORAMAS)
             Aba.FAVORITOS -> GradeActivity.intent(tela, GradeActivity.FAVORITOS)
+            Aba.EXTRAS -> GradeActivity.intent(tela, GradeActivity.EXTRAS)
             Aba.BUSCAR -> Intent(tela, BuscaActivity::class.java)
             Aba.AJUSTES -> Intent(tela, AjustesActivity::class.java)
         }
@@ -174,6 +184,11 @@ abstract class TelaComMenu : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.setBackgroundDrawableResource(R.drawable.fundo_app)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        MenuGlobal.atualizar(barraMenu)
     }
 
     override fun setContentView(layoutResID: Int) {

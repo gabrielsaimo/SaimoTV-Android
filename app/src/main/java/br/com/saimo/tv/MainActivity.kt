@@ -672,6 +672,7 @@ class MainActivity : AppCompatActivity() {
         typed = StringBuilder()
         status.visibility = View.GONE
         if (Unlock.consume(entered)) {
+            MenuGlobal.atualizar(menuGlobal)
             reorder()
             return@Runnable
         }
@@ -712,6 +713,7 @@ class MainActivity : AppCompatActivity() {
         typed = StringBuilder()
         numpad.visibility = View.GONE
         if (Unlock.consume(entered)) {
+            MenuGlobal.atualizar(menuGlobal)
             reorder()
             focusRow(current)
             return
