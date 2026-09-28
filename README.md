@@ -34,6 +34,7 @@ versão nova sozinho e oferece a atualização na tela.
   seção; o app abre no último canal e LAST volta ao anterior.
 - Guia de programação, lembretes de programa e timer de sono.
 - Troca de fonte automática quando uma cai, e manual pela lista.
+- Ao vivo não pausa: PLAY/PAUSE do controle e do Assistant não param o canal.
 
 **Filmes e séries**
 - Ficha com sinopse, elenco, temporadas e episódios, e "Mais como este".
@@ -68,6 +69,7 @@ Ao vivo:
 | LAST | volta ao canal anterior |
 | 0–9 | número do canal |
 | VOLTAR | fecha a lista |
+| PLAY/PAUSE | nada: ao vivo sempre toca |
 
 Filmes e séries: ← / → avançam e voltam (segurar acelera), OK mostra os
 controles, ↓ leva aos botões, VOLTAR sai guardando o ponto.

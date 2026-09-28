@@ -538,8 +538,10 @@ class MainActivity : AppCompatActivity() {
                     else -> super.onKeyDown(keyCode, event)
                 }
             }
-            KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> {
-                player.playWhenReady = !player.playWhenReady; true
+            // Ao vivo não pausa: a tecla só garante que está tocando.
+            KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, KeyEvent.KEYCODE_MEDIA_PLAY,
+            KeyEvent.KEYCODE_MEDIA_PAUSE -> {
+                player.playWhenReady = true; true
             }
             KeyEvent.KEYCODE_INFO -> { if (!listOpen) revealBanner(); true }
             KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.KEYCODE_GUIDE -> {
@@ -1137,6 +1139,8 @@ class MainActivity : AppCompatActivity() {
         override fun isCommandAvailable(command: Int) = when (command) {
             Player.COMMAND_SEEK_TO_NEXT, Player.COMMAND_SEEK_TO_NEXT_MEDIA_ITEM,
             Player.COMMAND_SEEK_TO_PREVIOUS, Player.COMMAND_SEEK_TO_PREVIOUS_MEDIA_ITEM -> true
+            // Ao vivo não pausa — nem pelo Assistant, nem pelo controle de outro app.
+            Player.COMMAND_PLAY_PAUSE -> false
             else -> super.isCommandAvailable(command)
         }
 
@@ -1145,7 +1149,10 @@ class MainActivity : AppCompatActivity() {
             .addAll(
                 Player.COMMAND_SEEK_TO_NEXT, Player.COMMAND_SEEK_TO_NEXT_MEDIA_ITEM,
                 Player.COMMAND_SEEK_TO_PREVIOUS, Player.COMMAND_SEEK_TO_PREVIOUS_MEDIA_ITEM)
+            .remove(Player.COMMAND_PLAY_PAUSE)
             .build()
+
+        override fun pause() {}
 
         override fun hasNextMediaItem() = true
         override fun hasPreviousMediaItem() = true
