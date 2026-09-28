@@ -57,12 +57,29 @@ object Cartoes {
      */
     fun segurarNasPontas(holder: RecyclerView.ViewHolder, codigo: Int, evento: KeyEvent): Boolean {
         if (evento.action != KeyEvent.ACTION_DOWN) return false
+        if (codigo != KeyEvent.KEYCODE_DPAD_RIGHT && codigo != KeyEvent.KEYCODE_DPAD_LEFT) return false
         val posicao = holder.bindingAdapterPosition
         val total = holder.bindingAdapter?.itemCount ?: return false
-        return when (codigo) {
-            KeyEvent.KEYCODE_DPAD_RIGHT -> posicao == total - 1
-            KeyEvent.KEYCODE_DPAD_LEFT -> posicao == 0
-            else -> false
+        val lista = holder.itemView.parent as? RecyclerView ?: return false
+        val gerente = lista.layoutManager
+        // Grade (várias colunas): só as pontas; o resto a busca do sistema resolve.
+        if (gerente is androidx.recyclerview.widget.GridLayoutManager ||
+            (gerente as? androidx.recyclerview.widget.LinearLayoutManager)?.orientation != RecyclerView.HORIZONTAL) {
+            return (codigo == KeyEvent.KEYCODE_DPAD_RIGHT && posicao == total - 1) ||
+                (codigo == KeyEvent.KEYCODE_DPAD_LEFT && posicao == 0)
         }
+        // Fileira: anda ela mesma. Segurando a seta, o próximo cartão ainda
+        // não existe na tela, a busca do sistema não acha "algo à direita"
+        // dentro da fileira e o foco pulava para a de cima ou a de baixo.
+        val alvo = posicao + if (codigo == KeyEvent.KEYCODE_DPAD_RIGHT) 1 else -1
+        if (alvo < 0 || alvo >= total) return true
+        val pronto = lista.findViewHolderForAdapterPosition(alvo)?.itemView
+        if (pronto != null) {
+            pronto.requestFocus()
+        } else {
+            lista.scrollToPosition(alvo)
+            lista.post { lista.findViewHolderForAdapterPosition(alvo)?.itemView?.requestFocus() }
+        }
+        return true
     }
 }

@@ -92,6 +92,20 @@ object MenuGlobal {
                     icone != 0 -> Icones.inicio(this, icone)
                 }
                 setOnFocusChangeListener { _, foco -> if (foco) aoFocar?.invoke() }
+                // Para os lados, o menu anda de aba em aba e para nas pontas:
+                // no fim, a busca do sistema achava algo "à direita" lá embaixo.
+                setOnKeyListener { v, codigo, evento ->
+                    if (evento.action != android.view.KeyEvent.ACTION_DOWN) return@setOnKeyListener false
+                    val passo = when (codigo) {
+                        android.view.KeyEvent.KEYCODE_DPAD_RIGHT -> 1
+                        android.view.KeyEvent.KEYCODE_DPAD_LEFT -> -1
+                        else -> return@setOnKeyListener false
+                    }
+                    var i = abas.indexOfChild(v) + passo
+                    while (i in 0 until abas.childCount && abas.getChildAt(i).visibility != View.VISIBLE) i += passo
+                    abas.getChildAt(i)?.requestFocus()
+                    true
+                }
                 setOnClickListener {
                     if (aba == Aba.INICIO && aoInicio != null) aoInicio() else ir(tela, aba, atual)
                 }
