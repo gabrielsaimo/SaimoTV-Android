@@ -181,6 +181,12 @@
     <string name="player_audio_item">Áudio: %1$s</string>
     <string name="player_legenda_item">Legenda: %1$s</string>
     <string name="player_sem_legenda">Sem legenda</string>
+    <string name="player_sincronia_legenda">Sincronia da legenda</string>
+    <string name="player_sincronia_original">Original</string>
+    <string name="player_sincronia_atrasar">Atrasar %1$s s</string>
+    <string name="player_sincronia_adiantar">Adiantar %1$s s</string>
+    <string name="player_legenda_baixando">Baixando a legenda…</string>
+    <string name="player_legenda_falhou">Não foi possível baixar esta legenda. Tente outra versão.</string>
     <string name="player_tamanho_legenda">Tamanho da legenda</string>
     <string name="player_idioma_padrao">Original</string>
     <string name="player_qualidade_auto">Automática</string>

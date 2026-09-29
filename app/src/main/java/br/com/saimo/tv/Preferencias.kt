@@ -52,6 +52,11 @@ object Preferencias {
         get() = prefs.getString("legendaIdioma", "") ?: ""
         set(valor) = prefs.edit().putString("legendaIdioma", valor).apply()
 
+    /** Idioma da legenda do OpenSubtitles escolhido da última vez ("pob", "eng"…; "" = nenhum). */
+    var legendaExterna: String
+        get() = prefs.getString("legendaExterna", "") ?: ""
+        set(valor) = prefs.edit().putString("legendaExterna", valor).apply()
+
     /** Qualidade limitada para economizar internet. */
     var economia: Boolean
         get() = prefs.getBoolean("economia", false)

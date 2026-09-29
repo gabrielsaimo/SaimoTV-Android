@@ -44,7 +44,9 @@ versão nova sozinho e oferece a atualização na tela.
 - Botão **Fonte N**: escolhe entre todas as fontes (versão e servidor) sem
   perder o ponto. Fonte que não abre em 15 s, ou que "termina" nos primeiros
   segundos, cai para a seguinte sozinha.
-- Áudio, legendas (tamanho, fundo, idioma) e qualidade.
+- Áudio, legendas (tamanho, fundo, idioma) e qualidade. Filmes e séries ganham
+  legendas do OpenSubtitles (pt-BR, pt-PT, inglês, espanhol) com ajuste de
+  sincronia, no mesmo painel — sem chave nem cadastro.
 
 **Google TV**
 - "Continuar assistindo" do sistema (Watch Next), canal do app na tela inicial e
@@ -108,6 +110,7 @@ Detecção de "pouca memória" em `Aparelho.kt` (isLowRamDevice ou até 1,5 GB).
 | `Epg`, `MeuGuia`, `GuiaDeTv` | guia de programação |
 | `Vod`, `Titulos`, `Generos`, `Progresso` | acervo, resolução de título, fichas e progresso |
 | `Pulos` | TheIntroDB |
+| `Legendas` | OpenSubtitles pelo id do TMDB (via `vod/imdb/`) |
 | `ProximaNaTv`, `CanalNaTv`, `Links` | integração com o Google TV |
 | `Remote`, `Catalog`, `FontesDesativadas` | lista de canais publicada |
 | `Telemetria` | contagem anônima de uso (desligável nos Ajustes) |

@@ -2,10 +2,13 @@ package br.com.saimo.tv
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
+import android.util.Base64
+import android.widget.Toast
 import android.view.KeyEvent
 import android.view.View
 import android.widget.ImageView
@@ -17,13 +20,19 @@ import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.ForwardingPlayer
+import androidx.media3.common.MediaItem
+import androidx.media3.common.MimeTypes
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.TrackSelectionOverride
 import androidx.media3.common.Tracks
 import androidx.media3.common.VideoSize
 import androidx.media3.common.util.UnstableApi
+import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.source.MediaSource
+import androidx.media3.exoplayer.source.MergingMediaSource
+import androidx.media3.exoplayer.source.SingleSampleMediaSource
 import androidx.media3.session.MediaSession
 import androidx.media3.ui.CaptionStyleCompat
 import androidx.media3.ui.PlayerView
@@ -107,6 +116,13 @@ class PlayerActivity : AppCompatActivity() {
     private var tocou = false
     private var tentativaDesde = 0L
     private var marcas: Pulos.Marcas? = null
+    /// Legendas do OpenSubtitles: as do título, a escolhida (com o arquivo já
+    /// baixado) e o atraso dela. Trocar de fonte não as perde.
+    private var legendasExt: List<Legendas.Opcao> = emptyList()
+    private var legendaExt: Legendas.Opcao? = null
+    private var legendaExtSrt: String? = null
+    private var legendaAtraso = 0.0
+    private var selecionarLegendaExt = false
     private var infoEpisodios: Map<Int, Detalhes.EpisodioTmdb> = emptyMap()
     /// Episódios seguidos que começaram sozinhos — o "ainda está assistindo?".
     private var seguidosSozinhos = 0
@@ -191,6 +207,10 @@ class PlayerActivity : AppCompatActivity() {
         opcoes = Titulos.ordem(fontes, versao)
         fonte = 0
         marcas = null
+        legendasExt = emptyList()
+        legendaExt = null
+        legendaExtSrt = null
+        legendaAtraso = 0.0
         trechoPulado = null
         proximoDispensado = false
         contagem = -1
@@ -201,6 +221,7 @@ class PlayerActivity : AppCompatActivity() {
         atualizarTitulos()
         montarBotoes()
         carregarMarcas()
+        carregarLegendas()
 
         val retomar = if (pedirRetomada) Progresso.posicao(this, r.chave(ep)) else 0L
         tocarFonte(inicio = retomar, pausado = retomar > 0)
@@ -232,6 +253,85 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
+    // MARK: - Legendas do OpenSubtitles
+
+    private fun carregarLegendas() {
+        val r = resolvido ?: return
+        val episodio = ep
+        lifecycleScope.launch(semDerrubar) {
+            val lista = Legendas.de(r.tmdbId, r.serie, episodio?.temporada ?: 0, episodio?.numero ?: 0)
+            if (episodio != ep || lista.isEmpty()) return@launch
+            legendasExt = lista
+            // Quem já escolheu um idioma antes não precisa escolher de novo.
+            val idioma = Preferencias.legendaExterna
+            if (idioma.isNotBlank() && legendaExt == null) {
+                lista.firstOrNull { it.idioma == idioma }?.let { escolherLegendaExterna(it, guardar = false) }
+            }
+        }
+    }
+
+    /** O vídeo, com a legenda externa ao lado quando há uma escolhida. */
+    private fun fonteAtual(url: String): MediaSource {
+        val base = Playback.mediaSource(this, Source(url))
+        val opcao = legendaExt ?: return base
+        val srt = legendaExtSrt ?: return base
+        // O arquivo vai embutido (data:): já está baixado, e o atraso escolhido
+        // é aplicado nas marcas de tempo antes de entregar ao player.
+        val dados = Base64.encodeToString(Legendas.deslocar(srt, legendaAtraso).toByteArray(), Base64.NO_WRAP)
+        val configuracao = MediaItem.SubtitleConfiguration.Builder(Uri.parse("data:application/x-subrip;base64,$dados"))
+            .setId(Legendas.ID_FAIXA)
+            .setMimeType(MimeTypes.APPLICATION_SUBRIP)
+            .setLanguage(opcao.bcp47)
+            .setLabel(opcao.rotulo)
+            .setSelectionFlags(C.SELECTION_FLAG_DEFAULT)
+            .build()
+        val legenda = SingleSampleMediaSource.Factory(DefaultDataSource.Factory(this))
+            .createMediaSource(configuracao, C.TIME_UNSET)
+        return MergingMediaSource(base, legenda)
+    }
+
+    /** Refaz a fonte na posição de agora, sem a telemetria de "começou". */
+    private fun recarregarComLegenda() {
+        val p = player ?: return
+        val opcao = opcoes.getOrNull(fonte) ?: return
+        val posicao = p.currentPosition
+        val tocando = p.playWhenReady
+        selecionarLegendaExt = legendaExt != null
+        p.setMediaSource(fonteAtual(opcao.url), posicao)
+        p.playWhenReady = tocando
+        p.prepare()
+    }
+
+    private fun escolherLegendaExterna(opcao: Legendas.Opcao?, guardar: Boolean = true) {
+        if (opcao == null) {
+            if (legendaExt == null) return
+            legendaExt = null
+            legendaExtSrt = null
+            legendaAtraso = 0.0
+            recarregarComLegenda()
+            return
+        }
+        lifecycleScope.launch(semDerrubar) {
+            Toast.makeText(this@PlayerActivity, R.string.player_legenda_baixando, Toast.LENGTH_SHORT).show()
+            val srt = Legendas.baixar(opcao)
+            if (srt == null) {
+                Toast.makeText(this@PlayerActivity, R.string.player_legenda_falhou, Toast.LENGTH_LONG).show()
+                return@launch
+            }
+            legendaExt = opcao
+            legendaExtSrt = srt
+            legendaAtraso = 0.0
+            if (guardar) Preferencias.legendaExterna = opcao.idioma
+            recarregarComLegenda()
+        }
+    }
+
+    private fun ajustarAtrasoDaLegenda(segundos: Double) {
+        if (legendaExt == null) return
+        legendaAtraso = segundos
+        recarregarComLegenda()
+    }
+
     // MARK: - Reprodução
 
     private fun novoPlayer(): ExoPlayer {
@@ -260,7 +360,8 @@ class PlayerActivity : AppCompatActivity() {
         mostrarCarregando(if (fonte == 0) getString(R.string.player_abrindo)
                           else getString(R.string.player_outro_servidor))
         Telemetria.comecou("vod", nomeTelemetria(), opcao.url, fonte + 1, nova = fonte == 0)
-        atual.setMediaSource(Playback.mediaSource(this, Source(opcao.url)))
+        selecionarLegendaExt = legendaExt != null
+        atual.setMediaSource(fonteAtual(opcao.url))
         if (inicio > 0) atual.seekTo(inicio)
         atual.playWhenReady = !pausado
         atual.prepare()
@@ -375,6 +476,20 @@ class PlayerActivity : AppCompatActivity() {
         }
 
         override fun onTracksChanged(tracks: Tracks) {
+            if (selecionarLegendaExt) {
+                // A faixa da legenda escolhida só existe depois de o player
+                // preparar; é aqui que ela é ligada.
+                val grupo = tracks.groups.firstOrNull { g ->
+                    g.type == C.TRACK_TYPE_TEXT && (0 until g.length).any { g.getTrackFormat(it).id == Legendas.ID_FAIXA }
+                }
+                val p = player
+                if (grupo != null && p != null) {
+                    selecionarLegendaExt = false
+                    p.trackSelectionParameters = p.trackSelectionParameters.buildUpon()
+                        .setTrackTypeDisabled(C.TRACK_TYPE_TEXT, false)
+                        .setOverrideForType(TrackSelectionOverride(grupo.mediaTrackGroup, 0)).build()
+                }
+            }
             montarBotoes()
         }
     }
@@ -844,7 +959,13 @@ class PlayerActivity : AppCompatActivity() {
         })
     }
 
-    private fun painelFaixas() { player?.let { Faixas.audioELegenda(this, it) { estiloDaLegenda() } } }
+    private fun painelFaixas() {
+        player?.let {
+            Faixas.audioELegenda(this, it, { estiloDaLegenda() },
+                externas = legendasExt, escolhida = legendaExt, atraso = legendaAtraso,
+                aoEscolherExterna = ::escolherLegendaExterna, aoAjustarAtraso = ::ajustarAtrasoDaLegenda)
+        }
+    }
 
     private fun painelQualidade() { player?.let { Faixas.qualidade(this, it) } }
 

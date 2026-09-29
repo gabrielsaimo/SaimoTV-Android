@@ -16,7 +16,15 @@ import java.util.Locale
 @UnstableApi
 object Faixas {
 
-    fun audioELegenda(tela: Activity, p: ExoPlayer, aoMudarEstilo: () -> Unit = {}) {
+    fun audioELegenda(
+        tela: Activity, p: ExoPlayer, aoMudarEstilo: () -> Unit = {},
+        /// Legendas do OpenSubtitles do que está tocando, a escolhida e o atraso dela.
+        externas: List<Legendas.Opcao> = emptyList(),
+        escolhida: Legendas.Opcao? = null,
+        atraso: Double = 0.0,
+        aoEscolherExterna: (Legendas.Opcao?) -> Unit = {},
+        aoAjustarAtraso: (Double) -> Unit = {},
+    ) {
         val itens = mutableListOf<Painel.Item>()
         val audios = p.currentTracks.groups.filter { it.type == C.TRACK_TYPE_AUDIO }
         if (audios.size > 1) {
@@ -30,12 +38,20 @@ object Faixas {
                 }
             }
         }
-        val legendas = p.currentTracks.groups.filter { it.type == C.TRACK_TYPE_TEXT }
-        val semLegenda = p.trackSelectionParameters.disabledTrackTypes.contains(C.TRACK_TYPE_TEXT) ||
-            legendas.none { it.isSelected }
-        if (legendas.isNotEmpty()) {
+        // A faixa da legenda externa aparece no player como qualquer outra; ela
+        // tem lista própria logo abaixo, então sai daqui para não se repetir.
+        val legendas = p.currentTracks.groups.filter { grupo ->
+            grupo.type == C.TRACK_TYPE_TEXT &&
+                (0 until grupo.length).none { grupo.getTrackFormat(it).id == Legendas.ID_FAIXA }
+        }
+        val semLegenda = escolhida == null && (
+            p.trackSelectionParameters.disabledTrackTypes.contains(C.TRACK_TYPE_TEXT) ||
+                legendas.none { it.isSelected })
+        if (legendas.isNotEmpty() || externas.isNotEmpty()) {
             itens += Painel.Item(tela.getString(R.string.player_sem_legenda), marcado = semLegenda) {
                 Preferencias.legendaIdioma = ""
+                Preferencias.legendaExterna = ""
+                aoEscolherExterna(null)
                 p.trackSelectionParameters = p.trackSelectionParameters.buildUpon()
                     .setTrackTypeDisabled(C.TRACK_TYPE_TEXT, true).build()
             }
@@ -50,6 +66,21 @@ object Faixas {
                     .setOverrideForType(TrackSelectionOverride(grupo.mediaTrackGroup, 0)).build()
             }
         }
+        for (opcao in externas) {
+            itens += Painel.Item(tela.getString(R.string.player_legenda_item, opcao.rotulo),
+                marcado = escolhida?.id == opcao.id) {
+                Preferencias.legendaIdioma = ""
+                aoEscolherExterna(opcao)
+            }
+        }
+        if (escolhida != null) {
+            itens += Painel.Item(tela.getString(R.string.player_sincronia_legenda), rotuloAtraso(tela, atraso)) {
+                val passos = listOf(-5.0, -2.0, -1.0, -0.5, 0.0, 0.5, 1.0, 2.0, 5.0)
+                Painel.mostrar(tela, tela.getString(R.string.player_sincronia_legenda), passos.map { passo ->
+                    Painel.Item(rotuloAtraso(tela, passo), marcado = passo == atraso) { aoAjustarAtraso(passo) }
+                })
+            }
+        }
         val tamanhos = tela.resources.getStringArray(R.array.tamanhos_legenda)
         itens += Painel.Item(tela.getString(R.string.player_tamanho_legenda),
             tamanhos[Preferencias.legenda.coerceIn(tamanhos.indices)]) {
@@ -58,7 +89,16 @@ object Faixas {
             })
         }
         Painel.mostrar(tela, tela.getString(R.string.player_audio_legenda), itens,
-            if (audios.size <= 1 && legendas.isEmpty()) tela.getString(R.string.faixas_so_uma) else null)
+            if (audios.size <= 1 && legendas.isEmpty() && externas.isEmpty()) tela.getString(R.string.faixas_so_uma) else null)
+    }
+
+    private fun rotuloAtraso(tela: Activity, segundos: Double): String {
+        val numero = Math.abs(segundos).toString().removeSuffix(".0").replace('.', ',')
+        return when {
+            segundos == 0.0 -> tela.getString(R.string.player_sincronia_original)
+            segundos > 0 -> tela.getString(R.string.player_sincronia_atrasar, numero)
+            else -> tela.getString(R.string.player_sincronia_adiantar, numero)
+        }
     }
 
     fun qualidade(tela: Activity, p: ExoPlayer) {
