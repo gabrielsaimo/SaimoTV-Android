@@ -1,5 +1,9 @@
 # Saimo TV — Android TV / Google TV
 
+<p align="center">
+  Saimo TV: <b>TV Box</b> · <a href="https://github.com/gabrielsaimo/Saimo-Cell-V2">Celular</a> · <a href="https://github.com/gabrielsaimo/SaimoWin">Windows</a> · <a href="https://github.com/gabrielsaimo/SaimoPlayer">Mac e catálogo</a> · <a href="https://github.com/gabrielsaimo/Saimo-TV">Site</a> · <a href="https://github.com/gabrielsaimo">todos os apps</a>
+</p>
+
 Canais ao vivo com guia de programação, filmes, séries, animes e doramas, feitos
 para TV Box e controle remoto. Funciona do **Android 6** em diante (quem ainda
 tem Android 5 fica na 2.0.2).
