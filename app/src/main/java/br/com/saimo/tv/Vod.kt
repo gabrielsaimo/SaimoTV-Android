@@ -141,13 +141,9 @@ object Vod {
         return texto.lineSequence().mapNotNull { linha ->
             val campos = linha.split("\t")
             if (campos.size < 2 || campos[0].isBlank()) return@mapNotNull null
-            val fontes = campos.drop(1).mapNotNull { parte ->
-                val marca = parte.indexOf('=')
-                if (marca <= 0) return@mapNotNull null
-                parte.take(marca) to FontesDesativadas.peneirar(
-                    parte.substring(marca + 1)
-                        .split(",").filter { it.isNotBlank() }.map(::montar).filter { it.isNotEmpty() })
-            }.filter { it.second.isNotEmpty() }.toMap()
+            val fontes = VodFormato.fontes(campos.drop(1), bases)
+                .mapValues { (_, urls) -> FontesDesativadas.peneirar(urls) }
+                .filterValues { it.isNotEmpty() }
             if (fontes.isEmpty()) null else Filme(campos[0], fontes)
         }.toList()
     }
@@ -421,14 +417,7 @@ object Vod {
     /// O item guarda "base:resto"; o endereço inteiro sairia dezenas de vezes
     /// maior, e o começo é sempre o mesmo punhado de servidores.
     private fun montar(valor: String): String {
-        if (valor.startsWith("http")) return valor
-        // Sem a base o que sobra é "0:19927", que só falha na hora de tocar.
-        // Melhor devolver vazio e deixar a fonte de fora.
-        val corte = valor.indexOf(':')
-        val indice = valor.take(corte).toIntOrNull() ?: return ""
-        val resto = valor.substring(corte + 1)
-        val base = bases.getOrNull(indice) ?: return ""
-        return if (resto.contains('.')) base + resto else "$base$resto.mp4"
+        return VodFormato.montar(valor, bases)
     }
 
     private fun conferirVersao(context: Context) {
