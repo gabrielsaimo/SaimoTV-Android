@@ -308,6 +308,7 @@ class MainActivity : AppCompatActivity() {
     /// Distingue a primeira abertura (que já oferece pelo refreshCatalog) da
     /// volta de outra tela, como as configurações.
     private var jaIniciou = false
+    private var emSegundoPlano = false
 
     private val atualizacao by lazy { OfertaDeAtualizacao(this) { showStatus(it) } }
 
@@ -401,7 +402,22 @@ class MainActivity : AppCompatActivity() {
 
     private val playerListener = object : Player.Listener {
         override fun onVideoSizeChanged(videoSize: VideoSize) {
-            val rotulo = rotuloResolucao(videoSize.width, videoSize.height)
+            var rotulo = rotuloResolucao(videoSize.width, videoSize.height)
+            var bitrate = androidx.media3.common.Format.NO_VALUE
+            for (grupo in player.currentTracks.groups) {
+                if (grupo.type == androidx.media3.common.C.TRACK_TYPE_VIDEO && grupo.isSelected) {
+                    for (i in 0 until grupo.length) {
+                        if (grupo.isTrackSelected(i)) {
+                            bitrate = grupo.getTrackFormat(i).bitrate
+                            break
+                        }
+                    }
+                }
+                if (bitrate != androidx.media3.common.Format.NO_VALUE && bitrate > 0) break
+            }
+            if (bitrate != androidx.media3.common.Format.NO_VALUE && bitrate > 0) {
+                rotulo += String.format(java.util.Locale.US, " · %.1f Mbps", bitrate / 1_000_000f)
+            }
             bannerResolution.text = rotulo
             bannerResolution.visibility = if (rotulo.isEmpty()) View.GONE else View.VISIBLE
         }
@@ -421,6 +437,14 @@ class MainActivity : AppCompatActivity() {
                 handler.removeCallbacks(sourceTimeout)
                 status.visibility = View.GONE
                 startGuide()
+            }
+        }
+        
+        override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
+            // Se tentar pausar enquanto o app está aberto, força a tocar de novo.
+            // TV ao vivo não tem pausa. (O sistema pausa sozinho se perder foco de áudio, por ex).
+            if (!playWhenReady && !emSegundoPlano) {
+                player.playWhenReady = true
             }
         }
 
@@ -1236,11 +1260,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
+        emSegundoPlano = true
         player.playWhenReady = false
     }
 
     override fun onStart() {
         super.onStart()
+        emSegundoPlano = false
         if (::player.isInitialized) player.playWhenReady = true
         // Voltando das configurações com a permissão já ligada (nos aparelhos
         // em que o sistema não matou o app no caminho), retoma a atualização.
