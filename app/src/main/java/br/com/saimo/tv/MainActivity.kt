@@ -67,6 +67,10 @@ private const val RETOMADAS_MAX = 3
 private const val CREDITO_DE_IMAGEM_MS = 30_000L
 /// De quanto em quanto tempo o relógio do vídeo é conferido.
 private const val VIGIA_MS = 2_000L
+/// Quanto tempo o relógio do vídeo pode ficar parado, com o player achando que
+/// toca ou carrega, antes de o vigia retomar a fonte sozinho. Cobre o canal que
+/// congela sem erro: engasgo de rede some em poucos segundos, isto não.
+private const val CONGELADO_MS = 12_000L
 
 /**
  * The whole app: a channel list and a player, driven entirely by the remote.
@@ -163,6 +167,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContentView(R.layout.activity_main)
+        if (Vr.ativo) Vr.videoEmTextura(this, R.id.player)
 
         playerView = findViewById(R.id.player)
         listPanel = findViewById(R.id.listPanel)
@@ -201,6 +206,7 @@ class MainActivity : AppCompatActivity() {
             numpadValue.text = typed
         }
         findViewById<View>(R.id.padOk).setOnClickListener { padCommit() }
+        if (Vr.ativo) montarVr()
 
         Favorites.load(this)
         // A lista publicada de ontem já está em disco: abre com ela e troca
@@ -586,16 +592,59 @@ class MainActivity : AppCompatActivity() {
         override fun run() {
             if (::player.isInitialized) {
                 val pos = player.currentPosition
+                val agora = android.os.SystemClock.elapsedRealtime()
                 // Relógio para trás é linha do tempo nova — a volta para a
                 // borda do ao vivo faz isso. Recomeça a contagem dali.
                 if (pos < ultimaPosicao - 1_000) ultimaPosicao = pos
                 if (player.isPlaying && pos > ultimaPosicao + 500) {
                     ultimaPosicao = pos
-                    ultimaImagem = android.os.SystemClock.elapsedRealtime()
+                    ultimaImagem = agora
                     retomadas = 0
+                    congeladoDesde = 0L
+                } else if (tocouAvisado && player.playWhenReady &&
+                    player.playbackState != Player.STATE_IDLE &&
+                    player.playbackState != Player.STATE_ENDED) {
+                    // Devia estar tocando e o relógio do vídeo não anda: ficou
+                    // em buffering eterno ou congelou sem o player dar erro
+                    // nenhum. Sem este vigia só reescolher a fonte à mão
+                    // desfazia — o prazo de abertura já foi desligado.
+                    if (congeladoDesde == 0L) congeladoDesde = agora
+                    if (agora - congeladoDesde >= CONGELADO_MS) {
+                        congeladoDesde = agora
+                        recuperarCongelado()
+                    }
+                } else {
+                    congeladoDesde = 0L
                 }
             }
             handler.postDelayed(this, VIGIA_MS)
+        }
+    }
+
+    /// Desde quando o vídeo está parado sem motivo; 0 = andando normalmente.
+    private var congeladoDesde = 0L
+
+    /**
+     * Canal congelado: primeiro pede o mesmo ponto de novo (volta para a
+     * borda do ao vivo), que resolve a maioria dos casos sem trocar de
+     * origem. Esgotadas as retomadas, desce para a fonte seguinte.
+     */
+    private fun recuperarCongelado() {
+        val channel = ordered.getOrNull(current) ?: return
+        Telemetria.falhou("live", channel.name, channel.sources.getOrNull(sourceIndex)?.url.orEmpty(),
+            sourceIndex + 1, "congelou por ${CONGELADO_MS / 1000} s")
+        if (retomadas < RETOMADAS_MAX) {
+            retomadas++
+            showStatus(getString(R.string.reconnecting))
+            player.seekToDefaultPosition()
+            player.prepare()
+            player.playWhenReady = true
+            return
+        }
+        if (sourceIndex + 1 < channel.sources.size) {
+            play(current, sourceIndex + 1, apósFalha = true)
+        } else {
+            play(current, 0, apósFalha = true)
         }
     }
 
@@ -923,6 +972,86 @@ class MainActivity : AppCompatActivity() {
         if (index >= 0) play(index)
     }
 
+    // MARK: - Óculos de VR
+
+    /**
+     * Só nos óculos (ver Vr.kt): lá não há D-pad, e o ao vivo inteiro vivia
+     * nele. Pinçar sobre o vídeo mostra esta barra, que faz o que as teclas
+     * fazem — lista, canal acima e abaixo, guia, fontes, número, opções.
+     */
+    private var barraVr: View? = null
+    private val esconderBarraVrDepois = Runnable { esconderBarraVr() }
+
+    private fun esconderBarraVr() {
+        handler.removeCallbacks(esconderBarraVrDepois)
+        barraVr?.visibility = View.GONE
+    }
+
+    private fun mostrarBarraVr() {
+        val barra = barraVr ?: return
+        revealBanner()
+        barra.visibility = View.VISIBLE
+        adiarBarraVr()
+    }
+
+    private fun adiarBarraVr() {
+        handler.removeCallbacks(esconderBarraVrDepois)
+        handler.postDelayed(esconderBarraVrDepois, BANNER_MS)
+    }
+
+    private fun montarVr() {
+        val raiz = findViewById<ViewGroup>(android.R.id.content).getChildAt(0) as? android.widget.FrameLayout ?: return
+        // Por cima do vídeo e embaixo de todo o resto: com a lista aberta, tocar
+        // na imagem fecha a lista (o "tocar fora"); sem ela, mostra ou esconde
+        // a barra.
+        Vr.camadaDeToque(raiz, 1) {
+            when {
+                listPanel.visibility == View.VISIBLE -> closeList()
+                barraVr?.visibility == View.VISIBLE -> { esconderBarraVr(); handler.removeCallbacks(hideBanner); hideBanner.run() }
+                else -> mostrarBarraVr()
+            }
+        }
+        val fileira = Vr.fileira(this)
+        fun botao(texto: String, icone: Int, soIcone: Boolean = false, acao: () -> Unit) {
+            val b = Vr.botao(this, if (soIcone) "" else texto, icone) { acao(); if (barraVr?.visibility == View.VISIBLE) adiarBarraVr() }
+            b.contentDescription = texto
+            Vr.adicionar(fileira, b)
+        }
+        botao(getString(R.string.vr_voltar), R.drawable.ic_arrow_back) { Vr.voltar(this) }
+        botao(getString(R.string.vr_canais), R.drawable.ic_list) { openList() }
+        // Mesmo sentido das setas do controle: para cima é o canal de cima da lista.
+        botao(getString(R.string.vr_canal_mais), R.drawable.ic_arrow_up, soIcone = true) {
+            play((current - 1 + ordered.size) % ordered.size)
+        }
+        botao(getString(R.string.vr_canal_menos), R.drawable.ic_arrow_down, soIcone = true) {
+            play((current + 1) % ordered.size)
+        }
+        botao(getString(R.string.guide), R.drawable.ic_guide) { esconderBarraVr(); openGuide() }
+        botao(getString(R.string.vr_fontes), R.drawable.ic_swap) { escolherFonte(current) }
+        botao(getString(R.string.vr_anterior), R.drawable.ic_history) { canalAnterior() }
+        botao(getString(R.string.vr_numero), R.drawable.ic_dialpad) { esconderBarraVr(); openNumpad() }
+        botao(getString(R.string.vr_opcoes), R.drawable.ic_more) { opcoes() }
+        val rolagem = android.widget.HorizontalScrollView(this).apply {
+            isHorizontalScrollBarEnabled = false
+            setBackgroundResource(R.drawable.bg_top_scrim)
+            addView(fileira)
+            visibility = View.GONE
+        }
+        raiz.addView(rolagem, android.widget.FrameLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, android.view.Gravity.TOP))
+        barraVr = rolagem
+
+        // Lista: um botão de fechar no cabeçalho (o BACK de quem não tem controle).
+        (listHeader as? ViewGroup)?.addView(Vr.botao(this, "", R.drawable.ic_close) { closeList() }.apply {
+            contentDescription = getString(R.string.vr_fechar)
+        })
+        findViewById<TextView>(R.id.listLegenda)?.setText(R.string.vr_legenda_lista)
+
+        // Teclado numérico: tocar fora fecha; tocar no quadro não.
+        numpad.setOnClickListener { closeNumpad() }
+        (numpad as? ViewGroup)?.getChildAt(0)?.isClickable = true
+    }
+
     // MARK: - Overlays
 
     /**
@@ -945,6 +1074,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openList() {
+        esconderBarraVr()
         menuGlobal?.visibility = View.VISIBLE
         listaAbertaEm = SystemClock.elapsedRealtime()
         handler.removeCallbacks(hideBanner)
@@ -1058,7 +1188,7 @@ class MainActivity : AppCompatActivity() {
         bannerChannel.text = channel.name
         val fonte = channel.sources.getOrNull(sourceIndex)
         // No lugar de "fonte 1/3 · servidor", o que o controle faz aqui.
-        bannerSource.text = if (fonte != null) getString(R.string.banner_dica) else ""
+        bannerSource.text = if (fonte == null) "" else getString(if (Vr.ativo) R.string.vr_banner_dica else R.string.banner_dica)
         bannerSource.visibility =
             if (bannerSource.text.isNullOrEmpty()) View.GONE else View.VISIBLE
         if (channel.logo != null) bannerLogo.load(channel.logo)
@@ -1267,6 +1397,9 @@ private class ChannelAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val holder = Holder(
             LayoutInflater.from(parent.context).inflate(R.layout.item_channel, parent, false))
+        // Nos óculos um toque na linha já sintoniza. Focável no modo toque, o
+        // primeiro toque só focaria — no TV Box o modo toque nunca entra.
+        if (Vr.ativo) holder.itemView.isFocusableInTouchMode = false
         // O crescimento no foco é o que dá a sensação de resposta imediata sem
         // custar nada: é a GPU, não uma nova medição de layout.
         holder.itemView.setOnFocusChangeListener { view, hasFocus ->
