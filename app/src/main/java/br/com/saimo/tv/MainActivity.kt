@@ -361,6 +361,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun play(index: Int, source: Int = 0, apósFalha: Boolean = false) {
+        val mudouDeFonte = current != index.coerceIn(ordered.indices) || sourceIndex != source
         val mesmoCanal = ordered.getOrNull(current)?.name == ordered.getOrNull(index.coerceIn(ordered.indices))?.name
         val novo = ordered.getOrNull(index.coerceIn(ordered.indices))?.name
         if (novo != null && novo != Preferencias.ultimoCanal) {
@@ -375,10 +376,9 @@ class MainActivity : AppCompatActivity() {
         tocouAvisado = false
         bannerResolution.text = ""
         bannerResolution.visibility = View.GONE
-        // Fonte nova, crédito zerado: o que a anterior entregou não vale para
-        // ela. A retomada da mesma fonte não passa por aqui — ela só chama
-        // `prepare()` — então zerar em toda abertura é o certo.
-        retomadas = 0
+        if (!apósFalha || mudouDeFonte) {
+            retomadas = 0
+        }
         ultimaImagem = 0L
         ultimaPosicao = -1L
         if (!apósFalha) caiuAvisado = false
@@ -516,12 +516,8 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
             if ((viva || ficouParaTras) && retomadas < RETOMADAS_MAX) {
                 retomadas++
                 showStatus(getString(R.string.reconnecting))
-                player.seekToDefaultPosition()
-                player.prepare()
-                player.playWhenReady = true
-                // Se a retomada também não trouxer imagem, o relógio desce para
-                // a fonte seguinte sozinho.
-                handler.postDelayed(sourceTimeout, SOURCE_TIMEOUT_MS)
+                play(current, sourceIndex, apósFalha = true)
+                // O play() já agenda o sourceTimeout.
                 return
             }
 
@@ -708,10 +704,8 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
             sourceIndex + 1, "congelou por ${CONGELADO_MS / 1000} s")
         if (retomadas < RETOMADAS_MAX) {
             retomadas++
-            showStatus(getString(R.string.reconnecting))
-            player.seekToDefaultPosition()
-            player.prepare()
-            player.playWhenReady = true
+            // Recria a conexão do zero, pois o socket pode estar preso no SO
+            play(current, sourceIndex, apósFalha = true)
             return
         }
         if (sourceIndex + 1 < channel.sources.size) {
