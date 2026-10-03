@@ -361,6 +361,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun play(index: Int, source: Int = 0, apósFalha: Boolean = false) {
+        android.util.Log.d("SAIMO_DEBUG", "play(index=$index, source=$source, aposFalha=$apósFalha)")
         val mudouDeFonte = current != index.coerceIn(ordered.indices) || sourceIndex != source
         val mesmoCanal = ordered.getOrNull(current)?.name == ordered.getOrNull(index.coerceIn(ordered.indices))?.name
         val novo = ordered.getOrNull(index.coerceIn(ordered.indices))?.name
@@ -471,7 +472,18 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
             bannerResolution.visibility = if (rotulo.isEmpty()) android.view.View.GONE else android.view.View.VISIBLE
         }
 
+
         override fun onPlaybackStateChanged(state: Int) {
+            android.util.Log.d("SAIMO_DEBUG", "ExoPlayer onPlaybackStateChanged: state=$state")
+
+            if (state == Player.STATE_ENDED && tocouAvisado && !emSegundoPlano) {
+                // TV ao vivo nunca "termina". Se o player achou o fim do arquivo, a conexão caiu
+                // limpamente sem dar erro. Devemos forçar a reconexão imediatamente!
+                android.util.Log.e("SAIMO_DEBUG", "Fim de stream detectado (EOF). Reconectando...")
+                play(current, sourceIndex, apósFalha = true)
+                return
+            }
+
             if (state == Player.STATE_READY) {
                 if (!tocouAvisado) {
                     tocouAvisado = true
@@ -497,7 +509,10 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
             }
         }
 
+
         override fun onPlayerError(error: PlaybackException) {
+            android.util.Log.e("SAIMO_DEBUG", "ExoPlayer error: ${error.errorCodeName}", error)
+
             handler.removeCallbacks(sourceTimeout)
             val channel = ordered[current]
             Telemetria.falhou("live", channel.name, channel.sources.getOrNull(sourceIndex)?.url.orEmpty(),
@@ -671,8 +686,7 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
                     retomadas = 0
                     congeladoDesde = 0L
                 } else if (tocouAvisado && player.playWhenReady &&
-                    player.playbackState != Player.STATE_IDLE &&
-                    player.playbackState != Player.STATE_ENDED) {
+                    player.playbackState != Player.STATE_IDLE) {
                     // Devia estar tocando e o relógio do vídeo não anda: ficou
                     // em buffering eterno ou congelou sem o player dar erro
                     // nenhum. Sem este vigia só reescolher a fonte à mão
@@ -699,6 +713,7 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
      * origem. Esgotadas as retomadas, desce para a fonte seguinte.
      */
     private fun recuperarCongelado() {
+        android.util.Log.e("SAIMO_DEBUG", "recuperarCongelado() chamado!")
         val channel = ordered.getOrNull(current) ?: return
         Telemetria.falhou("live", channel.name, channel.sources.getOrNull(sourceIndex)?.url.orEmpty(),
             sourceIndex + 1, "congelou por ${CONGELADO_MS / 1000} s")
