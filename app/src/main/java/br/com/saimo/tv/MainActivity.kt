@@ -235,6 +235,7 @@ class MainActivity : AppCompatActivity() {
             .build().apply {
                 playWhenReady = true
                 addListener(playerListener)
+                addAnalyticsListener(analyticsListener)
                 Telemetria.observar(this)
             }
         playerView.player = player
@@ -309,6 +310,8 @@ class MainActivity : AppCompatActivity() {
     /// volta de outra tela, como as configurações.
     private var jaIniciou = false
     private var emSegundoPlano = false
+    private var bitrateDinâmicoBps = 0L
+    private var ultimoVideoSize: androidx.media3.common.VideoSize? = null
 
     private val atualizacao by lazy { OfertaDeAtualizacao(this) { showStatus(it) } }
 
@@ -388,6 +391,8 @@ class MainActivity : AppCompatActivity() {
         // "fonte 1 falhou" por meio segundo e sumir não informa ninguém.
         // Quem assiste não precisa saber de fonte nem de servidor: só que o
         // canal está chegando. O detalhe técnico mora no painel de opções.
+        bitrateDinâmicoBps = 0L
+        ultimoVideoSize = null
         showStatus(getString(if (apósFalha) R.string.loading_outra else R.string.loading))
         handler.removeCallbacks(sourceTimeout)
         handler.postDelayed(sourceTimeout, SOURCE_TIMEOUT_MS)
@@ -400,26 +405,70 @@ class MainActivity : AppCompatActivity() {
         revealBanner()
     }
 
-    private val playerListener = object : Player.Listener {
-        override fun onVideoSizeChanged(videoSize: VideoSize) {
-            var rotulo = rotuloResolucao(videoSize.width, videoSize.height)
-            var bitrate = androidx.media3.common.Format.NO_VALUE
-            for (grupo in player.currentTracks.groups) {
-                if (grupo.type == androidx.media3.common.C.TRACK_TYPE_VIDEO && grupo.isSelected) {
-                    for (i in 0 until grupo.length) {
-                        if (grupo.isTrackSelected(i)) {
-                            bitrate = grupo.getTrackFormat(i).bitrate
-                            break
+    
+    private val analyticsListener = object : androidx.media3.exoplayer.analytics.AnalyticsListener {
+        override fun onLoadCompleted(
+            eventTime: androidx.media3.exoplayer.analytics.AnalyticsListener.EventTime,
+            loadEventInfo: androidx.media3.exoplayer.source.LoadEventInfo,
+            mediaLoadData: androidx.media3.exoplayer.source.MediaLoadData
+        ) {
+            if (mediaLoadData.dataType == androidx.media3.common.C.DATA_TYPE_MEDIA) {
+                val bytes = loadEventInfo.bytesLoaded
+                val durationMs = mediaLoadData.mediaEndTimeMs - mediaLoadData.mediaStartTimeMs
+                if (durationMs > 0 && bytes > 0) {
+                    val bps = (bytes * 8000L) / durationMs
+                    // Média móvel suave para não piscar muito (70% antigo, 30% novo)
+                    if (bitrateDinâmicoBps == 0L) bitrateDinâmicoBps = bps
+                    else bitrateDinâmicoBps = (bitrateDinâmicoBps * 7 + bps * 3) / 10
+                    
+                    // Atualiza a tela se já tivermos um tamanho de vídeo
+                    ultimoVideoSize?.let {
+                        runOnUiThread {
+                            var rotulo = rotuloResolucao(it.width, it.height)
+                            if (bitrateDinâmicoBps > 0) {
+                                rotulo += String.format(java.util.Locale.US, " · %.1f Mbps", bitrateDinâmicoBps / 1_000_000f)
+                            }
+                            bannerResolution.text = rotulo
+                            bannerResolution.visibility = if (rotulo.isEmpty()) android.view.View.GONE else android.view.View.VISIBLE
                         }
                     }
                 }
-                if (bitrate != androidx.media3.common.Format.NO_VALUE && bitrate > 0) break
             }
-            if (bitrate != androidx.media3.common.Format.NO_VALUE && bitrate > 0) {
-                rotulo += String.format(java.util.Locale.US, " · %.1f Mbps", bitrate / 1_000_000f)
+        }
+    }
+
+
+    private val playerListener = object : Player.Listener {
+override fun onVideoSizeChanged(videoSize: VideoSize) {
+            ultimoVideoSize = videoSize
+            var rotulo = rotuloResolucao(videoSize.width, videoSize.height)
+            
+            // Tenta pegar do formato se existir (para VOD ou playlists ricas)
+            var bitrateDaFaixa = player.videoFormat?.bitrate ?: androidx.media3.common.Format.NO_VALUE
+            if (bitrateDaFaixa <= 0) {
+                for (grupo in player.currentTracks.groups) {
+                    if (grupo.type == androidx.media3.common.C.TRACK_TYPE_VIDEO && grupo.isSelected) {
+                        for (i in 0 until grupo.length) {
+                            if (grupo.isTrackSelected(i)) {
+                                val b = grupo.getTrackFormat(i).bitrate
+                                if (b > 0) bitrateDaFaixa = b
+                                break
+                            }
+                        }
+                    }
+                    if (bitrateDaFaixa > 0) break
+                }
             }
+            
+            // Usa o da faixa se existir, senão usa o dinâmico
+            val bitrateFinal = if (bitrateDaFaixa > 0) bitrateDaFaixa.toLong() else bitrateDinâmicoBps
+            
+            if (bitrateFinal > 0) {
+                rotulo += String.format(java.util.Locale.US, " · %.1f Mbps", bitrateFinal / 1_000_000f)
+            }
+            
             bannerResolution.text = rotulo
-            bannerResolution.visibility = if (rotulo.isEmpty()) View.GONE else View.VISIBLE
+            bannerResolution.visibility = if (rotulo.isEmpty()) android.view.View.GONE else android.view.View.VISIBLE
         }
 
         override fun onPlaybackStateChanged(state: Int) {
