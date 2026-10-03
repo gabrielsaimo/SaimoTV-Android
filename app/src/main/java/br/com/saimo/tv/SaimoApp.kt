@@ -43,6 +43,7 @@ class SaimoApp : Application(), SingletonImageLoader.Factory {
     override fun onCreate() {
         super.onCreate()
         Preferencias.iniciar(this)
+        Vr.iniciar(this)
         Aparelho.conhecer(this)
         Telemetria.iniciar(this)
         Lembretes.iniciar(this)

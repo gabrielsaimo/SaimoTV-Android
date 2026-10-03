@@ -138,6 +138,7 @@ class PlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         alvo = Alvo.de(intent) ?: run { finish(); return }
         setContentView(R.layout.activity_player)
+        if (Vr.ativo) Vr.videoEmTextura(this, R.id.playerVideo)
         video = findViewById(R.id.playerVideo)
         carregando = findViewById(R.id.playerCarregando)
         status = findViewById(R.id.playerStatus)
@@ -176,8 +177,44 @@ class PlayerActivity : AppCompatActivity() {
             }
         }
 
+        if (Vr.ativo) montarVr()
+
         lifecycleScope.launch(semDerrubar) { preparar() }
         handler.post(tique)
+    }
+
+    // MARK: - Óculos de VR
+
+    /**
+     * Só nos óculos (ver Vr.kt). Sem D-pad, a barra do filme era um desenho:
+     * não se chegava a ela, nem se pulava, nem se escondia. Aqui pinçar sobre
+     * o vídeo mostra e esconde os controles, a barra de tempo se arrasta e a
+     * fileira de botões ganha voltar e 10 s para trás e para a frente.
+     */
+    private fun montarVr() {
+        val raiz = findViewById<android.view.ViewGroup>(R.id.playerRaiz)
+        Vr.camadaDeToque(raiz, 1) {
+            if (base.visibility == View.VISIBLE) esconderControles() else mostrarControles(focarLinha = false)
+        }
+        Vr.arrastavel(linha, barra,
+            aoMover = { fracao -> arrastarPara(fracao) },
+            aoSoltar = { fracao ->
+                arrastarPara(fracao)
+                handler.removeCallbacks(confirmarPulo)
+                confirmarPulo.run()
+            })
+    }
+
+    /** O ponto sob o dedo vira o destino do pulo, mostrado na bolha até soltar. */
+    private fun arrastarPara(fracao: Float) {
+        val p = player ?: return
+        val duracao = p.duration.takeIf { it > 0 && it != C.TIME_UNSET } ?: return
+        val destino = (duracao * fracao).toLong().coerceIn(0, (duracao - 1_000).coerceAtLeast(0))
+        alvoDoPulo = destino
+        bolha.text = tempo(destino)
+        bolha.visibility = View.VISIBLE
+        atualizarTempo()
+        adiarEsconder()
     }
 
     // MARK: - O que tocar
@@ -756,9 +793,17 @@ class PlayerActivity : AppCompatActivity() {
     private fun montarBotoes() {
         botoes.removeAllViews()
         val r = resolvido
+        // Nos óculos o BACK do controle não existe: sair do filme é um botão.
+        if (Vr.ativo) botao(getString(R.string.vr_voltar), "voltar", R.drawable.ic_arrow_back) {
+            onBackPressedDispatcher.onBackPressed()
+        }
         botao(if (player?.isPlaying == true) getString(R.string.player_pausar)
               else getString(R.string.player_tocar), "pausa",
               if (player?.isPlaying == true) R.drawable.ic_pause else R.drawable.ic_play) { alternarPausa() }
+        if (Vr.ativo) {
+            botao(getString(R.string.vr_voltar_10), "menos10", R.drawable.ic_replay_10) { acumularPulo(-1, 0) }
+            botao(getString(R.string.vr_avancar_10), "mais10", R.drawable.ic_forward_10) { acumularPulo(1, 0) }
+        }
         val atual = ep
         if (r != null && atual != null) {
             botao(getString(R.string.player_episodios), "eps", R.drawable.ic_episodes) { painelEpisodios() }

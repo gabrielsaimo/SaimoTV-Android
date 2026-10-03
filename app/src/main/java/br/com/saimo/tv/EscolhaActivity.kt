@@ -104,7 +104,7 @@ class EscolhaActivity : TelaComMenu() {
 
     private fun cabecalhoPadrao() {
         painelDestaque.padrao(saudacao(), getString(R.string.escolha_titulo))
-        sinopse.text = getString(R.string.inicio_dica)
+        sinopse.text = getString(if (Vr.ativo) R.string.vr_inicio_dica else R.string.inicio_dica)
     }
 
     override fun onNewIntent(intent: Intent) {

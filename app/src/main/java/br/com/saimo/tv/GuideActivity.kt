@@ -103,7 +103,17 @@ class GuideActivity : TelaComMenu() {
                 handler.removeCallbacks(mostrarFocado)
                 handler.postDelayed(mostrarFocado, 120)
             },
-            onPick = { tune(it) })
+            onPick = {
+                // Nos óculos não há foco que ande pela lista: o primeiro toque
+                // num canal mostra a programação dele (o que o foco faz no TV
+                // Box), e o segundo toque sintoniza.
+                if (Vr.ativo && it != focused) {
+                    focused = it
+                    handler.removeCallbacks(mostrarFocado)
+                    handler.post(mostrarFocado)
+                    android.widget.Toast.makeText(this, R.string.vr_ver_programacao, android.widget.Toast.LENGTH_SHORT).show()
+                } else tune(it)
+            })
         // OK sobre um programa abre a ficha dele. Trocar de canal por engano
         // faz perder o lugar na grade, e quem parou num horário quer saber o
         // que é aquilo — sintonizar continua a um botão de distância.

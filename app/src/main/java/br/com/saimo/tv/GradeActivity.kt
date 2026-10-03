@@ -90,6 +90,7 @@ class GradeActivity : TelaComMenu() {
         // Sem o código não há Extras — nem por um atalho antigo.
         if (tipo == EXTRAS && !Unlock.unlocked) { finish(); return }
         setContentView(R.layout.activity_grade)
+        if (Vr.ativo) findViewById<TextView>(R.id.gradeDica)?.setText(R.string.vr_grade_dica)
         capas = findViewById(R.id.gradeCapas)
         letras = findViewById(R.id.gradeLetras)
         estado = findViewById(R.id.gradeEstado)
@@ -167,7 +168,7 @@ class GradeActivity : TelaComMenu() {
         findViewById<TextView>(R.id.gradeContagem).text =
             resources.getQuantityString(R.plurals.vod_titulos, lista.size, lista.size)
         estado.visibility = if (lista.isEmpty()) View.VISIBLE else View.GONE
-        estado.text = if (tipo == FAVORITOS) getString(R.string.grade_vazio_favoritos) else getString(R.string.vod_vazio)
+        estado.text = if (tipo == FAVORITOS) getString(if (Vr.ativo) R.string.vr_grade_vazio_favoritos else R.string.grade_vazio_favoritos) else getString(R.string.vod_vazio)
         adaptadorLetras.letras = if (novosPrimeiro) emptyList() else lista.map { it.letra }.distinct()
         letras.visibility = if (adaptadorLetras.letras.isEmpty()) View.GONE else View.VISIBLE
         atualizarBotoes()

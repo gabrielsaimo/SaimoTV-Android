@@ -289,4 +289,24 @@
     <string name="faixas_so_uma">Este vídeo tem só um áudio e nenhuma legenda.</string>
     <string name="inicio_dica">OK abre · segure OK num título para favoritar e mais opções · VOLTAR vai ao menu</string>
     <string name="previa_sem_guia">Sem programação disponível</string>
+    <!-- Óculos de VR (Vr.kt): só aparecem lá, nunca no TV Box. -->
+    <string name="vr_voltar">Voltar</string>
+    <string name="vr_fechar">Fechar</string>
+    <string name="vr_mostrar_controles">Mostrar controles</string>
+    <string name="vr_canais">Canais</string>
+    <string name="vr_canal_mais">Canal acima</string>
+    <string name="vr_canal_menos">Canal abaixo</string>
+    <string name="vr_anterior">Anterior</string>
+    <string name="vr_fontes">Fontes</string>
+    <string name="vr_numero">Número</string>
+    <string name="vr_opcoes">Opções</string>
+    <string name="vr_voltar_10">10 s</string>
+    <string name="vr_avancar_10">10 s</string>
+    <string name="vr_legenda_lista">Toque para assistir · segure para favoritar</string>
+    <string name="vr_banner_dica">Toque no vídeo para os controles</string>
+    <string name="vr_painel_dica">Toque para escolher · toque fora para fechar</string>
+    <string name="vr_grade_dica">Toque para abrir · segure para favoritar</string>
+    <string name="vr_grade_vazio_favoritos">Nada nos favoritos ainda.\nSegure o dedo num título para favoritar.</string>
+    <string name="vr_inicio_dica">Toque para abrir · segure num título para favoritar e mais opções</string>
+    <string name="vr_ver_programacao">Toque de novo para assistir</string>
 </resources>

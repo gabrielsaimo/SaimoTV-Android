@@ -22,6 +22,11 @@
         android:largeHeap="true"
         android:theme="@style/Theme.Saimo"
         android:usesCleartextTraffic="true">
+        <!-- Meta Quest / Meta VR Glasses: o app se declara compatível (Vr.kt
+             liga os controles de toque lá). TV Box ignora. -->
+        <meta-data
+            android:name="com.oculus.supportedDevices"
+            android:value="quest2|questpro|quest3|quest3s" />
         <meta-data
             android:name="android.app.default_searchable"
             android:value=".EscolhaActivity" />
@@ -34,6 +39,9 @@
             android:exported="true"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.Saimo">
+            <!-- Janela no Horizon OS e demais óculos; TV Box ignora. -->
+            <layout android:defaultWidth="1024dp" android:defaultHeight="640dp"
+                android:minWidth="720dp" android:minHeight="405dp" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -59,12 +67,20 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:exported="false"
             android:screenOrientation="landscape"
-            android:theme="@style/Theme.Saimo" />
+            android:theme="@style/Theme.Saimo">
+            <!-- Janela no Horizon OS e demais óculos; TV Box ignora. -->
+            <layout android:defaultWidth="1024dp" android:defaultHeight="640dp"
+                android:minWidth="720dp" android:minHeight="405dp" />
+        </activity>
         <activity
             android:name=".AjustesActivity"
             android:exported="false"
             android:screenOrientation="landscape"
-            android:theme="@style/Theme.Saimo" />
+            android:theme="@style/Theme.Saimo">
+            <!-- Janela no Horizon OS e demais óculos; TV Box ignora. -->
+            <layout android:defaultWidth="1024dp" android:defaultHeight="640dp"
+                android:minWidth="720dp" android:minHeight="405dp" />
+        </activity>
         <provider
             android:name=".BuscaDoSistema"
             android:authorities="br.com.saimo.tv.busca"
@@ -74,33 +90,57 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:exported="false"
             android:launchMode="singleTop"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="landscape">
+            <!-- Janela no Horizon OS e demais óculos; TV Box ignora. -->
+            <layout android:defaultWidth="1024dp" android:defaultHeight="640dp"
+                android:minWidth="720dp" android:minHeight="405dp" />
+        </activity>
         <activity
             android:name=".GradeActivity"
             android:exported="false"
             android:screenOrientation="landscape"
-            android:theme="@style/Theme.Saimo" />
+            android:theme="@style/Theme.Saimo">
+            <!-- Janela no Horizon OS e demais óculos; TV Box ignora. -->
+            <layout android:defaultWidth="1024dp" android:defaultHeight="640dp"
+                android:minWidth="720dp" android:minHeight="405dp" />
+        </activity>
         <activity
             android:name=".PaginaActivity"
             android:exported="false"
             android:screenOrientation="landscape"
-            android:theme="@style/Theme.Saimo" />
+            android:theme="@style/Theme.Saimo">
+            <!-- Janela no Horizon OS e demais óculos; TV Box ignora. -->
+            <layout android:defaultWidth="1024dp" android:defaultHeight="640dp"
+                android:minWidth="720dp" android:minHeight="405dp" />
+        </activity>
         <activity
             android:name=".BuscaActivity"
             android:exported="false"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="stateAlwaysHidden"
-            android:theme="@style/Theme.Saimo" />
+            android:theme="@style/Theme.Saimo">
+            <!-- Janela no Horizon OS e demais óculos; TV Box ignora. -->
+            <layout android:defaultWidth="1024dp" android:defaultHeight="640dp"
+                android:minWidth="720dp" android:minHeight="405dp" />
+        </activity>
         <activity
             android:name=".FichaActivity"
             android:exported="false"
             android:screenOrientation="landscape"
-            android:theme="@style/Theme.Saimo" />
+            android:theme="@style/Theme.Saimo">
+            <!-- Janela no Horizon OS e demais óculos; TV Box ignora. -->
+            <layout android:defaultWidth="1024dp" android:defaultHeight="640dp"
+                android:minWidth="720dp" android:minHeight="405dp" />
+        </activity>
         <activity
             android:name=".AtorActivity"
             android:exported="false"
             android:screenOrientation="landscape"
-            android:theme="@style/Theme.Saimo" />
+            android:theme="@style/Theme.Saimo">
+            <!-- Janela no Horizon OS e demais óculos; TV Box ignora. -->
+            <layout android:defaultWidth="1024dp" android:defaultHeight="640dp"
+                android:minWidth="720dp" android:minHeight="405dp" />
+        </activity>
         <!-- O sistema responde aqui quando a instalação precisa da confirmação
              de quem está assistindo. -->
         <receiver
@@ -115,6 +155,10 @@
             android:name=".GuideActivity"
             android:exported="false"
             android:screenOrientation="landscape"
-            android:theme="@style/Theme.Saimo" />
+            android:theme="@style/Theme.Saimo">
+            <!-- Janela no Horizon OS e demais óculos; TV Box ignora. -->
+            <layout android:defaultWidth="1024dp" android:defaultHeight="640dp"
+                android:minWidth="720dp" android:minHeight="405dp" />
+        </activity>
     </application>
 </manifest>

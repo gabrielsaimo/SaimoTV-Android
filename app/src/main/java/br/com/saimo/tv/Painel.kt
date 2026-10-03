@@ -49,8 +49,11 @@ object Painel {
             text = subtitulo.orEmpty()
             visibility = if (subtitulo.isNullOrBlank()) View.GONE else View.VISIBLE
         }
+        if (Vr.ativo) vista.findViewById<TextView>(R.id.painelDica)?.setText(R.string.vr_painel_dica)
         val lista = vista.findViewById<RecyclerView>(R.id.painelLista)
         lista.layoutManager = LinearLayoutManager(activity)
+        // Nos óculos não há BACK no controle: tocar fora fecha, e há um Fechar.
+        val itens = if (Vr.ativo) itens + Item(activity.getString(R.string.vr_fechar), icone = R.drawable.ic_close) {} else itens
         val adaptador = Adaptador(itens) { item ->
             if (item.fecha) dialogo.dismiss()
             item.acao()
@@ -65,6 +68,7 @@ object Painel {
             setDimAmount(0.35f)
             setWindowAnimations(android.R.style.Animation_Translucent)
         }
+        if (Vr.ativo) dialogo.setCanceledOnTouchOutside(true)
         dialogo.setOnDismissListener { aoFechar?.invoke() }
         dialogo.show()
         // O foco começa no que já está marcado: abrir a lista de fontes com o

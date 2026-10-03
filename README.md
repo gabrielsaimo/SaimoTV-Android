@@ -52,6 +52,19 @@ versão nova sozinho e oferece a atualização na tela.
   legendas do OpenSubtitles (pt-BR, pt-PT, inglês, espanhol) com ajuste de
   sincronia, no mesmo painel — sem chave nem cadastro.
 
+**Óculos de VR e celular (modo toque)**
+- O mesmo APK reconhece sozinho quando está num óculos Android (Meta Quest e
+  Meta VR Glasses no Horizon OS, Pico, Vive Focus, Galaxy XR e demais Android
+  XR) ou num celular/tablet, e liga o que falta para o toque (olhar e pinçar,
+  no óculos) fazer tudo o que o D-pad faz: barra sobre o vídeo no ao vivo
+  (lista, canal acima/abaixo, guia, fontes, anterior, número, opções), lista e
+  teclado que fecham tocando fora, painéis com "Fechar", barra de tempo que se
+  arrasta, ±10 s, botão Voltar nas telas (no óculos) e dicas de tela em
+  linguagem de toque. O vídeo usa TextureView nesse modo.
+- No TV Box nada disso aparece. Para testar em qualquer aparelho:
+  `adb shell am start -n br.com.saimo.tv/.EscolhaActivity --es saimo_vr sim`
+  (`nao` desliga, `auto` volta à detecção).
+
 **Google TV**
 - "Continuar assistindo" do sistema (Watch Next), canal do app na tela inicial e
   busca do sistema. Links `saimo://assistir`, `saimo://titulo` e `saimo://canal`.
@@ -114,6 +127,7 @@ Detecção de "pouca memória" em `Aparelho.kt` (isLowRamDevice ou até 1,5 GB).
 | `Epg`, `MeuGuia`, `GuiaDeTv` | guia de programação |
 | `Vod`, `Titulos`, `Generos`, `Progresso` | acervo, resolução de título, fichas e progresso |
 | `Pulos` | TheIntroDB |
+| `Vr` | modo toque: detecção de óculos/celular e as peças de toque |
 | `Legendas` | OpenSubtitles pelo id do TMDB (via `vod/imdb/`) |
 | `ProximaNaTv`, `CanalNaTv`, `Links` | integração com o Google TV |
 | `Remote`, `Catalog`, `FontesDesativadas` | lista de canais publicada |
