@@ -61,7 +61,7 @@ private const val SOURCE_TIMEOUT_MS = 12_000L
 /// nesses casos é pior que o defeito — recomeça o canal noutro ponto, com outro
 /// áudio, na frente de quem está assistindo. Só depois destas retomadas sem
 /// imagem é que a fonte seguinte entra.
-private const val RETOMADAS_MAX = 3
+private const val RETOMADAS_MAX = 8
 /// Por quanto tempo a fonte continua sendo tratada como viva depois do último
 /// quadro que ela entregou.
 private const val CREDITO_DE_IMAGEM_MS = 30_000L
@@ -286,13 +286,13 @@ class MainActivity : AppCompatActivity() {
     private fun controleDeBuffer(): DefaultLoadControl =
         if (Aparelho.poucaMemoria) {
             DefaultLoadControl.Builder()
-                .setBufferDurationsMs(8_000, 20_000, 500, 2_000)
-                .setTargetBufferBytes(24 * 1024 * 1024)
+                .setBufferDurationsMs(15_000, 30_000, 1_500, 3_000)
+                .setTargetBufferBytes(32 * 1024 * 1024)
                 .setPrioritizeTimeOverSizeThresholds(false)
                 .build()
         } else {
             DefaultLoadControl.Builder()
-                .setBufferDurationsMs(12_000, 40_000, 500, 2_000)
+                .setBufferDurationsMs(32_000, 120_000, 1_500, 5_000)
                 .setPrioritizeTimeOverSizeThresholds(true)
                 .build()
         }
