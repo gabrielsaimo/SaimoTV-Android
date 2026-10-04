@@ -566,6 +566,21 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
                 padDigit(keyCode - KeyEvent.KEYCODE_0)
                 return true
             }
+            if (keyCode == KeyEvent.KEYCODE_DEL) {
+                if (typed.isNotEmpty()) typed.deleteCharAt(typed.length - 1)
+                numpadValue.text = typed
+                return true
+            }
+            val padIds = setOf(
+                R.id.pad0, R.id.pad1, R.id.pad2, R.id.pad3, R.id.pad4,
+                R.id.pad5, R.id.pad6, R.id.pad7, R.id.pad8, R.id.pad9,
+                R.id.padDel, R.id.padOk
+            )
+            val cur = currentFocus
+            if (cur == null || cur.id !in padIds) {
+                findViewById<View>(R.id.pad1)?.requestFocus()
+                return true
+            }
             return super.onKeyDown(keyCode, event)
         }
         val listOpen = listPanel.visibility == View.VISIBLE
@@ -1131,6 +1146,7 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
 
         // Teclado numérico: tocar fora fecha; tocar no quadro não.
         numpad.setOnClickListener { closeNumpad() }
+        findViewById<View>(R.id.numpadContainer)?.isClickable = true
         (numpad as? ViewGroup)?.getChildAt(0)?.isClickable = true
     }
 

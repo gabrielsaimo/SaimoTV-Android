@@ -326,218 +326,297 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#E6000000"
+        android:clickable="true"
+        android:focusable="false"
         android:visibility="gone">
 
-    <LinearLayout
-        android:layout_width="400dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@drawable/bg_modal"
-        android:orientation="vertical"
-        android:padding="26dp">
-
-        <TextView
-            android:id="@+id/numpadValue"
-            android:layout_width="match_parent"
+        <ScrollView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:fontFamily="sans-serif-medium"
-            android:gravity="center"
-            android:minHeight="52dp"
-            android:textColor="@color/accent"
-            android:textSize="38sp" />
+            android:layout_gravity="center"
+            android:overScrollMode="never"
+            android:scrollbars="none">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            <LinearLayout
+                android:id="@+id/numpadContainer"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_modal"
+                android:clickable="true"
+                android:focusable="false"
+                android:orientation="vertical"
+                android:padding="16dp">
 
-            <TextView
-                android:id="@+id/pad1"
-                android:layout_width="0dp"
-                android:layout_height="86dp"
-                android:layout_weight="1"
-                android:layout_margin="5dp"
-                android:background="@drawable/row_focus"
-                android:focusable="true"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center"
-                android:text="1"
-                android:textColor="@color/text_primary"
-                android:textSize="30sp" />
+                <TextView
+                    android:id="@+id/numpadValue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="center"
+                    android:minHeight="40dp"
+                    android:textColor="@color/accent"
+                    android:textSize="30sp" />
 
-            <TextView
-                android:id="@+id/pad2"
-                android:layout_width="0dp"
-                android:layout_height="86dp"
-                android:layout_weight="1"
-                android:layout_margin="5dp"
-                android:background="@drawable/row_focus"
-                android:focusable="true"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center"
-                android:text="2"
-                android:textColor="@color/text_primary"
-                android:textSize="30sp" />
+                <!-- Linha 1: 1, 2, 3 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/pad3"
-                android:layout_width="0dp"
-                android:layout_height="86dp"
-                android:layout_weight="1"
-                android:layout_margin="5dp"
-                android:background="@drawable/row_focus"
-                android:focusable="true"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center"
-                android:text="3"
-                android:textColor="@color/text_primary"
-                android:textSize="30sp" />
-        </LinearLayout>
+                    <TextView
+                        android:id="@+id/pad1"
+                        android:layout_width="0dp"
+                        android:layout_height="52dp"
+                        android:layout_weight="1"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/pad_button_bg"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:text="1"
+                        android:textColor="@color/text_primary"
+                        android:textSize="22sp"
+                        android:nextFocusLeft="@id/pad1"
+                        android:nextFocusUp="@id/pad1"
+                        android:nextFocusRight="@id/pad2"
+                        android:nextFocusDown="@id/pad4" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/pad2"
+                        android:layout_width="0dp"
+                        android:layout_height="52dp"
+                        android:layout_weight="1"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/pad_button_bg"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:text="2"
+                        android:textColor="@color/text_primary"
+                        android:textSize="22sp"
+                        android:nextFocusLeft="@id/pad1"
+                        android:nextFocusUp="@id/pad2"
+                        android:nextFocusRight="@id/pad3"
+                        android:nextFocusDown="@id/pad5" />
 
-            <TextView
-                android:id="@+id/pad4"
-                android:layout_width="0dp"
-                android:layout_height="86dp"
-                android:layout_weight="1"
-                android:layout_margin="5dp"
-                android:background="@drawable/row_focus"
-                android:focusable="true"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center"
-                android:text="4"
-                android:textColor="@color/text_primary"
-                android:textSize="30sp" />
+                    <TextView
+                        android:id="@+id/pad3"
+                        android:layout_width="0dp"
+                        android:layout_height="52dp"
+                        android:layout_weight="1"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/pad_button_bg"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:text="3"
+                        android:textColor="@color/text_primary"
+                        android:textSize="22sp"
+                        android:nextFocusLeft="@id/pad2"
+                        android:nextFocusUp="@id/pad3"
+                        android:nextFocusRight="@id/pad3"
+                        android:nextFocusDown="@id/pad6" />
+                </LinearLayout>
 
-            <TextView
-                android:id="@+id/pad5"
-                android:layout_width="0dp"
-                android:layout_height="86dp"
-                android:layout_weight="1"
-                android:layout_margin="5dp"
-                android:background="@drawable/row_focus"
-                android:focusable="true"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center"
-                android:text="5"
-                android:textColor="@color/text_primary"
-                android:textSize="30sp" />
+                <!-- Linha 2: 4, 5, 6 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/pad6"
-                android:layout_width="0dp"
-                android:layout_height="86dp"
-                android:layout_weight="1"
-                android:layout_margin="5dp"
-                android:background="@drawable/row_focus"
-                android:focusable="true"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center"
-                android:text="6"
-                android:textColor="@color/text_primary"
-                android:textSize="30sp" />
-        </LinearLayout>
+                    <TextView
+                        android:id="@+id/pad4"
+                        android:layout_width="0dp"
+                        android:layout_height="52dp"
+                        android:layout_weight="1"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/pad_button_bg"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:text="4"
+                        android:textColor="@color/text_primary"
+                        android:textSize="22sp"
+                        android:nextFocusLeft="@id/pad4"
+                        android:nextFocusUp="@id/pad1"
+                        android:nextFocusRight="@id/pad5"
+                        android:nextFocusDown="@id/pad7" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/pad5"
+                        android:layout_width="0dp"
+                        android:layout_height="52dp"
+                        android:layout_weight="1"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/pad_button_bg"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:text="5"
+                        android:textColor="@color/text_primary"
+                        android:textSize="22sp"
+                        android:nextFocusLeft="@id/pad4"
+                        android:nextFocusUp="@id/pad2"
+                        android:nextFocusRight="@id/pad6"
+                        android:nextFocusDown="@id/pad8" />
 
-            <TextView
-                android:id="@+id/pad7"
-                android:layout_width="0dp"
-                android:layout_height="86dp"
-                android:layout_weight="1"
-                android:layout_margin="5dp"
-                android:background="@drawable/row_focus"
-                android:focusable="true"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center"
-                android:text="7"
-                android:textColor="@color/text_primary"
-                android:textSize="30sp" />
+                    <TextView
+                        android:id="@+id/pad6"
+                        android:layout_width="0dp"
+                        android:layout_height="52dp"
+                        android:layout_weight="1"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/pad_button_bg"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:text="6"
+                        android:textColor="@color/text_primary"
+                        android:textSize="22sp"
+                        android:nextFocusLeft="@id/pad5"
+                        android:nextFocusUp="@id/pad3"
+                        android:nextFocusRight="@id/pad6"
+                        android:nextFocusDown="@id/pad9" />
+                </LinearLayout>
 
-            <TextView
-                android:id="@+id/pad8"
-                android:layout_width="0dp"
-                android:layout_height="86dp"
-                android:layout_weight="1"
-                android:layout_margin="5dp"
-                android:background="@drawable/row_focus"
-                android:focusable="true"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center"
-                android:text="8"
-                android:textColor="@color/text_primary"
-                android:textSize="30sp" />
+                <!-- Linha 3: 7, 8, 9 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/pad9"
-                android:layout_width="0dp"
-                android:layout_height="86dp"
-                android:layout_weight="1"
-                android:layout_margin="5dp"
-                android:background="@drawable/row_focus"
-                android:focusable="true"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center"
-                android:text="9"
-                android:textColor="@color/text_primary"
-                android:textSize="30sp" />
-        </LinearLayout>
+                    <TextView
+                        android:id="@+id/pad7"
+                        android:layout_width="0dp"
+                        android:layout_height="52dp"
+                        android:layout_weight="1"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/pad_button_bg"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:text="7"
+                        android:textColor="@color/text_primary"
+                        android:textSize="22sp"
+                        android:nextFocusLeft="@id/pad7"
+                        android:nextFocusUp="@id/pad4"
+                        android:nextFocusRight="@id/pad8"
+                        android:nextFocusDown="@id/padDel" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/pad8"
+                        android:layout_width="0dp"
+                        android:layout_height="52dp"
+                        android:layout_weight="1"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/pad_button_bg"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:text="8"
+                        android:textColor="@color/text_primary"
+                        android:textSize="22sp"
+                        android:nextFocusLeft="@id/pad7"
+                        android:nextFocusUp="@id/pad5"
+                        android:nextFocusRight="@id/pad9"
+                        android:nextFocusDown="@id/pad0" />
 
-            <TextView
-                android:id="@+id/padDel"
-                android:layout_width="0dp"
-                android:layout_height="86dp"
-                android:layout_weight="1"
-                android:layout_margin="5dp"
-                android:background="@drawable/row_focus"
-                android:focusable="true"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center"
-                android:text="@string/pad_delete"
-                android:textColor="@color/text_primary"
-                android:textSize="30sp" />
+                    <TextView
+                        android:id="@+id/pad9"
+                        android:layout_width="0dp"
+                        android:layout_height="52dp"
+                        android:layout_weight="1"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/pad_button_bg"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:text="9"
+                        android:textColor="@color/text_primary"
+                        android:textSize="22sp"
+                        android:nextFocusLeft="@id/pad8"
+                        android:nextFocusUp="@id/pad6"
+                        android:nextFocusRight="@id/pad9"
+                        android:nextFocusDown="@id/padOk" />
+                </LinearLayout>
 
-            <TextView
-                android:id="@+id/pad0"
-                android:layout_width="0dp"
-                android:layout_height="86dp"
-                android:layout_weight="1"
-                android:layout_margin="5dp"
-                android:background="@drawable/row_focus"
-                android:focusable="true"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center"
-                android:text="0"
-                android:textColor="@color/text_primary"
-                android:textSize="30sp" />
+                <!-- Linha 4: Apagar, 0, Ir -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/padOk"
-                android:layout_width="0dp"
-                android:layout_height="86dp"
-                android:layout_weight="1"
-                android:layout_margin="5dp"
-                android:background="@drawable/row_focus"
-                android:focusable="true"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center"
-                android:text="@string/pad_ok"
-                android:textColor="@color/text_primary"
-                android:textSize="30sp" />
-        </LinearLayout>
-    </LinearLayout>
+                    <TextView
+                        android:id="@+id/padDel"
+                        android:layout_width="0dp"
+                        android:layout_height="52dp"
+                        android:layout_weight="1"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/pad_button_bg"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:text="@string/pad_delete"
+                        android:textAllCaps="true"
+                        android:textColor="@color/text_primary"
+                        android:textSize="13sp"
+                        android:nextFocusLeft="@id/padDel"
+                        android:nextFocusUp="@id/pad7"
+                        android:nextFocusRight="@id/pad0"
+                        android:nextFocusDown="@id/padDel" />
+
+                    <TextView
+                        android:id="@+id/pad0"
+                        android:layout_width="0dp"
+                        android:layout_height="52dp"
+                        android:layout_weight="1"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/pad_button_bg"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textColor="@color/text_primary"
+                        android:textSize="22sp"
+                        android:nextFocusLeft="@id/padDel"
+                        android:nextFocusUp="@id/pad8"
+                        android:nextFocusRight="@id/padOk"
+                        android:nextFocusDown="@id/pad0" />
+
+                    <TextView
+                        android:id="@+id/padOk"
+                        android:layout_width="0dp"
+                        android:layout_height="52dp"
+                        android:layout_weight="1"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/pad_button_bg"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:text="@string/pad_ok"
+                        android:textAllCaps="true"
+                        android:textColor="@color/accent"
+                        android:textSize="15sp"
+                        android:nextFocusLeft="@id/pad0"
+                        android:nextFocusUp="@id/pad9"
+                        android:nextFocusRight="@id/padOk"
+                        android:nextFocusDown="@id/padOk" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
     </FrameLayout>
 </FrameLayout>
