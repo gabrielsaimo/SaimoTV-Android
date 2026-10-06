@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import coil3.load
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -102,17 +104,27 @@ class EventosActivity : TelaComMenu() {
             holder.timeCasa.text = ev.timeCasaNome
             holder.timeFora.text = ev.timeForaNome
             
-            // Simplesmente define os nomes por hora (o Glide pode ser adicionado depois para imagens)
+            if (ev.ligaLogo.isNotEmpty()) holder.imgLiga.load(ev.ligaLogo)
+            if (ev.timeCasaLogo.isNotEmpty()) holder.imgTimeCasa.load(ev.timeCasaLogo)
+            if (ev.timeForaLogo.isNotEmpty()) holder.imgTimeFora.load(ev.timeForaLogo)
             
             holder.itemView.setOnClickListener {
                 if (ev.playerUrl.isNotEmpty()) {
-                    val slug = ev.playerUrl.substringAfterLast("/")
-                    // Abre a MainActivity tocando o canal (via intent extra)
-                    val i = Intent(this@EventosActivity, MainActivity::class.java)
-                    i.putExtra(MainActivity.EXTRA_CANAL, slug)
-                    startActivity(i)
+                    val slug = ev.playerUrl.substringAfterLast("/").lowercase()
+                    val slugLimpo = slug.replace("-", "").replace(" ", "")
+                    val channel = CATALOG.firstOrNull { it.name.lowercase().replace(" ", "") == slugLimpo }
+                        ?: CATALOG.firstOrNull { it.name.lowercase().contains(slugLimpo) }
+                    
+                    if (channel != null) {
+                        val i = Intent(this@EventosActivity, MainActivity::class.java)
+                        i.putExtra(MainActivity.EXTRA_CANAL, channel.name)
+                        startActivity(i)
+                    } else {
+                        Toast.makeText(this@EventosActivity, "Canal do evento não encontrado", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
+        }
         }
         
         override fun getItemCount() = itens.size
@@ -123,6 +135,9 @@ class EventosActivity : TelaComMenu() {
         val titulo: TextView = v.findViewById(R.id.eventoTitulo)
         val timeCasa: TextView = v.findViewById(R.id.eventoTimeCasa)
         val timeFora: TextView = v.findViewById(R.id.eventoTimeFora)
+        val imgLiga: ImageView = v.findViewById(R.id.imgLiga)
+        val imgTimeCasa: ImageView = v.findViewById(R.id.imgTimeCasa)
+        val imgTimeFora: ImageView = v.findViewById(R.id.imgTimeFora)
     }
 
     data class Evento(
