@@ -20,7 +20,7 @@ import java.util.Date
 import java.util.Locale
 
 /** A aba do menu do topo que cada tela representa. */
-enum class Aba { INICIO, AO_VIVO, FILMES, SERIES, ANIMES, DORAMAS, FAVORITOS, EXTRAS, BUSCAR, AJUSTES, NENHUMA }
+enum class Aba { INICIO, AO_VIVO, EVENTOS, FILMES, SERIES, ANIMES, DORAMAS, FAVORITOS, EXTRAS, BUSCAR, AJUSTES, NENHUMA }
 
 /**
  * O menu do topo, o mesmo em todas as telas.
@@ -155,6 +155,7 @@ object MenuGlobal {
         val destino: Intent? = when (aba) {
             Aba.INICIO, Aba.NENHUMA -> null
             Aba.AO_VIVO -> Intent(tela, MainActivity::class.java)
+            Aba.EVENTOS -> Intent(tela, EventosActivity::class.java)
             Aba.FILMES -> PaginaActivity.intent(tela, GradeActivity.FILMES)
             Aba.SERIES -> PaginaActivity.intent(tela, GradeActivity.SERIES)
             Aba.ANIMES -> PaginaActivity.intent(tela, GradeActivity.ANIMES)

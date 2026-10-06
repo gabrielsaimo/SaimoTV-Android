@@ -244,6 +244,7 @@
     <string name="menu_ao_vivo">Ao vivo</string>
     <string name="menu_buscar">Buscar</string>
     <string name="menu_ajustes">Ajustes</string>
+    <string name="menu_eventos">Eventos</string>
     <string name="inicio_ao_vivo_agora">Ao vivo agora</string>
     <string name="inicio_sair">Aperte VOLTAR de novo para sair</string>
     <string name="inicio_remover_continuar">Tirar do Continue assistindo</string>

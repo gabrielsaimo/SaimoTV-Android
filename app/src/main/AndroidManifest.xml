@@ -160,5 +160,6 @@
             <layout android:defaultWidth="1024dp" android:defaultHeight="640dp"
                 android:minWidth="720dp" android:minHeight="405dp" />
         </activity>
+        <activity android:name=".EventosActivity" />
     </application>
 </manifest>

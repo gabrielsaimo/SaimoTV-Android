@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- O vídeo do modo toque (óculos, celular): TextureView em vez de SurfaceView.
+     Trocar de canal muda a resolução do quadro (1080p para 720p, por exemplo),
+     e com SurfaceView o compositor às vezes deixava o quadro novo sem escala,
+     pequeno no canto de cima, com o último quadro do canal anterior atrás. Com
+     TextureView a escala é do próprio app. O TV Box continua no SurfaceView,
+     que é mais leve. Os atributos repetem os dos layouts das telas. -->
+<androidx.media3.ui.PlayerView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="false"
+    app:resize_mode="fit"
+    app:show_buffering="never"
+    app:shutter_background_color="#000000"
+    app:surface_type="texture_view"
+    app:use_controller="false" />
