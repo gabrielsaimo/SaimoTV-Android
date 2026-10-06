@@ -30,8 +30,8 @@
         
         <ImageView
             android:id="@+id/imgLiga"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_marginEnd="8dp"
             android:scaleType="centerInside" />
             
@@ -59,9 +59,9 @@
             
             <ImageView
                 android:id="@+id/imgTimeCasa"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginBottom="4dp"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:layout_marginBottom="8dp"
                 android:scaleType="centerInside" />
                 
             <TextView
@@ -92,9 +92,9 @@
             
             <ImageView
                 android:id="@+id/imgTimeFora"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginBottom="4dp"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:layout_marginBottom="8dp"
                 android:scaleType="centerInside" />
                 
             <TextView
