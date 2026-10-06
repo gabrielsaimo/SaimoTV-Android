@@ -8,6 +8,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.Date
 import coil3.load
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
@@ -103,6 +106,7 @@ class EventosActivity : TelaComMenu() {
             holder.titulo.text = ev.titulo
             holder.timeCasa.text = ev.timeCasaNome
             holder.timeFora.text = ev.timeForaNome
+            holder.horario.text = ev.horarioFormatado
             
             if (ev.ligaLogo.isNotEmpty()) holder.imgLiga.load(ev.ligaLogo)
             if (ev.timeCasaLogo.isNotEmpty()) holder.imgTimeCasa.load(ev.timeCasaLogo)
@@ -134,6 +138,7 @@ class EventosActivity : TelaComMenu() {
         val titulo: TextView = v.findViewById(R.id.eventoTitulo)
         val timeCasa: TextView = v.findViewById(R.id.eventoTimeCasa)
         val timeFora: TextView = v.findViewById(R.id.eventoTimeFora)
+        val horario: TextView = v.findViewById(R.id.eventoHorario)
         val imgLiga: ImageView = v.findViewById(R.id.imgLiga)
         val imgTimeCasa: ImageView = v.findViewById(R.id.imgTimeCasa)
         val imgTimeFora: ImageView = v.findViewById(R.id.imgTimeFora)
@@ -149,6 +154,7 @@ class EventosActivity : TelaComMenu() {
         val timeForaLogo: String,
         val inicio: String,
         val fim: String,
-        val playerUrl: String
+        val playerUrl: String,
+        val horarioFormatado: String
     )
 }
