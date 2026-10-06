@@ -62,6 +62,7 @@ object MenuGlobal {
         val itens = listOf(
             Triple(Aba.INICIO, R.string.menu_inicio, R.drawable.ic_home),
             Triple(Aba.AO_VIVO, R.string.menu_ao_vivo, R.drawable.ic_live_tv),
+            Triple(Aba.EVENTOS, R.string.menu_eventos, 0),
             Triple(Aba.FILMES, R.string.vod_filmes, 0),
             Triple(Aba.SERIES, R.string.vod_series, 0),
             Triple(Aba.ANIMES, R.string.vod_animes, 0),
