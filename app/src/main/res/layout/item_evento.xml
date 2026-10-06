@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:padding="16dp"
     android:layout_margin="8dp"
-    android:background="@drawable/fundo_card"
+    android:background="#222222"
     android:focusable="true">
 
     <LinearLayout

@@ -125,7 +125,6 @@ class EventosActivity : TelaComMenu() {
                 }
             }
         }
-        }
         
         override fun getItemCount() = itens.size
     }
