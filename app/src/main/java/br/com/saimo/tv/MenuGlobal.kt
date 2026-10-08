@@ -73,7 +73,7 @@ object MenuGlobal {
         val temRadios = java.io.File(tela.filesDir, "vod/radios.txt").exists() || java.io.File(tela.filesDir, "radios.txt").exists()
 
         for ((aba, texto, icone) in itens) {
-            if (aba == Aba.RADIOS && !temRadios) continue
+            // Always show radios button
             abas.addView(TextView(tela).apply {
                 text = tela.getString(texto)
                 tag = aba
