@@ -20,7 +20,7 @@ import java.util.Date
 import java.util.Locale
 
 /** A aba do menu do topo que cada tela representa. */
-enum class Aba { INICIO, AO_VIVO, EVENTOS, FILMES, SERIES, ANIMES, DORAMAS, FAVORITOS, EXTRAS, BUSCAR, AJUSTES, NENHUMA }
+enum class Aba { INICIO, AO_VIVO, EVENTOS, ON_DEMAND, FAVORITOS, RADIOS, EXTRAS, BUSCAR, AJUSTES, NENHUMA }
 
 /**
  * O menu do topo, o mesmo em todas as telas.
@@ -60,19 +60,20 @@ object MenuGlobal {
         barra.addView(rolagem)
 
         val itens = listOf(
+            Triple(Aba.BUSCAR, R.string.menu_buscar, R.drawable.ic_search),
             Triple(Aba.INICIO, R.string.menu_inicio, R.drawable.ic_home),
             Triple(Aba.AO_VIVO, R.string.menu_ao_vivo, R.drawable.ic_live_tv),
-            Triple(Aba.EVENTOS, R.string.menu_eventos, 0),
-            Triple(Aba.FILMES, R.string.vod_filmes, 0),
-            Triple(Aba.SERIES, R.string.vod_series, 0),
-            Triple(Aba.ANIMES, R.string.vod_animes, 0),
-            Triple(Aba.DORAMAS, R.string.vod_doramas, 0),
-            Triple(Aba.FAVORITOS, R.string.vod_favoritos, 0),
-            Triple(Aba.EXTRAS, R.string.vod_extras, 0),
-            Triple(Aba.BUSCAR, R.string.menu_buscar, R.drawable.ic_search),
-            Triple(Aba.AJUSTES, R.string.menu_ajustes, R.drawable.ic_settings),
+            Triple(Aba.EVENTOS, R.string.menu_eventos, R.drawable.ic_football),
+            Triple(Aba.ON_DEMAND, R.string.menu_on_demand, R.drawable.ic_movie),
+            Triple(Aba.FAVORITOS, R.string.vod_favoritos, R.drawable.ic_star),
+            Triple(Aba.RADIOS, R.string.menu_radios, R.drawable.ic_radio),
+            Triple(Aba.EXTRAS, R.string.vod_extras, R.drawable.ic_more),
+            Triple(Aba.AJUSTES, R.string.menu_ajustes, R.drawable.ic_settings)
         )
+        val temRadios = java.io.File(tela.filesDir, "vod/radios.txt").exists() || java.io.File(tela.filesDir, "radios.txt").exists()
+
         for ((aba, texto, icone) in itens) {
+            if (aba == Aba.RADIOS && !temRadios) continue
             abas.addView(TextView(tela).apply {
                 text = tela.getString(texto)
                 tag = aba
@@ -157,11 +158,9 @@ object MenuGlobal {
             Aba.INICIO, Aba.NENHUMA -> null
             Aba.AO_VIVO -> Intent(tela, MainActivity::class.java)
             Aba.EVENTOS -> Intent(tela, EventosActivity::class.java)
-            Aba.FILMES -> PaginaActivity.intent(tela, GradeActivity.FILMES)
-            Aba.SERIES -> PaginaActivity.intent(tela, GradeActivity.SERIES)
-            Aba.ANIMES -> PaginaActivity.intent(tela, GradeActivity.ANIMES)
-            Aba.DORAMAS -> PaginaActivity.intent(tela, GradeActivity.DORAMAS)
+            Aba.ON_DEMAND -> Intent(tela, OnDemandActivity::class.java)
             Aba.FAVORITOS -> GradeActivity.intent(tela, GradeActivity.FAVORITOS)
+            Aba.RADIOS -> Intent(tela, RadiosActivity::class.java)
             Aba.EXTRAS -> GradeActivity.intent(tela, GradeActivity.EXTRAS)
             Aba.BUSCAR -> Intent(tela, BuscaActivity::class.java)
             Aba.AJUSTES -> Intent(tela, AjustesActivity::class.java)

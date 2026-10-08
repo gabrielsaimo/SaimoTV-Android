@@ -127,6 +127,7 @@ class PlayerActivity : AppCompatActivity() {
     /// Episódios seguidos que começaram sozinhos — o "ainda está assistindo?".
     private var seguidosSozinhos = 0
     private var comecouSozinho = false
+    private var pausaAutoplayDesativada = false
     private var trechoPulado: Pulos.Trecho? = null
     private var proximoDispensado = false
     private var contagem = -1
@@ -657,7 +658,8 @@ class PlayerActivity : AppCompatActivity() {
         val atual = ep
         val seguinte = if (r != null && atual != null) r.seguinte(atual) else null
         if (seguinte == null) {
-            finish()
+            if (r?.serie == true) Progresso.finalizarSerie(this, r.nomeChave)
+            mostrarRecomendacoes()
             return
         }
         if (Preferencias.proximoAutomatico && contagem != 0) {
@@ -665,6 +667,67 @@ class PlayerActivity : AppCompatActivity() {
         } else if (proximo.visibility != View.VISIBLE) {
             proximoDispensado = false
             mostrarProximo(seguinte)
+        }
+    }
+
+    /** Tela pós-créditos no estilo de streaming, operável só pelo controle. */
+    private fun mostrarRecomendacoes() {
+        val r = resolvido
+        if (r == null) { finish(); return }
+        lifecycleScope.launch(semDerrubar) {
+            val parecidos = if (r.tmdbId > 0) {
+                runCatching { Detalhes.parecidos(this@PlayerActivity, r.tmdbId, r.serie) }
+                    .getOrDefault(emptyList())
+                    .map { it.achado }
+            } else emptyList<Vod.Achado>()
+            Generos.carregar(this@PlayerActivity)
+            val candidatos = if (parecidos.isNotEmpty()) parecidos else
+                runCatching { 
+                    Vod.entradas(this@PlayerActivity)
+                        .filter { Generos.capa(it.achado.titulo, it.achado.serie) != null }
+                        .shuffled()
+                        .map { it.achado } 
+                }.getOrDefault(emptyList())
+            val recomendados = parecidos
+                .ifEmpty { candidatos }
+                .filter { it.titulo.isNotBlank() && !it.titulo.equals(r.alvo.titulo, true) }
+                .distinctBy { it.titulo.lowercase(Locale.ROOT) }
+                .take(6)
+            val acoes = mutableListOf(getString(R.string.player_voltar) to { finish() })
+            mostrarAviso("Você terminou", "Mais títulos para você assistir", acoes)
+            val linha = findViewById<LinearLayout>(R.id.recomendacoesLinha)
+            linha.removeAllViews()
+            for (achado in recomendados) {
+                val alvoSugerido = Alvo(achado.titulo, achado.serie, achado.letra, achado.ano)
+                val capa = ImageView(this@PlayerActivity).apply {
+                    layoutParams = LinearLayout.LayoutParams(dp(190), dp(220))
+                    scaleType = ImageView.ScaleType.CENTER_CROP
+                    setBackgroundResource(R.drawable.bg_card)
+                    Generos.capa(achado.titulo, achado.serie)?.let { load(it) }
+                }
+                linha.addView(LinearLayout(this@PlayerActivity).apply {
+                    orientation = LinearLayout.VERTICAL
+                    gravity = android.view.Gravity.CENTER_HORIZONTAL
+                    setBackgroundResource(R.drawable.botao_ficha)
+                    isFocusable = true
+                    setPadding(dp(4), dp(4), dp(4), dp(8))
+                    layoutParams = LinearLayout.LayoutParams(dp(198), dp(270)).apply { marginEnd = dp(12) }
+                    setOnClickListener { FichaActivity.abrir(this@PlayerActivity, alvoSugerido) }
+                    addView(capa)
+                    addView(TextView(this@PlayerActivity).apply {
+                        text = Generos.semAno(achado.titulo)
+                        gravity = android.view.Gravity.CENTER
+                        textSize = 16f
+                        maxLines = 1
+                        ellipsize = android.text.TextUtils.TruncateAt.END
+                        setTextColor(androidx.core.content.ContextCompat.getColor(context, R.color.text_primary))
+                        layoutParams = LinearLayout.LayoutParams(dp(184), dp(38))
+                    })
+                })
+            }
+            findViewById<View>(R.id.recomendacoesScroll).visibility =
+                if (linha.childCount > 0) View.VISIBLE else View.GONE
+            linha.getChildAt(0)?.requestFocus()
         }
     }
 
@@ -677,9 +740,9 @@ class PlayerActivity : AppCompatActivity() {
         if (seguinte.temporada != ep?.temporada) infoEpisodios = emptyMap()
         ep = seguinte
         comecouSozinho = sozinho
-        // Três episódios sem ninguém tocar no controle: talvez a pessoa tenha
+        // Sete episódios sem ninguém tocar no controle: talvez a pessoa tenha
         // dormido. Pausar aqui economiza a internet de uma noite inteira.
-        if (sozinho && seguidosSozinhos >= 3) {
+        if (sozinho && !pausaAutoplayDesativada && seguidosSozinhos >= 7) {
             comecar(pedirRetomada = false)
             player?.playWhenReady = false
             perguntarSeAindaAssiste()
@@ -723,8 +786,14 @@ class PlayerActivity : AppCompatActivity() {
     private fun perguntarSeAindaAssiste() {
         mostrarAviso(getString(R.string.player_ainda_titulo), getString(R.string.player_ainda_texto),
             listOf(
-                getString(R.string.player_continuar) to {
+                getString(R.string.player_continuar_novamente) to {
                     seguidosSozinhos = 0; esconderAviso(); player?.playWhenReady = true
+                },
+                getString(R.string.player_continuar) to {
+                    pausaAutoplayDesativada = true
+                    seguidosSozinhos = 0
+                    esconderAviso()
+                    player?.playWhenReady = true
                 },
                 getString(R.string.player_sair) to { finish() },
             ))
@@ -748,6 +817,7 @@ class PlayerActivity : AppCompatActivity() {
     private fun mostrarAviso(tituloAviso: String, texto: String, acoes: List<Pair<String, () -> Unit>>) {
         esconderControles()
         proximo.visibility = View.GONE
+        findViewById<View>(R.id.recomendacoesScroll).visibility = View.GONE
         findViewById<TextView>(R.id.avisoTitulo).text = tituloAviso
         findViewById<TextView>(R.id.avisoTexto).text = texto
         val caixa = findViewById<LinearLayout>(R.id.avisoBotoes)

@@ -152,9 +152,10 @@
     <string name="player_continuar_de">Continuar de %1$s</string>
     <string name="player_do_inicio">Começar do início</string>
     <string name="player_ainda_titulo">Ainda está assistindo?</string>
-    <string name="player_ainda_texto">Pausamos para não gastar sua internet à toa.</string>
-    <string name="player_continuar">Continuar assistindo</string>
-    <string name="player_sair">Sair</string>
+    <string name="player_ainda_texto">Pausamos depois de 7 episódios automáticos para saber se você ainda está assistindo.</string>
+    <string name="player_continuar_novamente">Continuar e mostrar novamente</string>
+    <string name="player_continuar">Continuar sem parar</string>
+    <string name="player_sair">Fechar conteúdo</string>
     <string name="player_pular_abertura">Pular abertura</string>
     <string name="player_pular_recap">Pular recapitulação</string>
     <string name="player_pular_previa">Pular prévia</string>
@@ -209,7 +210,7 @@
     <string name="lembrete_marcado">Cancelar aviso</string>
     <string name="update_discreto">Versão %1$s disponível · atualize em Ajustes</string>
     <string name="ajustes">Ajustes</string>
-    <string name="ajustes_sobre">Saimo TV %1$s\nID do aparelho: %2$s\n\nInforme este ID ao pedir ajuda.</string>
+    <string name="ajustes_sobre">Saimo TV %1$s\nID do aparelho: %2$s\n\nDesenvolvimento: Gabriel Saimo\nContribuição: Arthur Roberto (thxsp)\n\nInforme este ID ao pedir ajuda.</string>
     <string name="ajustes_ligado">Ligado</string>
     <string name="ajustes_desligado">Desligado</string>
     <string name="ajustes_reproducao">Reprodução</string>
@@ -310,4 +311,6 @@
     <string name="vr_grade_vazio_favoritos">Nada nos favoritos ainda.\nSegure o dedo num título para favoritar.</string>
     <string name="vr_inicio_dica">Toque para abrir · segure num título para favoritar e mais opções</string>
     <string name="vr_ver_programacao">Toque de novo para assistir</string>
+    <string name="menu_on_demand">On Demand</string>
+    <string name="menu_radios">Rádios</string>
 </resources>

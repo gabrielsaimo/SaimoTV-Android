@@ -9,7 +9,7 @@
     <uses-permission android:name="com.android.providers.tv.permission.WRITE_EPG_DATA" />
 
     <!-- Televisão primeiro: sem toque, tudo pelo controle. -->
-    <uses-feature android:name="android.software.leanback" android:required="false" />
+    <uses-feature android:name="android.software.leanback" android:required="true" />
     <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
 
     <application
@@ -161,5 +161,8 @@
                 android:minWidth="720dp" android:minHeight="405dp" />
         </activity>
         <activity android:name=".EventosActivity" />
-    </application>
+    
+        <activity android:name=".OnDemandActivity" android:exported="false" android:launchMode="singleTop" />
+        <activity android:name=".RadiosActivity" android:exported="false" android:launchMode="singleTop" />
+</application>
 </manifest>

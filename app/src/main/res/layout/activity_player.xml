@@ -296,7 +296,7 @@
         android:background="#B3000000"
         android:visibility="gone">
         <LinearLayout
-            android:layout_width="620dp"
+            android:layout_width="900dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@drawable/bg_modal"
@@ -319,6 +319,20 @@
                 android:gravity="center"
                 android:textColor="@color/text_secondary"
                 android:textSize="18sp" />
+            <HorizontalScrollView
+                android:id="@+id/recomendacoesScroll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:clipToPadding="false"
+                android:scrollbars="none"
+                android:visibility="gone">
+                <LinearLayout
+                    android:id="@+id/recomendacoesLinha"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
             <LinearLayout
                 android:id="@+id/avisoBotoes"
                 android:layout_width="match_parent"

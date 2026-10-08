@@ -6,39 +6,76 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
-import java.text.SimpleDateFormat
-import java.util.Locale
-import java.util.Date
-import coil3.load
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.media3.common.util.UnstableApi
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import coil3.load
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.Request
 import org.json.JSONArray
 
+@UnstableApi
 class EventosActivity : TelaComMenu() {
     override val aba = Aba.EVENTOS
     private lateinit var lista: RecyclerView
-    private lateinit var carregando: View
+    private lateinit var carregando: ProgressBar
     private lateinit var avisoErro: TextView
+    private lateinit var dImgCasa: ImageView
+    private lateinit var dImgFora: ImageView
+    private lateinit var dImgLiga: ImageView
+    private lateinit var dTimeCasa: TextView
+    private lateinit var dTimeFora: TextView
+    private lateinit var dLiga: TextView
+    private lateinit var dHorario: TextView
+    private lateinit var dTitulo: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_eventos)
-
+        
         lista = findViewById(R.id.eventosLista)
         carregando = findViewById(R.id.eventosCarregando)
         avisoErro = findViewById(R.id.eventosAvisoErro)
-
-        lista.layoutManager = GridLayoutManager(this, 3)
+        dImgCasa = findViewById(R.id.eventoDestaqueImgCasa)
+        dImgFora = findViewById(R.id.eventoDestaqueImgFora)
+        dImgLiga = findViewById(R.id.eventoDestaqueLigaImg)
+        dTimeCasa = findViewById(R.id.eventoDestaqueTimeCasa)
+        dTimeFora = findViewById(R.id.eventoDestaqueTimeFora)
+        dLiga = findViewById(R.id.eventoDestaqueLiga)
+        dHorario = findViewById(R.id.eventoDestaqueHorario)
+        dTitulo = findViewById(R.id.eventoDestaqueTitulo)
+        
+        lista.layoutManager = LinearLayoutManager(this)
         
         carregarEventos()
+    }
+
+    fun atualizarDestaque(ev: Evento) {
+        if (ev.timeCasaLogo.isNotEmpty()) {
+            dImgCasa.load(ev.timeCasaLogo)
+        } else {
+            dImgCasa.setImageDrawable(null)
+        }
+        
+        if (ev.timeForaLogo.isNotEmpty()) {
+            dImgFora.load(ev.timeForaLogo)
+        } else {
+            dImgFora.setImageDrawable(null)
+        }
+        
+        if (ev.ligaLogo.isNotEmpty()) dImgLiga.load(ev.ligaLogo) else dImgLiga.setImageDrawable(null)
+        
+        dTimeCasa.text = ev.timeCasaNome
+        dTimeFora.text = ev.timeForaNome
+        dLiga.text = ev.ligaNome
+        dHorario.text = ev.horarioFormatado
+        dTitulo.text = ev.titulo
     }
 
     private fun carregarEventos() {
@@ -131,15 +168,19 @@ class EventosActivity : TelaComMenu() {
         
         override fun onBindViewHolder(holder: EventoViewHolder, position: Int) {
             val ev = itens[position]
-            holder.liga.text = ev.ligaNome
-            holder.titulo.text = ev.titulo
             holder.timeCasa.text = ev.timeCasaNome
             holder.timeFora.text = ev.timeForaNome
             holder.horario.text = ev.horarioFormatado
             
-            if (ev.ligaLogo.isNotEmpty()) holder.imgLiga.load(ev.ligaLogo)
-            if (ev.timeCasaLogo.isNotEmpty()) holder.imgTimeCasa.load(ev.timeCasaLogo)
-            if (ev.timeForaLogo.isNotEmpty()) holder.imgTimeFora.load(ev.timeForaLogo)
+            if (ev.ligaLogo.isNotEmpty()) holder.imgLiga.load(ev.ligaLogo) else holder.imgLiga.setImageDrawable(null)
+            if (ev.timeCasaLogo.isNotEmpty()) holder.imgCasaItem.load(ev.timeCasaLogo) else holder.imgCasaItem.setImageDrawable(null)
+            if (ev.timeForaLogo.isNotEmpty()) holder.imgForaItem.load(ev.timeForaLogo) else holder.imgForaItem.setImageDrawable(null)
+            
+            holder.itemView.setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus) {
+                    (holder.itemView.context as? EventosActivity)?.atualizarDestaque(ev)
+                }
+            }
             
             holder.itemView.setOnClickListener {
                 if (ev.playerUrl.isNotEmpty()) {
@@ -163,14 +204,12 @@ class EventosActivity : TelaComMenu() {
     }
 
     private class EventoViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-        val liga: TextView = v.findViewById(R.id.eventoLiga)
-        val titulo: TextView = v.findViewById(R.id.eventoTitulo)
         val timeCasa: TextView = v.findViewById(R.id.eventoTimeCasa)
         val timeFora: TextView = v.findViewById(R.id.eventoTimeFora)
         val horario: TextView = v.findViewById(R.id.eventoHorario)
         val imgLiga: ImageView = v.findViewById(R.id.imgLiga)
-        val imgTimeCasa: ImageView = v.findViewById(R.id.imgTimeCasa)
-        val imgTimeFora: ImageView = v.findViewById(R.id.imgTimeFora)
+        val imgCasaItem: ImageView = v.findViewById(R.id.imgTimeCasaItem)
+        val imgForaItem: ImageView = v.findViewById(R.id.imgTimeForaItem)
     }
 
     data class Evento(

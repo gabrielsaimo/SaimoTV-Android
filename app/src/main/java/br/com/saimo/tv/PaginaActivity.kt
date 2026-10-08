@@ -27,10 +27,10 @@ import java.util.Calendar
 class PaginaActivity : TelaComMenu() {
 
     override val aba: Aba get() = when (intent.getStringExtra(TIPO)) {
-        GradeActivity.SERIES -> Aba.SERIES
-        GradeActivity.ANIMES -> Aba.ANIMES
-        GradeActivity.DORAMAS -> Aba.DORAMAS
-        else -> Aba.FILMES
+        GradeActivity.SERIES -> Aba.ON_DEMAND
+        GradeActivity.ANIMES -> Aba.ON_DEMAND
+        GradeActivity.DORAMAS -> Aba.ON_DEMAND
+        else -> Aba.ON_DEMAND
     }
 
 

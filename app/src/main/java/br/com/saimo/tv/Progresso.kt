@@ -105,6 +105,17 @@ object Progresso {
         editor.apply()
     }
 
+    /**
+     * Finaliza uma série de verdade: depois do último episódio não deve sobrar
+     * um cartão "Tn En+1" na fileira Continuar assistindo.
+     */
+    fun finalizarSerie(context: Context, nome: String) {
+        prefs(context).edit()
+            .remove("u|$nome")
+            .remove("u|$nome|t")
+            .apply()
+    }
+
     fun visto(context: Context, chave: String): Boolean = prefs(context).getBoolean("v|$chave", false)
 
     /**

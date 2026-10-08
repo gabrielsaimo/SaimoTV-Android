@@ -1,36 +1,182 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp">
+    android:orientation="horizontal"
+    android:background="#0f1115">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Eventos Esportivos"
-        android:textColor="@android:color/white"
-        android:textSize="28sp"
-        android:layout_marginBottom="20dp" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/eventosLista"
-        android:layout_width="match_parent"
+    <!-- Painel Esquerdo: Destaque do Evento Focado -->
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_weight="4.5"
         android:layout_height="match_parent"
-        android:layout_marginTop="50dp" />
+        android:background="#111318">
 
-    <ProgressBar
-        android:id="@+id/eventosCarregando"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone" />
+        <!-- Conteúdo do Destaque -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="32dp"
+            android:gravity="center">
 
-    <TextView
-        android:id="@+id/eventosAvisoErro"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textColor="@android:color/holo_red_light"
-        android:textSize="20sp"
-        android:visibility="gone" />
-</FrameLayout>
+            <!-- Liga Topo -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginBottom="24dp">
+                <ImageView
+                    android:id="@+id/eventoDestaqueLigaImg"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginEnd="12dp"
+                    android:scaleType="fitCenter"
+                        android:adjustViewBounds="true" />
+                <TextView
+                    android:id="@+id/eventoDestaqueLiga"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#AAAAAA"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Escudos e VS -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginBottom="24dp">
+
+                <!-- Casa -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center">
+                    <ImageView
+                        android:id="@+id/eventoDestaqueImgCasa"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_marginBottom="12dp"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true" />
+                    <TextView
+                        android:id="@+id/eventoDestaqueTimeCasa"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:textColor="#FFFFFF"
+                        android:textSize="22sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="VS"
+                    android:textColor="#FFCC00"
+                    android:textSize="32sp"
+                    android:textStyle="bold|italic"
+                    android:layout_marginHorizontal="8dp" />
+
+                <!-- Fora -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center">
+                    <ImageView
+                        android:id="@+id/eventoDestaqueImgFora"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_marginBottom="12dp"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true" />
+                    <TextView
+                        android:id="@+id/eventoDestaqueTimeFora"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:textColor="#FFFFFF"
+                        android:textSize="22sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Detalhes Finais (Horario e Nome) -->
+            <TextView
+                android:id="@+id/eventoDestaqueHorario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#333333"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:textColor="#00FF00"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp" />
+
+            <TextView
+                android:id="@+id/eventoDestaqueTitulo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#888888"
+                android:textSize="16sp"
+                android:textAlignment="center" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- Painel Direito: Lista de Eventos -->
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_weight="5.5"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="32dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Eventos Esportivos"
+                android:textSize="32sp"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:layout_marginBottom="24dp"
+                android:layout_marginStart="12dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/eventosLista"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingBottom="50dp" />
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/eventosCarregando"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/eventosAvisoErro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="#FF5555"
+            android:textSize="18sp"
+            android:visibility="gone" />
+    </FrameLayout>
+
+</LinearLayout>

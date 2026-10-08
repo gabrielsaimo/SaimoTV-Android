@@ -36,10 +36,10 @@ class GradeActivity : TelaComMenu() {
     override val aba: Aba get() = when (intent.getStringExtra(TIPO)) {
         FAVORITOS -> Aba.FAVORITOS
         EXTRAS -> Aba.EXTRAS
-        SERIES -> Aba.SERIES
-        ANIMES -> Aba.ANIMES
-        DORAMAS -> Aba.DORAMAS
-        else -> Aba.FILMES
+        SERIES -> Aba.ON_DEMAND
+        ANIMES -> Aba.ON_DEMAND
+        DORAMAS -> Aba.ON_DEMAND
+        else -> Aba.ON_DEMAND
     }
 
 
@@ -78,7 +78,7 @@ class GradeActivity : TelaComMenu() {
     private var todos: List<Item> = emptyList()
     private var vistos: List<Item> = emptyList()
     private var genero = ""
-    private var novosPrimeiro = false
+    private var novosPrimeiro = true
     private val adaptador = Capas()
     private var colunas = 5
     private val adaptadorLetras = Letras()
@@ -134,12 +134,12 @@ class GradeActivity : TelaComMenu() {
         Generos.carregar(this)
         todos = withContext(Dispatchers.Default) {
             when (tipo) {
-                FILMES, SERIES -> Vod.entradas(this@GradeActivity).filter { it.serie == (tipo == SERIES) }
+                FILMES, SERIES -> Vod.entradas(this@GradeActivity).filter { it.serie == (tipo == SERIES) && Generos.capa(it.achado.titulo, it.achado.serie) != null }
                     .map { e ->
                         val a = e.achado
                         Item(Alvo(a.titulo, a.serie, a.letra, a.ano), e.chave, anoDe(a.titulo, a.ano))
                     }
-                ANIMES, DORAMAS -> Vod.colecao(this@GradeActivity, tipo).map { c ->
+                ANIMES, DORAMAS -> Vod.colecao(this@GradeActivity, tipo).filter { Generos.capa(it.titulo, true) != null }.map { c ->
                     Item(Alvo(c.titulo, true, "", c.ano, tipo, c.tmdbId.toIntOrNull() ?: 0),
                         Vod.normalizar(c.titulo), anoDe(c.titulo, c.ano))
                 }

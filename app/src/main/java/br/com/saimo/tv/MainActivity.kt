@@ -85,6 +85,8 @@ class MainActivity : AppCompatActivity() {
     companion object {
         /** Nome do canal a sintonizar ao abrir (link saimo://canal). */
         const val EXTRA_CANAL = "br.com.saimo.tv.CANAL"
+        const val EXTRA_RADIO_URL = "br.com.saimo.tv.RADIO_URL"
+        const val EXTRA_RADIO_NOME = "br.com.saimo.tv.RADIO_NOME"
     }
 
     private lateinit var player: ExoPlayer
@@ -256,8 +258,16 @@ class MainActivity : AppCompatActivity() {
 
         // Abre no canal pedido por link, ou no último assistido — não no
         // primeiro da lista, que obrigava a zapear até onde se estava.
-        val pedido = intent.getStringExtra(EXTRA_CANAL) ?: Preferencias.ultimoCanal
-        play(ordered.indexOfFirst { it.name == pedido }.coerceAtLeast(0))
+        val rUrl = intent.getStringExtra(EXTRA_RADIO_URL)
+        val rNome = intent.getStringExtra(EXTRA_RADIO_NOME)
+        if (rUrl != null && rNome != null) {
+            val radioChannel = Channel(name = rNome, sources = listOf(Source(url = rUrl)), categoria = "Rádio")
+            ordered = (listOf(radioChannel) + ordered).distinctBy { it.name }
+            play(0)
+        } else {
+            val pedido = intent.getStringExtra(EXTRA_CANAL) ?: Preferencias.ultimoCanal
+            play(ordered.indexOfFirst { it.name == pedido }.coerceAtLeast(0))
+        }
         refreshCatalog()
         handler.postDelayed(tick, TICK_MS)
         handler.postDelayed(procurarDeHoraEmHora, ATUALIZACAO_MS)
@@ -385,7 +395,8 @@ class MainActivity : AppCompatActivity() {
         if (!apósFalha) caiuAvisado = false
         // Falha passando para a próxima fonte, ou a reconexão do mesmo canal,
         // não é mais uma abertura; escolher canal ou fonte à mão é.
-        Telemetria.comecou("live", channel.name, chosen.url, sourceIndex + 1,
+        val categoriaMonitor = if (channel.name.contains("Rádio", ignoreCase = true)) "radio" else "live"
+        Telemetria.comecou(categoriaMonitor, channel.name, chosen.url, sourceIndex + 1,
             nova = !(apósFalha || (mesmoCanal && retries > 0)))
 
         // O aviso conta a tentativa inteira, não só o instante da troca: dizer
@@ -488,7 +499,8 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
                 if (!tocouAvisado) {
                     tocouAvisado = true
                     ordered.getOrNull(current)?.let { canal ->
-                        Telemetria.tocou("live", canal.name, canal.sources.getOrNull(sourceIndex)?.url.orEmpty(),
+                        val categoriaMonitor = if (canal.name.contains("Rádio", ignoreCase = true)) "radio" else "live"
+                        Telemetria.tocou(categoriaMonitor, canal.name, canal.sources.getOrNull(sourceIndex)?.url.orEmpty(),
                             sourceIndex + 1, android.os.SystemClock.elapsedRealtime() - tentativaDesde)
                     }
                 }
@@ -515,7 +527,8 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
 
             handler.removeCallbacks(sourceTimeout)
             val channel = ordered[current]
-            Telemetria.falhou("live", channel.name, channel.sources.getOrNull(sourceIndex)?.url.orEmpty(),
+            val categoriaMonitor = if (channel.name.contains("Rádio", ignoreCase = true)) "radio" else "live"
+            Telemetria.falhou(categoriaMonitor, channel.name, channel.sources.getOrNull(sourceIndex)?.url.orEmpty(),
                 sourceIndex + 1, error.errorCodeName)
 
             val agora = android.os.SystemClock.elapsedRealtime()
@@ -730,7 +743,8 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
     private fun recuperarCongelado() {
         android.util.Log.e("SAIMO_DEBUG", "recuperarCongelado() chamado!")
         val channel = ordered.getOrNull(current) ?: return
-        Telemetria.falhou("live", channel.name, channel.sources.getOrNull(sourceIndex)?.url.orEmpty(),
+        val categoriaMonitor = if (channel.name.contains("Rádio", ignoreCase = true)) "radio" else "live"
+            Telemetria.falhou(categoriaMonitor, channel.name, channel.sources.getOrNull(sourceIndex)?.url.orEmpty(),
             sourceIndex + 1, "congelou por ${CONGELADO_MS / 1000} s")
         if (retomadas < RETOMADAS_MAX) {
             retomadas++
@@ -763,7 +777,8 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
 
     private val sourceTimeout = Runnable {
         val channel = ordered.getOrNull(current) ?: return@Runnable
-        Telemetria.falhou("live", channel.name, channel.sources.getOrNull(sourceIndex)?.url.orEmpty(),
+        val categoriaMonitor = if (channel.name.contains("Rádio", ignoreCase = true)) "radio" else "live"
+            Telemetria.falhou(categoriaMonitor, channel.name, channel.sources.getOrNull(sourceIndex)?.url.orEmpty(),
             sourceIndex + 1, "sem imagem em ${SOURCE_TIMEOUT_MS / 1000} s")
         if (sourceIndex + 1 < channel.sources.size) {
             play(current, sourceIndex + 1, apósFalha = true)
@@ -776,7 +791,8 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
     private fun avisarQueCaiu(channel: Channel) {
         if (caiuAvisado) return
         caiuAvisado = true
-        Telemetria.caiu("live", channel.name, channel.sources.size)
+        val categoriaMonitor = if (channel.name.contains("Rádio", ignoreCase = true)) "radio" else "live"
+        Telemetria.caiu(categoriaMonitor, channel.name, channel.sources.size)
     }
 
 

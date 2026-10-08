@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_margin="12dp"
+    android:padding="24dp"
+    android:gravity="center"
+    android:background="@drawable/row_focus">
+
+    <ImageView
+        android:id="@+id/radioIcone"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_radio"
+        android:tint="#FFFFFF" />
+
+    <TextView
+        android:id="@+id/radioNome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:maxLines="2"
+        android:textStyle="bold" />
+</LinearLayout>

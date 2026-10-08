@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:paddingHorizontal="40dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Escolha uma categoria"
+            android:textSize="28sp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="40dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:clipChildren="false">
+
+            <!-- Card Filmes -->
+            <LinearLayout
+                android:id="@+id/btnFilmes"
+                android:layout_width="0dp"
+                android:layout_height="180dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:background="@drawable/row_focus"
+                android:layout_marginHorizontal="10dp">
+                
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_movie"
+                    android:tint="#FFFFFF"
+                    android:layout_marginBottom="16dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Filmes"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Card Séries -->
+            <LinearLayout
+                android:id="@+id/btnSeries"
+                android:layout_width="0dp"
+                android:layout_height="180dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:background="@drawable/row_focus"
+                android:layout_marginHorizontal="10dp">
+                
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_episodes"
+                    android:tint="#FFFFFF"
+                    android:layout_marginBottom="16dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Séries"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Card Animes -->
+            <LinearLayout
+                android:id="@+id/btnAnimes"
+                android:layout_width="0dp"
+                android:layout_height="180dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:background="@drawable/row_focus"
+                android:layout_marginHorizontal="10dp">
+                
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_star"
+                    android:tint="#FFFFFF"
+                    android:layout_marginBottom="16dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Animes"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Card Doramas -->
+            <LinearLayout
+                android:id="@+id/btnDoramas"
+                android:layout_width="0dp"
+                android:layout_height="180dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:background="@drawable/row_focus"
+                android:layout_marginHorizontal="10dp">
+                
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_star_outline"
+                    android:tint="#FFFFFF"
+                    android:layout_marginBottom="16dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Doramas"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

@@ -1,11 +1,4 @@
 #!/usr/bin/env python3
-"""Gera Catalog.kt a partir das listas publicadas pelo SaimoPlayer.
-
-catalogo.txt e restritos.txt são o que os apps baixam; o Catalog.kt é só a
-reserva de quando não há rede, então sai deles, com a categoria de cada canal.
-O ClearKey vem como KID:CHAVE: o AVFoundation usa só a chave e o ExoPlayer
-precisa das duas metades.
-"""
 import re
 from pathlib import Path
 
@@ -22,15 +15,11 @@ data class Source(
     val url: String,
     val referer: String? = null,
     val userAgent: String? = null,
-    /// Par KID:chave do ClearKey, em hexadecimal, para as fontes DASH.
     val keyId: String? = null,
     val key: String? = null,
     val quality: String? = null,
 ) {
     val isDash: Boolean get() = url.contains(".mpd", ignoreCase = true)
-    // Alguns provedores publicam um manifesto #EXTM3U como text/plain e com
-    // extensão .txt. No catálogo este é um endereço de mídia, não um arquivo
-    // de dados, portanto deve entrar explicitamente no demuxer HLS.
     val isHls: Boolean get() =
         url.contains(".m3u8", ignoreCase = true) ||
             url.substringBefore('?').endsWith(".txt", ignoreCase = true)
@@ -40,26 +29,14 @@ data class Channel(
     val name: String,
     val logo: String? = null,
     val sources: List<Source>,
-    /// Seção da lista ("24 Horas", "Esportes"...). Nula numa lista sem
-    /// categoria declarada: aí a seção sai do nome, ver [Categorias].
     val categoria: String? = null,
 )
 
 '''
 
-STRING = r'(?:nil|"(?:[^"\\]|\\.)*")'
-
-
-def unquote(text):
-    if text == "nil":
-        return None
-    return text[1:-1].replace('\\"', '"').replace("\\\\", "\\")
-
-
 def quote(value):
     escaped = value.replace("\\", "\\\\").replace('"', '\\"').replace("$", "\\$")
     return f'"{escaped}"'
-
 
 def parse_txt(nome, categoria_padrao=None):
     channels, fonte = [], None
@@ -87,8 +64,8 @@ def parse_txt(nome, categoria_padrao=None):
             fonte[{"agente": "userAgent", "chave": "key", "qualidade": "quality"}.get(campo, campo)] = valor
     return [c for c in channels if c["sources"]]
 
-
-def emit(out, missing, channels):
+def emit_chunk(out, missing, channels, chunk_name):
+    out.append(f"private fun build_{chunk_name}(): List<Channel> = listOf(")
     for channel in channels:
         out.append("    Channel(")
         out.append(f'        name = {quote(channel["name"])},')
@@ -105,7 +82,6 @@ def emit(out, missing, channels):
             if source["userAgent"]:
                 out.append(f'                userAgent = {quote(source["userAgent"])},')
             if source["key"]:
-                # O catálogo guarda KID:CHAVE; o ExoPlayer precisa dos dois.
                 parts = source["key"].split(":")
                 if len(parts) == 2 and all(parts):
                     out.append(f'                keyId = {quote(parts[0])},')
@@ -117,26 +93,30 @@ def emit(out, missing, channels):
         if channel.get("categoria"):
             out.append(f'        categoria = {quote(channel["categoria"])},')
         out.append("    ),")
+    out.append(")")
+    out.append("")
 
+def emit_list(out, missing, channels, list_name):
+    CHUNK_SIZE = 50  # Smaller chunks to be perfectly safe per method limit
+    chunks = []
+    for i in range(0, len(channels), CHUNK_SIZE):
+        chunk_name = f"{list_name}_PART_{i//CHUNK_SIZE}"
+        emit_chunk(out, missing, channels[i:i+CHUNK_SIZE], chunk_name)
+        chunks.append(chunk_name)
+    
+    out.append(f"val {list_name}: List<Channel> = " + " + ".join([f"build_{c}()" for c in chunks]) if chunks else f"val {list_name}: List<Channel> = emptyList()")
+    out.append("")
 
 def main():
     out, missing = [HEADER], []
 
-    open_list = "val CATALOG: List<Channel> = listOf("
-    restricted_list = "val RESTRICTED: List<Channel> = listOf("
-
     catalog = parse_txt("catalogo.txt")
     restricted = parse_txt("restritos.txt", categoria_padrao="Adulto")
 
-    out.append(open_list)
-    emit(out, missing, catalog)
-    out.append(")")
-    out.append("")
+    emit_list(out, missing, catalog, "CATALOG")
     out.append("/// Só entra na lista depois do código, e só sem rede: a que vale é a")
     out.append("/// baixada pelo Remote. Ver Unlock.")
-    out.append(restricted_list)
-    emit(out, missing, restricted)
-    out.append(")")
+    emit_list(out, missing, restricted, "RESTRICTED")
 
     KOTLIN.write_text("\n".join(out) + "\n", encoding="utf-8")
 
@@ -146,7 +126,6 @@ def main():
           f" | reservados: {len(restricted)}")
     for item in missing:
         print(f"  SEM KID (canal DASH não vai tocar no Android): {item}")
-
 
 if __name__ == "__main__":
     main()
