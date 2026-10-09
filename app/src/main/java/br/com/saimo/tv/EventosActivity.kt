@@ -100,6 +100,11 @@ class EventosActivity : TelaComMenu() {
                 val espnUrls = listOf(
                     "https://site.api.espn.com/apis/site/v2/sports/soccer/bra.1/scoreboard",
                     "https://site.api.espn.com/apis/site/v2/sports/soccer/bra.2/scoreboard",
+                    "https://site.api.espn.com/apis/site/v2/sports/soccer/arg.1/scoreboard",
+                    "https://site.api.espn.com/apis/site/v2/sports/soccer/ksa.1/scoreboard",
+                    "https://site.api.espn.com/apis/site/v2/sports/soccer/fra.1/scoreboard",
+                    "https://site.api.espn.com/apis/site/v2/sports/soccer/por.1/scoreboard",
+                    "https://site.api.espn.com/apis/site/v2/sports/soccer/ned.1/scoreboard",
                     "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard",
                     "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard",
                     "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard",
