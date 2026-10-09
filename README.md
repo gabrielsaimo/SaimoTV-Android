@@ -20,6 +20,11 @@ versão nova sozinho e oferece a atualização na tela.
   lugar; VOLTAR sempre leva à tela inicial.
 - Tela inicial em fileiras: continuar assistindo, destaques, lançamentos,
   gêneros e canais no ar. O destaque do topo acompanha o cartão em foco.
+  Quando o catálogo publica um trailer direto (MP4/HLS) para o título, ele
+  começa sem som depois de 5 s de foco parado; se tocou e o foco ficou ali
+  mais 15 s, a ficha abre. Sem trailer, nada abre sozinho (`Destaque.kt`).
+- Rádios com o logo de cada emissora, zapping entre elas e, nos aparelhos que
+  têm janela flutuante, a rádio continua tocando nela ao apertar HOME.
 - Páginas de Filmes/Séries/Animes/Doramas com fileiras e um "Explorar" de A a Z
   com filtro de gênero e ordenação.
 - Busca única (canais, filmes, séries, atores) com teclado na tela, voz,
