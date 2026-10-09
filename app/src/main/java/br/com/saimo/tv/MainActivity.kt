@@ -977,8 +977,11 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
         if (isFinishing || isDestroyed) return
         val marcada = if (index == current) sourceIndex else -1
         Painel.mostrar(this, getString(R.string.fontes_titulo, canal.name), canal.sources.mapIndexed { i, fonte ->
-            Painel.Item(getString(R.string.fontes_item_amigavel, i + 1),
-                listOfNotNull(fonte.quality, fonte.url.toUri().host?.removePrefix("www.")).joinToString(" · "),
+            // Nos canais 24h cada fonte é uma temporada: o nome dela ("Temporada 3")
+            // no lugar do número, e embaixo a qualidade e o servidor.
+            Painel.Item(fonte.nome ?: getString(R.string.fontes_item_amigavel, i + 1),
+                listOfNotNull(fonte.quality?.takeUnless { it.equals("Qualidade não informada", true) },
+                    fonte.url.toUri().host?.removePrefix("www.")).joinToString(" · "),
                 marcado = i == marcada) {
                 if (listPanel.visibility == View.VISIBLE) closeList()
                 retries = 0
@@ -1347,8 +1350,9 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
     private fun updateBanner() {
         val channel = ordered[current]
         bannerNumber.text = numeroDe(channel).takeIf { it > 0 }?.toString().orEmpty()
-        bannerChannel.text = channel.name
         val fonte = channel.sources.getOrNull(sourceIndex)
+        // Canal 24h: qual temporada está no ar.
+        bannerChannel.text = listOfNotNull(channel.name, fonte?.nome).joinToString(" · ")
         // No lugar de "fonte 1/3 · servidor", o que o controle faz aqui.
         bannerSource.text = if (fonte == null) "" else getString(if (Vr.ativo) R.string.vr_banner_dica else R.string.banner_dica)
         bannerSource.visibility =

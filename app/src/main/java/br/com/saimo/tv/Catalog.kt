@@ -10,6 +10,9 @@ data class Source(
     val keyId: String? = null,
     val key: String? = null,
     val quality: String? = null,
+    /// O que diferencia a fonte das outras do canal ("Temporada 3"), quando o
+    /// catálogo sabe; senão o app mostra o número dela.
+    val nome: String? = null,
 ) {
     val isDash: Boolean get() = url.contains(".mpd", ignoreCase = true)
     val isHls: Boolean get() =
