@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cartão de categoria do On Demand (Filmes, Séries, Animes, Doramas).
+
+     Atrás, uma colagem com quatro capas em alta daquela categoria; por cima,
+     a cor dela vinda do canto, o véu escuro e o nome com quantos títulos tem.
+     Tamanho fixo, como as outras células: nada pula enquanto as capas chegam.
+     Os ids capa* são os mesmos das outras células, que o adaptador procura. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="360dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:background="@drawable/row_focus"
+    android:focusable="true"
+    android:orientation="vertical"
+    android:padding="6dp">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@drawable/bg_logo">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/secaoCapa1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop" />
+            <ImageView
+                android:id="@+id/secaoCapa2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop" />
+            <ImageView
+                android:id="@+id/secaoCapa3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop" />
+            <ImageView
+                android:id="@+id/secaoCapa4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop" />
+        </LinearLayout>
+
+        <!-- A cor da categoria, entrando pelo canto de baixo. -->
+        <View
+            android:id="@+id/secaoCor"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_secao_veu" />
+
+        <!-- Não usados aqui, mas o adaptador das fileiras procura por eles. -->
+        <ImageView
+            android:id="@+id/capaImagem"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@null"
+            android:visibility="gone" />
+        <TextView
+            android:id="@+id/capaInicial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|start"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="18dp">
+            <ImageView
+                android:id="@+id/secaoIcone"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="14dp"
+                android:contentDescription="@null"
+                android:padding="11dp" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/capaNome"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:fontFamily="sans-serif-black"
+                    android:maxLines="1"
+                    android:textColor="@color/text_primary"
+                    android:textSize="28sp" />
+                <TextView
+                    android:id="@+id/capaSub"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/capaProgresso"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_gravity="bottom"
+            android:max="1000"
+            android:progressDrawable="@drawable/progress_track"
+            android:visibility="gone" />
+    </FrameLayout>
+</LinearLayout>

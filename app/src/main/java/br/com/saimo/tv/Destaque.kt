@@ -94,11 +94,20 @@ class Destaque(
         }
         val alvo = cartao.alvo
         titulo.text = if (alvo != null) Generos.semAno(alvo.titulo) else cartao.titulo
-        meta.text = cartao.subtitulo?.let { tela.getString(R.string.inicio_canal_agora, it) }
+        meta.text = cartao.meta
+            ?: cartao.subtitulo?.let { tela.getString(R.string.inicio_canal_agora, it) }
             ?: alvo?.let { tela.getString(if (it.serie) R.string.vod_ficha_tipo_serie else R.string.vod_ficha_tipo_filme) }
                 .orEmpty()
-        sinopse.text = ""
-        if (alvo == null) { trocarFundo(null); return }
+        sinopse.text = cartao.sinopse.orEmpty()
+        if (alvo == null) {
+            // Cartão que não é título (categoria): o fundo é o de um título dela.
+            val de = cartao.fundoDe ?: run { trocarFundo(null); return }
+            trabalho = escopo.launch(semDerrubar) {
+                delay(250)
+                trocarFundo(Detalhes.de(de.titulo, de.serie, de.tmdbId.takeIf { it > 0 })?.fundo)
+            }
+            return
+        }
         trabalho = escopo.launch(semDerrubar) {
             delay(400)
             val ficha = Detalhes.de(alvo.titulo, alvo.serie, alvo.tmdbId.takeIf { it > 0 }) ?: return@launch

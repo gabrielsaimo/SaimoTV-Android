@@ -275,6 +275,14 @@
     <string name="pagina_explorar">Explorar</string>
     <string name="pagina_todos_az">Todos de A a Z</string>
     <string name="pagina_ver_mais">Ver todos</string>
+    <string name="ondemand_categorias">Categorias</string>
+    <string name="ondemand_titulos">%1$s títulos</string>
+    <string name="ondemand_filmes_sobre">Lançamentos, clássicos e tudo entre eles, dublados e legendados.</string>
+    <string name="ondemand_series_sobre">Temporadas completas, com o próximo episódio emendando sozinho.</string>
+    <string name="ondemand_animes_sobre">Os animes do momento e os que marcaram época.</string>
+    <string name="ondemand_doramas_sobre">Romance, drama e suspense da Coreia, do Japão e da China.</string>
+    <string name="ondemand_genero_filmes">Filmes de %1$s</string>
+    <string name="ondemand_az">%1$s de A a Z</string>
     <string name="fontes_item_amigavel">Servidor %1$d</string>
     <string name="fontes_dica">Se a imagem travar, tente outro servidor. Se ele também cair, o app troca sozinho.</string>
     <string name="opcoes_canais">Lista de canais</string>

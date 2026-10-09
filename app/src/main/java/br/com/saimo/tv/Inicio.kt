@@ -54,10 +54,20 @@ object Inicio {
         val alvo: Alvo? = null,
         /// MENU sobre o cartão: favoritar, tirar do "continuar"...
         val aoMenu: (() -> Unit)? = null,
+        /// Cartão de categoria: as capas da colagem, o ícone e a cor dela.
+        val colagem: List<String> = emptyList(),
+        val icone: Int = 0,
+        val cor: Int = 0,
+        /// Linha de cima e texto do destaque quando o cartão não é um título.
+        val meta: String? = null,
+        val sinopse: String? = null,
+        /// Título cuja imagem larga vai ao fundo do destaque, quando o cartão
+        /// não é ele mesmo um título (a categoria mostra o filme em alta).
+        val fundoDe: Alvo? = null,
         val aoEscolher: () -> Unit,
     )
 
-    enum class Tipo { CAPA, LARGO }
+    enum class Tipo { CAPA, LARGO, SECAO }
 
     /**
      * O gerente da lista de fileiras: não rola sozinho quando o foco muda.
@@ -90,6 +100,7 @@ object Inicio {
         private var filas: List<Fila> = emptyList()
         private val depositoCapas = RecyclerView.RecycledViewPool()
         private val depositoLargos = RecyclerView.RecycledViewPool()
+        private val depositoSecoes = RecyclerView.RecycledViewPool()
         /// Onde cada fileira estava, para voltar no mesmo lugar.
         private val posicoes = mutableMapOf<String, Int>()
 
@@ -132,7 +143,11 @@ object Inicio {
                 LinearLayoutManager(parent.context, LinearLayoutManager.HORIZONTAL, false).apply {
                     initialPrefetchItemCount = 6
                 }
-            holder.capas.setRecycledViewPool(if (viewType == Tipo.LARGO.ordinal) depositoLargos else depositoCapas)
+            holder.capas.setRecycledViewPool(when (viewType) {
+                Tipo.LARGO.ordinal -> depositoLargos
+                Tipo.SECAO.ordinal -> depositoSecoes
+                else -> depositoCapas
+            })
             holder.capas.isFocusable = false
             return holder
         }
@@ -169,12 +184,21 @@ object Inicio {
             val nome: TextView = view.findViewById(R.id.capaNome)
             val sub: TextView? = view.findViewById(R.id.capaSub)
             val progresso: ProgressBar = view.findViewById(R.id.capaProgresso)
+            val colagem: List<ImageView> = listOfNotNull(
+                view.findViewById(R.id.secaoCapa1), view.findViewById(R.id.secaoCapa2),
+                view.findViewById(R.id.secaoCapa3), view.findViewById(R.id.secaoCapa4))
+            val icone: ImageView? = view.findViewById(R.id.secaoIcone)
+            val cor: View? = view.findViewById(R.id.secaoCor)
             var pedido: String? = null
             var cartao: Cartao? = null
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-            val layout = if (tipo == Tipo.LARGO) R.layout.item_cartao_largo else R.layout.item_capa
+            val layout = when (tipo) {
+                Tipo.LARGO -> R.layout.item_cartao_largo
+                Tipo.SECAO -> R.layout.item_secao
+                else -> R.layout.item_capa
+            }
             val holder = Holder(LayoutInflater.from(parent.context).inflate(layout, parent, false))
             Cartoes.arredondar(holder.imagem.parent as View)
             // Sem crescer no foco: o contorno do row_focus já mostra onde está,
@@ -210,6 +234,8 @@ object Inicio {
             holder.inicial.text = cartao.inicial
             holder.itemView.setOnClickListener { cartao.aoEscolher() }
 
+            if (tipo == Tipo.SECAO) { secao(holder, cartao); return }
+
             holder.progresso.visibility =
                 if (cartao.progresso == null || cartao.progresso <= 0f) View.GONE else View.VISIBLE
             cartao.progresso?.let { holder.progresso.progress = (it * 1000).toInt() }
@@ -237,6 +263,28 @@ object Inicio {
                 return
             }
             Cartoes.carregar(holder.imagem, holder.inicial, direta)
+        }
+
+        /** Cartão de categoria: colagem de capas, cor e ícone da categoria. */
+        private fun secao(holder: Holder, cartao: Cartao) {
+            holder.colagem.forEachIndexed { i, imagem ->
+                imagem.dispose()
+                imagem.setImageDrawable(null)
+                cartao.colagem.getOrNull(i)?.let { imagem.load(it) }
+            }
+            // A cor entra pelo canto de baixo e some antes do meio do cartão.
+            holder.cor?.background = android.graphics.drawable.GradientDrawable(
+                android.graphics.drawable.GradientDrawable.Orientation.BL_TR,
+                intArrayOf(cartao.cor and 0x00FFFFFF or (0xB3 shl 24), cartao.cor and 0x00FFFFFF),
+            )
+            holder.icone?.apply {
+                setImageResource(cartao.icone)
+                background = android.graphics.drawable.GradientDrawable().apply {
+                    shape = android.graphics.drawable.GradientDrawable.OVAL
+                    setColor(cartao.cor)
+                }
+                imageTintList = android.content.res.ColorStateList.valueOf(0xFF0B0E14.toInt())
+            }
         }
 
         override fun getItemCount() = cartoes.size
