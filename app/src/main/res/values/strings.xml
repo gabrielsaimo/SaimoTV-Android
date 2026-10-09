@@ -278,7 +278,7 @@
     <string name="ondemand_categorias">Categorias</string>
     <string name="radios_recentes">Ouvidas por último</string>
     <string name="radio_ao_vivo">AO VIVO</string>
-    <string name="radio_dica_tocando">cima e baixo trocam de estação · esquerda abre a lista · VOLTAR sai</string>
+    <string name="radio_dica_tocando">cima e baixo trocam de estação · esquerda ou VOLTAR mostram todas as rádios</string>
     <string name="radio_posicao">Estação %1$d de %2$d</string>
     <string name="radios_noticias">Notícias e esporte</string>
     <string name="radios_rock">Rock</string>

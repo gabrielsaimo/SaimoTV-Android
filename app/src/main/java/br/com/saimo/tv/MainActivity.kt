@@ -396,7 +396,12 @@ class MainActivity : AppCompatActivity() {
         current = index.coerceIn(ordered.indices)
         sourceIndex = source
         val channel = ordered[current]
-        if (isModoRadio) painelRadio.mostrar(channel, current, ordered.size)
+        if (isModoRadio) {
+            painelRadio.mostrar(channel, current, ordered.size)
+            // A faixa de canal de TV não aparece na rádio (ver revealBanner).
+            handler.removeCallbacks(hideBanner)
+            banner.visibility = View.GONE
+        }
         val chosen = channel.sources.getOrNull(sourceIndex) ?: channel.sources.first()
         tentativaDesde = android.os.SystemClock.elapsedRealtime()
         tocouAvisado = false
@@ -611,6 +616,7 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
             }
             return super.onKeyDown(keyCode, event)
         }
+        if (isModoRadio) return teclaNaRadio(keyCode, event)
         val listOpen = listPanel.visibility == View.VISIBLE
         return when (keyCode) {
             // Um toque no OK mostra o que está no ar; segurar três segundos é
@@ -814,7 +820,31 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
     private var okSegurado = false
     private var okApertado = false
 
+    /**
+     * Teclas com uma rádio tocando. Rádio não é canal de TV: não tem lista de
+     * canais, guia de programação nem fontes. Cima e baixo trocam de estação;
+     * esquerda e VOLTAR voltam para a tela de Rádios, que é a lista delas.
+     */
+    private fun teclaNaRadio(keyCode: Int, event: KeyEvent?): Boolean = when (keyCode) {
+        KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_CHANNEL_UP, KeyEvent.KEYCODE_MEDIA_PREVIOUS -> {
+            play((current - 1 + ordered.size) % ordered.size); true
+        }
+        KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_CHANNEL_DOWN, KeyEvent.KEYCODE_MEDIA_NEXT -> {
+            play((current + 1) % ordered.size); true
+        }
+        KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_BACK, KeyEvent.KEYCODE_ESCAPE -> { finish(); true }
+        KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, KeyEvent.KEYCODE_MEDIA_PLAY, KeyEvent.KEYCODE_MEDIA_PAUSE -> {
+            player.playWhenReady = true; true
+        }
+        KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_DPAD_RIGHT,
+        KeyEvent.KEYCODE_GUIDE, KeyEvent.KEYCODE_INFO, KeyEvent.KEYCODE_MENU, KeyEvent.KEYCODE_SETTINGS,
+        KeyEvent.KEYCODE_LAST_CHANNEL, KeyEvent.KEYCODE_CAPTIONS,
+        in KeyEvent.KEYCODE_0..KeyEvent.KEYCODE_9 -> true
+        else -> super.onKeyDown(keyCode, event)
+    }
+
     override fun onKeyLongPress(keyCode: Int, event: KeyEvent?): Boolean {
+        if (isModoRadio) return true
         if ((keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER) &&
             listPanel.visibility != View.VISIBLE && numpad.visibility != View.VISIBLE) {
             okSegurado = true
@@ -825,6 +855,7 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
+        if (isModoRadio && (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER)) return true
         if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER) {
             // O OK que abriu a lista não pode, ao ser solto, escolher o canal em foco.
             if (SystemClock.elapsedRealtime() - listaAbertaEm < 400) return true
@@ -1347,6 +1378,9 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
     }
 
     private fun revealBanner() {
+        // Na rádio, o painel dela já diz o que toca; a faixa de canal de TV
+        // (com as teclas de TV) só confundiria.
+        if (isModoRadio) return
         if (listPanel.visibility == View.VISIBLE) return
         updateBanner()
         handler.removeCallbacks(hideBanner)
