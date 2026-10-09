@@ -154,6 +154,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun indicePorNumero(numero: Int): Int = ordered.indexOfFirst { numeros[it.name] == numero }
     private var isModoRadio = false
+    /// O painel que cobre a tela enquanto uma rádio (só áudio) toca.
+    private val painelRadio by lazy {
+        PainelRadio(findViewById(R.id.radioPainel)) { ::player.isInitialized && player.isPlaying }
+    }
     private var current = 0
     private var sourceIndex = 0
     private var retries = 0
@@ -392,6 +396,7 @@ class MainActivity : AppCompatActivity() {
         current = index.coerceIn(ordered.indices)
         sourceIndex = source
         val channel = ordered[current]
+        if (isModoRadio) painelRadio.mostrar(channel, current, ordered.size)
         val chosen = channel.sources.getOrNull(sourceIndex) ?: channel.sources.first()
         tentativaDesde = android.os.SystemClock.elapsedRealtime()
         tocouAvisado = false
