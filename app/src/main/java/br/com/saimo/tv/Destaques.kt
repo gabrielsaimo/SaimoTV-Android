@@ -35,6 +35,8 @@ object Destaques {
         val ano: String,
         /// Endereço inteiro da capa, ou vazio quando o gerador não achou uma.
         val capa: String,
+        /** URL direta MP4/HLS; campo opcional para manter compatibilidade. */
+        val trailer: String = "",
     ) {
         val serie: Boolean get() = tipo != 'f'
         val daColecao: Boolean get() = tipo == 'a' || tipo == 'd'
@@ -68,12 +70,14 @@ object Destaques {
                     val campos = linha.split("\t")
                     if (campos.size < 3) continue
                     val poster = campos.getOrNull(4).orEmpty()
+                    val trailer = campos.getOrNull(5).orEmpty()
                     itens += Item(
                         titulo = campos[1],
                         tipo = campos[0].firstOrNull() ?: 'f',
                         letra = campos[2],
                         ano = campos.getOrNull(3).orEmpty(),
                         capa = if (poster.isEmpty()) "" else base + poster,
+                        trailer = trailer,
                     )
                 }
             }

@@ -1369,6 +1369,14 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
         status.visibility = View.VISIBLE
     }
 
+    override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O &&
+            isModoRadio && !isInPictureInPictureMode && ::player.isInitialized && player.isPlaying) {
+            enterPictureInPictureMode(android.app.PictureInPictureParams.Builder().build())
+        }
+    }
+
     override fun onStop() {
         super.onStop()
         emSegundoPlano = true

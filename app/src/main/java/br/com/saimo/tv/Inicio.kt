@@ -48,6 +48,8 @@ object Inicio {
         val nomeDaCapa: String? = null,
         /// Linha de baixo do cartão largo (o programa no ar, no canal).
         val subtitulo: String? = null,
+        /** Trailer direto do banner, quando publicado no catálogo. */
+        val trailer: String? = null,
         /// O título por trás do cartão, para o destaque do topo e o MENU.
         val alvo: Alvo? = null,
         /// MENU sobre o cartão: favoritar, tirar do "continuar"...

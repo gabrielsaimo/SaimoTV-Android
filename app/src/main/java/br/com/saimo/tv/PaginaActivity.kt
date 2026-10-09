@@ -70,7 +70,7 @@ class PaginaActivity : TelaComMenu() {
         filas.layoutManager = Inicio.Filas(this)
         filas.adapter = adaptador
         destaque = Destaque(this, lifecycleScope, findViewById<ImageView>(R.id.inicioFundo),
-            findViewById(R.id.inicioTitulo), findViewById(R.id.inicioMeta), findViewById(R.id.inicioSinopse))
+            findViewById(R.id.inicioTitulo), findViewById(R.id.inicioMeta), findViewById(R.id.inicioSinopse)) { it.aoEscolher() }
         val nome = getString(when (tipo) {
             GradeActivity.SERIES -> R.string.vod_series
             GradeActivity.ANIMES -> R.string.vod_animes

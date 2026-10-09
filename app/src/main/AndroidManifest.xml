@@ -87,6 +87,8 @@
             android:exported="true" />
         <activity
             android:name=".MainActivity"
+            android:supportsPictureInPicture="true"
+            android:resizeableActivity="true"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:exported="false"
             android:launchMode="singleTop"

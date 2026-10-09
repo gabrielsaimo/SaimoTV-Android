@@ -15,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
+import coil3.load
 
 @UnstableApi
 class RadiosActivity : TelaComMenu() {
@@ -23,7 +24,7 @@ class RadiosActivity : TelaComMenu() {
     private lateinit var carregando: View
     private lateinit var vazio: TextView
 
-    data class Radio(val nome: String, val url: String)
+    data class Radio(val nome: String, val url: String, val logo: String?)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +60,7 @@ class RadiosActivity : TelaComMenu() {
                 if (!arquivo.exists()) return@withContext emptyList<Radio>()
                 arquivo.readLines().mapNotNull { linha ->
                     val partes = linha.split("|")
-                    if (partes.size >= 2) Radio(partes[0].trim(), partes[1].trim()) else null
+                    if (partes.size >= 2) Radio(partes[0].trim(), partes[1].trim(), partes.getOrNull(2)?.trim()?.takeIf { it.isNotEmpty() }) else null
                 }
             }
             carregando.visibility = View.GONE
@@ -83,6 +84,8 @@ class RadiosActivity : TelaComMenu() {
         override fun onBindViewHolder(holder: Holder, position: Int) {
             val r = itens[position]
             holder.nome.text = r.nome
+            holder.icone.setImageResource(R.drawable.ic_radio)
+            r.logo?.let { holder.icone.load(it) }
             holder.itemView.setOnClickListener {
                 val i = Intent(this@RadiosActivity, MainActivity::class.java)
                 i.putExtra(MainActivity.EXTRA_RADIO_NOME, r.nome)
