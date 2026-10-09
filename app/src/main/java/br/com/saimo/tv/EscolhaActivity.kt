@@ -245,7 +245,7 @@ class EscolhaActivity : TelaComMenu() {
         val alvo = Alvo(item.titulo, item.serie, item.letra, item.ano,
             colecao = if (item.daColecao) item.colecao else "")
         return Inicio.Cartao(
-            titulo = item.titulo, capa = item.capa, inicial = item.titulo.take(1).uppercase(),
+            titulo = item.titulo, capa = item.capa, inicial = item.titulo.take(1).uppercase(), trailer = item.trailer,
             progresso = if (item.serie) null else Progresso.fracao(this, Progresso.chaveFilme(item.titulo)),
             alvo = alvo,
             aoMenu = if (item.daColecao) null else ({ alternarFavorito(alvo) }),
@@ -261,7 +261,7 @@ class EscolhaActivity : TelaComMenu() {
 
     // MARK: - Destaque
 
-    private val painelDestaque by lazy { Destaque(this, lifecycleScope, fundo, titulo, meta, sinopse) }
+    private val painelDestaque by lazy { Destaque(this, lifecycleScope, fundo, titulo, meta, sinopse) { it.aoEscolher() } }
 
     private fun mostrarDestaque(cartao: Inicio.Cartao) = painelDestaque.mostrar(cartao)
 

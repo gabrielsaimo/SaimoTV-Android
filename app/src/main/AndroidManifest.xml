@@ -64,6 +64,8 @@
         </activity>
         <activity
             android:name=".PlayerActivity"
+            android:supportsPictureInPicture="true"
+            android:resizeableActivity="true"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:exported="false"
             android:screenOrientation="landscape"
@@ -87,6 +89,8 @@
             android:exported="true" />
         <activity
             android:name=".MainActivity"
+            android:supportsPictureInPicture="true"
+            android:resizeableActivity="true"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:exported="false"
             android:launchMode="singleTop"
@@ -163,6 +167,8 @@
         <activity android:name=".EventosActivity" />
     
         <activity android:name=".OnDemandActivity" android:exported="false" android:launchMode="singleTop" />
-        <activity android:name=".RadiosActivity" android:exported="false" android:launchMode="singleTop" />
+        <activity android:name=".RadiosActivity"
+            android:supportsPictureInPicture="true"
+            android:resizeableActivity="true" android:exported="false" android:launchMode="singleTop" />
 </application>
 </manifest>

@@ -154,6 +154,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun indicePorNumero(numero: Int): Int = ordered.indexOfFirst { numeros[it.name] == numero }
     private var current = 0
+    /** PiP é exclusivo da rádio; canais e VOD não continuam em janela. */
+    private var radioAtivo = false
     private var sourceIndex = 0
     private var retries = 0
 
@@ -261,6 +263,7 @@ class MainActivity : AppCompatActivity() {
         val rUrl = intent.getStringExtra(EXTRA_RADIO_URL)
         val rNome = intent.getStringExtra(EXTRA_RADIO_NOME)
         if (rUrl != null && rNome != null) {
+            radioAtivo = true
             val radioChannel = Channel(name = rNome, sources = listOf(Source(url = rUrl)), categoria = "Rádio")
             ordered = (listOf(radioChannel) + ordered).distinctBy { it.name }
             play(0)
@@ -382,6 +385,8 @@ class MainActivity : AppCompatActivity() {
         current = index.coerceIn(ordered.indices)
         sourceIndex = source
         val channel = ordered[current]
+        radioAtivo = channel.categoria.equals("Rádio", ignoreCase = true) ||
+            channel.name.contains("rádio", ignoreCase = true) || channel.name.contains("radio", ignoreCase = true)
         val chosen = channel.sources.getOrNull(sourceIndex) ?: channel.sources.first()
         tentativaDesde = android.os.SystemClock.elapsedRealtime()
         tocouAvisado = false
@@ -1346,6 +1351,14 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
     private fun showStatus(text: String) {
         status.text = text
         status.visibility = View.VISIBLE
+    }
+
+    override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O &&
+            radioAtivo && !isInPictureInPictureMode && ::player.isInitialized && player.isPlaying) {
+            enterPictureInPictureMode()
+        }
     }
 
     override fun onStop() {

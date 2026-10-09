@@ -29,6 +29,7 @@ import androidx.media3.common.Tracks
 import androidx.media3.common.VideoSize
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DefaultDataSource
+import androidx.media3.datasource.FileDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.MediaSource
 import androidx.media3.exoplayer.source.MergingMediaSource
@@ -184,6 +185,7 @@ class PlayerActivity : AppCompatActivity() {
         handler.post(tique)
     }
 
+
     // MARK: - Óculos de VR
 
     /**
@@ -324,7 +326,7 @@ class PlayerActivity : AppCompatActivity() {
             .setLabel(opcao.rotulo)
             .setSelectionFlags(C.SELECTION_FLAG_DEFAULT)
             .build()
-        val legenda = SingleSampleMediaSource.Factory(DefaultDataSource.Factory(this))
+        val legenda = SingleSampleMediaSource.Factory(FileDataSource.Factory())
             .createMediaSource(configuracao, C.TIME_UNSET)
         return MergingMediaSource(base, legenda)
     }
@@ -360,6 +362,8 @@ class PlayerActivity : AppCompatActivity() {
             legendaExt = opcao
             legendaExtSrt = srt
             legendaAtraso = 0.0
+            video.subtitleView?.visibility = View.VISIBLE
+            estiloDaLegenda()
             if (guardar) Preferencias.legendaExterna = opcao.idioma
             recarregarComLegenda()
         }
@@ -519,7 +523,12 @@ class PlayerActivity : AppCompatActivity() {
                 // A faixa da legenda escolhida só existe depois de o player
                 // preparar; é aqui que ela é ligada.
                 val grupo = tracks.groups.firstOrNull { g ->
-                    g.type == C.TRACK_TYPE_TEXT && (0 until g.length).any { g.getTrackFormat(it).id == Legendas.ID_FAIXA }
+                    g.type == C.TRACK_TYPE_TEXT && (0 until g.length).any { i ->
+                        val formato = g.getTrackFormat(i)
+                        formato.id == Legendas.ID_FAIXA ||
+                            formato.label == legendaExt?.rotulo ||
+                            formato.language == legendaExt?.bcp47
+                    }
                 }
                 val p = player
                 if (grupo != null && p != null) {
@@ -527,6 +536,8 @@ class PlayerActivity : AppCompatActivity() {
                     p.trackSelectionParameters = p.trackSelectionParameters.buildUpon()
                         .setTrackTypeDisabled(C.TRACK_TYPE_TEXT, false)
                         .setOverrideForType(TrackSelectionOverride(grupo.mediaTrackGroup, 0)).build()
+                    video.subtitleView?.visibility = View.VISIBLE
+                    estiloDaLegenda()
                 }
             }
             montarBotoes()
@@ -692,7 +703,7 @@ class PlayerActivity : AppCompatActivity() {
                 .ifEmpty { candidatos }
                 .filter { it.titulo.isNotBlank() && !it.titulo.equals(r.alvo.titulo, true) }
                 .distinctBy { it.titulo.lowercase(Locale.ROOT) }
-                .take(6)
+                .take(20)
             val acoes = mutableListOf(getString(R.string.player_voltar) to { finish() })
             mostrarAviso("Você terminou", "Mais títulos para você assistir", acoes)
             val linha = findViewById<LinearLayout>(R.id.recomendacoesLinha)
