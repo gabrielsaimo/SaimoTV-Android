@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Trailer do destaque do topo. TextureView porque fica dentro do grupo do
+     fundo, que entra e sai com transparência animada: SurfaceView ignora a
+     transparência do pai e ficaria preto por cima da imagem. Começa invisível
+     (alpha 0) e só aparece no primeiro quadro, para não cobrir a imagem com
+     preto enquanto carrega. -->
+<androidx.media3.ui.PlayerView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:alpha="0"
+    android:focusable="false"
+    android:visibility="gone"
+    app:resize_mode="zoom"
+    app:show_buffering="never"
+    app:shutter_background_color="@android:color/transparent"
+    app:surface_type="texture_view"
+    app:use_controller="false" />

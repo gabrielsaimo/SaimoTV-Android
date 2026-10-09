@@ -9,6 +9,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.media3.common.MediaItem
+import androidx.media3.common.PlaybackException
+import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
@@ -46,13 +48,12 @@ class Destaque(
     /// Logo acima da imagem e abaixo dos degradês do grupo, que continuam
     /// deixando o texto legível por cima do vídeo.
     private val trailerView: PlayerView? = (fundo.parent as? ViewGroup)?.let { grupo ->
-        PlayerView(tela).apply {
-            useController = false
-            visibility = View.GONE
-            layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-            grupo.addView(this, grupo.indexOfChild(fundo) + 1)
+        (tela.layoutInflater.inflate(R.layout.trailer_destaque, grupo, false) as PlayerView).also {
+            grupo.addView(it, grupo.indexOfChild(fundo) + 1)
         }
     }
+    /// O trailer só conta como "tocou" depois do primeiro quadro na tela.
+    private var trailerMostrou = false
 
     init {
         // Tela que sai da frente (abriu a ficha, o player, foi para o
@@ -88,7 +89,7 @@ class Destaque(
                 delay(15_000)
                 val naFrente = (tela as? LifecycleOwner)?.lifecycle?.currentState
                     ?.isAtLeast(Lifecycle.State.RESUMED) ?: true
-                if (trailerPlayer != null && naFrente) aoAbrir(cartao)
+                if (trailerMostrou && naFrente) aoAbrir(cartao)
             }
         }
         val alvo = cartao.alvo
@@ -118,11 +119,21 @@ class Destaque(
         val view = trailerView ?: return
         val p = ExoPlayer.Builder(tela).build()
         trailerPlayer = p
+        trailerMostrou = false
+        view.alpha = 0f
         view.player = p
         view.visibility = View.VISIBLE
-        // Título sem imagem larga deixa o grupo apagado; com trailer ele aparece.
-        (fundo.parent as? View)?.takeIf { it.id == R.id.inicioFundoGrupo }
-            ?.animate()?.alpha(1f)?.setDuration(300)?.start()
+        p.addListener(object : Player.Listener {
+            override fun onRenderedFirstFrame() {
+                trailerMostrou = true
+                view.animate().alpha(1f).setDuration(400).start()
+                // Título sem imagem larga deixa o grupo apagado; com trailer ele aparece.
+                (fundo.parent as? View)?.takeIf { it.id == R.id.inicioFundoGrupo }
+                    ?.animate()?.alpha(1f)?.setDuration(300)?.start()
+            }
+            // Endereço fora do ar ou recusado: volta a imagem, e nada abre sozinho.
+            override fun onPlayerError(error: PlaybackException) { view.post { pararTrailer() } }
+        })
         p.setMediaItem(MediaItem.fromUri(url))
         p.repeatMode = ExoPlayer.REPEAT_MODE_ONE
         p.volume = 0f
@@ -130,8 +141,11 @@ class Destaque(
         p.play()
     }
     private fun pararTrailer() {
+        trailerMostrou = false
         if (trailerPlayer == null) return
         trailerView?.player = null
+        trailerView?.animate()?.cancel()
+        trailerView?.alpha = 0f
         trailerView?.visibility = View.GONE
         trailerPlayer?.release()
         trailerPlayer = null

@@ -15,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
+import coil3.dispose
 import coil3.load
 
 @UnstableApi
@@ -81,11 +82,27 @@ class RadiosActivity : TelaComMenu() {
             return Holder(v)
         }
         
+        private val branco = android.content.res.ColorStateList.valueOf(android.graphics.Color.WHITE)
+
         override fun onBindViewHolder(holder: Holder, position: Int) {
             val r = itens[position]
             holder.nome.text = r.nome
+            // O ícone de rádio é desenhado em branco (tint); o logo da emissora
+            // tem as cores dele, e com o tint ficava só a silhueta branca.
+            holder.icone.dispose()
+            holder.icone.imageTintList = branco
             holder.icone.setImageResource(R.drawable.ic_radio)
-            r.logo?.let { holder.icone.load(it) }
+            r.logo?.let { logo ->
+                holder.icone.load(logo) {
+                    listener(
+                        onSuccess = { _, _ -> holder.icone.imageTintList = null },
+                        onError = { _, _ ->
+                            holder.icone.imageTintList = branco
+                            holder.icone.setImageResource(R.drawable.ic_radio)
+                        },
+                    )
+                }
+            }
             holder.itemView.setOnClickListener {
                 val i = Intent(this@RadiosActivity, MainActivity::class.java)
                 i.putExtra(MainActivity.EXTRA_RADIO_NOME, r.nome)
