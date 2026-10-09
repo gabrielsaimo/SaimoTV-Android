@@ -34,7 +34,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/ae.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/ae/ae.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/ae/ae.m3u8",
                 quality = "FHD · 1920x1080",
             ),
             Source(
@@ -161,7 +161,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/adultswim.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/adultswim/adultswim.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/adultswim/adultswim.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -264,7 +264,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/amc.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/amc/amc.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/amc/amc.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -387,7 +387,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/animalplanet.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/animalplanet/animalplanet.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/animalplanet/animalplanet.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -533,7 +533,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/cartoonnetwork.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/cartoonnetwork/cartoonnetwork.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/cartoonnetwork/cartoonnetwork.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -660,7 +660,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/cnnbrasil.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/cnnbrasil/cnnbrasil.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/cnnbrasil/cnnbrasil.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -1023,7 +1023,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/globonews.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/globonews/globonews.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/globonews/globonews.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -1302,7 +1302,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
                 quality = "HD",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/globonovelas/globonovelas.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/globonovelas/globonovelas.m3u8",
             ),
         ),
         categoria = "Filmes e Séries",
@@ -1312,7 +1312,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/gnt.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/gnt/gnt.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/gnt/gnt.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -1575,7 +1575,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
                 quality = "HD",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/history/history.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/history/history.m3u8",
             ),
         ),
         categoria = "Documentários",
@@ -1673,7 +1673,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
                 quality = "HD",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/history2/history2.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/history2/history2.m3u8",
             ),
         ),
         categoria = "Documentários",
@@ -1815,7 +1815,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/megapix.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/megapix/megapix.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/megapix/megapix.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -1998,7 +1998,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/multishow.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/multishow/multishow.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/multishow/multishow.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -2121,7 +2121,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/premiere.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/premiere2/premiere2.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/premiere2/premiere2.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -2245,7 +2245,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
                 quality = "HD",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/premiere/premiere.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/premiere/premiere.m3u8",
             ),
         ),
         categoria = "Esportes",
@@ -2255,7 +2255,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/premiere.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/premiere3/premiere3.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/premiere3/premiere3.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -2386,7 +2386,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/premiere.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/premiere4/premiere4.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/premiere4/premiere4.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -2517,7 +2517,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/premiere.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/premiere5/premiere5.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/premiere5/premiere5.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -2656,7 +2656,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/premiere.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/premiere6/premiere6.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/premiere6/premiere6.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -2783,7 +2783,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/premiere.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/premiere7/premiere7.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/premiere7/premiere7.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -2914,7 +2914,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
         logo = "https://mondrian.claro.com.br/channels/inverse/premiere.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/premiere8/premiere8.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/premiere8/premiere8.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -3244,7 +3244,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/sonychannel.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/sonychannel/sonychannel.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/sonychannel/sonychannel.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -3391,7 +3391,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/sportv.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/sportv/sportv.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/sportv/sportv.m3u8",
                 quality = "FHD · 1920x1080",
             ),
             Source(
@@ -3522,7 +3522,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/sportv2.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/sportv2/sportv2.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/sportv2/sportv2.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -3657,7 +3657,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/sportv3.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/sportv3/sportv3.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/sportv3/sportv3.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -3792,7 +3792,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/off.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/off/off.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/off/off.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -3891,7 +3891,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/telecineaction.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/telecineaction/telecineaction.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/telecineaction/telecineaction.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -4070,7 +4070,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/telecinepipoca.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/telecinepipoca/telecinepipoca.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/telecinepipoca/telecinepipoca.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -4221,7 +4221,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/telecinepremium.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/telecinepremium/telecinepremium.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/telecinepremium/telecinepremium.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -4529,7 +4529,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/warnerchannel.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/warnerchannel/warnerchannel.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/warnerchannel/warnerchannel.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -4687,7 +4687,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/globosp.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/globosp/globosp.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/globosp/globosp.m3u8",
                 quality = "FHD · 1920x1080",
             ),
             Source(
@@ -4778,7 +4778,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/cartoonito.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/cartoonito/cartoonito.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/cartoonito/cartoonito.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -4905,7 +4905,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/cinemax.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/cinemax/cinemax.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/cinemax/cinemax.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -5152,7 +5152,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
                 quality = "HD",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/discoverychannel/discoverychannel.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/discoverychannel/discoverychannel.m3u8",
                 quality = "HD · 1280x720",
             ),
         ),
@@ -5267,7 +5267,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
                 quality = "HD",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/discoverykids/discoverykids.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/discoverykids/discoverykids.m3u8",
                 quality = "HD · 1280x720",
             ),
         ),
@@ -5390,7 +5390,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
                 quality = "HD",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/discoverytheather/discoverytheather.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/discoverytheather/discoverytheather.m3u8",
             ),
         ),
         categoria = "Documentários",
@@ -5400,7 +5400,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/espn.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/espn/espn.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/espn/espn.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -5535,7 +5535,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/espn2.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/espn2/espn2.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/espn2/espn2.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -5662,7 +5662,7 @@ private fun build_CATALOG_PART_0(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/espn4.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/espn4/espn4.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/espn4/espn4.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -5796,7 +5796,7 @@ private fun build_CATALOG_PART_1(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/espn5.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/espn5/espn5.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/espn5/espn5.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -5923,7 +5923,7 @@ private fun build_CATALOG_PART_1(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/espn6.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/espn6/espn6.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/espn6/espn6.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -6042,7 +6042,7 @@ private fun build_CATALOG_PART_1(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/hbo.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/hbo/hbo.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/hbo/hbo.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -6209,7 +6209,7 @@ private fun build_CATALOG_PART_1(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/hbo2.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/hbo2/hbo2.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/hbo2/hbo2.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -6332,7 +6332,7 @@ private fun build_CATALOG_PART_1(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/hbofamily.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/hbofamily/hbofamily.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/hbofamily/hbofamily.m3u8",
                 quality = "FHD · 1920x1080",
             ),
             Source(
@@ -6455,7 +6455,7 @@ private fun build_CATALOG_PART_1(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/hbomundi.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/hbomundi/hbomundi.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/hbomundi/hbomundi.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -6626,7 +6626,7 @@ private fun build_CATALOG_PART_1(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/hboplus.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/hboplus/hboplus.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/hboplus/hboplus.m3u8",
                 quality = "FHD · 1920x1080",
             ),
             Source(
@@ -6793,7 +6793,7 @@ private fun build_CATALOG_PART_1(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/hbopop.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/hbopop/hbopop.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/hbopop/hbopop.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -7275,7 +7275,7 @@ private fun build_CATALOG_PART_1(): List<Channel> = listOf(
                 quality = "HD",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/hboxtreme/hboxtreme.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/hboxtreme/hboxtreme.m3u8",
             ),
         ),
         categoria = "Filmes e Séries",
@@ -7304,7 +7304,7 @@ private fun build_CATALOG_PART_1(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/space.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/space/space.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/space/space.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -7475,7 +7475,7 @@ private fun build_CATALOG_PART_1(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/tnt.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/tnt/tnt.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/tnt/tnt.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -7646,7 +7646,7 @@ private fun build_CATALOG_PART_1(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/tntseries.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/tntseries/tntseries.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/tntseries/tntseries.m3u8",
                 quality = "SD · 1024x576",
             ),
             Source(
@@ -7817,7 +7817,7 @@ private fun build_CATALOG_PART_1(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/universaltv.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/universaltv/universaltv.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/universaltv/universaltv.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -8099,7 +8099,7 @@ private fun build_CATALOG_PART_1(): List<Channel> = listOf(
                 quality = "HD",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/discoveryturbo/discoveryturbo.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/discoveryturbo/discoveryturbo.m3u8",
             ),
         ),
         categoria = "Documentários",
@@ -8184,7 +8184,7 @@ private fun build_CATALOG_PART_1(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/telecinefun.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/telecinefun/telecinefun.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/telecinefun/telecinefun.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -8363,7 +8363,7 @@ private fun build_CATALOG_PART_1(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/telecinecult.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/telecinecult/telecinecult.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/telecinecult/telecinecult.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -8542,7 +8542,7 @@ private fun build_CATALOG_PART_1(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/telecinetouch.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/telecinetouch/telecinetouch.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/telecinetouch/telecinetouch.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -8898,7 +8898,7 @@ private fun build_CATALOG_PART_1(): List<Channel> = listOf(
                 quality = "HD",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/tlc/tlc.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/tlc/tlc.m3u8",
             ),
         ),
         categoria = "Variedades",
@@ -9011,7 +9011,7 @@ private fun build_CATALOG_PART_1(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/tntnovelas.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/tntnovelas/tntnovelas.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/tntnovelas/tntnovelas.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -9238,7 +9238,7 @@ private fun build_CATALOG_PART_1(): List<Channel> = listOf(
                 quality = "HD",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/discoveryscience/discoveryscience.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/discoveryscience/discoveryscience.m3u8",
             ),
         ),
         categoria = "Documentários",
@@ -9248,7 +9248,7 @@ private fun build_CATALOG_PART_1(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/axn.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/axn/axn.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/axn/axn.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -9447,7 +9447,7 @@ private fun build_CATALOG_PART_1(): List<Channel> = listOf(
                 quality = "HD",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/tcm/tcm.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/tcm/tcm.m3u8",
             ),
         ),
         categoria = "Filmes e Séries",
@@ -9457,7 +9457,7 @@ private fun build_CATALOG_PART_1(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/bandnews.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/bandnews/bandnews.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/bandnews/bandnews.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -9588,7 +9588,7 @@ private fun build_CATALOG_PART_1(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/bandsports.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/bandsports/bandsports.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/bandsports/bandsports.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -9778,7 +9778,7 @@ private fun build_CATALOG_PART_1(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/cultura.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/cultura/cultura.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/cultura/cultura.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -10003,7 +10003,7 @@ private fun build_CATALOG_PART_1(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/espn3.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/espn3/espn3.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/espn3/espn3.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -10300,7 +10300,7 @@ private fun build_CATALOG_PART_1(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/cancaonova.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/cancaonova/cancaonova.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/cancaonova/cancaonova.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -10455,7 +10455,7 @@ private fun build_CATALOG_PART_1(): List<Channel> = listOf(
                 quality = "HD",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/aparecida/aparecida.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/aparecida/aparecida.m3u8",
             ),
         ),
         categoria = "TV Aberta",
@@ -10465,7 +10465,7 @@ private fun build_CATALOG_PART_1(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/redevida.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/redevida/redevida.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/redevida/redevida.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -10672,7 +10672,7 @@ private fun build_CATALOG_PART_1(): List<Channel> = listOf(
                 quality = "HD",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/discoveryid/discoveryid.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/discoveryid/discoveryid.m3u8",
             ),
         ),
         categoria = "Documentários",
@@ -10800,7 +10800,7 @@ private fun build_CATALOG_PART_1(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/xsports.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/xsports/xsports.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/xsports/xsports.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -10993,7 +10993,7 @@ private fun build_CATALOG_PART_1(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/band.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/bandsp/bandsp.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/bandsp/bandsp.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -11114,7 +11114,7 @@ private fun build_CATALOG_PART_2(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/sbt.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/sbtsp/sbtsp.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/sbtsp/sbtsp.m3u8",
                 quality = "FHD · 1920x1080",
             ),
             Source(
@@ -11197,7 +11197,7 @@ private fun build_CATALOG_PART_2(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/record.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/recordsp/recordsp.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/recordsp/recordsp.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -11509,7 +11509,7 @@ private fun build_CATALOG_PART_2(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/tvpaieterno.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/tvpaieterno/tvpaieterno.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/tvpaieterno/tvpaieterno.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -12166,7 +12166,7 @@ private fun build_CATALOG_PART_2(): List<Channel> = listOf(
                 quality = "HD",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/discoveryhh/discoveryhh.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/discoveryhh/discoveryhh.m3u8",
             ),
         ),
         categoria = "Documentários",
@@ -13002,7 +13002,7 @@ private fun build_CATALOG_PART_3(): List<Channel> = listOf(
                 quality = "SD · 1216x684",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/masterchef/masterchef.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/masterchef/masterchef.m3u8",
             ),
         ),
         categoria = "24 Horas",
@@ -14151,7 +14151,7 @@ private fun build_CATALOG_PART_4(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/primevideo.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/primevideo/primevideo.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/primevideo/primevideo.m3u8",
                 quality = "FHD · 1920x1080",
             ),
             Source(
@@ -14177,7 +14177,7 @@ private fun build_CATALOG_PART_5(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/primevideo.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/primevideo2/primevideo2.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/primevideo2/primevideo2.m3u8",
                 quality = "FHD · 1920x1080",
             ),
             Source(
@@ -14384,7 +14384,7 @@ private fun build_CATALOG_PART_5(): List<Channel> = listOf(
                 quality = "HD",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/combate/combate.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/combate/combate.m3u8",
             ),
         ),
         categoria = "Esportes",
@@ -15284,7 +15284,7 @@ private fun build_CATALOG_PART_5(): List<Channel> = listOf(
                 quality = "FHD",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/max1/max1.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/max1/max1.m3u8",
             ),
         ),
         categoria = "Filmes e Séries",
@@ -15338,7 +15338,7 @@ private fun build_CATALOG_PART_5(): List<Channel> = listOf(
                 quality = "HD",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/max2/max2.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/max2/max2.m3u8",
             ),
         ),
         categoria = "Filmes e Séries",
@@ -15370,7 +15370,7 @@ private fun build_CATALOG_PART_5(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/studiouniversal.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/studiouniversal/studiouniversal.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/studiouniversal/studiouniversal.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -15493,7 +15493,7 @@ private fun build_CATALOG_PART_5(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/gloob.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/gloob/gloob.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/gloob/gloob.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -15930,7 +15930,7 @@ private fun build_CATALOG_PART_5(): List<Channel> = listOf(
                 quality = "Qualidade não informada",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/bandrj/bandrj.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/bandrj/bandrj.m3u8",
             ),
         ),
         categoria = "TV Aberta",
@@ -16126,7 +16126,7 @@ private fun build_CATALOG_PART_6(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/sbt.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/sbtrj/sbtrj.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/sbtrj/sbtrj.m3u8",
                 quality = "FHD · 1920x1080",
             ),
             Source(
@@ -16408,7 +16408,7 @@ private fun build_CATALOG_PART_6(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/foodnetwork.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/foodnetwork/foodnetwork.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/foodnetwork/foodnetwork.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -16729,7 +16729,7 @@ private fun build_CATALOG_PART_6(): List<Channel> = listOf(
                 quality = "Qualidade não informada",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/24h_chaves/24h_chaves.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/24h_chaves/24h_chaves.m3u8",
             ),
         ),
         categoria = "24 Horas",
@@ -16747,7 +16747,7 @@ private fun build_CATALOG_PART_6(): List<Channel> = listOf(
                 quality = "Qualidade não informada",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/24h_dragonball/24h_dragonball.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/24h_dragonball/24h_dragonball.m3u8",
             ),
         ),
         categoria = "24 Horas",
@@ -16761,7 +16761,7 @@ private fun build_CATALOG_PART_6(): List<Channel> = listOf(
                 quality = "Qualidade não informada",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/24h_naruto/24h_naruto.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/24h_naruto/24h_naruto.m3u8",
             ),
         ),
         categoria = "24 Horas",
@@ -17163,7 +17163,7 @@ private fun build_CATALOG_PART_6(): List<Channel> = listOf(
                 quality = "Qualidade não informada",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/24h_simpsons/24h_simpsons.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/24h_simpsons/24h_simpsons.m3u8",
             ),
         ),
         categoria = "24 Horas",
@@ -17189,7 +17189,7 @@ private fun build_CATALOG_PART_6(): List<Channel> = listOf(
                 quality = "Qualidade não informada",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/24h_picapau/24h_picapau.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/24h_picapau/24h_picapau.m3u8",
             ),
         ),
         categoria = "24 Horas",
@@ -17255,7 +17255,7 @@ private fun build_CATALOG_PART_6(): List<Channel> = listOf(
                 quality = "Qualidade não informada",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/24h_odeiachris/24h_odeiachris.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/24h_odeiachris/24h_odeiachris.m3u8",
             ),
         ),
         categoria = "24 Horas",
@@ -17389,7 +17389,7 @@ private fun build_CATALOG_PART_6(): List<Channel> = listOf(
                 quality = "Qualidade não informada",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/24h_friends/24h_friends.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/24h_friends/24h_friends.m3u8",
                 quality = "SD · 768x432",
             ),
         ),
@@ -17504,7 +17504,7 @@ private fun build_CATALOG_PART_6(): List<Channel> = listOf(
                 quality = "HD",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/discoveryworld/discoveryworld.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/discoveryworld/discoveryworld.m3u8",
             ),
         ),
         categoria = "Documentários",
@@ -17514,7 +17514,7 @@ private fun build_CATALOG_PART_6(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/cazetv.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/caze1/caze1.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/caze1/caze1.m3u8",
                 quality = "FHD · 1920x1080",
             ),
             Source(
@@ -17553,7 +17553,7 @@ private fun build_CATALOG_PART_6(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/cazetv.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/caze2/caze2.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/caze2/caze2.m3u8",
                 quality = "FHD · 1920x1080",
             ),
             Source(
@@ -17588,7 +17588,7 @@ private fun build_CATALOG_PART_6(): List<Channel> = listOf(
                 quality = "Qualidade não informada",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/pt_abola/pt_abola.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/pt_abola/pt_abola.m3u8",
             ),
         ),
         categoria = "Esportes",
@@ -17602,7 +17602,7 @@ private fun build_CATALOG_PART_6(): List<Channel> = listOf(
                 quality = "Qualidade não informada",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/pt_benficatv/pt_benficatv.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/pt_benficatv/pt_benficatv.m3u8",
             ),
         ),
         categoria = "Esportes",
@@ -17616,7 +17616,7 @@ private fun build_CATALOG_PART_6(): List<Channel> = listOf(
                 quality = "Qualidade não informada",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/pt_canal11/pt_canal11.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/pt_canal11/pt_canal11.m3u8",
             ),
         ),
         categoria = "Esportes",
@@ -17630,7 +17630,7 @@ private fun build_CATALOG_PART_6(): List<Channel> = listOf(
                 quality = "Qualidade não informada",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/pt_eleven1/pt_eleven1.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/pt_eleven1/pt_eleven1.m3u8",
             ),
         ),
         categoria = "Esportes",
@@ -17644,7 +17644,7 @@ private fun build_CATALOG_PART_6(): List<Channel> = listOf(
                 quality = "Qualidade não informada",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/pt_eleven2/pt_eleven2.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/pt_eleven2/pt_eleven2.m3u8",
             ),
         ),
         categoria = "Esportes",
@@ -17658,7 +17658,7 @@ private fun build_CATALOG_PART_6(): List<Channel> = listOf(
                 quality = "Qualidade não informada",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/pt_eleven3/pt_eleven3.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/pt_eleven3/pt_eleven3.m3u8",
             ),
         ),
         categoria = "Esportes",
@@ -17672,7 +17672,7 @@ private fun build_CATALOG_PART_6(): List<Channel> = listOf(
                 quality = "Qualidade não informada",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/pt_sportv1/pt_sportv1.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/pt_sportv1/pt_sportv1.m3u8",
             ),
         ),
         categoria = "Esportes",
@@ -17686,7 +17686,7 @@ private fun build_CATALOG_PART_6(): List<Channel> = listOf(
                 quality = "Qualidade não informada",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/pt_sportv2/pt_sportv2.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/pt_sportv2/pt_sportv2.m3u8",
             ),
         ),
         categoria = "Esportes",
@@ -17700,7 +17700,7 @@ private fun build_CATALOG_PART_6(): List<Channel> = listOf(
                 quality = "Qualidade não informada",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/pt_sportv3/pt_sportv3.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/pt_sportv3/pt_sportv3.m3u8",
             ),
         ),
         categoria = "Esportes",
@@ -17714,7 +17714,7 @@ private fun build_CATALOG_PART_6(): List<Channel> = listOf(
                 quality = "Qualidade não informada",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/pt_sportv4/pt_sportv4.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/pt_sportv4/pt_sportv4.m3u8",
             ),
         ),
         categoria = "Esportes",
@@ -17728,7 +17728,7 @@ private fun build_CATALOG_PART_6(): List<Channel> = listOf(
                 quality = "Qualidade não informada",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/pt_sportv5/pt_sportv5.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/pt_sportv5/pt_sportv5.m3u8",
             ),
         ),
         categoria = "Esportes",
@@ -17742,7 +17742,7 @@ private fun build_CATALOG_PART_6(): List<Channel> = listOf(
                 quality = "Qualidade não informada",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/pt_sportv6/pt_sportv6.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/pt_sportv6/pt_sportv6.m3u8",
             ),
         ),
         categoria = "Esportes",
@@ -17756,7 +17756,7 @@ private fun build_CATALOG_PART_6(): List<Channel> = listOf(
                 quality = "Qualidade não informada",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/pt_sportv7/pt_sportv7.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/pt_sportv7/pt_sportv7.m3u8",
             ),
         ),
         categoria = "Esportes",
@@ -17911,7 +17911,7 @@ private fun build_CATALOG_PART_6(): List<Channel> = listOf(
                 quality = "Qualidade não informada",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/globoam/globoam.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/globoam/globoam.m3u8",
             ),
         ),
         categoria = "TV Aberta",
@@ -17925,7 +17925,7 @@ private fun build_CATALOG_PART_6(): List<Channel> = listOf(
                 quality = "Qualidade não informada",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/globoce/globoce.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/globoce/globoce.m3u8",
             ),
         ),
         categoria = "TV Aberta",
@@ -17938,7 +17938,7 @@ private fun build_CATALOG_PART_7(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/globosp.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/globoes/globoes.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/globoes/globoes.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -17957,7 +17957,7 @@ private fun build_CATALOG_PART_7(): List<Channel> = listOf(
                 quality = "Qualidade não informada",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/globogo/globogo.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/globogo/globogo.m3u8",
             ),
         ),
         categoria = "TV Aberta",
@@ -17971,7 +17971,7 @@ private fun build_CATALOG_PART_7(): List<Channel> = listOf(
                 quality = "Qualidade não informada",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/globopb/globopb.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/globopb/globopb.m3u8",
             ),
         ),
         categoria = "TV Aberta",
@@ -17985,7 +17985,7 @@ private fun build_CATALOG_PART_7(): List<Channel> = listOf(
                 quality = "Qualidade não informada",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/globope/globope.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/globope/globope.m3u8",
             ),
         ),
         categoria = "TV Aberta",
@@ -17995,7 +17995,7 @@ private fun build_CATALOG_PART_7(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/globorj.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/globorj/globorj.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/globorj/globorj.m3u8",
                 quality = "FHD · 1920x1080",
             ),
             Source(
@@ -18070,7 +18070,7 @@ private fun build_CATALOG_PART_7(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/globosp.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/globors/globors.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/globors/globors.m3u8",
                 quality = "FHD · 1920x1080",
             ),
             Source(
@@ -18121,7 +18121,7 @@ private fun build_CATALOG_PART_7(): List<Channel> = listOf(
                 quality = "HD",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/recordgo/recordgo.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/recordgo/recordgo.m3u8",
             ),
         ),
         categoria = "TV Aberta",
@@ -18131,7 +18131,7 @@ private fun build_CATALOG_PART_7(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/record.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/recordmg/recordmg.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/recordmg/recordmg.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -18154,7 +18154,7 @@ private fun build_CATALOG_PART_7(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/record.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/recordrj/recordrj.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/recordrj/recordrj.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -18309,7 +18309,7 @@ private fun build_CATALOG_PART_7(): List<Channel> = listOf(
                 quality = "HD",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/hgtv/hgtv.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/hgtv/hgtv.m3u8",
             ),
         ),
         categoria = "Variedades",
@@ -18319,7 +18319,7 @@ private fun build_CATALOG_PART_7(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/mtv.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/mtv/mtv.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/mtv/mtv.m3u8",
                 quality = "FHD · 1536x1024",
             ),
             Source(
@@ -18342,7 +18342,7 @@ private fun build_CATALOG_PART_7(): List<Channel> = listOf(
                 quality = "Qualidade não informada",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/afazenda/afazenda.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/afazenda/afazenda.m3u8",
             ),
         ),
         categoria = "PPV",
@@ -18360,7 +18360,7 @@ private fun build_CATALOG_PART_7(): List<Channel> = listOf(
                 quality = "Qualidade não informada",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/afazenda2/afazenda2.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/afazenda2/afazenda2.m3u8",
             ),
         ),
         categoria = "PPV",
@@ -18378,7 +18378,7 @@ private fun build_CATALOG_PART_7(): List<Channel> = listOf(
                 quality = "Qualidade não informada",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/afazenda3/afazenda3.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/afazenda3/afazenda3.m3u8",
             ),
         ),
         categoria = "PPV",
@@ -18396,7 +18396,7 @@ private fun build_CATALOG_PART_7(): List<Channel> = listOf(
                 quality = "Qualidade não informada",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/afazenda4/afazenda4.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/afazenda4/afazenda4.m3u8",
             ),
         ),
         categoria = "PPV",
@@ -18414,7 +18414,7 @@ private fun build_CATALOG_PART_7(): List<Channel> = listOf(
                 quality = "Qualidade não informada",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/afazenda5/afazenda5.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/afazenda5/afazenda5.m3u8",
             ),
         ),
         categoria = "PPV",
@@ -18424,7 +18424,7 @@ private fun build_CATALOG_PART_7(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/cazetv.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/caze3/caze3.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/caze3/caze3.m3u8",
                 quality = "FHD · 1920x1080",
             ),
             Source(
@@ -18439,7 +18439,7 @@ private fun build_CATALOG_PART_7(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/globosp.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/globodf/globodf.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/globodf/globodf.m3u8",
                 quality = "HD · 1280x720",
             ),
             Source(
@@ -18490,7 +18490,7 @@ private fun build_CATALOG_PART_7(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/globosp.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/globomg/globomg.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/globomg/globomg.m3u8",
                 quality = "FHD · 1920x1080",
             ),
             Source(
@@ -18553,7 +18553,7 @@ private fun build_CATALOG_PART_7(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/max.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/max3/max3.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/max3/max3.m3u8",
                 quality = "FHD · 1920x1080",
             ),
             Source(
@@ -18608,7 +18608,7 @@ private fun build_CATALOG_PART_7(): List<Channel> = listOf(
         logo = "https://img.faz-o-eli.online/primevideo.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/primevideo4/primevideo4.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/primevideo4/primevideo4.m3u8",
                 quality = "FHD · 1920x1080",
             ),
             Source(
@@ -18711,7 +18711,7 @@ private fun build_CATALOG_PART_7(): List<Channel> = listOf(
                 quality = "FHD",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/sportv4/sportv4.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/sportv4/sportv4.m3u8",
             ),
         ),
         categoria = "Esportes",
@@ -18725,7 +18725,7 @@ private fun build_CATALOG_PART_7(): List<Channel> = listOf(
                 quality = "Qualidade não informada",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/starchannel/starchannel.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/starchannel/starchannel.m3u8",
             ),
         ),
         categoria = "Filmes e Séries",
@@ -20182,7 +20182,7 @@ private fun build_CATALOG_PART_8(): List<Channel> = listOf(
                 quality = "Qualidade não informada",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/sportynetplus3/sportynetplus3.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/sportynetplus3/sportynetplus3.m3u8",
             ),
         ),
         categoria = "Esportes",
@@ -20559,7 +20559,7 @@ private fun build_CATALOG_PART_8(): List<Channel> = listOf(
                 quality = "SD",
             ),
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/ufcfightpass/ufcfightpass.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/ufcfightpass/ufcfightpass.m3u8",
             ),
         ),
         categoria = "PPV",
@@ -22790,7 +22790,7 @@ private fun build_CATALOG_PART_9(): List<Channel> = listOf(
         logo = "https://vipcanais.net/images/disneyplus.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/disneyplus1/disneyplus1.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/disneyplus1/disneyplus1.m3u8",
             ),
         ),
         categoria = "Filmes e Séries",
@@ -22800,7 +22800,7 @@ private fun build_CATALOG_PART_9(): List<Channel> = listOf(
         logo = "https://vipcanais.net/images/disneyplus.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/disneyplus2/disneyplus2.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/disneyplus2/disneyplus2.m3u8",
             ),
         ),
         categoria = "Filmes e Séries",
@@ -22810,7 +22810,7 @@ private fun build_CATALOG_PART_9(): List<Channel> = listOf(
         logo = "https://vipcanais.net/images/disneyplus.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/disneyplus3/disneyplus3.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/disneyplus3/disneyplus3.m3u8",
             ),
         ),
         categoria = "Filmes e Séries",
@@ -22820,7 +22820,7 @@ private fun build_CATALOG_PART_9(): List<Channel> = listOf(
         logo = "https://vipcanais.net/images/paramountplus.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/paramountplus/paramountplus.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/paramountplus/paramountplus.m3u8",
             ),
         ),
         categoria = "Filmes e Séries",
@@ -22830,7 +22830,7 @@ private fun build_CATALOG_PART_9(): List<Channel> = listOf(
         logo = "https://vipcanais.net/images/paramountplus.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/paramountplus2/paramountplus2.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/paramountplus2/paramountplus2.m3u8",
             ),
         ),
         categoria = "Filmes e Séries",
@@ -22840,7 +22840,7 @@ private fun build_CATALOG_PART_9(): List<Channel> = listOf(
         logo = "https://vipcanais.net/images/amazonprimevideo.png",
         sources = listOf(
             Source(
-                url = "https://nexustvplay.bbroot.com/nxs/stream/primevideo3/primevideo3.m3u8",
+                url = "https://fallback1.nexustvplay.bbroot.com/nxs/stream/primevideo3/primevideo3.m3u8",
             ),
         ),
         categoria = "Filmes e Séries",
