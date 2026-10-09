@@ -153,6 +153,7 @@ class MainActivity : AppCompatActivity() {
     private fun numeroDe(canal: Channel?): Int = canal?.let { numeros[it.name] } ?: 0
 
     private fun indicePorNumero(numero: Int): Int = ordered.indexOfFirst { numeros[it.name] == numero }
+    private var isModoRadio = false
     private var current = 0
     private var sourceIndex = 0
     private var retries = 0
@@ -261,9 +262,27 @@ class MainActivity : AppCompatActivity() {
         val rUrl = intent.getStringExtra(EXTRA_RADIO_URL)
         val rNome = intent.getStringExtra(EXTRA_RADIO_NOME)
         if (rUrl != null && rNome != null) {
-            val radioChannel = Channel(name = rNome, sources = listOf(Source(url = rUrl)), categoria = "Rádio")
-            ordered = (listOf(radioChannel) + ordered).distinctBy { it.name }
-            play(0)
+            isModoRadio = true
+            val radiosFile = java.io.File(filesDir, "radios.txt")
+            val radiosFallback = java.io.File(filesDir, "vod/radios.txt")
+            val alvo = if (radiosFile.exists()) radiosFile else radiosFallback
+            
+            val radiosList = mutableListOf<Channel>()
+            if (alvo.exists()) {
+                alvo.readLines().forEach { linha ->
+                    val partes = linha.split("|")
+                    if (partes.size >= 2) {
+                        radiosList.add(Channel(name = partes[0].trim(), sources = listOf(Source(url = partes[1].trim())), categoria = "Rádio"))
+                    }
+                }
+            }
+            if (radiosList.isEmpty()) {
+                radiosList.add(Channel(name = rNome, sources = listOf(Source(url = rUrl)), categoria = "Rádio"))
+            }
+            
+            ordered = radiosList
+            numeros = ordered.mapIndexed { i, c -> c.name to i + 1 }.toMap()
+            play(ordered.indexOfFirst { it.name == rNome }.coerceAtLeast(0))
         } else {
             val pedido = intent.getStringExtra(EXTRA_CANAL) ?: Preferencias.ultimoCanal
             play(ordered.indexOfFirst { it.name == pedido }.coerceAtLeast(0))
@@ -906,8 +925,10 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
         val playing = ordered.getOrNull(current)?.name
         // O que o painel desligou some aqui, antes de a lista chegar à tela:
         // canal sem nenhuma fonte não abriria mesmo.
-        ordered = FontesDesativadas.peneirarCanais(Categorias.ordenar(Unlock.channels()))
-        numeros = Categorias.ordenarFixo(ordered).mapIndexed { i, c -> c.name to i + 1 }.toMap()
+        if (!isModoRadio) {
+            ordered = FontesDesativadas.peneirarCanais(Categorias.ordenar(Unlock.channels()))
+            numeros = Categorias.ordenarFixo(ordered).mapIndexed { i, c -> c.name to i + 1 }.toMap()
+        }
         adapter.numero = { numeroDe(it) }
         val found = ordered.indexOfFirst { it.name == playing }
         // Ao trancar com um desses no ar, o nome ficaria à vista na faixa;
