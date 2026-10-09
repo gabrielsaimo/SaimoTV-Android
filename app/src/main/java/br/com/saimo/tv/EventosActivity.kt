@@ -229,7 +229,9 @@ class EventosActivity : TelaComMenu() {
                                 inicio = dateStr,
                                 fim = "",
                                 playerUrl = "", // sem stream nativo ESPN
-                                horarioFormatado = horarioFormatado
+                                horarioFormatado = horarioFormatado,
+                                canalNome = "",
+                                canalLogo = ""
                             )
                         }
                     } catch (e: Exception) { e.printStackTrace() }
@@ -265,28 +267,48 @@ class EventosActivity : TelaComMenu() {
                     val key = norm(homeName) + "|" + norm(awayName)
                     val espnMatch = eventosDict[key]
                     
-                    if (espnMatch != null) {
-                        // Enriquece ESPN com a URL de streaming do EmbedTV e outros fallbacks
-                        eventosDict[key] = espnMatch.copy(playerUrl = playerUrl)
-                    } else {
-                        // Adiciona jogo exclusivo do EmbedTV
-                        eventosDict[key] = Evento(
-                            titulo = obj.getString("title"),
-                            ligaNome = league.getString("name"),
-                            ligaLogo = league.optString("image"),
-                            timeCasaNome = homeName,
-                            timeCasaLogo = home.optString("image"),
-                            timeForaNome = awayName,
-                            timeForaLogo = away.optString("image"),
-                            inicio = inicioStr,
-                            fim = obj.getString("time_end"),
-                            playerUrl = playerUrl,
-                            horarioFormatado = horarioFormatado
-                        )
+                    // ACHAR O CANAL NA LISTA
+                    var canalNome = ""
+                    var canalLogo = ""
+                    var temCanal = false
+                    
+                    if (playerUrl.isNotEmpty()) {
+                        val slug = playerUrl.substringAfterLast("/").lowercase()
+                        val slugLimpo = slug.replace("-", "").replace(" ", "")
+                        val channel = CATALOG.firstOrNull { it.name.lowercase().replace(" ", "") == slugLimpo }
+                            ?: CATALOG.firstOrNull { it.name.lowercase().contains(slugLimpo) }
+                        
+                        if (channel != null) {
+                            canalNome = channel.name
+                            canalLogo = channel.logo ?: ""
+                            temCanal = true
+                        }
+                    }
+                    
+                    if (temCanal) {
+                        if (espnMatch != null) {
+                            eventosDict[key] = espnMatch.copy(playerUrl = playerUrl, canalNome = canalNome, canalLogo = canalLogo)
+                        } else {
+                            eventosDict[key] = Evento(
+                                titulo = obj.getString("title"),
+                                ligaNome = league.getString("name"),
+                                ligaLogo = league.optString("image"),
+                                timeCasaNome = homeName,
+                                timeCasaLogo = home.optString("image"),
+                                timeForaNome = awayName,
+                                timeForaLogo = away.optString("image"),
+                                inicio = inicioStr,
+                                fim = obj.getString("time_end"),
+                                playerUrl = playerUrl,
+                                horarioFormatado = horarioFormatado,
+                                canalNome = canalNome,
+                                canalLogo = canalLogo
+                            )
+                        }
                     }
                 }
                 
-                val eventosFinais = eventosDict.values.toList().sortedBy { it.titulo }
+                val eventosFinais = eventosDict.values.filter { it.canalNome.isNotEmpty() }.sortedBy { it.titulo }
                 
                 withContext(Dispatchers.Main) {
                     carregando.visibility = View.GONE
@@ -322,6 +344,9 @@ class EventosActivity : TelaComMenu() {
             if (ev.timeCasaLogo.isNotEmpty()) holder.imgCasaItem.load(ev.timeCasaLogo) else holder.imgCasaItem.setImageDrawable(null)
             if (ev.timeForaLogo.isNotEmpty()) holder.imgForaItem.load(ev.timeForaLogo) else holder.imgForaItem.setImageDrawable(null)
             
+            holder.textoCanalItem.text = ev.canalNome
+            if (ev.canalLogo.isNotEmpty()) holder.imgCanalItem.load(ev.canalLogo) else holder.imgCanalItem.setImageDrawable(null)
+            
             holder.itemView.setOnFocusChangeListener { _, hasFocus ->
                 if (hasFocus) {
                     (holder.itemView.context as? EventosActivity)?.atualizarDestaque(ev)
@@ -356,6 +381,8 @@ class EventosActivity : TelaComMenu() {
         val imgLiga: ImageView = v.findViewById(R.id.imgLiga)
         val imgCasaItem: ImageView = v.findViewById(R.id.imgTimeCasaItem)
         val imgForaItem: ImageView = v.findViewById(R.id.imgTimeForaItem)
+        val imgCanalItem: ImageView = v.findViewById(R.id.imgCanalItem)
+        val textoCanalItem: TextView = v.findViewById(R.id.textoCanalItem)
     }
 
     data class Evento(
@@ -369,6 +396,8 @@ class EventosActivity : TelaComMenu() {
         val inicio: String,
         val fim: String,
         val playerUrl: String,
-        val horarioFormatado: String
+        val horarioFormatado: String,
+        val canalNome: String,
+        val canalLogo: String
     )
 }
