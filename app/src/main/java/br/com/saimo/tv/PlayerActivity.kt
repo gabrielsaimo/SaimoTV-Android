@@ -28,12 +28,14 @@ import androidx.media3.common.TrackSelectionOverride
 import androidx.media3.common.Tracks
 import androidx.media3.common.VideoSize
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.datasource.FileDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.MediaSource
 import androidx.media3.exoplayer.source.MergingMediaSource
-import androidx.media3.exoplayer.source.SingleSampleMediaSource
+import androidx.media3.exoplayer.source.ProgressiveMediaSource
+import androidx.media3.extractor.ExtractorsFactory
+import androidx.media3.extractor.text.DefaultSubtitleParserFactory
+import androidx.media3.extractor.text.SubtitleExtractor
 import androidx.media3.session.MediaSession
 import androidx.media3.ui.CaptionStyleCompat
 import androidx.media3.ui.PlayerView
@@ -62,6 +64,8 @@ import java.util.Locale
 class PlayerActivity : AppCompatActivity() {
 
     companion object {
+        /// Altura da legenda (fração da tela, de baixo) com a barra e os botões à vista.
+        private const val LEGENDA_COM_CONTROLES = 0.3f
         private const val TEMPORADA = "player.temporada"
         private const val EPISODIO = "player.episodio"
         private const val VERSAO = "player.versao"
@@ -319,16 +323,34 @@ class PlayerActivity : AppCompatActivity() {
         // do DataSchemeDataSource do ExoPlayer com base64 gigantes.
         val arquivo = java.io.File(cacheDir, "saimo_legenda.srt")
         arquivo.writeText(Legendas.deslocar(srt, legendaAtraso), Charsets.UTF_8)
-        val configuracao = MediaItem.SubtitleConfiguration.Builder(Uri.fromFile(arquivo))
+        val formato = androidx.media3.common.Format.Builder()
             .setId(Legendas.ID_FAIXA)
-            .setMimeType(MimeTypes.APPLICATION_SUBRIP)
+            .setSampleMimeType(MimeTypes.APPLICATION_SUBRIP)
             .setLanguage(opcao.bcp47)
             .setLabel(opcao.rotulo)
             .setSelectionFlags(C.SELECTION_FLAG_DEFAULT)
             .build()
-        val legenda = SingleSampleMediaSource.Factory(FileDataSource.Factory())
-            .createMediaSource(configuracao, C.TIME_UNSET)
+        // O Media3 (desde a 1.4) quer a legenda já convertida em "cues" na
+        // leitura do arquivo; o SRT cru entregue num SingleSampleMediaSource
+        // derrubava o player ("Legacy decoding is disabled") e o filme ia para
+        // o servidor seguinte. O SubtitleExtractor faz essa conversão.
+        val leitor = DefaultSubtitleParserFactory()
+        val extratores = ExtractorsFactory { arrayOf(SubtitleExtractor(leitor.create(formato), formato)) }
+        val legenda = ProgressiveMediaSource.Factory(FileDataSource.Factory(), extratores)
+            .createMediaSource(MediaItem.fromUri(Uri.fromFile(arquivo)))
         return MergingMediaSource(base, legenda)
+    }
+
+    /** O erro veio da legenda (leitura do SRT ou do renderizador de texto)? */
+    private fun erroDaLegenda(erro: PlaybackException): Boolean {
+        val formato = (erro as? androidx.media3.exoplayer.ExoPlaybackException)?.rendererFormat
+        if (formato != null && (MimeTypes.isText(formato.sampleMimeType) || formato.id == Legendas.ID_FAIXA)) return true
+        return generateSequence(erro as Throwable) { it.cause }.take(6).any { causa ->
+            causa.stackTrace.take(12).any { quadro ->
+                quadro.className.startsWith("androidx.media3.exoplayer.text.") ||
+                    quadro.className.startsWith("androidx.media3.extractor.text.")
+            }
+        }
     }
 
     /** Refaz a fonte na posição de agora, sem a telemetria de "começou". */
@@ -500,6 +522,16 @@ class PlayerActivity : AppCompatActivity() {
         override fun onPlayerError(error: PlaybackException) {
             val p = player ?: return
             handler.removeCallbacks(prazo)
+            // Legenda com defeito não é fonte morta: sai a legenda, o filme
+            // continua no mesmo servidor e no mesmo ponto.
+            if (legendaExt != null && erroDaLegenda(error)) {
+                legendaExt = null
+                legendaExtSrt = null
+                legendaAtraso = 0.0
+                Toast.makeText(this@PlayerActivity, R.string.player_legenda_falhou, Toast.LENGTH_LONG).show()
+                recarregarComLegenda()
+                return
+            }
             Telemetria.falhou("vod", nomeTelemetria(), opcoes.getOrNull(fonte)?.url.orEmpty(),
                 fonte + 1, error.errorCodeName)
             // Já tocava: é tropeço da origem, não fonte morta. Pede de novo o
@@ -940,6 +972,8 @@ class PlayerActivity : AppCompatActivity() {
     private fun mostrarControles(focarLinha: Boolean = true) {
         topo.visibility = View.VISIBLE
         base.visibility = View.VISIBLE
+        // A legenda sobe acima da barra e dos botões enquanto eles estão na tela.
+        video.subtitleView?.setBottomPaddingFraction(LEGENDA_COM_CONTROLES)
         if (focarLinha && !linha.hasFocus() && !botoes.hasFocus()) linha.requestFocus()
         adiarEsconder()
     }
@@ -949,6 +983,7 @@ class PlayerActivity : AppCompatActivity() {
         topo.visibility = View.GONE
         base.visibility = View.GONE
         bolha.visibility = View.INVISIBLE
+        video.subtitleView?.setBottomPaddingFraction(SubtitleView.DEFAULT_BOTTOM_PADDING_FRACTION)
         if (pular.visibility == View.VISIBLE) pular.requestFocus() else video.requestFocus()
     }
 

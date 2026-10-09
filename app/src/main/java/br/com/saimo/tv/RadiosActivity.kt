@@ -2,120 +2,110 @@ package br.com.saimo.tv
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.io.File
-import coil3.dispose
-import coil3.load
 
+/**
+ * As rádios, no formato da tela inicial: o destaque em cima mostra a rádio em
+ * foco, e embaixo as fileiras — as ouvidas por último, uma por estilo (rock,
+ * notícias, gospel...) e todas de A a Z, uma fileira por letra, para chegar a
+ * qualquer uma com poucas setas.
+ *
+ * O estilo sai do nome da rádio: a lista publicada só tem nome, endereço e logo.
+ */
 @UnstableApi
 class RadiosActivity : TelaComMenu() {
     override val aba = Aba.RADIOS
-    private lateinit var lista: RecyclerView
-    private lateinit var carregando: View
-    private lateinit var vazio: TextView
 
-    data class Radio(val nome: String, val url: String, val logo: String?)
+    private lateinit var filas: RecyclerView
+    private lateinit var destaque: Destaque
+    private val adaptador by lazy { Inicio.Adapter(escopo = lifecycleScope, aoFocar = { destaque.mostrar(it) }) }
+    private var radios: List<Radios.Radio> = emptyList()
+    private var montou = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_radios)
-        
-        lista = findViewById(R.id.radiosLista)
-        carregando = findViewById(R.id.radiosCarregando)
-        vazio = findViewById(R.id.radiosVazio)
-        
-        lista.layoutManager = GridLayoutManager(this, 5)
-        
-        carregar()
+        setContentView(R.layout.activity_pagina)
+        filas = findViewById(R.id.inicioFilas)
+        filas.layoutManager = Inicio.Filas(this)
+        filas.adapter = adaptador
+        destaque = Destaque(this, lifecycleScope, findViewById<ImageView>(R.id.inicioFundo),
+            findViewById(R.id.inicioTitulo), findViewById(R.id.inicioMeta), findViewById(R.id.inicioSinopse))
+        findViewById<TextView>(R.id.paginaNome).visibility = View.GONE
+        destaque.padrao(getString(R.string.menu_radios), getString(R.string.vod_carregando))
+
+        // Na hora, o que já está no aparelho; a lista nova chega por trás.
+        mostrar(Radios.locais(this))
+        lifecycleScope.launch(semDerrubar) {
+            val nova = Radios.baixar(this@RadiosActivity) ?: return@launch
+            if (nova != radios) mostrar(nova)
+        }
     }
 
-    private fun carregar() {
-        lifecycleScope.launch {
-            carregando.visibility = View.VISIBLE
-            val radios = withContext(Dispatchers.IO) {
-                val arquivo = File(filesDir, "radios.txt")
-                if (!arquivo.exists()) {
-                    runCatching {
-                        val request = okhttp3.Request.Builder()
-                            .url("https://raw.githubusercontent.com/gabrielsaimo/SaimoPlayer/main/vod/radios.txt")
-                            .build()
-                        Playback.client.newCall(request).execute().use { response ->
-                            if (response.isSuccessful) {
-                                response.body?.string()?.let { arquivo.writeText(it) }
-                            }
-                        }
-                    }
-                }
-                
-                if (!arquivo.exists()) return@withContext emptyList<Radio>()
-                arquivo.readLines().mapNotNull { linha ->
-                    val partes = linha.split("|")
-                    if (partes.size >= 2) Radio(partes[0].trim(), partes[1].trim(), partes.getOrNull(2)?.trim()?.takeIf { it.isNotEmpty() }) else null
-                }
+    override fun onRestart() {
+        super.onRestart()
+        // A fileira de ouvidas por último muda depois de tocar uma.
+        mostrar(radios)
+    }
+
+    private fun mostrar(lista: List<Radios.Radio>) {
+        if (isFinishing || isDestroyed) return
+        radios = lista
+        destaque.padrao(getString(R.string.menu_radios),
+            resources.getQuantityString(R.plurals.radios_ao_vivo, lista.size, lista.size))
+        val porNome = lista.associateBy { it.nome }
+        val filasNovas = mutableListOf<Inicio.Fila>()
+
+        Radios.recentes(this).mapNotNull { porNome[it] }.takeIf { it.isNotEmpty() }?.let {
+            filasNovas += Inicio.Fila(getString(R.string.radios_recentes), it.map(::cartao), Inicio.Tipo.LARGO)
+        }
+        val estilos = lista.groupBy { Radios.estiloDe(it) }
+        for (estilo in Radios.ESTILOS) {
+            val doEstilo = estilos[estilo].orEmpty()
+            if (doEstilo.size >= 4) filasNovas += Inicio.Fila(getString(estilo.titulo), doEstilo.map(::cartao), Inicio.Tipo.LARGO)
+        }
+        // De A a Z: números e símbolos juntos numa fileira só, antes do A.
+        lista.groupBy { r -> Radios.chave(r.nome).firstOrNull()?.takeIf { it in 'a'..'z' }?.uppercaseChar() ?: '#' }
+            .toSortedMap()
+            .forEach { (letra, daLetra) ->
+                val titulo = if (letra == '#') getString(R.string.radios_numeros) else letra.toString()
+                filasNovas += Inicio.Fila(titulo, daLetra.map(::cartao), Inicio.Tipo.LARGO)
             }
-            carregando.visibility = View.GONE
-            if (radios.isEmpty()) {
-                vazio.visibility = View.VISIBLE
-            } else {
-                lista.adapter = Adaptador(radios)
+
+        if (filasNovas.isEmpty()) {
+            destaque.padrao(getString(R.string.menu_radios), getString(R.string.radios_vazio))
+        }
+        adaptador.trocar(filasNovas)
+        if (!montou && filasNovas.isNotEmpty()) {
+            montou = true
+            focarQuandoPronto {
+                filas.findViewHolderForAdapterPosition(0)?.itemView
+                    ?.findViewById<RecyclerView>(R.id.filaCapas)?.getChildAt(0)
             }
         }
     }
 
-    private inner class Adaptador(val itens: List<Radio>) : RecyclerView.Adapter<Holder>() {
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-            val v = LayoutInflater.from(parent.context).inflate(R.layout.item_radio, parent, false)
-            v.isFocusable = true
-            v.isFocusableInTouchMode = true
-            v.setBackgroundResource(R.drawable.row_focus)
-            return Holder(v)
-        }
-        
-        private val branco = android.content.res.ColorStateList.valueOf(android.graphics.Color.WHITE)
-
-        override fun onBindViewHolder(holder: Holder, position: Int) {
-            val r = itens[position]
-            holder.nome.text = r.nome
-            // O ícone de rádio é desenhado em branco (tint); o logo da emissora
-            // tem as cores dele, e com o tint ficava só a silhueta branca.
-            holder.icone.dispose()
-            holder.icone.imageTintList = branco
-            holder.icone.setImageResource(R.drawable.ic_radio)
-            r.logo?.let { logo ->
-                holder.icone.load(logo) {
-                    listener(
-                        onSuccess = { _, _ -> holder.icone.imageTintList = null },
-                        onError = { _, _ ->
-                            holder.icone.imageTintList = branco
-                            holder.icone.setImageResource(R.drawable.ic_radio)
-                        },
-                    )
-                }
-            }
-            holder.itemView.setOnClickListener {
-                val i = Intent(this@RadiosActivity, MainActivity::class.java)
-                i.putExtra(MainActivity.EXTRA_RADIO_NOME, r.nome)
-                i.putExtra(MainActivity.EXTRA_RADIO_URL, r.url)
-                startActivity(i)
-            }
-        }
-        
-        override fun getItemCount() = itens.size
+    private fun cartao(r: Radios.Radio): Inicio.Cartao {
+        val estilo = Radios.estiloDe(r)?.let { getString(it.titulo) }
+        return Inicio.Cartao(
+            titulo = r.nome,
+            capa = r.logo.orEmpty(),
+            inicial = r.nome.firstOrNull { it.isLetterOrDigit() }?.uppercase() ?: "R",
+            subtitulo = estilo,
+            meta = listOfNotNull(getString(R.string.radios_no_ar), estilo).joinToString("  ·  "),
+            sinopse = getString(R.string.radios_dica),
+        ) { tocar(r) }
     }
 
-    private class Holder(v: View) : RecyclerView.ViewHolder(v) {
-        val nome: TextView = v.findViewById(R.id.radioNome)
-        val icone: ImageView = v.findViewById(R.id.radioIcone)
+    private fun tocar(r: Radios.Radio) {
+        Radios.ouviu(this, r.nome)
+        startActivity(Intent(this, MainActivity::class.java)
+            .putExtra(MainActivity.EXTRA_RADIO_NOME, r.nome)
+            .putExtra(MainActivity.EXTRA_RADIO_URL, r.url))
     }
 }

@@ -263,19 +263,10 @@ class MainActivity : AppCompatActivity() {
         val rNome = intent.getStringExtra(EXTRA_RADIO_NOME)
         if (rUrl != null && rNome != null) {
             isModoRadio = true
-            val radiosFile = java.io.File(filesDir, "radios.txt")
-            val radiosFallback = java.io.File(filesDir, "vod/radios.txt")
-            val alvo = if (radiosFile.exists()) radiosFile else radiosFallback
-            
-            val radiosList = mutableListOf<Channel>()
-            if (alvo.exists()) {
-                alvo.readLines().forEach { linha ->
-                    val partes = linha.split("|")
-                    if (partes.size >= 2) {
-                        radiosList.add(Channel(name = partes[0].trim(), sources = listOf(Source(url = partes[1].trim())), categoria = "Rádio"))
-                    }
-                }
-            }
+            // A mesma lista da tela de rádios, para o zapping passar por todas.
+            val radiosList = Radios.locais(this).map { r ->
+                Channel(name = r.nome, sources = listOf(Source(url = r.url)), categoria = "Rádio", logo = r.logo)
+            }.toMutableList()
             if (radiosList.isEmpty()) {
                 radiosList.add(Channel(name = rNome, sources = listOf(Source(url = rUrl)), categoria = "Rádio"))
             }

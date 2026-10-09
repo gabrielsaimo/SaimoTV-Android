@@ -276,6 +276,21 @@
     <string name="pagina_todos_az">Todos de A a Z</string>
     <string name="pagina_ver_mais">Ver todos</string>
     <string name="ondemand_categorias">Categorias</string>
+    <string name="radios_recentes">Ouvidas por último</string>
+    <string name="radios_noticias">Notícias e esporte</string>
+    <string name="radios_rock">Rock</string>
+    <string name="radios_gospel">Gospel e católicas</string>
+    <string name="radios_pop">Pop e hits</string>
+    <string name="radios_brasileiras">Sertanejo, MPB e samba</string>
+    <string name="radios_classica">Clássica e jazz</string>
+    <string name="radios_numeros">0 a 9</string>
+    <string name="radios_no_ar">Rádio ao vivo</string>
+    <string name="radios_dica">OK toca · na rádio, cima e baixo trocam de estação</string>
+    <string name="radios_vazio">Sem rádios por enquanto. Confira a internet e abra de novo.</string>
+    <plurals name="radios_ao_vivo">
+        <item quantity="one">%d rádio ao vivo</item>
+        <item quantity="other">%d rádios ao vivo</item>
+    </plurals>
     <string name="ondemand_titulos">%1$s títulos</string>
     <string name="ondemand_filmes_sobre">Lançamentos, clássicos e tudo entre eles, dublados e legendados.</string>
     <string name="ondemand_series_sobre">Temporadas completas, com o próximo episódio emendando sozinho.</string>
