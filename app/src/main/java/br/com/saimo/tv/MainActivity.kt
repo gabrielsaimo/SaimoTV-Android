@@ -1399,18 +1399,6 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
         status.visibility = View.VISIBLE
     }
 
-    /// Rádio segue tocando em janela quando a pessoa sai do app. Só a rádio:
-    /// canal e filme continuam parando ao sair. Muito TV Box não tem janela
-    /// flutuante; nesses, nada muda.
-    override fun onUserLeaveHint() {
-        super.onUserLeaveHint()
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O &&
-            packageManager.hasSystemFeature(android.content.pm.PackageManager.FEATURE_PICTURE_IN_PICTURE) &&
-            isModoRadio && !isInPictureInPictureMode && ::player.isInitialized && player.isPlaying) {
-            runCatching { enterPictureInPictureMode(android.app.PictureInPictureParams.Builder().build()) }
-        }
-    }
-
     override fun onStop() {
         super.onStop()
         emSegundoPlano = true

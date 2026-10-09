@@ -23,8 +23,15 @@ versão nova sozinho e oferece a atualização na tela.
   Quando o catálogo publica um trailer direto (MP4/HLS) para o título, ele
   começa sem som depois de 5 s de foco parado; se tocou e o foco ficou ali
   mais 15 s, a ficha abre. Sem trailer, nada abre sozinho (`Destaque.kt`).
-- Rádios com o logo de cada emissora, zapping entre elas e, nos aparelhos que
-  têm janela flutuante, a rádio continua tocando nela ao apertar HOME.
+- Rádios no formato da tela inicial: ouvidas por último, uma fileira por estilo
+  e todas de A a Z, com o logo de cada emissora. A lista aparece na hora (a
+  guardada ou a que vem no app) e se atualiza por trás. Tocando, a tela mostra
+  o logo, o nome, o estilo e um equalizador; cima/baixo trocam de estação e
+  esquerda/VOLTAR voltam às rádios.
+- On Demand como a tela inicial: destaque, cartões das quatro categorias com
+  colagem de capas, fileiras e o A a Z no fim.
+- Eventos em fileiras por horário (ao vivo agora, em breve, hoje, amanhã), com
+  os escudos, o placar ao vivo da ESPN e o canal de cada jogo.
 - Páginas de Filmes/Séries/Animes/Doramas com fileiras e um "Explorar" de A a Z
   com filtro de gênero e ordenação.
 - Busca única (canais, filmes, séries, atores) com teclado na tela, voz,
