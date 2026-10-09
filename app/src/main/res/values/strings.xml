@@ -210,7 +210,7 @@
     <string name="lembrete_marcado">Cancelar aviso</string>
     <string name="update_discreto">Versão %1$s disponível · atualize em Ajustes</string>
     <string name="ajustes">Ajustes</string>
-    <string name="ajustes_sobre">Saimo TV %1$s\nID do aparelho: %2$s\n\nDesenvolvimento: Gabriel Saimo\nContribuição: Arthur Roberto (thxsp)\n\nInforme este ID ao pedir ajuda.</string>
+    <string name="ajustes_sobre">Saimo TV %1$s\nID do aparelho: %2$s\n\nInforme este ID ao pedir ajuda.</string>
     <string name="ajustes_ligado">Ligado</string>
     <string name="ajustes_desligado">Desligado</string>
     <string name="ajustes_reproducao">Reprodução</string>
