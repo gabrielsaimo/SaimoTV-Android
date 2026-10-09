@@ -64,10 +64,13 @@ object Inicio {
         /// Título cuja imagem larga vai ao fundo do destaque, quando o cartão
         /// não é ele mesmo um título (a categoria mostra o filme em alta).
         val fundoDe: Alvo? = null,
+        /// Cartão de jogo: o selo do canto (placar ao vivo ou horário).
+        val selo: String? = null,
+        val seloAoVivo: Boolean = false,
         val aoEscolher: () -> Unit,
     )
 
-    enum class Tipo { CAPA, LARGO, SECAO }
+    enum class Tipo { CAPA, LARGO, SECAO, EVENTO }
 
     /**
      * O gerente da lista de fileiras: não rola sozinho quando o foco muda.
@@ -101,6 +104,7 @@ object Inicio {
         private val depositoCapas = RecyclerView.RecycledViewPool()
         private val depositoLargos = RecyclerView.RecycledViewPool()
         private val depositoSecoes = RecyclerView.RecycledViewPool()
+        private val depositoEventos = RecyclerView.RecycledViewPool()
         /// Onde cada fileira estava, para voltar no mesmo lugar.
         private val posicoes = mutableMapOf<String, Int>()
 
@@ -122,6 +126,7 @@ object Inicio {
                     a.cartoes.size == b.cartoes.size &&
                     a.cartoes.indices.all { a.cartoes[it].titulo == b.cartoes[it].titulo &&
                         a.cartoes[it].subtitulo == b.cartoes[it].subtitulo &&
+                        a.cartoes[it].selo == b.cartoes[it].selo &&
                         a.cartoes[it].progresso == b.cartoes[it].progresso }
                 if (!igual) notifyItemChanged(i)
             }
@@ -146,6 +151,7 @@ object Inicio {
             holder.capas.setRecycledViewPool(when (viewType) {
                 Tipo.LARGO.ordinal -> depositoLargos
                 Tipo.SECAO.ordinal -> depositoSecoes
+                Tipo.EVENTO.ordinal -> depositoEventos
                 else -> depositoCapas
             })
             holder.capas.isFocusable = false
@@ -189,6 +195,10 @@ object Inicio {
                 view.findViewById(R.id.secaoCapa3), view.findViewById(R.id.secaoCapa4))
             val icone: ImageView? = view.findViewById(R.id.secaoIcone)
             val cor: View? = view.findViewById(R.id.secaoCor)
+            val casa: ImageView? = view.findViewById(R.id.eventoCasa)
+            val fora: ImageView? = view.findViewById(R.id.eventoFora)
+            val liga: ImageView? = view.findViewById(R.id.eventoLiga)
+            val selo: TextView? = view.findViewById(R.id.eventoSelo)
             var pedido: String? = null
             var cartao: Cartao? = null
         }
@@ -197,6 +207,7 @@ object Inicio {
             val layout = when (tipo) {
                 Tipo.LARGO -> R.layout.item_cartao_largo
                 Tipo.SECAO -> R.layout.item_secao
+                Tipo.EVENTO -> R.layout.item_evento_cartao
                 else -> R.layout.item_capa
             }
             val holder = Holder(LayoutInflater.from(parent.context).inflate(layout, parent, false))
@@ -235,6 +246,7 @@ object Inicio {
             holder.itemView.setOnClickListener { cartao.aoEscolher() }
 
             if (tipo == Tipo.SECAO) { secao(holder, cartao); return }
+            if (tipo == Tipo.EVENTO) { evento(holder, cartao); return }
 
             holder.progresso.visibility =
                 if (cartao.progresso == null || cartao.progresso <= 0f) View.GONE else View.VISIBLE
@@ -263,6 +275,21 @@ object Inicio {
                 return
             }
             Cartoes.carregar(holder.imagem, holder.inicial, direta)
+        }
+
+        /** Cartão de jogo: escudos (colagem = casa, fora, campeonato) e o selo. */
+        private fun evento(holder: Holder, cartao: Cartao) {
+            listOf(holder.casa, holder.fora, holder.liga).forEachIndexed { i, imagem ->
+                imagem ?: return@forEachIndexed
+                imagem.dispose()
+                imagem.setImageDrawable(null)
+                cartao.colagem.getOrNull(i)?.takeIf { it.isNotEmpty() }?.let { imagem.load(it) }
+            }
+            holder.selo?.apply {
+                text = cartao.selo.orEmpty()
+                visibility = if (cartao.selo.isNullOrEmpty()) View.GONE else View.VISIBLE
+                setBackgroundResource(if (cartao.seloAoVivo) R.drawable.bg_chip else R.drawable.bg_chip_neutro)
+            }
         }
 
         /** Cartão de categoria: colagem de capas, cor e ícone da categoria. */

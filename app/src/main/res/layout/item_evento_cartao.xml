@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Um jogo na fileira de Eventos: os dois escudos frente a frente, o selo
+     (AO VIVO com o placar, ou o horário) e o logo do campeonato. Embaixo, os
+     times e o canal. Os ids capa* são os que o adaptador das fileiras procura. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="320dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:background="@drawable/row_focus"
+    android:focusable="true"
+    android:orientation="vertical"
+    android:padding="6dp">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:background="@drawable/bg_logo">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingTop="18dp">
+            <ImageView
+                android:id="@+id/eventoCasa"
+                android:layout_width="78dp"
+                android:layout_height="78dp"
+                android:contentDescription="@null"
+                android:scaleType="fitCenter" />
+            <TextView
+                android:id="@+id/eventoVersus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginEnd="18dp"
+                android:fontFamily="sans-serif-black"
+                android:text="x"
+                android:textColor="@color/text_secondary"
+                android:textSize="24sp" />
+            <ImageView
+                android:id="@+id/eventoFora"
+                android:layout_width="78dp"
+                android:layout_height="78dp"
+                android:contentDescription="@null"
+                android:scaleType="fitCenter" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/eventoSelo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|start"
+            android:layout_margin="8dp"
+            android:background="@drawable/bg_chip"
+            android:fontFamily="sans-serif-medium"
+            android:paddingStart="10dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="2dp"
+            android:textColor="@color/text_primary"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/eventoLiga"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="top|end"
+            android:layout_margin="8dp"
+            android:contentDescription="@null"
+            android:scaleType="fitCenter" />
+
+        <!-- Não usados aqui, mas o adaptador das fileiras procura por eles. -->
+        <ImageView
+            android:id="@+id/capaImagem"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:contentDescription="@null"
+            android:visibility="gone" />
+        <TextView
+            android:id="@+id/capaInicial"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone" />
+        <ProgressBar
+            android:id="@+id/capaProgresso"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_gravity="bottom"
+            android:max="1000"
+            android:progressDrawable="@drawable/progress_track"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/capaNome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-medium"
+        android:maxLines="1"
+        android:textColor="@color/text_primary"
+        android:textSize="16sp" />
+    <TextView
+        android:id="@+id/capaSub"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/text_secondary"
+        android:textSize="14sp" />
+</LinearLayout>

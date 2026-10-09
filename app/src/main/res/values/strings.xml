@@ -277,6 +277,19 @@
     <string name="pagina_ver_mais">Ver todos</string>
     <string name="ondemand_categorias">Categorias</string>
     <string name="radios_recentes">Ouvidas por último</string>
+    <string name="eventos_ao_vivo">Ao vivo agora</string>
+    <string name="eventos_em_breve">Começa em breve</string>
+    <string name="eventos_hoje">Hoje mais tarde</string>
+    <string name="eventos_amanha">Amanhã</string>
+    <string name="eventos_proximos">Próximos dias</string>
+    <string name="eventos_amanha_as">amanhã %1$s</string>
+    <string name="eventos_dica">No canal %1$s · OK assiste</string>
+    <string name="eventos_erro">Não deu para carregar a agenda agora. Tentando de novo em um minuto.</string>
+    <string name="eventos_nenhum">Nenhum jogo nos canais da lista agora. A agenda se atualiza sozinha.</string>
+    <plurals name="eventos_resumo">
+        <item quantity="one">%1$d jogo nos canais da lista · %2$d ao vivo</item>
+        <item quantity="other">%1$d jogos nos canais da lista · %2$d ao vivo</item>
+    </plurals>
     <string name="radio_ao_vivo">AO VIVO</string>
     <string name="radio_dica_tocando">cima e baixo trocam de estação · esquerda ou VOLTAR mostram todas as rádios</string>
     <string name="radio_posicao">Estação %1$d de %2$d</string>
