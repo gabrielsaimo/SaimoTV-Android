@@ -323,6 +323,14 @@
     <string name="opcoes_fontes">Trocar servidor</string>
     <string name="opcoes_fontes_dica">%1$d servidores para este canal</string>
     <string name="opcoes_inicio">Tela inicial</string>
+    <!-- Multi tela: dois canais ao vivo lado a lado (MainActivity). -->
+    <string name="multi_tela">Multi tela</string>
+    <string name="multi_tela_detalhe">Dois canais lado a lado</string>
+    <string name="multi_tela_sair">Sair da multi tela</string>
+    <string name="multi_tela_escolha">Escolha o canal da segunda tela</string>
+    <string name="multi_tela_sem_suporte">Este aparelho não consegue tocar duas telas</string>
+    <string name="multi_tela_sem_sinal">Sem sinal neste canal. Escolha outro com OK.</string>
+    <string name="multi_tela_dica">esquerda/direita troca a tela · OK canais · cima/baixo troca o canal · VOLTAR sai</string>
     <string name="fora_titulo">%1$s está fora do ar agora</string>
     <string name="fora_sub">Nenhum servidor respondeu. Tentamos de novo sozinhos daqui a pouco.</string>
     <string name="fora_ir">Ir para %1$s</string>

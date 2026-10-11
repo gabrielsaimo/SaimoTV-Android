@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Multi tela: a metade sem som. Só um fio, para separar as duas imagens. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@android:color/transparent" />
+    <stroke android:width="1dp" android:color="@color/text_faint" />
+</shape>

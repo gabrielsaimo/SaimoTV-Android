@@ -9,21 +9,25 @@ import android.os.Looper
 import android.os.SystemClock
 import android.provider.Settings
 import android.util.Log
+import android.view.Gravity
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.ForwardingPlayer
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
+import androidx.media3.common.TrackSelectionParameters
 import androidx.media3.common.VideoSize
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.DefaultLoadControl
@@ -137,7 +141,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val adapter = ChannelAdapter(
-        onPick = { play(it) },
+        // Na multi tela a lista cobre a metade esquerda: escolhido o canal,
+        // ela sai para as duas imagens ficarem à vista.
+        onPick = { if (multiTela) { sintonizar(it); closeList() } else play(it) },
         onFavorite = { index ->
             Favorites.toggle(this, ordered[index].name)
             reorder()
@@ -432,7 +438,8 @@ class MainActivity : AppCompatActivity() {
         player.prepare()
         player.playWhenReady = true
 
-        adapter.select(current)
+        adapter.select(indiceAtivo())
+        if (multiTela) atualizarRotulo()
         updateBanner()
         revealBanner()
     }
@@ -546,6 +553,13 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
             android.util.Log.e("SAIMO_DEBUG", "ExoPlayer error: ${error.errorCodeName}", error)
 
             handler.removeCallbacks(sourceTimeout)
+            // Com duas telas, o decodificador que falta pode ser o que a outra
+            // metade tomou: volta para uma tela só e retoma este canal.
+            if (multiTela && SegundaTela.faltaDecodificador(error)) {
+                sairDaMultiTela(manterAtiva = false, semSuporte = true)
+                play(current, sourceIndex, apósFalha = true)
+                return
+            }
             val channel = ordered[current]
             val categoriaMonitor = if (channel.name.contains("Rádio", ignoreCase = true)) "radio" else "live"
             Telemetria.falhou(categoriaMonitor, channel.name, channel.sources.getOrNull(sourceIndex)?.url.orEmpty(),
@@ -618,6 +632,7 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
         }
         if (isModoRadio) return teclaNaRadio(keyCode, event)
         val listOpen = listPanel.visibility == View.VISIBLE
+        if (multiTela && !listOpen) teclaNaMultiTela(keyCode)?.let { return it }
         return when (keyCode) {
             // Um toque no OK mostra o que está no ar; segurar três segundos é
             // que abre a lista. O toque é o gesto que se dá o tempo todo, então
@@ -649,7 +664,13 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
                 }
             }
             KeyEvent.KEYCODE_BACK, KeyEvent.KEYCODE_ESCAPE -> {
-                if (listOpen) { closeList(); true } else super.onKeyDown(keyCode, event)
+                when {
+                    listOpen -> { closeList(); true }
+                    // VOLTAR na multi tela fecha a segunda; o canal da metade
+                    // ativa fica em tela cheia.
+                    multiTela -> { sairDaMultiTela(); true }
+                    else -> super.onKeyDown(keyCode, event)
+                }
             }
             // Sobre a imagem o direcional troca de canal, como numa TV: cima e
             // baixo andam na lista, direita abre a programação.
@@ -662,7 +683,7 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
             // para ele, sem depender da busca espacial do sistema.
             KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_CHANNEL_UP, KeyEvent.KEYCODE_MEDIA_PREVIOUS -> {
                 when {
-                    !listOpen -> { play((current - 1 + ordered.size) % ordered.size); true }
+                    !listOpen -> { zapear(-1); true }
                     // Canal+ / Canal− na lista pulam de seção em seção.
                     channels.hasFocus() && keyCode == KeyEvent.KEYCODE_CHANNEL_UP -> { pularSecao(-1); true }
                     channels.hasFocus() -> { moverFoco(-passo(event)); true }
@@ -671,7 +692,7 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
             }
             KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_CHANNEL_DOWN, KeyEvent.KEYCODE_MEDIA_NEXT -> {
                 when {
-                    !listOpen -> { play((current + 1) % ordered.size); true }
+                    !listOpen -> { zapear(1); true }
                     channels.hasFocus() && keyCode == KeyEvent.KEYCODE_CHANNEL_DOWN -> { pularSecao(1); true }
                     channels.hasFocus() -> { moverFoco(passo(event)); true }
                     else -> super.onKeyDown(keyCode, event)
@@ -864,7 +885,10 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
                 // OK sobre o vídeo mostra a programação do canal (o rodapé); com
                 // ela já na tela, abre as fontes. A lista é na seta esquerda.
                 if (!okSegurado && listPanel.visibility != View.VISIBLE) {
-                    if (banner.visibility == View.VISIBLE && banner.alpha > 0.5f) escolherFonte(current)
+                    // Na multi tela as setas laterais trocam de metade, então
+                    // a lista (da metade ativa) passa para o OK.
+                    if (multiTela) openList()
+                    else if (banner.visibility == View.VISIBLE && banner.alpha > 0.5f) escolherFonte(current)
                     else revealBanner()
                 }
                 okSegurado = false
@@ -888,7 +912,7 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
         }
         val number = entered.toIntOrNull()
         val indice = number?.let { indicePorNumero(it) } ?: -1
-        if (indice >= 0) play(indice)
+        if (indice >= 0) sintonizar(indice)
     }
 
     // MARK: - Teclado na tela
@@ -932,7 +956,7 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
         val indice = number?.let { indicePorNumero(it) } ?: -1
         if (indice >= 0) {
             closeList()
-            play(indice)
+            sintonizar(indice)
         } else {
             focusRow(current)
         }
@@ -961,8 +985,10 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
         // Ao trancar com um desses no ar, o nome ficaria à vista na faixa;
         // volta para o primeiro canal comum antes de a lista encolher.
         if (found < 0 && playing != null) play(0) else current = found.coerceAtLeast(0)
+        // O canal da segunda tela saiu da lista: ela volta a pedir um.
+        segunda?.canal?.let { c -> if (ordered.none { it.name == c.name }) segunda?.limpar() }
         adapter.submit(ordered)
-        adapter.select(current)
+        adapter.select(indiceAtivo())
         montarSecoes()
         listCount.text = ordered.size.toString()
     }
@@ -992,12 +1018,17 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
 
     /** MENU com o vídeo na tela: tudo o que se pode fazer com o canal. */
     private fun opcoes() {
+        if (multiTela) { opcoesDaMultiTela(); return }
         val canal = ordered.getOrNull(current) ?: return
         val favorito = Favorites.contains(canal.name)
         val anterior = Preferencias.canalAnterior?.takeIf { n -> ordered.any { it.name == n } }
         val itens = listOfNotNull(
             Painel.Item(getString(R.string.opcoes_canais), icone = R.drawable.ic_list) { openList() },
             Painel.Item(getString(R.string.guide), icone = R.drawable.ic_guide) { openGuide() },
+            // Rádio não chega aqui (ver teclaNaRadio); nos óculos não há setas
+            // para trocar de metade, então lá a multi tela não aparece.
+            if (!isModoRadio && !Vr.ativo) Painel.Item(getString(R.string.multi_tela),
+                getString(R.string.multi_tela_detalhe), icone = R.drawable.ic_multi_tela) { entrarNaMultiTela() } else null,
             anterior?.let { Painel.Item(getString(R.string.opcoes_anterior, it), icone = R.drawable.ic_history) { canalAnterior() } },
             Painel.Item(getString(if (favorito) R.string.opcoes_desfavoritar else R.string.opcoes_favoritar),
                 icone = if (favorito) R.drawable.ic_star else R.drawable.ic_star_outline) {
@@ -1136,6 +1167,181 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
         if (index >= 0) play(index)
     }
 
+    // MARK: - Multi tela
+
+    /**
+     * Dois canais lado a lado, como no Mac e no Windows. A metade esquerda é
+     * o player de sempre (com fontes, vigia e telemetria); a direita é a
+     * `SegundaTela`, que só existe enquanto a multi tela está aberta.
+     *
+     * Só a metade ativa (contorno ciano) tem som, e é nela que a lista, as
+     * setas de canal e os números sintonizam. Esquerda e direita trocam de
+     * metade; OK abre a lista; VOLTAR fecha a segunda tela.
+     */
+    private var multiTela = false
+    /// 0 = metade esquerda (o player principal), 1 = a direita.
+    private var telaAtiva = 0
+    private var segunda: SegundaTela? = null
+    /// O limite de qualidade do canal principal antes de entrar, para voltar
+    /// a ele ao sair (inclusive o que a pessoa escolheu em Qualidade).
+    private var limiteAntes: TrackSelectionParameters? = null
+    private val esconderDica = Runnable { findViewById<View>(R.id.multiDica).visibility = View.GONE }
+
+    /** O canal da metade ativa, na lista; fora da multi tela, o que está no ar. */
+    private fun indiceAtivo(): Int {
+        if (!multiTela || telaAtiva == 0) return current
+        val nome = segunda?.canal?.name ?: return current
+        return ordered.indexOfFirst { it.name == nome }.takeIf { it >= 0 } ?: current
+    }
+
+    /** Sintoniza na metade ativa — a lista, os números e as setas passam por aqui. */
+    private fun sintonizar(index: Int) {
+        val tela2 = segunda
+        if (multiTela && telaAtiva == 1 && tela2 != null) {
+            val canal = ordered.getOrNull(index) ?: return
+            tela2.tocar(canal)
+            adapter.select(index)
+            mostrarDica()
+        } else {
+            play(index)
+        }
+    }
+
+    private fun zapear(sentido: Int) {
+        if (ordered.isEmpty()) return
+        // Segunda tela ainda vazia: cima/baixo partem do canal da esquerda.
+        sintonizar((indiceAtivo() + sentido + ordered.size) % ordered.size)
+    }
+
+    private fun entrarNaMultiTela() {
+        if (multiTela || isModoRadio || Vr.ativo) return
+        val tela2 = SegundaTela(this, findViewById(R.id.player2), findViewById(R.id.multiRotulo2),
+            findViewById(R.id.multiAviso2), { numeroDe(it) }) {
+            // Fora do callback do player: soltá-lo dentro do próprio erro dele
+            // deixaria o resto do aviso rodando sobre um player já solto.
+            handler.post { sairDaMultiTela(manterAtiva = false, semSuporte = true) }
+        }
+        if (!tela2.ligar()) {
+            tela2.soltar()
+            avisarSemSuporte()
+            return
+        }
+        multiTela = true
+        segunda = tela2
+        limiteAntes = player.trackSelectionParameters
+        player.trackSelectionParameters = SegundaTela.limite(player.trackSelectionParameters)
+        handler.removeCallbacks(hideBanner)
+        banner.visibility = View.GONE
+        arrumarTelas()
+        atualizarRotulo()
+        ativarTela(1)
+        mostrarDica()
+        // A metade nova começa vazia: a lista já abre para escolher o canal dela.
+        openList()
+    }
+
+    /**
+     * Volta para uma tela só. `manterAtiva` põe o canal da metade direita em
+     * tela cheia quando era ela a ativa (VOLTAR, sair pelo menu, ir para outra
+     * tela); sem isso fica o da esquerda, que já está tocando.
+     */
+    private fun sairDaMultiTela(manterAtiva: Boolean = true, semSuporte: Boolean = false) {
+        if (!multiTela) return
+        val daDireita = if (manterAtiva && telaAtiva == 1) segunda?.canal?.name else null
+        multiTela = false
+        telaAtiva = 0
+        segunda?.soltar()
+        segunda = null
+        player.volume = 1f
+        limiteAntes?.let { player.trackSelectionParameters = it }
+        limiteAntes = null
+        handler.removeCallbacks(esconderDica)
+        arrumarTelas()
+        val indice = daDireita?.let { n -> ordered.indexOfFirst { it.name == n } } ?: -1
+        if (indice >= 0) play(indice) else { adapter.select(current); revealBanner() }
+        if (semSuporte) avisarSemSuporte()
+    }
+
+    private fun avisarSemSuporte() {
+        showStatus(getString(R.string.multi_tela_sem_suporte))
+        handler.removeCallbacks(esconderStatus)
+        handler.postDelayed(esconderStatus, 4_000)
+    }
+
+    /** Metades iguais na multi tela; o player principal em tela cheia fora dela. */
+    private fun arrumarTelas() {
+        val raiz = playerView.parent as View
+        val metade = (raiz.width.takeIf { it > 0 } ?: resources.displayMetrics.widthPixels) / 2
+        playerView.layoutParams = (playerView.layoutParams as FrameLayout.LayoutParams).apply {
+            width = if (multiTela) metade else ViewGroup.LayoutParams.MATCH_PARENT
+            gravity = Gravity.START
+        }
+        val vista2 = findViewById<View>(R.id.player2)
+        vista2.layoutParams = (vista2.layoutParams as FrameLayout.LayoutParams).apply {
+            width = metade
+            gravity = Gravity.END
+        }
+        vista2.visibility = if (multiTela) View.VISIBLE else View.GONE
+        findViewById<View>(R.id.multiTela).visibility = if (multiTela) View.VISIBLE else View.GONE
+        // A superfície do vídeo guarda o tamanho da metade depois de crescer
+        // de volta, e o compositor ainda desenha uma cópia pequena no canto.
+        // Religar o player a ela faz o sistema recriar a superfície no tamanho
+        // novo — um quadro preto, só na troca.
+        playerView.player = null
+        playerView.player = player
+    }
+
+    /** Acende a metade escolhida e passa o som para ela. */
+    private fun ativarTela(qual: Int) {
+        if (!multiTela) return
+        telaAtiva = if (qual == 1 && segunda != null) 1 else 0
+        player.volume = if (telaAtiva == 0) 1f else 0f
+        segunda?.comSom = telaAtiva == 1
+        findViewById<View>(R.id.multiTela1).setBackgroundResource(
+            if (telaAtiva == 0) R.drawable.bg_tela_ativa else R.drawable.bg_tela_inativa)
+        findViewById<View>(R.id.multiTela2).setBackgroundResource(
+            if (telaAtiva == 1) R.drawable.bg_tela_ativa else R.drawable.bg_tela_inativa)
+        adapter.select(indiceAtivo())
+    }
+
+    /** O nome do canal da metade esquerda; a direita cuida do dela. */
+    private fun atualizarRotulo() {
+        val canal = ordered.getOrNull(current) ?: return
+        findViewById<TextView>(R.id.multiRotulo1).text =
+            listOfNotNull(numeroDe(canal).takeIf { it > 0 }?.toString(), canal.name).joinToString("  ")
+    }
+
+    private fun mostrarDica() {
+        // Com a lista aberta a dica ficaria por cima da legenda dela.
+        if (listPanel.isVisible) return
+        findViewById<View>(R.id.multiDica).visibility = View.VISIBLE
+        handler.removeCallbacks(esconderDica)
+        handler.postDelayed(esconderDica, BANNER_MS)
+    }
+
+    /**
+     * Teclas sobre a imagem na multi tela; nulo segue o caminho de sempre
+     * (cima/baixo, números, MENU, VOLTAR). Guia e LAST ficam de fora: o guia
+     * é outra tela, e sair para ela fecharia a multi tela.
+     */
+    private fun teclaNaMultiTela(keyCode: Int): Boolean? = when (keyCode) {
+        KeyEvent.KEYCODE_DPAD_LEFT -> { ativarTela(0); mostrarDica(); true }
+        KeyEvent.KEYCODE_DPAD_RIGHT -> { ativarTela(1); mostrarDica(); true }
+        KeyEvent.KEYCODE_GUIDE, KeyEvent.KEYCODE_INFO, KeyEvent.KEYCODE_LAST_CHANNEL,
+        KeyEvent.KEYCODE_CAPTIONS -> { mostrarDica(); true }
+        else -> null
+    }
+
+    /** MENU na multi tela: o que vale para as duas metades. */
+    private fun opcoesDaMultiTela() {
+        val nome = if (telaAtiva == 1) segunda?.canal?.name else ordered.getOrNull(current)?.name
+        Painel.mostrar(this, getString(R.string.multi_tela), listOf(
+            Painel.Item(getString(R.string.opcoes_canais), icone = R.drawable.ic_list) { openList() },
+            Painel.Item(getString(R.string.multi_tela_sair), icone = R.drawable.ic_close) { sairDaMultiTela() },
+            Painel.Item(getString(R.string.opcoes_inicio), icone = R.drawable.ic_home) { finish() },
+        ), nome)
+    }
+
     // MARK: - Óculos de VR
 
     /**
@@ -1240,6 +1446,12 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
 
     private fun openList() {
         esconderBarraVr()
+        // Na multi tela, os rótulos das metades ficariam sob o menu do topo.
+        if (multiTela) {
+            esconderDica.run()
+            findViewById<View>(R.id.multiRotulo1).alpha = 0f
+            findViewById<View>(R.id.multiRotulo2).alpha = 0f
+        }
         menuGlobal?.visibility = View.VISIBLE
         listaAbertaEm = SystemClock.elapsedRealtime()
         handler.removeCallbacks(hideBanner)
@@ -1258,8 +1470,8 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
         // bem na hora em que ela ainda estava apertando para baixo. Só refaz o
         // foco se ele realmente escapou da lista (ficou no cabeçalho).
         listPanel.animate().translationX(0f).setDuration(180)
-            .withEndAction { if (!channels.hasFocus()) focusRow(current) }.start()
-        channels.post { focusRow(current) }
+            .withEndAction { if (!channels.hasFocus()) focusRow(indiceAtivo()) }.start()
+        channels.post { focusRow(indiceAtivo()) }
     }
 
     /**
@@ -1336,6 +1548,8 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
 
     private fun closeList() {
         menuGlobal?.visibility = View.GONE
+        findViewById<View>(R.id.multiRotulo1).alpha = 1f
+        findViewById<View>(R.id.multiRotulo2).alpha = 1f
         findViewById<View>(R.id.previa).visibility = View.GONE
         numpad.visibility = View.GONE
         listPanel.animate().translationX(-panelWidth()).setDuration(160)
@@ -1386,6 +1600,9 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
         // (com as teclas de TV) só confundiria.
         if (isModoRadio) return
         if (listPanel.visibility == View.VISIBLE) return
+        // Na multi tela cada metade tem o próprio rótulo; a faixa larga
+        // cobriria as duas. No lugar dela, a dica das teclas.
+        if (multiTela) { mostrarDica(); return }
         updateBanner()
         handler.removeCallbacks(hideBanner)
         if (banner.visibility != View.VISIBLE) {
@@ -1405,6 +1622,9 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
 
     override fun onStop() {
         super.onStop()
+        // Fora da tela, o segundo player só gastaria memória e rede. Volta com
+        // o canal da metade ativa em tela cheia, como no Mac ao abrir o acervo.
+        sairDaMultiTela()
         emSegundoPlano = true
         player.playWhenReady = false
     }
@@ -1421,6 +1641,8 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
 
     override fun onDestroy() {
         handler.removeCallbacksAndMessages(null)
+        segunda?.soltar()
+        segunda = null
         mediaSession?.release()
         player.release()
         super.onDestroy()

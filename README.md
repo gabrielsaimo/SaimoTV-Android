@@ -51,6 +51,14 @@ versão nova sozinho e oferece a atualização na tela.
 - Guia de programação, lembretes de programa e timer de sono.
 - Troca de fonte automática quando uma cai, e manual pela lista.
 - Ao vivo não pausa: PLAY/PAUSE do controle e do Assistant não param o canal.
+- **Multi tela** (`MultiTela.kt`): dois canais lado a lado, em "Multi tela" nas
+  opções (segurar OK ou MENU). A tela divide ao meio, a direita começa vazia e
+  a lista abre para escolher o canal dela. Só a metade ativa (contorno ciano)
+  tem som, e é nela que a lista, as setas e os números sintonizam; cada uma
+  troca de fonte sozinha quando a dela cai. Cada metade fica limitada a 720p
+  (480p em aparelho de pouca memória) e o segundo player só existe enquanto a
+  multi tela está aberta. Aparelho que não toca dois vídeos ao mesmo tempo
+  avisa e volta a uma tela só. Não aparece na rádio.
 
 **Filmes e séries**
 - Ficha com sinopse, elenco, temporadas e episódios, e "Mais como este".
@@ -102,6 +110,16 @@ Ao vivo:
 | VOLTAR | fecha a lista |
 | PLAY/PAUSE | nada: ao vivo sempre toca |
 
+Na multi tela:
+
+| Tecla | Ação |
+|---|---|
+| ← / → | escolhe a metade ativa (a que tem som) |
+| OK | lista de canais da metade ativa |
+| ↑ / ↓, CH+ / CH−, 0–9 | troca o canal da metade ativa |
+| segurar OK, ou MENU | lista, sair da multi tela, tela inicial |
+| VOLTAR | sai: o canal da metade ativa fica em tela cheia |
+
 Filmes e séries: ← / → avançam e voltam (segurar acelera), OK mostra os
 controles, ↓ leva aos botões, VOLTAR sai guardando o ponto.
 
@@ -129,6 +147,7 @@ Detecção de "pouca memória" em `Aparelho.kt` (isLowRamDevice ou até 1,5 GB).
 |---|---|
 | `EscolhaActivity` | tela inicial (fileiras) |
 | `MainActivity` | TV ao vivo |
+| `MultiTela` | segunda metade da multi tela (player, troca de fonte) |
 | `PlayerActivity` | player de filmes e séries |
 | `FichaActivity`, `AtorActivity` | ficha do título e do ator |
 | `PaginaActivity`, `GradeActivity` | páginas por tipo e grade A–Z |

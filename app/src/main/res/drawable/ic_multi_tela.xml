@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ícone Material (Apache 2.0), "vertical split" em duas metades iguais. A
+     cor vem de quem usa: tingido pela cor do texto. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp"
+    android:viewportWidth="24" android:viewportHeight="24">
+    <path android:fillColor="#FFFFFFFF" android:pathData="M3,5v14h8V5H3zM9,17H5V7h4V17zM13,5v14h8V5H13zM19,17h-4V7h4V17z" />
+</vector>

@@ -14,6 +14,110 @@
         app:resize_mode="fit"
         app:use_controller="false" />
 
+    <!-- Multi tela: a segunda imagem, na metade direita. Só tem player ligado
+         enquanto a multi tela está aberta; as larguras saem do código. -->
+    <androidx.media3.ui.PlayerView
+        android:id="@+id/player2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:visibility="gone"
+        app:resize_mode="fit"
+        app:use_controller="false" />
+
+    <!-- Multi tela: contorno de cada metade (o aceso é a que tem som), o nome
+         do canal de cada uma e a dica das teclas. -->
+    <FrameLayout
+        android:id="@+id/multiTela"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:id="@+id/multiTela1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/bg_tela_ativa">
+
+                <TextView
+                    android:id="@+id/multiRotulo1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|start"
+                    android:layout_margin="18dp"
+                    android:background="@drawable/bg_card"
+                    android:ellipsize="end"
+                    android:fontFamily="sans-serif-medium"
+                    android:maxLines="1"
+                    android:paddingStart="14dp"
+                    android:paddingTop="6dp"
+                    android:paddingEnd="14dp"
+                    android:paddingBottom="6dp"
+                    android:textColor="@color/text_primary"
+                    android:textSize="16sp" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/multiTela2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/bg_tela_inativa">
+
+                <TextView
+                    android:id="@+id/multiRotulo2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|start"
+                    android:layout_margin="18dp"
+                    android:background="@drawable/bg_card"
+                    android:ellipsize="end"
+                    android:fontFamily="sans-serif-medium"
+                    android:maxLines="1"
+                    android:paddingStart="14dp"
+                    android:paddingTop="6dp"
+                    android:paddingEnd="14dp"
+                    android:paddingBottom="6dp"
+                    android:textColor="@color/text_primary"
+                    android:textSize="16sp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/multiAviso2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="24dp"
+                    android:gravity="center"
+                    android:text="@string/multi_tela_escolha"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="20sp" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/multiDica"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="28dp"
+            android:background="@drawable/bg_card"
+            android:paddingStart="18dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="18dp"
+            android:paddingBottom="8dp"
+            android:text="@string/multi_tela_dica"
+            android:textColor="@color/text_secondary"
+            android:textSize="15sp" />
+    </FrameLayout>
+
     <!-- Rádio tocando: o painel cobre a tela que seria preta. -->
     <include layout="@layout/painel_radio" />
 
