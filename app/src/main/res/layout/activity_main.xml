@@ -46,22 +46,55 @@
                 android:layout_weight="1"
                 android:background="@drawable/bg_tela_ativa">
 
-                <TextView
+                <!-- Logo e nome do canal desta metade. Sem logo, a inicial. -->
+                <LinearLayout
                     android:id="@+id/multiRotulo1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top|start"
                     android:layout_margin="18dp"
                     android:background="@drawable/bg_card"
-                    android:ellipsize="end"
-                    android:fontFamily="sans-serif-medium"
-                    android:maxLines="1"
-                    android:paddingStart="14dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="8dp"
                     android:paddingTop="6dp"
                     android:paddingEnd="14dp"
-                    android:paddingBottom="6dp"
-                    android:textColor="@color/text_primary"
-                    android:textSize="16sp" />
+                    android:paddingBottom="6dp">
+
+                    <FrameLayout
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/bg_logo">
+
+                        <TextView
+                            android:id="@+id/multiInicial1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:fontFamily="sans-serif-medium"
+                            android:gravity="center"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="16sp" />
+
+                        <ImageView
+                            android:id="@+id/multiLogo1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@null"
+                            android:padding="4dp"
+                            android:scaleType="fitCenter" />
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/multiNome1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:fontFamily="sans-serif-medium"
+                        android:maxLines="1"
+                        android:textColor="@color/text_primary"
+                        android:textSize="16sp" />
+                </LinearLayout>
             </FrameLayout>
 
             <FrameLayout
@@ -71,23 +104,56 @@
                 android:layout_weight="1"
                 android:background="@drawable/bg_tela_inativa">
 
-                <TextView
+                <!-- Logo e nome do canal desta metade. Sem logo, a inicial. -->
+                <LinearLayout
                     android:id="@+id/multiRotulo2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top|start"
                     android:layout_margin="18dp"
                     android:background="@drawable/bg_card"
-                    android:ellipsize="end"
-                    android:fontFamily="sans-serif-medium"
-                    android:maxLines="1"
-                    android:paddingStart="14dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="8dp"
                     android:paddingTop="6dp"
                     android:paddingEnd="14dp"
                     android:paddingBottom="6dp"
-                    android:textColor="@color/text_primary"
-                    android:textSize="16sp"
-                    android:visibility="gone" />
+                    android:visibility="gone">
+
+                    <FrameLayout
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/bg_logo">
+
+                        <TextView
+                            android:id="@+id/multiInicial2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:fontFamily="sans-serif-medium"
+                            android:gravity="center"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="16sp" />
+
+                        <ImageView
+                            android:id="@+id/multiLogo2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@null"
+                            android:padding="4dp"
+                            android:scaleType="fitCenter" />
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/multiNome2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:fontFamily="sans-serif-medium"
+                        android:maxLines="1"
+                        android:textColor="@color/text_primary"
+                        android:textSize="16sp" />
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/multiAviso2"

@@ -330,7 +330,8 @@
     <string name="multi_tela_escolha">Escolha o canal da segunda tela</string>
     <string name="multi_tela_sem_suporte">Este aparelho não consegue tocar duas telas</string>
     <string name="multi_tela_sem_sinal">Sem sinal neste canal. Escolha outro com OK.</string>
-    <string name="multi_tela_dica">esquerda/direita troca a tela · OK canais · cima/baixo troca o canal · VOLTAR sai</string>
+    <string name="multi_tela_dica">esquerda/direita troca a tela · OK informações · OK de novo canais · cima/baixo troca o canal · VOLTAR sai</string>
+    <string name="multi_tela_banner_dica">OK canais · esquerda/direita troca · VOLTAR sai</string>
     <string name="fora_titulo">%1$s está fora do ar agora</string>
     <string name="fora_sub">Nenhum servidor respondeu. Tentamos de novo sozinhos daqui a pouco.</string>
     <string name="fora_ir">Ir para %1$s</string>

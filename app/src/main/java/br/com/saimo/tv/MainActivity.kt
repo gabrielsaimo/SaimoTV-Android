@@ -468,7 +468,7 @@ class MainActivity : AppCompatActivity() {
                                 rotulo += String.format(java.util.Locale.US, " · %.1f Mbps", bitrateDinâmicoBps / 1_000_000f)
                             }
                             bannerResolution.text = rotulo
-                            bannerResolution.visibility = if (rotulo.isEmpty()) android.view.View.GONE else android.view.View.VISIBLE
+                            bannerResolution.visibility = if (rotulo.isEmpty() || faixaDaSegunda()) android.view.View.GONE else android.view.View.VISIBLE
                         }
                     }
                 }
@@ -507,7 +507,7 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
             }
             
             bannerResolution.text = rotulo
-            bannerResolution.visibility = if (rotulo.isEmpty()) android.view.View.GONE else android.view.View.VISIBLE
+            bannerResolution.visibility = if (rotulo.isEmpty() || faixaDaSegunda()) android.view.View.GONE else android.view.View.VISIBLE
         }
 
 
@@ -887,8 +887,12 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
                 if (!okSegurado && listPanel.visibility != View.VISIBLE) {
                     // Na multi tela as setas laterais trocam de metade, então
                     // a lista (da metade ativa) passa para o OK.
-                    if (multiTela) openList()
-                    else if (banner.visibility == View.VISIBLE && banner.alpha > 0.5f) escolherFonte(current)
+                    val faixaNaTela = banner.visibility == View.VISIBLE && banner.alpha > 0.5f
+                    // Na multi tela o primeiro OK é o mesmo de sempre (a faixa
+                    // do canal, aqui o da metade ativa); o segundo abre a lista,
+                    // que perdeu a seta esquerda para a troca de metade.
+                    if (multiTela) { if (faixaNaTela) openList() else revealBanner() }
+                    else if (faixaNaTela) escolherFonte(current)
                     else revealBanner()
                 }
                 okSegurado = false
@@ -1176,7 +1180,8 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
      *
      * Só a metade ativa (contorno ciano) tem som, e é nela que a lista, as
      * setas de canal e os números sintonizam. Esquerda e direita trocam de
-     * metade; OK abre a lista; VOLTAR fecha a segunda tela.
+     * metade; OK mostra a faixa do canal ativo e, com ela na tela, abre a
+     * lista; VOLTAR fecha a segunda tela.
      */
     private var multiTela = false
     /// 0 = metade esquerda (o player principal), 1 = a direita.
@@ -1201,7 +1206,7 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
             val canal = ordered.getOrNull(index) ?: return
             tela2.tocar(canal)
             adapter.select(index)
-            mostrarDica()
+            revealBanner()
         } else {
             play(index)
         }
@@ -1216,6 +1221,7 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
     private fun entrarNaMultiTela() {
         if (multiTela || isModoRadio || Vr.ativo) return
         val tela2 = SegundaTela(this, findViewById(R.id.player2), findViewById(R.id.multiRotulo2),
+            findViewById(R.id.multiNome2), findViewById(R.id.multiLogo2), findViewById(R.id.multiInicial2),
             findViewById(R.id.multiAviso2), { numeroDe(it) }) {
             // Fora do callback do player: soltá-lo dentro do próprio erro dele
             // deixaria o resto do aviso rodando sobre um player já solto.
@@ -1283,6 +1289,7 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
         }
         vista2.visibility = if (multiTela) View.VISIBLE else View.GONE
         findViewById<View>(R.id.multiTela).visibility = if (multiTela) View.VISIBLE else View.GONE
+        posicionarBanner()
         // A superfície do vídeo guarda o tamanho da metade depois de crescer
         // de volta, e o compositor ainda desenha uma cópia pequena no canto.
         // Religar o player a ela faz o sistema recriar a superfície no tamanho
@@ -1302,18 +1309,43 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
         findViewById<View>(R.id.multiTela2).setBackgroundResource(
             if (telaAtiva == 1) R.drawable.bg_tela_ativa else R.drawable.bg_tela_inativa)
         adapter.select(indiceAtivo())
+        posicionarBanner()
     }
 
-    /** O nome do canal da metade esquerda; a direita cuida do dela. */
+    /// O recuo lateral da faixa em tela cheia, lido do layout na primeira vez.
+    private var recuoDaFaixa = -1
+
+    /**
+     * A faixa do canal (a mesma do OK em tela cheia) fica sobre a metade
+     * ativa na multi tela, com recuo menor para caber; fora dela, a tela toda.
+     */
+    private fun posicionarBanner() {
+        if (recuoDaFaixa < 0) recuoDaFaixa = banner.paddingStart
+        val recuo = if (multiTela) (24 * resources.displayMetrics.density).toInt() else recuoDaFaixa
+        banner.setPaddingRelative(recuo, banner.paddingTop, recuo, banner.paddingBottom)
+        val metade = ((playerView.parent as View).width.takeIf { it > 0 } ?: resources.displayMetrics.widthPixels) / 2
+        banner.layoutParams = (banner.layoutParams as FrameLayout.LayoutParams).apply {
+            width = if (multiTela) metade else ViewGroup.LayoutParams.MATCH_PARENT
+            gravity = Gravity.BOTTOM or if (multiTela && telaAtiva == 1) Gravity.END else Gravity.START
+        }
+    }
+
+    /** A faixa está falando do canal da metade direita (não do player principal). */
+    private fun faixaDaSegunda(): Boolean = multiTela && telaAtiva == 1 && segunda?.canal != null
+
+    /** Logo, número e nome do canal da metade esquerda; a direita cuida do dela. */
     private fun atualizarRotulo() {
         val canal = ordered.getOrNull(current) ?: return
-        findViewById<TextView>(R.id.multiRotulo1).text =
-            listOfNotNull(numeroDe(canal).takeIf { it > 0 }?.toString(), canal.name).joinToString("  ")
+        SegundaTela.preencherRotulo(findViewById(R.id.multiNome1), findViewById(R.id.multiLogo1),
+            findViewById(R.id.multiInicial1), canal, numeroDe(canal))
     }
 
     private fun mostrarDica() {
-        // Com a lista aberta a dica ficaria por cima da legenda dela.
+        // Com a lista aberta a dica ficaria por cima da legenda dela; com a
+        // faixa do canal, por cima da faixa.
         if (listPanel.isVisible) return
+        handler.removeCallbacks(hideBanner)
+        banner.visibility = View.GONE
         findViewById<View>(R.id.multiDica).visibility = View.VISIBLE
         handler.removeCallbacks(esconderDica)
         handler.postDelayed(esconderDica, BANNER_MS)
@@ -1325,9 +1357,11 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
      * é outra tela, e sair para ela fecharia a multi tela.
      */
     private fun teclaNaMultiTela(keyCode: Int): Boolean? = when (keyCode) {
-        KeyEvent.KEYCODE_DPAD_LEFT -> { ativarTela(0); mostrarDica(); true }
-        KeyEvent.KEYCODE_DPAD_RIGHT -> { ativarTela(1); mostrarDica(); true }
-        KeyEvent.KEYCODE_GUIDE, KeyEvent.KEYCODE_INFO, KeyEvent.KEYCODE_LAST_CHANNEL,
+        // Trocar de metade mostra a faixa da que acabou de ganhar o som.
+        KeyEvent.KEYCODE_DPAD_LEFT -> { ativarTela(0); revealBanner(); true }
+        KeyEvent.KEYCODE_DPAD_RIGHT -> { ativarTela(1); revealBanner(); true }
+        KeyEvent.KEYCODE_INFO -> { revealBanner(); true }
+        KeyEvent.KEYCODE_GUIDE, KeyEvent.KEYCODE_LAST_CHANNEL,
         KeyEvent.KEYCODE_CAPTIONS -> { mostrarDica(); true }
         else -> null
     }
@@ -1562,13 +1596,21 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
     }
 
     private fun updateBanner() {
-        val channel = ordered[current]
+        // Na multi tela, a faixa é da metade ativa — que pode ser a direita.
+        val tela2 = segunda?.takeIf { faixaDaSegunda() }
+        val channel = tela2?.canal ?: ordered[current]
         bannerNumber.text = numeroDe(channel).takeIf { it > 0 }?.toString().orEmpty()
-        val fonte = channel.sources.getOrNull(sourceIndex)
+        val fonte = channel.sources.getOrNull(tela2?.fonteAtual ?: sourceIndex)
         // Canal 24h: qual temporada está no ar.
         bannerChannel.text = listOfNotNull(channel.name, fonte?.nome).joinToString(" · ")
+        // A resolução medida é a do player principal; da direita não há.
+        if (tela2 != null) bannerResolution.visibility = View.GONE
         // No lugar de "fonte 1/3 · servidor", o que o controle faz aqui.
-        bannerSource.text = if (fonte == null) "" else getString(if (Vr.ativo) R.string.vr_banner_dica else R.string.banner_dica)
+        bannerSource.text = when {
+            fonte == null -> ""
+            multiTela -> getString(R.string.multi_tela_banner_dica)
+            else -> getString(if (Vr.ativo) R.string.vr_banner_dica else R.string.banner_dica)
+        }
         bannerSource.visibility =
             if (bannerSource.text.isNullOrEmpty()) View.GONE else View.VISIBLE
         if (channel.logo != null) bannerLogo.load(channel.logo)
@@ -1600,9 +1642,13 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
         // (com as teclas de TV) só confundiria.
         if (isModoRadio) return
         if (listPanel.visibility == View.VISIBLE) return
-        // Na multi tela cada metade tem o próprio rótulo; a faixa larga
-        // cobriria as duas. No lugar dela, a dica das teclas.
-        if (multiTela) { mostrarDica(); return }
+        // Na multi tela a faixa vai para a metade ativa (ver posicionarBanner).
+        // Com a direita ainda vazia não há canal a mostrar: fica a dica.
+        if (multiTela) {
+            if (telaAtiva == 1 && segunda?.canal == null) { mostrarDica(); return }
+            esconderDica.run()
+            posicionarBanner()
+        }
         updateBanner()
         handler.removeCallbacks(hideBanner)
         if (banner.visibility != View.VISIBLE) {

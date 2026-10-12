@@ -5,6 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
@@ -33,7 +34,11 @@ import androidx.media3.ui.PlayerView
 class SegundaTela(
     private val tela: Activity,
     private val vista: PlayerView,
-    private val rotulo: TextView,
+    /// O selo do topo da metade: logo (ou a inicial) e nome do canal.
+    private val rotulo: View,
+    private val nome: TextView,
+    private val logo: ImageView,
+    private val inicial: TextView,
     private val aviso: TextView,
     private val numero: (Channel) -> Int,
     /// O aparelho não deu conta de dois vídeos: quem chama fecha a multi tela.
@@ -62,6 +67,17 @@ class SegundaTela(
             PlaybackException.ERROR_CODE_DECODING_FORMAT_EXCEEDS_CAPABILITIES,
             PlaybackException.ERROR_CODE_DECODING_RESOURCES_RECLAIMED,
         )
+
+        /**
+         * O selo de uma metade: logo pequeno, número e nome. Sem logo (ou se
+         * ele não carregar), a inicial do canal no lugar — o mesmo jeito dos
+         * cartões da tela inicial.
+         */
+        fun preencherRotulo(nome: TextView, logo: ImageView, inicial: TextView, canal: Channel, numero: Int) {
+            nome.text = listOfNotNull(numero.takeIf { it > 0 }?.toString(), canal.name).joinToString("  ")
+            inicial.text = canal.name.trim().firstOrNull()?.uppercase().orEmpty()
+            Cartoes.carregar(logo, inicial, canal.logo)
+        }
     }
 
     private val handler = Handler(Looper.getMainLooper())
@@ -70,6 +86,8 @@ class SegundaTela(
     var canal: Channel? = null
         private set
     private var fonte = 0
+    /** A fonte no ar, para a faixa do canal dizer qual temporada/versão é. */
+    val fonteAtual: Int get() = fonte
     private var tocou = false
     private var retomadas = 0
     /// Fontes desta volta que caíram por falta de decodificador. Se foram
@@ -127,7 +145,7 @@ class SegundaTela(
     fun tocar(novo: Channel) {
         canal = novo
         falhasDeDecodificador = 0
-        rotulo.text = listOfNotNull(numero(novo).takeIf { it > 0 }?.toString(), novo.name).joinToString("  ")
+        preencherRotulo(nome, logo, inicial, novo, numero(novo))
         rotulo.visibility = View.VISIBLE
         abrir(0, retomando = false)
     }

@@ -53,7 +53,8 @@ versão nova sozinho e oferece a atualização na tela.
 - Ao vivo não pausa: PLAY/PAUSE do controle e do Assistant não param o canal.
 - **Multi tela** (`MultiTela.kt`): dois canais lado a lado, em "Multi tela" nas
   opções (segurar OK ou MENU). A tela divide ao meio, a direita começa vazia e
-  a lista abre para escolher o canal dela. Só a metade ativa (contorno ciano)
+  a lista abre para escolher o canal dela. Cada metade mostra no alto o logo,
+  o número e o nome do canal. Só a metade ativa (contorno ciano)
   tem som, e é nela que a lista, as setas e os números sintonizam; cada uma
   troca de fonte sozinha quando a dela cai. Cada metade fica limitada a 720p
   (480p em aparelho de pouca memória) e o segundo player só existe enquanto a
@@ -114,8 +115,9 @@ Na multi tela:
 
 | Tecla | Ação |
 |---|---|
-| ← / → | escolhe a metade ativa (a que tem som) |
-| OK | lista de canais da metade ativa |
+| ← / → | escolhe a metade ativa (a que tem som) e mostra o canal dela |
+| OK | programação do canal da metade ativa (o rodapé, sobre ela) |
+| OK com o rodapé na tela | lista de canais da metade ativa |
 | ↑ / ↓, CH+ / CH−, 0–9 | troca o canal da metade ativa |
 | segurar OK, ou MENU | lista, sair da multi tela, tela inicial |
 | VOLTAR | sai: o canal da metade ativa fica em tela cheia |
