@@ -135,7 +135,7 @@ class AjustesActivity : TelaComMenu() {
             withContext(Dispatchers.IO) {
                 File(filesDir, "vod").deleteRecursively()
                 runCatching { coil3.SingletonImageLoader.get(this@AjustesActivity).diskCache?.clear() }
-                Remote.refresh(this@AjustesActivity)
+                Remote.refresh(this@AjustesActivity, forcar = true)
             }
             runCatching { coil3.SingletonImageLoader.get(this@AjustesActivity).memoryCache?.clear() }
             Toast.makeText(this@AjustesActivity, R.string.ajustes_recarregado, Toast.LENGTH_LONG).show()

@@ -2,6 +2,8 @@ package br.com.saimo.tv
 
 import android.content.Context
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
@@ -10,9 +12,7 @@ import java.io.Reader
 import java.net.HttpURLConnection
 import java.net.URL
 import java.text.Normalizer
-import java.util.Calendar
 import java.util.Locale
-import java.util.TimeZone
 import java.util.zip.GZIPInputStream
 
 private val TEMPORADA_S = Regex("^S(\\d+)")
@@ -121,6 +121,11 @@ object Epg {
 
     val channelsWithGuide: Int get() = byChannel.size
 
+    /** Solta o guia da memória; o Ao vivo o relê do disco quando voltar. */
+    fun liberar() {
+        byChannel = emptyMap()
+    }
+
     /** Todos os programas do canal, para a grade. */
     fun schedule(channel: String): List<Programme> = byChannel[channel] ?: emptyList()
 
@@ -143,18 +148,27 @@ object Epg {
         readCache(context)?.let { byChannel = it; true } ?: false
     }
 
+    /// Uma carga por vez: o Ao vivo e a Programação abrem quase juntos, e
+    /// duas cargas em paralelo eram dois guias inteiros no heap ao mesmo tempo.
+    private val carga = Mutex()
+
     suspend fun load(context: Context, onReady: () -> Unit) = withContext(Dispatchers.IO) {
-        readCache(context)?.let {
-            byChannel = it
-            withContext(Dispatchers.Main) { onReady() }
-        }
+        carga.withLock { carregar(context, onReady) }
+    }
+
+    private suspend fun carregar(context: Context, onReady: () -> Unit) {
+        // O guia já na memória vale: reler o cache (uns 7 MB de JSON) a cada
+        // abertura do Ao vivo era 1,5 s e dezenas de MB de lixo no TV Box de
+        // 1 GB, logo quando o canal começa a tocar.
+        if (byChannel.isEmpty()) readCache(context)?.let { byChannel = it }
+        if (byChannel.isNotEmpty()) withContext(Dispatchers.Main) { onReady() }
         // Um canal novo no catálogo torna o cache velho na hora, mesmo dentro do
         // prazo: sem isto, quem já tinha o app instalado ficaria até seis horas
         // com o canal recém-chegado sem guia nenhum.
         val stale = cacheAge(context) > CACHE_TTL_MS ||
             byChannel.isEmpty() ||
             readSignature(context) != signature()
-        if (!stale) return@withContext
+        if (!stale) return
 
         val pluto = idsDaPluto(Remote.channels)
         val principais = plutoPrincipais(Remote.channels)
@@ -225,7 +239,7 @@ object Epg {
             publish()
         }
 
-        if (merged.isEmpty()) return@withContext
+        if (merged.isEmpty()) return
         writeCache(context, merged)
     }
 
@@ -489,26 +503,48 @@ object Epg {
         }
     }
 
-    /** XMLTV timestamps look like `20260809153000 -0300`. */
+    /**
+     * XMLTV timestamps look like `20260809153000 -0300`.
+     *
+     * Conta feita à mão, sem `Calendar`: são dezenas de milhares de datas por
+     * carga do guia, e um `Calendar` por data (mais seis `substring`) era o
+     * maior lixo do parse enquanto o vídeo tocava no TV Box.
+     */
     private fun parseXmltvDate(text: String): Long? {
         if (text.length < 14) return null
-        val digits = text.take(14)
-        return runCatching {
-            val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
-            calendar.clear()
-            calendar.set(
-                digits.substring(0, 4).toInt(), digits.substring(4, 6).toInt() - 1,
-                digits.substring(6, 8).toInt(), digits.substring(8, 10).toInt(),
-                digits.substring(10, 12).toInt(), digits.substring(12, 14).toInt())
-            var millis = calendar.timeInMillis
-            val tail = text.drop(14).trim()
-            if (tail.length >= 5 && (tail[0] == '+' || tail[0] == '-')) {
-                val offset = (tail.substring(1, 3).toInt() * 3600 +
-                    tail.substring(3, 5).toInt() * 60) * 1000L
-                millis += if (tail[0] == '-') offset else -offset
+        fun num(de: Int, ate: Int): Int {
+            var n = 0
+            for (i in de until ate) {
+                val d = text[i] - '0'
+                if (d !in 0..9) return -1
+                n = n * 10 + d
             }
-            millis
-        }.getOrNull()
+            return n
+        }
+        val ano = num(0, 4); val mes = num(4, 6); val dia = num(6, 8)
+        val hora = num(8, 10); val minuto = num(10, 12); val segundo = num(12, 14)
+        if (ano < 0 || mes !in 1..12 || dia !in 1..31 || hora < 0 || minuto < 0 || segundo < 0) return null
+        var millis = (diasDesde1970(ano, mes, dia) * 86_400L + hora * 3_600L + minuto * 60L + segundo) * 1000L
+        var i = 14
+        while (i < text.length && text[i] == ' ') i++
+        if (text.length - i >= 5 && (text[i] == '+' || text[i] == '-')) {
+            val h = num(i + 1, i + 3); val m = num(i + 3, i + 5)
+            if (h >= 0 && m >= 0) {
+                val offset = (h * 3600 + m * 60) * 1000L
+                millis += if (text[i] == '-') offset else -offset
+            }
+        }
+        return millis
+    }
+
+    /** Dias de 1970-01-01 até a data (calendário gregoriano), sem fuso. */
+    internal fun diasDesde1970(ano: Int, mes: Int, dia: Int): Long {
+        val y = if (mes <= 2) ano - 1 else ano
+        val era = (if (y >= 0) y else y - 399) / 400
+        val anoDaEra = y - era * 400
+        val diaDoAno = (153 * (mes + (if (mes > 2) -3 else 9)) + 2) / 5 + dia - 1
+        val diaDaEra = anoDaEra * 365 + anoDaEra / 4 - anoDaEra / 100 + diaDoAno
+        return era * 146_097L + diaDaEra - 719_468L
     }
 
     // MARK: - Shared helpers

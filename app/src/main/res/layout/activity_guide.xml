@@ -56,7 +56,7 @@
         android:paddingEnd="30dp"
         android:paddingBottom="24dp">
 
-        <androidx.recyclerview.widget.RecyclerView
+        <br.com.saimo.tv.ListaSemFuga
             android:id="@+id/guideChannels"
             android:layout_width="430dp"
             android:layout_height="match_parent"
@@ -72,7 +72,7 @@
             android:layout_marginEnd="20dp"
             android:background="@color/surface_raised" />
 
-        <androidx.recyclerview.widget.RecyclerView
+        <br.com.saimo.tv.ListaSemFuga
             android:id="@+id/guideProgrammes"
             android:layout_width="0dp"
             android:layout_height="match_parent"

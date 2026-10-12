@@ -96,6 +96,9 @@ dependencies {
     implementation("androidx.core:core-ktx:1.19.1")
     implementation("androidx.appcompat:appcompat:1.8.0")
     implementation("androidx.recyclerview:recyclerview:1.4.0")
+    // Instala o perfil de compilação (src/main/baseline-prof.txt) também em
+    // quem instala o APK direto, sem loja: é ele que compila o app na hora.
+    implementation("androidx.profileinstaller:profileinstaller:1.4.1")
     // "Continuar assistindo" na tela inicial do Google TV.
     implementation("androidx.tvprovider:tvprovider:1.1.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0")

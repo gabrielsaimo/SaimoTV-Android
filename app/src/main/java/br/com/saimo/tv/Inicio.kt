@@ -91,7 +91,15 @@ object Inicio {
         ) = false
     }
 
-    data class Fila(val titulo: String, val cartoes: List<Cartao>, val tipo: Tipo = Tipo.CAPA)
+    data class Fila(
+        val titulo: String,
+        val cartoes: List<Cartao>,
+        val tipo: Tipo = Tipo.CAPA,
+        /// Se as fichas já estavam na memória quando a fileira foi montada: a
+        /// capa de quem não traz a própria sai delas na hora de desenhar, e a
+        /// fileira montada antes delas tem de ser redesenhada quando chegam.
+        val comFichas: Boolean = Generos.prontos,
+    )
 
     class Adapter(
         private val escopo: kotlinx.coroutines.CoroutineScope? = null,
@@ -122,7 +130,7 @@ object Inicio {
             val comum = minOf(velhas.size, novas.size)
             for (i in 0 until comum) {
                 val a = velhas[i]; val b = novas[i]
-                val igual = a.titulo == b.titulo && a.tipo == b.tipo &&
+                val igual = a.titulo == b.titulo && a.tipo == b.tipo && a.comFichas == b.comFichas &&
                     a.cartoes.size == b.cartoes.size &&
                     a.cartoes.indices.all { a.cartoes[it].titulo == b.cartoes[it].titulo &&
                         a.cartoes[it].subtitulo == b.cartoes[it].subtitulo &&

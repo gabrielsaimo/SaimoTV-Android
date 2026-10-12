@@ -62,7 +62,7 @@
         android:layout_marginTop="12dp"
         android:layout_weight="1"
         android:orientation="horizontal">
-        <androidx.recyclerview.widget.RecyclerView
+        <br.com.saimo.tv.ListaSemFuga
             android:id="@+id/gradeLetras"
             android:layout_width="56dp"
             android:layout_height="match_parent"
@@ -73,7 +73,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
-            <androidx.recyclerview.widget.RecyclerView
+            <br.com.saimo.tv.ListaSemFuga
                 android:id="@+id/gradeCapas"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

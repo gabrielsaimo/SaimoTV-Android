@@ -39,9 +39,10 @@ class RadiosActivity : TelaComMenu() {
         findViewById<TextView>(R.id.paginaNome).visibility = View.GONE
         destaque.padrao(getString(R.string.menu_radios), getString(R.string.vod_carregando))
 
-        // Na hora, o que já está no aparelho; a lista nova chega por trás.
-        mostrar(Radios.locais(this))
+        // Primeiro o que já está no aparelho (lido fora da linha da tela); a
+        // lista nova chega por trás.
         lifecycleScope.launch(semDerrubar) {
+            mostrar(kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { Radios.locais(this@RadiosActivity) })
             val nova = Radios.baixar(this@RadiosActivity) ?: return@launch
             if (nova != radios) mostrar(nova)
         }

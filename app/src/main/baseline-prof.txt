@@ -1,0 +1,9 @@
+# Perfil de compilação antecipada do app (baseline profile).
+#
+# O Android compila na instalação o que estiver aqui, em vez de interpretar o
+# código nas primeiras vezes que ele roda. Num TV Box de 1 GB, compilar o app
+# assim levou a abertura fria de 400 ms para 280 ms e tirou os engasgos da
+# primeira rolagem (medido em 2026-10-12). O app é pequeno: vai inteiro.
+# As bibliotecas (Media3, Coil, OkHttp, RecyclerView) trazem os perfis delas.
+HSPLbr/com/saimo/tv/**->**(**)**
+Lbr/com/saimo/tv/**;

@@ -405,6 +405,13 @@ object Vod {
 
     private val colecoes = java.util.concurrent.ConcurrentHashMap<String, List<SerieColecao>>()
 
+    /** Solta os índices de busca; a próxima busca os monta de novo do disco. */
+    fun liberar() {
+        indice = null
+        porTitulo = null
+        colecoes.clear()
+    }
+
     /** Animes e doramas que batem com o termo — eles não estão no índice de busca. */
     suspend fun buscarColecoes(context: Context, termo: String): List<Pair<String, SerieColecao>> {
         val alvo = normalizar(termo)

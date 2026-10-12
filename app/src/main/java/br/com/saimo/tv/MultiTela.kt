@@ -94,6 +94,9 @@ class SegundaTela(
     /// todas, o problema é o aparelho, não o canal.
     private var falhasDeDecodificador = 0
 
+    /** Se esta metade está mostrando imagem agora. */
+    val tocando: Boolean get() = player?.isPlaying == true
+
     /** Só a metade ativa tem som; a outra fica muda, mas continua tocando. */
     var comSom: Boolean = false
         set(valor) {

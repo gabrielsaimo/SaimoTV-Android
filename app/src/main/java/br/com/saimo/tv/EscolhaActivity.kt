@@ -117,8 +117,12 @@ class EscolhaActivity : TelaComMenu() {
         super.onStart()
         if (jaIniciou) {
             atualizacao.retomarSePendente()
-            // Voltando do player ou da ficha: o "continuar" mudou.
-            lifecycleScope.launch(semDerrubar) { montarFilas() }
+            // Voltando do player ou da ficha: o "continuar" mudou. O guia pode
+            // ter saído da memória com o app em segundo plano.
+            lifecycleScope.launch(semDerrubar) {
+                Epg.carregarCache(this@EscolhaActivity)
+                montarFilas()
+            }
         }
         jaIniciou = true
     }
@@ -151,7 +155,14 @@ class EscolhaActivity : TelaComMenu() {
     private val abertaEm = System.currentTimeMillis()
 
     private suspend fun montarFilas() {
-        Generos.carregar(this)
+        // O que é local (continuar, ao vivo, favoritos) entra antes das fichas:
+        // ler as fichas (3,7 MB) leva até 2 s num TV Box lento, e a tela
+        // ficava vazia esse tempo todo. As capas dos destaques chegam depois.
+        if (!Generos.prontos) {
+            val locais = listOfNotNull(continuar(), aoVivo(), favoritos())
+            if (locais.isNotEmpty()) mostrarFilas(locais)
+            Generos.carregar(this)
+        }
         val lista = mutableListOf<Inicio.Fila>()
         continuar()?.let { lista += it }
         aoVivo()?.let { lista += it }
@@ -160,6 +171,10 @@ class EscolhaActivity : TelaComMenu() {
             val cartoes = fila.itens.map { cartaoDe(it) }
             if (cartoes.isNotEmpty()) lista += Inicio.Fila(fila.titulo, cartoes)
         }
+        mostrarFilas(lista)
+    }
+
+    private fun mostrarFilas(lista: List<Inicio.Fila>) {
         if (isFinishing || isDestroyed) return
         // Refazer as fileiras recria as capas e o foco escaparia para o menu.
         // Nos primeiros segundos (a pessoa ainda não mexeu), ele volta à

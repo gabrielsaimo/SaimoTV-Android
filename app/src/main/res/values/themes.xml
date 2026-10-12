@@ -6,4 +6,11 @@
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:colorAccent">@color/accent</item>
     </style>
+
+    <!-- Telas de vídeo: fundo preto liso. A imagem de fundo do app (uns 3,7 MB
+         decodificada) ficava desenhada por baixo do vídeo a cada quadro sem
+         nunca aparecer, porque a tela inteira é coberta pelo player. -->
+    <style name="Theme.Saimo.Video">
+        <item name="android:windowBackground">@android:color/black</item>
+    </style>
 </resources>

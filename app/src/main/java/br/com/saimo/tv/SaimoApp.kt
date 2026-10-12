@@ -47,6 +47,13 @@ class SaimoApp : Application(), SingletonImageLoader.Factory {
         Aparelho.conhecer(this)
         Telemetria.iniciar(this)
         Lembretes.iniciar(this)
+        // As raízes de certificado e o cliente de rede ficam prontos numa
+        // thread à parte, enquanto a primeira tela desenha: montados na hora
+        // do primeiro pedido, eram até 300 ms na thread da tela num TV Box lento.
+        Thread({ runCatching { Confianca.fabrica; Playback.client } }, "aquecer-rede").apply {
+            priority = Thread.MIN_PRIORITY
+            start()
+        }
     }
 
     /**
@@ -56,9 +63,17 @@ class SaimoApp : Application(), SingletonImageLoader.Factory {
      */
     override fun onTrimMemory(level: Int) {
         super.onTrimMemory(level)
-        if (level >= TRIM_MEMORY_RUNNING_LOW) {
+        // App fora da tela (ou o sistema apertando): índices de busca, fichas,
+        // legendas e capas na memória voltam do disco ou da rede quando
+        // alguém precisar. No TV Box de 1 GB o Início parado passava de
+        // 60 MB para 130 MB depois de navegar, e era daí que vinha a morte.
+        if (level >= TRIM_MEMORY_UI_HIDDEN || level == TRIM_MEMORY_RUNNING_LOW || level == TRIM_MEMORY_RUNNING_CRITICAL) {
             runCatching { SingletonImageLoader.get(this).memoryCache?.clear() }
+            Memoria.liberar()
         }
+        // O guia só sai com o app de fato em segundo plano: o Ao vivo na
+        // frente o usa a cada troca de canal.
+        if (level >= TRIM_MEMORY_BACKGROUND) Epg.liberar()
     }
 
     override fun newImageLoader(context: PlatformContext): ImageLoader =

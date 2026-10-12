@@ -43,8 +43,8 @@ object Legendas {
         }
     }
 
-    private val fragmentos = HashMap<String, Map<Int, String>>()
-    private val listas = HashMap<String, List<Opcao>>()
+    private val fragmentos = recentes<String, Map<Int, String>>(40)
+    private val listas = recentes<String, List<Opcao>>(60)
 
     private fun texto(url: String): String? = runCatching {
         val pedido = Request.Builder().url(url)
@@ -101,7 +101,13 @@ object Legendas {
             saida
         }
 
-    private val arquivos = HashMap<String, String>()
+    private val arquivos = recentes<String, String>(12)
+
+    fun liberar() {
+        synchronized(fragmentos) { fragmentos.clear() }
+        synchronized(listas) { listas.clear() }
+        synchronized(arquivos) { arquivos.clear() }
+    }
 
     /** O SRT da legenda, em UTF-8. Nulo quando o servidor devolveu outra coisa. */
     suspend fun baixar(opcao: Opcao): String? = withContext(Dispatchers.IO) {

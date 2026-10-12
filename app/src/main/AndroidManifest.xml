@@ -67,7 +67,7 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:exported="false"
             android:screenOrientation="landscape"
-            android:theme="@style/Theme.Saimo">
+            android:theme="@style/Theme.Saimo.Video">
             <!-- Janela no Horizon OS e demais óculos; TV Box ignora. -->
             <layout android:defaultWidth="1024dp" android:defaultHeight="640dp"
                 android:minWidth="720dp" android:minHeight="405dp" />
@@ -90,7 +90,8 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:exported="false"
             android:launchMode="singleTop"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.Saimo.Video">
             <!-- Janela no Horizon OS e demais óculos; TV Box ignora. -->
             <layout android:defaultWidth="1024dp" android:defaultHeight="640dp"
                 android:minWidth="720dp" android:minHeight="405dp" />

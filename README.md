@@ -140,6 +140,23 @@ para isso não acontecer:
 - Buffer do vídeo com teto em bytes, cache de imagens de tamanho fixo e
   bitmaps RGB_565 em aparelho fraco.
 - Arquivo de gêneros e índice de busca compactos, lidos em fluxo.
+- O guia já na memória não é relido a cada abertura do Ao vivo, e só uma carga
+  roda por vez (`Epg.load`); datas do XMLTV contadas à mão, sem `Calendar`.
+- Filmes com buffer limitado (15–30 s e 32 MB no aparelho fraco; 96 MB nos
+  outros), e o Ao vivo com teto de 96 MB também fora dele.
+- Fora da tela, o Ao vivo para os relógios e, depois de 45 s, solta o fluxo e o
+  decodificador; voltando, o canal recomeça sozinho. Com o app em segundo
+  plano, `onTrimMemory` solta índices de busca, fichas, legendas e capas
+  guardados (`Memoria.kt`, mapas com limite de itens); tudo volta do disco.
+- Painel da rádio a 20 qps num ritmo só, com os gradientes reaproveitados.
+- Listas de canais atualizam só o programa no ar a cada 20 s, com id fixo
+  por canal; perfil de compilação antecipada (`baseline-prof.txt`).
+- Catálogo baixado com ETag (no máximo uma conferência a cada 10 min), DNS do
+  DoH guardado por 5 min, rede e certificados preparados fora da tela.
+
+Medido no emulador de 1 GB (12/10/2026, antes → depois): Ao vivo abrindo em
+5,3 s → 0,8 s; Programação em 1,8 s → 0,2 s; filme com 150 MB → 75 MB de
+memória; rádio com 33% → 18% de CPU; multi tela com 32% → 20%.
 
 Detecção de "pouca memória" em `Aparelho.kt` (isLowRamDevice ou até 1,5 GB).
 
@@ -210,6 +227,6 @@ adb shell am start -a android.intent.action.VIEW -d "saimo://canal?n=Band"
 ## Canais e ícones
 
 ```bash
-python3 scripts/gen_catalog.py   # lista embutida de reserva
+python3 scripts/gen_catalog.py   # lista de reserva: copia o catalogo.txt para src/main/resources/reserva
 python3 scripts/gen_icons.py     # ícone e banner a partir da arte do Mac
 ```

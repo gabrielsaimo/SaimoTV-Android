@@ -45,8 +45,17 @@ object Destaques {
 
     data class Fila(val titulo: String, val itens: List<Item>)
 
+    /// As fileiras já lidas e a data do arquivo de onde vieram: a tela inicial
+    /// as monta de novo a cada volta do player, e o arquivo quase nunca muda.
+    @Volatile
+    private var lidas: Pair<Long, List<Fila>>? = null
+
     suspend fun filas(context: Context): List<Fila> = withContext(Dispatchers.IO) {
+        val local = File(File(context.filesDir, "vod"), ARQUIVO)
+        val dentroDoPrazo = local.exists() && System.currentTimeMillis() - local.lastModified() < VALIDADE_MS
+        lidas?.let { (quando, filas) -> if (dentroDoPrazo && quando == local.lastModified()) return@withContext filas }
         val texto = texto(context) ?: return@withContext emptyList()
+        val versao = local.lastModified()
         val out = mutableListOf<Fila>()
         var titulo: String? = null
         var itens = mutableListOf<Item>()
@@ -83,6 +92,7 @@ object Destaques {
             }
         }
         fechar()
+        lidas = versao to out
         out
     }
 

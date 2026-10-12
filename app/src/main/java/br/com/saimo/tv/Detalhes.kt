@@ -54,7 +54,13 @@ object Detalhes {
             get() = sinopse.isBlank() && elenco.isEmpty() && generos.isEmpty() && duracao == null
     }
 
-    private val guardadas = HashMap<String, Ficha>()
+    private val guardadas = recentes<String, Ficha>(150)
+
+    fun liberar() {
+        synchronized(guardadas) { guardadas.clear() }
+        synchronized(perfis) { perfis.clear() }
+        synchronized(temporadas) { temporadas.clear() }
+    }
 
     /**
      * A ficha de um título do acervo, ou nula quando o TMDB não a conhece.
@@ -156,7 +162,7 @@ object Detalhes {
         val conhecidaPor: String,
     )
 
-    private val perfis = HashMap<Int, Perfil>()
+    private val perfis = recentes<Int, Perfil>(60)
 
     /**
      * O perfil de uma pessoa. A biografia em português é curta ou falta para
@@ -254,7 +260,7 @@ object Detalhes {
         val duracao: Int?,
     )
 
-    private val temporadas = HashMap<String, List<EpisodioTmdb>>()
+    private val temporadas = recentes<String, List<EpisodioTmdb>>(60)
 
     /** Os episódios de uma temporada, para a lista da ficha ter nome e imagem. */
     suspend fun temporada(id: Int, numero: Int): List<EpisodioTmdb> = withContext(Dispatchers.IO) {

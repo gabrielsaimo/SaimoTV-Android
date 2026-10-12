@@ -42,9 +42,12 @@ object Radios {
             "instrumental", "blues", "lounge")),
     )
 
+    /// Compilada uma vez: `chave` roda para cada rádio a cada desenho da lista.
+    private val ACENTOS = Regex("\\p{M}+")
+
     /** Nome sem acento e em minúsculas, para achar o estilo. */
     fun chave(nome: String): String =
-        Normalizer.normalize(nome, Normalizer.Form.NFD).replace(Regex("\\p{M}+"), "").lowercase(Locale.ROOT)
+        Normalizer.normalize(nome, Normalizer.Form.NFD).replace(ACENTOS, "").lowercase(Locale.ROOT)
 
     fun estiloDe(radio: Radio): Estilo? {
         val nome = chave(radio.nome) + " "

@@ -42,7 +42,9 @@ object Capas {
 
     /// Título -> capa. Vazio quer dizer procurado e não achado, e é guardado
     /// também: sem isso a mesma busca infrutífera se repetiria a cada rolagem.
-    private val memoria = Collections.synchronizedMap(HashMap<String, String>())
+    private val memoria = Collections.synchronizedMap(recentes<String, String>(3_000))
+
+    fun liberar() = memoria.clear()
 
     /**
      * Capa do título, ou nulo. Devolve na hora o que já está na memória.

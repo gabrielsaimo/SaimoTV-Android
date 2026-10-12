@@ -32,6 +32,9 @@ import androidx.media3.exoplayer.source.MediaSource
  * that applies here: ExoPlayer speaks DASH with ClearKey and HEVC-in-TS
  * natively, so every channel is played straight from its origin.
  */
+/// Quanto tempo um endereço resolvido pelo DoH vale sem perguntar de novo.
+private const val DNS_VALIDADE_MS = 5 * 60_000L
+
 @UnstableApi
 object Playback {
 
@@ -80,10 +83,21 @@ object Playback {
     private class Resolvedor(private val doh: okhttp3.Dns) : okhttp3.Dns {
         @Volatile private var derrotas = 0
 
+        /// Respostas do DoH guardadas por 5 minutos. Sem isso, cada troca de
+        /// canal ou de fonte num host já visto pagava de novo a ida e volta
+        /// ao 1.1.1.1 — de 30 a 300 ms antes do primeiro byte do vídeo.
+        private val guardados = java.util.concurrent.ConcurrentHashMap<String, Pair<Long, List<InetAddress>>>()
+
         override fun lookup(hostname: String): List<InetAddress> {
             if (derrotas >= 3) return okhttp3.Dns.SYSTEM.lookup(hostname)
+            val agora = android.os.SystemClock.elapsedRealtime()
+            guardados[hostname]?.let { (quando, enderecos) -> if (agora - quando < DNS_VALIDADE_MS) return enderecos }
             return try {
-                doh.lookup(hostname).also { derrotas = 0 }
+                doh.lookup(hostname).also {
+                    derrotas = 0
+                    if (guardados.size > 256) guardados.clear()
+                    guardados[hostname] = agora to it
+                }
             } catch (falha: java.net.UnknownHostException) {
                 val doSistema = runCatching { okhttp3.Dns.SYSTEM.lookup(hostname) }.getOrNull()
                     ?: throw falha

@@ -292,10 +292,13 @@ class EventosActivity : TelaComMenu() {
     }
 
     private fun chaveTime(nome: String): String =
-        Normalizer.normalize(nome, Normalizer.Form.NFD).replace(Regex("\\p{M}+"), "").lowercase(Locale.ROOT)
-            .split(Regex("[^a-z0-9]+")).filter { it.isNotEmpty() && it !in SIGLAS }.joinToString("")
+        Normalizer.normalize(nome, Normalizer.Form.NFD).replace(ACENTOS, "").lowercase(Locale.ROOT)
+            .split(SEPARADOR).filter { it.isNotEmpty() && it !in SIGLAS }.joinToString("")
 
     private companion object {
+        /// Compiladas uma vez: cada jogo da agenda é comparado com cada jogo da ESPN.
+        val ACENTOS = Regex("\\p{M}+")
+        val SEPARADOR = Regex("[^a-z0-9]+")
         const val EMBED = "https://embedtv.cc/api/events"
         val SIGLAS = setOf("fc", "ec", "sc", "ac", "afc", "cf", "cd", "club", "clube", "esporte", "sport",
             "futebol", "de", "do", "da", "sp", "rj", "mg", "rs", "pr", "ba", "pe", "ce", "go", "sad")

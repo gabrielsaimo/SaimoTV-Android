@@ -37,7 +37,9 @@ object Pulos {
         }
     }
 
-    private val guardadas = HashMap<String, Marcas>()
+    private val guardadas = recentes<String, Marcas>(200)
+
+    fun liberar() = synchronized(guardadas) { guardadas.clear() }
 
     suspend fun de(tmdbId: Int, temporada: Int = 0, episodio: Int = 0): Marcas? =
         withContext(Dispatchers.IO) {

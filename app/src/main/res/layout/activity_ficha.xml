@@ -232,7 +232,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal" />
             </HorizontalScrollView>
-            <androidx.recyclerview.widget.RecyclerView
+            <br.com.saimo.tv.ListaSemFuga
                 android:id="@+id/fichaEpisodios"
                 android:descendantFocusability="afterDescendants"
                 android:layout_width="match_parent"
@@ -275,7 +275,7 @@
                 android:visibility="gone" />
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
+        <br.com.saimo.tv.ListaSemFuga
             android:id="@+id/fichaElenco"
             android:layout_width="match_parent"
             android:layout_height="150dp"
@@ -300,7 +300,7 @@
                 android:text="@string/ficha_parecidos"
                 android:textColor="@color/text_primary"
                 android:textSize="22sp" />
-            <androidx.recyclerview.widget.RecyclerView
+            <br.com.saimo.tv.ListaSemFuga
                 android:id="@+id/fichaParecidos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

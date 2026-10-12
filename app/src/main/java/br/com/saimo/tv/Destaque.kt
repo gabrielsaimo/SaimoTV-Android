@@ -167,11 +167,11 @@ class Destaque(
         // fundo do app fica à vista.
         val alvo = (fundo.parent as? android.view.View)?.takeIf { it.id == R.id.inicioFundoGrupo } ?: fundo
         if (endereco == null) {
-            alvo.animate().alpha(0f).setDuration(200).start()
+            alvo.animate().alpha(0f).setDuration(200).withLayer().start()
             return
         }
         fundo.load(endereco) {
-            listener(onSuccess = { _, _ -> alvo.animate().alpha(1f).setDuration(300).start() })
+            listener(onSuccess = { _, _ -> alvo.animate().alpha(1f).setDuration(300).withLayer().start() })
         }
     }
 

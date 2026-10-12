@@ -12,6 +12,8 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil3.dispose
@@ -91,13 +93,18 @@ class GuideActivity : TelaComMenu() {
         info = findViewById(R.id.guideInfo)
         clockLabel = findViewById(R.id.guideClock)
 
-        channels = Categorias.ordenar(Unlock.channels())
+        // A mesma lista e a mesma numeração do Ao vivo: sem os canais que o
+        // painel desligou, e com o número fixo de cada canal. Antes a grade
+        // numerava pela posição e o UFC Fight Pass era 328 num e 340 no outro.
+        channels = FontesDesativadas.peneirarCanais(Categorias.ordenar(Unlock.channels()))
+        val numeros = Categorias.ordenarFixo(channels).mapIndexed { i, c -> c.name to i + 1 }.toMap()
         val startAt = intent.getStringExtra(EXTRA_CHANNEL)
             ?.let { name -> channels.indexOfFirst { it.name == name } }
             ?.takeIf { it >= 0 } ?: 0
 
         val adapter = ChannelStripAdapter(
             channels,
+            numeros,
             onFocus = {
                 focused = it
                 handler.removeCallbacks(mostrarFocado)
@@ -139,6 +146,10 @@ class GuideActivity : TelaComMenu() {
         programmeList.layoutManager = LinearLayoutManager(this)
         programmeList.adapter = programmes
         programmeList.setHasFixedSize(true)
+        // Atualizar o "no ar" a cada 20 s não deve piscar as linhas.
+        for (lista in listOf(channelList, programmeList)) {
+            (lista.itemAnimator as? androidx.recyclerview.widget.SimpleItemAnimator)?.supportsChangeAnimations = false
+        }
 
         info.text = getString(R.string.guide_info, Epg.channelsWithGuide, Remote.channels.size)
         clockLabel.text = clock.format(Date())
@@ -148,7 +159,6 @@ class GuideActivity : TelaComMenu() {
         // at the top means hunting for your own channel every time.
         focused = startAt
         channelList.post { focusRow(startAt) }
-        handler.postDelayed(tick, 20_000)
     }
 
     /**
@@ -183,6 +193,12 @@ class GuideActivity : TelaComMenu() {
         }
         if (currentFocus == null) {
             focusRow(focused)
+            return true
+        }
+        // Canal sem guia: à direita não há grade para onde ir. Sem isto a
+        // busca de foco do sistema achava o menu do topo e o foco saía da
+        // lista; antes, pior, entrava numa grade vazia e ficava preso.
+        if (keyCode == android.view.KeyEvent.KEYCODE_DPAD_RIGHT && channelList.hasFocus() && shown == 0) {
             return true
         }
         return super.onKeyDown(keyCode, event)
@@ -266,12 +282,38 @@ class GuideActivity : TelaComMenu() {
         val schedule = Epg.schedule(channel.name)
         shown = schedule.size
         programmes.submit(schedule)
+        // Grade vazia não recebe foco: a seta para a direita levava o foco a
+        // uma lista sem nada, de onde nem cima nem baixo saíam.
+        programmeList.isFocusable = schedule.isNotEmpty()
+        programmeList.descendantFocusability =
+            if (schedule.isEmpty()) ViewGroup.FOCUS_BLOCK_DESCENDANTS else ViewGroup.FOCUS_AFTER_DESCENDANTS
         // Abre no que está no ar, não às seis da manhã de ontem.
         val now = System.currentTimeMillis()
         val onAir = schedule.indexOfFirst { it.isOnAir(now) }.takeIf { it >= 0 } ?: 0
         programmeList.post {
             (programmeList.layoutManager as LinearLayoutManager)
                 .scrollToPositionWithOffset(onAir, 0)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        handler.removeCallbacks(tick)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        handler.removeCallbacks(tick)
+        handler.postDelayed(tick, 20_000)
+        // Com o app em segundo plano o guia pode ter saído da memória: volta do
+        // disco, e a grade e a coluna de canais se refazem.
+        if (Epg.channelsWithGuide == 0) {
+            lifecycleScope.launch(semDerrubar) {
+                if (Epg.carregarCache(this@GuideActivity)) {
+                    (channelList.adapter as? ChannelStripAdapter)?.refresh()
+                    show(focused)
+                }
+            }
         }
     }
 
@@ -285,9 +327,13 @@ class GuideActivity : TelaComMenu() {
     }
 }
 
+/// Marca de atualização parcial da coluna de canais: só o programa no ar mudou.
+private val SO_O_PROGRAMA = Any()
+
 /** Channel column of the guide. */
 private class ChannelStripAdapter(
     private val items: List<Channel>,
+    private val numeros: Map<String, Int>,
     private val onFocus: (Int) -> Unit,
     private val onPick: (Int) -> Unit,
 ) : RecyclerView.Adapter<ChannelStripAdapter.Holder>() {
@@ -306,16 +352,15 @@ private class ChannelStripAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         Holder(LayoutInflater.from(parent.context).inflate(R.layout.item_channel, parent, false))
 
-    override fun onBindViewHolder(holder: Holder, position: Int) {
-        val channel = items[position]
-        holder.number.text = (position + 1).toString()
-        holder.name.text = channel.name
-        holder.star.visibility =
-            if (Favorites.contains(channel.name)) View.VISIBLE else View.GONE
-        val rotulo = Categorias.rotulo(items, position)
-        holder.secao.text = rotulo.orEmpty()
-        holder.secao.visibility = if (rotulo == null) View.GONE else View.VISIBLE
+    /** Só o programa no ar de cada linha, quando o guia chega de volta. */
+    fun refresh() = notifyItemRangeChanged(0, items.size, SO_O_PROGRAMA)
 
+    override fun onBindViewHolder(holder: Holder, position: Int, payloads: MutableList<Any>) {
+        if (payloads.isNotEmpty() && payloads.all { it === SO_O_PROGRAMA }) mostrarNoAr(holder, items[position])
+        else onBindViewHolder(holder, position)
+    }
+
+    private fun mostrarNoAr(holder: Holder, channel: Channel) {
         val now = System.currentTimeMillis()
         val onAir = Epg.nowNext(channel.name, now)?.first
         if (onAir == null) {
@@ -327,6 +372,19 @@ private class ChannelStripAdapter(
             holder.progress.visibility = View.VISIBLE
             holder.progress.progress = (onAir.progress(now) * 1000).toInt()
         }
+    }
+
+    override fun onBindViewHolder(holder: Holder, position: Int) {
+        val channel = items[position]
+        holder.number.text = numeros[channel.name]?.toString().orEmpty()
+        holder.name.text = channel.name
+        holder.star.visibility =
+            if (Favorites.contains(channel.name)) View.VISIBLE else View.GONE
+        val rotulo = Categorias.rotulo(items, position)
+        holder.secao.text = rotulo.orEmpty()
+        holder.secao.visibility = if (rotulo == null) View.GONE else View.VISIBLE
+
+        mostrarNoAr(holder, channel)
 
         if (holder.loaded != channel.logo) {
             holder.loaded = channel.logo
@@ -356,12 +414,14 @@ private class ProgrammeAdapter : RecyclerView.Adapter<ProgrammeAdapter.Holder>()
     private val clock = SimpleDateFormat("HH:mm", Locale("pt", "BR"))
     var onPick: ((Programme) -> Unit)? = null
 
+    @android.annotation.SuppressLint("NotifyDataSetChanged")
     fun submit(list: List<Programme>) {
         items = list
         notifyDataSetChanged()
     }
 
-    fun refresh() = notifyDataSetChanged()
+    /// A cada 20 s só o "no ar" e a barra mudam: sem recarregar pôster nem texto.
+    fun refresh() = notifyItemRangeChanged(0, items.size)
 
     class Holder(view: View) : RecyclerView.ViewHolder(view) {
         val time: TextView = view.findViewById(R.id.time)

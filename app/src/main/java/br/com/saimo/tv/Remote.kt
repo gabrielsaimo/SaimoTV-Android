@@ -83,7 +83,19 @@ object Remote {
      * aproveitável, e aí quem chamou fica com o que já tinha em vez de esvaziar
      * a lista.
      */
-    suspend fun refresh(context: Context): Boolean = withContext(Dispatchers.IO) {
+    /// Quando a lista foi conferida pela última vez neste processo. Abrir o
+    /// Ao vivo dez vezes seguidas baixava e lia os 330 KB dez vezes.
+    @Volatile
+    private var conferidaEm = 0L
+    private const val CONFERIR_A_CADA_MS = 10 * 60_000L
+
+    /** [forcar]: quem pediu foi a pessoa (Ajustes), não a abertura de uma tela. */
+    suspend fun refresh(context: Context, forcar: Boolean = false): Boolean = withContext(Dispatchers.IO) {
+        val agora = System.currentTimeMillis()
+        if (!forcar && agora - conferidaEm < CONFERIR_A_CADA_MS) return@withContext false
+        conferidaEm = agora
+        // Pedido da pessoa baixa tudo de novo, sem confiar na etiqueta.
+        if (forcar) for (nome in listOf("catalogo.txt", "canais.txt", "restritos.txt")) File(context.filesDir, "$nome.etag").delete()
         val base = baixar(context, CATALOG_URL, "catalogo.txt")
         val extras = baixar(context, EXTRAS_URL, "canais.txt")
         val novosRestritos = baixar(context, RESTRITOS_URL, "restritos.txt").map { it }
@@ -101,23 +113,38 @@ object Remote {
         true
     }
 
-    /// Baixa e guarda. Devolve vazio quando não veio nada aproveitável, e aí
-    /// quem chamou fica com o que já estava em disco.
+    /// Baixa e guarda. Devolve vazio quando não veio nada aproveitável — ou
+    /// quando o servidor disse que nada mudou (304) —, e aí quem chamou fica
+    /// com o que já estava em disco.
+    ///
+    /// A etiqueta (ETag) da última versão baixada vai junto no pedido: sem
+    /// mudança, o servidor responde só o cabeçalho, sem os 330 KB nem o parse.
     private fun baixar(context: Context, url: String, nome: String): List<Channel> {
+        val arquivo = File(context.filesDir, nome)
+        val etiqueta = File(context.filesDir, "$nome.etag")
         val text = runCatching {
             val request = Request.Builder()
                 .url(url)
                 .header("User-Agent", Playback.DEFAULT_USER_AGENT)
                 .header("Cache-Control", "no-cache")
+                .apply {
+                    val anterior = etiqueta.takeIf { arquivo.exists() && it.exists() }?.readText()?.trim()
+                    if (!anterior.isNullOrEmpty()) header("If-None-Match", anterior)
+                }
                 .build()
             Playback.client.newCall(request).execute().use { response ->
-                if (!response.isSuccessful) null else response.body?.string()
+                if (!response.isSuccessful) null
+                else response.body?.string()?.also { corpo ->
+                    response.header("ETag")?.let { novo -> runCatching { etiqueta.writeText(novo) } }
+                        ?: etiqueta.delete()
+                    if (corpo.isEmpty()) etiqueta.delete()
+                }
             }
         }.getOrNull() ?: return emptyList()
 
         val parsed = parse(text)
         if (parsed.isEmpty()) return emptyList()
-        runCatching { File(context.filesDir, nome).writeText(text) }
+        runCatching { arquivo.writeText(text) }
         return parsed
     }
 
@@ -133,7 +160,15 @@ object Remote {
         if (text.trimStart().startsWith("#EXTM3U")) {
             return parseM3u(text)
         }
+        return withKnownLogos(lerCampos(text))
+    }
 
+    /**
+     * O parse do formato `chave: valor`, sem completar logos pela lista de
+     * reserva — é com ele que a própria reserva é lida (completar por ela
+     * mesma seria pedir a lista enquanto ela é montada).
+     */
+    internal fun lerCampos(text: String): List<Channel> {
         val out = mutableListOf<Channel>()
         var name: String? = null
         var logo: String? = null
@@ -191,7 +226,7 @@ object Remote {
             }
         }
         flush()
-        return withKnownLogos(out)
+        return out
     }
 
     private fun parseM3u(text: String): List<Channel> {

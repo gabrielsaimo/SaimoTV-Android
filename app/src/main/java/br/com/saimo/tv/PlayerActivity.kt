@@ -29,6 +29,8 @@ import androidx.media3.common.Tracks
 import androidx.media3.common.VideoSize
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.FileDataSource
+import androidx.media3.exoplayer.DefaultLoadControl
+import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.MediaSource
 import androidx.media3.exoplayer.source.MergingMediaSource
@@ -401,6 +403,8 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun novoPlayer(): ExoPlayer {
         val novo = ExoPlayer.Builder(this)
+            .setLoadControl(bufferDoFilme())
+            .setRenderersFactory(DefaultRenderersFactory(this).setEnableDecoderFallback(true))
             .setAudioAttributes(AudioAttributes.Builder()
                 .setUsage(C.USAGE_MEDIA).setContentType(C.AUDIO_CONTENT_TYPE_MOVIE).build(), true)
             .setHandleAudioBecomingNoisy(true)
@@ -411,6 +415,28 @@ class PlayerActivity : AppCompatActivity() {
         aplicarLegendaPreferida(novo)
         return novo
     }
+
+    /**
+     * Quanto do filme guardar adiantado. O padrão do ExoPlayer não tem teto em
+     * bytes: num TV Box de 1 GB o filme em 1080p chegou a 75 MB de heap e
+     * deixou 47 MB livres para o sistema, que matava o app. Lá ficam 15 a
+     * 30 s e 32 MB; nos outros, até 50 s e 96 MB — folga de sobra para rede
+     * ruim sem crescer sem fim.
+     */
+    private fun bufferDoFilme(): DefaultLoadControl =
+        if (Aparelho.poucaMemoria) {
+            DefaultLoadControl.Builder()
+                .setBufferDurationsMs(15_000, 30_000, 2_500, 5_000)
+                .setTargetBufferBytes(32 * 1024 * 1024)
+                .setPrioritizeTimeOverSizeThresholds(false)
+                .build()
+        } else {
+            DefaultLoadControl.Builder()
+                .setBufferDurationsMs(30_000, 50_000, 2_500, 5_000)
+                .setTargetBufferBytes(96 * 1024 * 1024)
+                .setPrioritizeTimeOverSizeThresholds(true)
+                .build()
+        }
 
     private fun tocarFonte(inicio: Long, pausado: Boolean = false) {
         val opcao = opcoes.getOrNull(fonte) ?: run { desistir(); return }
@@ -602,7 +628,9 @@ class PlayerActivity : AppCompatActivity() {
         }
         agora.text = tempo(posicao)
         val relogioAgora = SystemClock.elapsedRealtime()
-        if (p.isPlaying && relogioAgora - ultimoGuardado > 10_000) {
+        // A cada 30 s: a pausa e a saída da tela já guardam o ponto exato, e
+        // cada gravação reescreve o arquivo de progresso inteiro.
+        if (p.isPlaying && relogioAgora - ultimoGuardado > 30_000) {
             ultimoGuardado = relogioAgora
             guardar()
         }
@@ -1230,6 +1258,14 @@ class PlayerActivity : AppCompatActivity() {
         super.onStop()
         guardar()
         player?.playWhenReady = false
+        // Relógio da barra, pulos e próximo episódio: nada disso aparece fora da tela.
+        handler.removeCallbacks(tique)
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        handler.removeCallbacks(tique)
+        handler.post(tique)
     }
 
     override fun onDestroy() {

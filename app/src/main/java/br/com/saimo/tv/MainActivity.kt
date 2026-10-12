@@ -31,6 +31,7 @@ import androidx.media3.common.TrackSelectionParameters
 import androidx.media3.common.VideoSize
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.DefaultLoadControl
+import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.upstream.DefaultBandwidthMeter
 import androidx.media3.session.MediaSession
@@ -71,6 +72,8 @@ private const val RETOMADAS_MAX = 8
 private const val CREDITO_DE_IMAGEM_MS = 30_000L
 /// De quanto em quanto tempo o relógio do vídeo é conferido.
 private const val VIGIA_MS = 2_000L
+/// Quanto o player espera fora da tela antes de soltar o fluxo e o decodificador.
+private const val SOLTAR_PLAYER_MS = 45_000L
 /// Quanto tempo o relógio do vídeo pode ficar parado, com o player achando que
 /// toca ou carrega, antes de o vigia retomar a fonte sozinho. Cobre o canal que
 /// congela sem erro: engasgo de rede some em poucos segundos, isto não.
@@ -143,11 +146,8 @@ class MainActivity : AppCompatActivity() {
     private val adapter = ChannelAdapter(
         // Na multi tela a lista cobre a metade esquerda: escolhido o canal,
         // ela sai para as duas imagens ficarem à vista.
-        onPick = { if (multiTela) { sintonizar(it); closeList() } else play(it) },
-        onFavorite = { index ->
-            Favorites.toggle(this, ordered[index].name)
-            reorder()
-        })
+        onPick = { sintonizar(it); if (multiTela) closeList() },
+        onFavorite = { index -> favoritarNaLista(index) })
 
     /// Favoritos primeiro, depois a ordem do catálogo.
     private var ordered: List<Channel> = CATALOG
@@ -232,6 +232,8 @@ class MainActivity : AppCompatActivity() {
         // remedição a cada mudança — é o que tira o engasgo ao rolar a lista.
         channels.setHasFixedSize(true)
         channels.setItemViewCacheSize(12)
+        // Sem o piscar de "mudou" a cada atualização do guia: são 300 linhas.
+        (channels.itemAnimator as? androidx.recyclerview.widget.SimpleItemAnimator)?.supportsChangeAnimations = false
         reorder()
 
         // Sem estimativa, o ExoPlayer começa por uma variante baixa e o canal
@@ -242,6 +244,9 @@ class MainActivity : AppCompatActivity() {
             .setInitialBitrateEstimate(8_000_000L)
             .build()
         player = ExoPlayer.Builder(this)
+            // Decodificador que falha ao abrir dá lugar ao próximo do aparelho,
+            // em vez de o canal parecer fora do ar.
+            .setRenderersFactory(DefaultRenderersFactory(this).setEnableDecoderFallback(true))
             .setBandwidthMeter(bandwidth)
             .setLoadControl(
                 controleDeBuffer())
@@ -310,8 +315,9 @@ class MainActivity : AppCompatActivity() {
      * sobre tamanho não têm limite em bytes: num canal Full HD a 8–15 Mbps são
      * 40 a 75 MB, que num Fire TV Stick de 1 GB se somam ao resto do sistema
      * até ele matar o app — com a lista aberta, depois de alguns minutos, que
-     * é o tempo de o buffer encher. Lá o teto é 20 segundos e 24 MB, o que
-     * ainda cobre qualquer engasgo de rede comum.
+     * é o tempo de o buffer encher. Lá o teto é 30 segundos e 32 MB, o que
+     * ainda cobre qualquer engasgo de rede comum. Nos outros, até 120 s, mas
+     * com teto de 96 MB: sem ele, um canal 4K enchia centenas de MB.
      */
     private fun controleDeBuffer(): DefaultLoadControl =
         if (Aparelho.poucaMemoria) {
@@ -323,6 +329,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             DefaultLoadControl.Builder()
                 .setBufferDurationsMs(32_000, 120_000, 1_500, 5_000)
+                .setTargetBufferBytes(96 * 1024 * 1024)
                 .setPrioritizeTimeOverSizeThresholds(true)
                 .build()
         }
@@ -391,11 +398,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun play(index: Int, source: Int = 0, apósFalha: Boolean = false) {
-        android.util.Log.d("SAIMO_DEBUG", "play(index=$index, source=$source, aposFalha=$apósFalha)")
         val mudouDeFonte = current != index.coerceIn(ordered.indices) || sourceIndex != source
         val mesmoCanal = ordered.getOrNull(current)?.name == ordered.getOrNull(index.coerceIn(ordered.indices))?.name
         val novo = ordered.getOrNull(index.coerceIn(ordered.indices))?.name
-        if (novo != null && novo != Preferencias.ultimoCanal) {
+        // Rádio não é canal de TV: gravar a estação aqui fazia o "Ao vivo"
+        // seguinte abrir no canal 1 (o nome dela não está na lista de canais)
+        // e o "Voltar para" apontar para uma rádio.
+        if (!isModoRadio && novo != null && novo != Preferencias.ultimoCanal) {
             Preferencias.canalAnterior = Preferencias.ultimoCanal
             Preferencias.ultimoCanal = novo
         }
@@ -512,12 +521,10 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
 
 
         override fun onPlaybackStateChanged(state: Int) {
-            android.util.Log.d("SAIMO_DEBUG", "ExoPlayer onPlaybackStateChanged: state=$state")
-
             if (state == Player.STATE_ENDED && tocouAvisado && !emSegundoPlano) {
                 // TV ao vivo nunca "termina". Se o player achou o fim do arquivo, a conexão caiu
                 // limpamente sem dar erro. Devemos forçar a reconexão imediatamente!
-                android.util.Log.e("SAIMO_DEBUG", "Fim de stream detectado (EOF). Reconectando...")
+                Log.i("SaimoTV", "fim do stream: reconectando")
                 play(current, sourceIndex, apósFalha = true)
                 return
             }
@@ -525,10 +532,12 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
             if (state == Player.STATE_READY) {
                 if (!tocouAvisado) {
                     tocouAvisado = true
+                    val demorou = android.os.SystemClock.elapsedRealtime() - tentativaDesde
+                    Log.i("SaimoTV", "tocou em $demorou ms (fonte ${sourceIndex + 1})")
                     ordered.getOrNull(current)?.let { canal ->
                         val categoriaMonitor = if (canal.name.contains("Rádio", ignoreCase = true)) "radio" else "live"
                         Telemetria.tocou(categoriaMonitor, canal.name, canal.sources.getOrNull(sourceIndex)?.url.orEmpty(),
-                            sourceIndex + 1, android.os.SystemClock.elapsedRealtime() - tentativaDesde)
+                            sourceIndex + 1, demorou)
                     }
                 }
                 retries = 0
@@ -550,7 +559,9 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
 
 
         override fun onPlayerError(error: PlaybackException) {
-            android.util.Log.e("SAIMO_DEBUG", "ExoPlayer error: ${error.errorCodeName}", error)
+            // Uma linha por erro, sem a pilha inteira: troca de fonte é rotina
+            // e a pilha do ExoPlayer não diz nada que o código do erro não diga.
+            Log.w("SaimoTV", "erro no player: ${error.errorCodeName}")
 
             handler.removeCallbacks(sourceTimeout)
             // Com duas telas, o decodificador que falta pode ser o que a outra
@@ -721,8 +732,7 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
             }
             KeyEvent.KEYCODE_MENU, KeyEvent.KEYCODE_SETTINGS -> {
                 if (listOpen && keyCode == KeyEvent.KEYCODE_MENU) {
-                    Favorites.toggle(this, ordered.getOrNull(listaFoco)?.name ?: ordered[current].name)
-                    reorder()
+                    favoritarNaLista(if (ordered.getOrNull(listaFoco) != null) listaFoco else current)
                 } else {
                     opcoes()
                 }
@@ -783,7 +793,7 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
      * origem. Esgotadas as retomadas, desce para a fonte seguinte.
      */
     private fun recuperarCongelado() {
-        android.util.Log.e("SAIMO_DEBUG", "recuperarCongelado() chamado!")
+        Log.w("SaimoTV", "imagem congelada: recuperando")
         val channel = ordered.getOrNull(current) ?: return
         val categoriaMonitor = if (channel.name.contains("Rádio", ignoreCase = true)) "radio" else "live"
             Telemetria.falhou(categoriaMonitor, channel.name, channel.sources.getOrNull(sourceIndex)?.url.orEmpty(),
@@ -1094,24 +1104,31 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
         }
     }
 
+    // As views do cartão de prévia, achadas uma vez: o cartão é refeito a cada
+    // passo do foco pela lista, e segurar a seta são dezenas por segundo.
+    private val previa by lazy { findViewById<View>(R.id.previa) }
+    private val previaCanal by lazy { findViewById<TextView>(R.id.previaCanal) }
+    private val previaAgora by lazy { findViewById<TextView>(R.id.previaAgora) }
+    private val previaDetalhe by lazy { findViewById<TextView>(R.id.previaDetalhe) }
+    private val secoesItens by lazy { findViewById<android.widget.LinearLayout>(R.id.listSecoesItens) }
+
     /** Cartão do canal focado na lista e a aba da seção dele acesa. */
     private fun mostrarPrevia(index: Int) {
         val canal = ordered.getOrNull(index) ?: return
-        val previa = findViewById<View>(R.id.previa)
         val par = Epg.nowNext(canal.name)
         val agora = par?.first
         val depois = par?.second
-        findViewById<TextView>(R.id.previaCanal).text =
+        previaCanal.text =
             listOfNotNull(numeroDe(canal).takeIf { it > 0 }?.toString(), canal.name).joinToString("  ")
-        findViewById<TextView>(R.id.previaAgora).text = agora?.title ?: getString(R.string.previa_sem_guia)
-        findViewById<TextView>(R.id.previaDetalhe).text = listOfNotNull(
+        previaAgora.text = agora?.title ?: getString(R.string.previa_sem_guia)
+        previaDetalhe.text = listOfNotNull(
             agora?.let { getString(R.string.times, clock.format(Date(it.start)), clock.format(Date(it.stop)),
                 ((it.stop - System.currentTimeMillis()) / 60_000L).coerceAtLeast(0)) },
             depois?.let { getString(R.string.up_next, it.title) },
         ).joinToString("\n")
         previa.visibility = if (listPanel.visibility == View.VISIBLE) View.VISIBLE else View.GONE
         val secao = Categorias.secao(canal)
-        val caixa = findViewById<android.widget.LinearLayout>(R.id.listSecoesItens)
+        val caixa = secoesItens
         for (i in 0 until caixa.childCount) {
             val chip = caixa.getChildAt(i)
             val esta = chip.tag == secao
@@ -1127,6 +1144,20 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
         val secao = ordered.getOrNull(listaFoco)?.let { Categorias.secao(it) }
         val caixa = findViewById<android.widget.LinearLayout>(R.id.listSecoesItens)
         (caixa.findViewWithTag<View>(secao) ?: caixa.getChildAt(0) ?: vodEntrada).requestFocus()
+    }
+
+    /**
+     * Favorita (ou tira) um canal pela lista. O canal muda de lugar — sobe para
+     * Favoritos ou volta à seção dele — e o foco vai junto: antes ele caía no
+     * cabeçalho e o índice guardado passava a apontar outro canal, que o
+     * MENU seguinte favoritava por engano.
+     */
+    private fun favoritarNaLista(index: Int) {
+        val nome = ordered.getOrNull(index)?.name ?: return
+        Favorites.toggle(this, nome)
+        reorder()
+        val novo = ordered.indexOfFirst { it.name == nome }
+        if (listPanel.visibility == View.VISIBLE && novo >= 0) focusRow(novo)
     }
 
     /** Volta ao canal de antes — o "zap" entre dois canais, como no controle da TV. */
@@ -1204,7 +1235,11 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
         val tela2 = segunda
         if (multiTela && telaAtiva == 1 && tela2 != null) {
             val canal = ordered.getOrNull(index) ?: return
-            tela2.tocar(canal)
+            // Escolher de novo o canal que já toca não reconecta: só mostra a faixa.
+            if (tela2.canal?.name != canal.name || !tela2.tocando) tela2.tocar(canal)
+            adapter.select(index)
+            revealBanner()
+        } else if (index == current && ::player.isInitialized && player.isPlaying) {
             adapter.select(index)
             revealBanner()
         } else {
@@ -1666,6 +1701,27 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
         status.visibility = View.VISIBLE
     }
 
+    /**
+     * Fora da tela por mais de 45 s (a Programação aberta, o HOME), o player
+     * solta o fluxo: decodificador e buffer ficavam presos sob a outra tela,
+     * dezenas de MB num TV Box de 1 GB. Voltar antes disso não rebufferiza.
+     */
+    private val soltarPlayerParado = Runnable {
+        if (emSegundoPlano && ::player.isInitialized) {
+            player.stop()
+            playerSolto = true
+        }
+    }
+    private var playerSolto = false
+
+    /** Os relógios do Ao vivo, que só fazem sentido com ele na tela. */
+    private fun pararRelogios() {
+        handler.removeCallbacks(tick)
+        handler.removeCallbacks(vigiaDeImagem)
+        handler.removeCallbacks(vigiaDeFontes)
+        handler.removeCallbacks(procurarDeHoraEmHora)
+    }
+
     override fun onStop() {
         super.onStop()
         // Fora da tela, o segundo player só gastaria memória e rede. Volta com
@@ -1673,12 +1729,32 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
         sairDaMultiTela()
         emSegundoPlano = true
         player.playWhenReady = false
+        pararRelogios()
+        handler.postDelayed(soltarPlayerParado, SOLTAR_PLAYER_MS)
     }
 
     override fun onStart() {
         super.onStart()
         emSegundoPlano = false
-        if (::player.isInitialized) player.playWhenReady = true
+        handler.removeCallbacks(soltarPlayerParado)
+        if (jaIniciou) {
+            pararRelogios()
+            handler.postDelayed(tick, TICK_MS)
+            handler.postDelayed(vigiaDeImagem, VIGIA_MS)
+            handler.post(vigiaDeFontes)
+            handler.postDelayed(procurarDeHoraEmHora, ATUALIZACAO_MS)
+            // O guia pode ter sido solto da memória com o app em segundo plano.
+            if (guideStarted && Epg.channelsWithGuide == 0) {
+                guideStarted = false
+                startGuide()
+            }
+        }
+        if (playerSolto) {
+            playerSolto = false
+            play(current, sourceIndex)
+        } else if (::player.isInitialized) {
+            player.playWhenReady = true
+        }
         // Voltando das configurações com a permissão já ligada (nos aparelhos
         // em que o sistema não matou o app no caminho), retoma a atualização.
         if (jaIniciou) atualizacao.retomarSePendente()
@@ -1796,6 +1872,9 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
             .trim()
 }
 
+/// Marca de atualização parcial: só o que está no ar mudou, não o canal.
+private val SO_O_GUIA = Any()
+
 /** Channel rows: number, logo, name and whatever is on air right now. */
 private class ChannelAdapter(
     private val onPick: (Int) -> Unit,
@@ -1806,13 +1885,49 @@ private class ChannelAdapter(
     private var selected = 0
     var numero: (Channel) -> Int = { 0 }
 
+    /// Id fixo por canal: reordenar (favoritar, a lista nova chegando) move as
+    /// linhas em vez de recriar todas, e o foco não se perde no meio.
+    private val ids = HashMap<String, Long>()
+
+    init { setHasStableIds(true) }
+
+    override fun getItemId(position: Int): Long =
+        ids.getOrPut(items[position].name) { ids.size.toLong() }
+
+    @android.annotation.SuppressLint("NotifyDataSetChanged")
     fun submit(list: List<Channel>) {
         items = list
         notifyDataSetChanged()
     }
 
-    /** Redesenha só o que está à vista, para o guia recém-chegado aparecer. */
-    fun refresh() = notifyDataSetChanged()
+    /**
+     * Só o programa no ar e a barra de andamento, a cada 20 s ou quando o guia
+     * chega: antes era a linha inteira — logo, número, seção — e a rolagem da
+     * lista engasgava no TV Box de 1 GB a cada atualização.
+     */
+    fun refresh() = notifyItemRangeChanged(0, items.size, SO_O_GUIA)
+
+    override fun onBindViewHolder(holder: Holder, position: Int, payloads: MutableList<Any>) {
+        if (payloads.isNotEmpty() && payloads.all { it === SO_O_GUIA }) {
+            mostrarNoAr(holder, items[position])
+        } else {
+            onBindViewHolder(holder, position)
+        }
+    }
+
+    private fun mostrarNoAr(holder: Holder, channel: Channel) {
+        val now = System.currentTimeMillis()
+        val onAir = Epg.nowNext(channel.name, now)?.first
+        if (onAir == null) {
+            holder.programme.visibility = View.GONE
+            holder.progress.visibility = View.GONE
+        } else {
+            holder.programme.visibility = View.VISIBLE
+            holder.programme.text = onAir.title
+            holder.progress.visibility = View.VISIBLE
+            holder.progress.progress = (onAir.progress(now) * 1000).toInt()
+        }
+    }
 
     fun select(index: Int) {
         val previous = selected
@@ -1857,18 +1972,7 @@ private class ChannelAdapter(
         val rotulo = Categorias.rotulo(items, position)
         holder.secao.text = rotulo.orEmpty()
         holder.secao.visibility = if (rotulo == null) View.GONE else View.VISIBLE
-
-        val now = System.currentTimeMillis()
-        val onAir = Epg.nowNext(channel.name, now)?.first
-        if (onAir == null) {
-            holder.programme.visibility = View.GONE
-            holder.progress.visibility = View.GONE
-        } else {
-            holder.programme.visibility = View.VISIBLE
-            holder.programme.text = onAir.title
-            holder.progress.visibility = View.VISIBLE
-            holder.progress.progress = (onAir.progress(now) * 1000).toInt()
-        }
+        mostrarNoAr(holder, channel)
 
         if (holder.loaded != channel.logo) {
             holder.loaded = channel.logo
