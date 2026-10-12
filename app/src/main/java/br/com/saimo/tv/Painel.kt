@@ -71,6 +71,7 @@ object Painel {
         if (Vr.ativo) dialogo.setCanceledOnTouchOutside(true)
         dialogo.setOnDismissListener { aoFechar?.invoke() }
         dialogo.show()
+        Vr.telaCheia(dialogo.window)
         // O foco começa no que já está marcado: abrir a lista de fontes com o
         // canal no ar e ter de procurar qual é a atual seria um passo a mais.
         val inicio = itens.indexOfFirst { it.marcado }.coerceAtLeast(0)

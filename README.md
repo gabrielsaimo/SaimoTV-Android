@@ -59,7 +59,9 @@ versão nova sozinho e oferece a atualização na tela.
   troca de fonte sozinha quando a dela cai. Cada metade fica limitada a 720p
   (480p em aparelho de pouca memória) e o segundo player só existe enquanto a
   multi tela está aberta. Aparelho que não toca dois vídeos ao mesmo tempo
-  avisa e volta a uma tela só. Não aparece na rádio.
+  avisa e volta a uma tela só. Não aparece na rádio nem no óculos. No
+  celular e no tablet entra pelo botão Opções da barra, e tocar na outra
+  metade passa o som e a lista para ela.
 
 **Filmes e séries**
 - Ficha com sinopse, elenco, temporadas e episódios, e "Mais como este".
@@ -82,6 +84,13 @@ versão nova sozinho e oferece a atualização na tela.
   teclado que fecham tocando fora, painéis com "Fechar", barra de tempo que se
   arrasta, ±10 s, botão Voltar nas telas (no óculos) e dicas de tela em
   linguagem de toque. O vídeo usa TextureView nesse modo.
+- No celular e no tablet o app fica em tela cheia: as barras de navegação e
+  de status somem em todas as telas e painéis (`Vr.telaCheia`); um deslize da
+  borda mostra por um instante.
+- O voltar preditivo do Android 13+ está desligado
+  (`android:enableOnBackInvokedCallback="false"` no manifesto): com ele, o
+  Android 16 deixa de entregar a tecla VOLTAR ao `onKeyDown`, e o Voltar da
+  barra de toque (que simula a tecla) não fazia nada.
 - No TV Box nada disso aparece. Para testar em qualquer aparelho:
   `adb shell am start -n br.com.saimo.tv/.EscolhaActivity --es saimo_vr sim`
   (`nao` desliga, `auto` volta à detecção).

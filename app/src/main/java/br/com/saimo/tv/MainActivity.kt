@@ -1039,9 +1039,10 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
         val itens = listOfNotNull(
             Painel.Item(getString(R.string.opcoes_canais), icone = R.drawable.ic_list) { openList() },
             Painel.Item(getString(R.string.guide), icone = R.drawable.ic_guide) { openGuide() },
-            // Rádio não chega aqui (ver teclaNaRadio); nos óculos não há setas
-            // para trocar de metade, então lá a multi tela não aparece.
-            if (!isModoRadio && !Vr.ativo) Painel.Item(getString(R.string.multi_tela),
+            // Rádio não chega aqui (ver teclaNaRadio). Nos óculos não há setas
+            // nem toque preciso para trocar de metade, então lá a multi tela
+            // não aparece; no celular e no tablet troca-se tocando na metade.
+            if (!isModoRadio && multiTelaPossivel()) Painel.Item(getString(R.string.multi_tela),
                 getString(R.string.multi_tela_detalhe), icone = R.drawable.ic_multi_tela) { entrarNaMultiTela() } else null,
             anterior?.let { Painel.Item(getString(R.string.opcoes_anterior, it), icone = R.drawable.ic_history) { canalAnterior() } },
             Painel.Item(getString(if (favorito) R.string.opcoes_desfavoritar else R.string.opcoes_favoritar),
@@ -1254,7 +1255,7 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
     }
 
     private fun entrarNaMultiTela() {
-        if (multiTela || isModoRadio || Vr.ativo) return
+        if (multiTela || isModoRadio || !multiTelaPossivel()) return
         val tela2 = SegundaTela(this, findViewById(R.id.player2), findViewById(R.id.multiRotulo2),
             findViewById(R.id.multiNome2), findViewById(R.id.multiLogo2), findViewById(R.id.multiInicial2),
             findViewById(R.id.multiAviso2), { numeroDe(it) }) {
@@ -1302,6 +1303,9 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
         if (indice >= 0) play(indice) else { adapter.select(current); revealBanner() }
         if (semSuporte) avisarSemSuporte()
     }
+
+    /** TV Box, celular e tablet; nos óculos não (ver opcoes). */
+    private fun multiTelaPossivel() = !Vr.ativo || Vr.celular
 
     private fun avisarSemSuporte() {
         showStatus(getString(R.string.multi_tela_sem_suporte))
@@ -1381,7 +1385,10 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
         if (listPanel.isVisible) return
         handler.removeCallbacks(hideBanner)
         banner.visibility = View.GONE
-        findViewById<View>(R.id.multiDica).visibility = View.VISIBLE
+        findViewById<TextView>(R.id.multiDica).apply {
+            setText(if (Vr.ativo) R.string.multi_tela_dica_toque else R.string.multi_tela_dica)
+            visibility = View.VISIBLE
+        }
         handler.removeCallbacks(esconderDica)
         handler.postDelayed(esconderDica, BANNER_MS)
     }
@@ -1443,13 +1450,20 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
         // Por cima do vídeo e embaixo de todo o resto: com a lista aberta, tocar
         // na imagem fecha a lista (o "tocar fora"); sem ela, mostra ou esconde
         // a barra.
-        Vr.camadaDeToque(raiz, 1) {
+        // Na multi tela, tocar na metade que não está ativa passa o som e a
+        // lista para ela (as setas laterais do controle, no toque).
+        var toqueX = 0f
+        val camada = Vr.camadaDeToque(raiz, 1) {
+            val metade = if (toqueX < raiz.width / 2f) 0 else 1
             when {
                 listPanel.visibility == View.VISIBLE -> closeList()
+                multiTela && metade != telaAtiva -> { ativarTela(metade); revealBanner() }
                 barraVr?.visibility == View.VISIBLE -> { esconderBarraVr(); handler.removeCallbacks(hideBanner); hideBanner.run() }
                 else -> mostrarBarraVr()
             }
         }
+        @Suppress("ClickableViewAccessibility")
+        camada.setOnTouchListener { _, e -> toqueX = e.x; false }
         val fileira = Vr.fileira(this)
         fun botao(texto: String, icone: Int, soIcone: Boolean = false, acao: () -> Unit) {
             val b = Vr.botao(this, if (soIcone) "" else texto, icone) { acao(); if (barraVr?.visibility == View.VISIBLE) adiarBarraVr() }
@@ -1459,12 +1473,9 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
         botao(getString(R.string.vr_voltar), R.drawable.ic_arrow_back) { Vr.voltar(this) }
         botao(getString(R.string.vr_canais), R.drawable.ic_list) { openList() }
         // Mesmo sentido das setas do controle: para cima é o canal de cima da lista.
-        botao(getString(R.string.vr_canal_mais), R.drawable.ic_arrow_up, soIcone = true) {
-            play((current - 1 + ordered.size) % ordered.size)
-        }
-        botao(getString(R.string.vr_canal_menos), R.drawable.ic_arrow_down, soIcone = true) {
-            play((current + 1) % ordered.size)
-        }
+        // Na multi tela andam na metade ativa, como as setas do controle.
+        botao(getString(R.string.vr_canal_mais), R.drawable.ic_arrow_up, soIcone = true) { zapear(-1) }
+        botao(getString(R.string.vr_canal_menos), R.drawable.ic_arrow_down, soIcone = true) { zapear(1) }
         botao(getString(R.string.guide), R.drawable.ic_guide) { esconderBarraVr(); openGuide() }
         botao(getString(R.string.vr_fontes), R.drawable.ic_swap) { escolherFonte(current) }
         botao(getString(R.string.vr_anterior), R.drawable.ic_history) { canalAnterior() }
@@ -1643,7 +1654,7 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
         // No lugar de "fonte 1/3 · servidor", o que o controle faz aqui.
         bannerSource.text = when {
             fonte == null -> ""
-            multiTela -> getString(R.string.multi_tela_banner_dica)
+            multiTela -> getString(if (Vr.ativo) R.string.multi_tela_banner_dica_toque else R.string.multi_tela_banner_dica)
             else -> getString(if (Vr.ativo) R.string.vr_banner_dica else R.string.banner_dica)
         }
         bannerSource.visibility =

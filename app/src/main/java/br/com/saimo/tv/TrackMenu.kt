@@ -30,9 +30,10 @@ object TrackMenu {
                     .setAllowAdaptiveSelections(adaptativa)
                     .setShowDisableOption(tipo == C.TRACK_TYPE_TEXT)
                     .build()
-                    .show()
+                    .apply { show(); Vr.telaCheia(window) }
             }
             .show()
+            .also { Vr.telaCheia(it.window) }
     }
 }
 

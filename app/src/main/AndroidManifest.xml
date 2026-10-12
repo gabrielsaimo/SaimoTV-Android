@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -20,8 +21,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
         android:largeHeap="true"
+        android:enableOnBackInvokedCallback="false"
+        tools:targetApi="33"
         android:theme="@style/Theme.Saimo"
         android:usesCleartextTraffic="true">
+        <!-- enableOnBackInvokedCallback="false": com o voltar preditivo (padrão
+             a partir do targetSdk 36) o Android para de entregar KEYCODE_BACK
+             ao onKeyDown e o onKeyUp deixa de chamar onBackPressed. Num tablet
+             com Android 16 o botão Voltar da barra de toque (que simula a
+             tecla, ver Vr.voltar) não fazia nada, e o voltar do sistema
+             fechava o ao vivo sem passar pela lista ou pela multi tela. -->
         <!-- Meta Quest / Meta VR Glasses: o app se declara compatível (Vr.kt
              liga os controles de toque lá). TV Box ignora. -->
         <meta-data

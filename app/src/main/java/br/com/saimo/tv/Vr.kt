@@ -144,11 +144,29 @@ object Vr {
         override fun onActivityStarted(a: Activity) {
             if (ativo && !celular && a.javaClass.simpleName !in SEM_VOLTAR_FLUTUANTE) botaoVoltarFlutuante(a)
         }
-        override fun onActivityResumed(a: Activity) {}
+        override fun onActivityResumed(a: Activity) {
+            if (celular) telaCheia(a.window)
+        }
         override fun onActivityPaused(a: Activity) {}
         override fun onActivityStopped(a: Activity) {}
         override fun onActivitySaveInstanceState(a: Activity, b: Bundle) {}
         override fun onActivityDestroyed(a: Activity) {}
+    }
+
+    // MARK: - Tela cheia
+
+    /**
+     * No celular e no tablet as barras do sistema (navegação e status) somem
+     * em todas as telas, como no TV Box; um deslize da borda mostra por um
+     * instante e elas somem de novo sozinhas. Painéis (Dialog) têm janela
+     * própria e chamam isto também, senão as barras voltam ao abrir um.
+     */
+    fun telaCheia(janela: android.view.Window?) {
+        if (!celular || janela == null) return
+        androidx.core.view.WindowCompat.getInsetsController(janela, janela.decorView).apply {
+            hide(androidx.core.view.WindowInsetsCompat.Type.systemBars())
+            systemBarsBehavior = androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        }
     }
 
     // MARK: - Voltar

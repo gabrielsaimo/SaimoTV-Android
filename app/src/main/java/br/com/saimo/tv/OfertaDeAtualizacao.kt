@@ -58,6 +58,7 @@ class OfertaDeAtualizacao(
                 }
                 .setOnDismissListener { ofertando = false }
                 .show()
+                .also { Vr.telaCheia(it.window) }
         }
     }
 
