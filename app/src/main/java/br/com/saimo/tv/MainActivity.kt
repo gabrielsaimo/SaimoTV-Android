@@ -160,6 +160,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun indicePorNumero(numero: Int): Int = ordered.indexOfFirst { numeros[it.name] == numero }
     private var isModoRadio = false
+
+    /**
+     * Como o monitor separa o que toca: "radio" no modo rádio (as estações
+     * quase nunca têm "Rádio" no nome, "96 FM", "BandNews FM"…), e também o
+     * canal da lista que se chama rádio; o resto é "live".
+     */
+    private fun categoriaNoMonitor(canal: Channel): String =
+        if (isModoRadio || canal.name.contains("Rádio", ignoreCase = true)) "radio" else "live"
     /// O painel que cobre a tela enquanto uma rádio (só áudio) toca.
     private val painelRadio by lazy {
         PainelRadio(findViewById(R.id.radioPainel)) { ::player.isInitialized && player.isPlaying }
@@ -430,7 +438,7 @@ class MainActivity : AppCompatActivity() {
         if (!apósFalha) caiuAvisado = false
         // Falha passando para a próxima fonte, ou a reconexão do mesmo canal,
         // não é mais uma abertura; escolher canal ou fonte à mão é.
-        val categoriaMonitor = if (channel.name.contains("Rádio", ignoreCase = true)) "radio" else "live"
+        val categoriaMonitor = categoriaNoMonitor(channel)
         Telemetria.comecou(categoriaMonitor, channel.name, chosen.url, sourceIndex + 1,
             nova = !(apósFalha || (mesmoCanal && retries > 0)))
 
@@ -535,7 +543,7 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
                     val demorou = android.os.SystemClock.elapsedRealtime() - tentativaDesde
                     Log.i("SaimoTV", "tocou em $demorou ms (fonte ${sourceIndex + 1})")
                     ordered.getOrNull(current)?.let { canal ->
-                        val categoriaMonitor = if (canal.name.contains("Rádio", ignoreCase = true)) "radio" else "live"
+                        val categoriaMonitor = categoriaNoMonitor(canal)
                         Telemetria.tocou(categoriaMonitor, canal.name, canal.sources.getOrNull(sourceIndex)?.url.orEmpty(),
                             sourceIndex + 1, demorou)
                     }
@@ -572,7 +580,7 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
                 return
             }
             val channel = ordered[current]
-            val categoriaMonitor = if (channel.name.contains("Rádio", ignoreCase = true)) "radio" else "live"
+            val categoriaMonitor = categoriaNoMonitor(channel)
             Telemetria.falhou(categoriaMonitor, channel.name, channel.sources.getOrNull(sourceIndex)?.url.orEmpty(),
                 sourceIndex + 1, error.errorCodeName)
 
@@ -795,7 +803,7 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
     private fun recuperarCongelado() {
         Log.w("SaimoTV", "imagem congelada: recuperando")
         val channel = ordered.getOrNull(current) ?: return
-        val categoriaMonitor = if (channel.name.contains("Rádio", ignoreCase = true)) "radio" else "live"
+        val categoriaMonitor = categoriaNoMonitor(channel)
             Telemetria.falhou(categoriaMonitor, channel.name, channel.sources.getOrNull(sourceIndex)?.url.orEmpty(),
             sourceIndex + 1, "congelou por ${CONGELADO_MS / 1000} s")
         if (retomadas < RETOMADAS_MAX) {
@@ -829,7 +837,7 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
 
     private val sourceTimeout = Runnable {
         val channel = ordered.getOrNull(current) ?: return@Runnable
-        val categoriaMonitor = if (channel.name.contains("Rádio", ignoreCase = true)) "radio" else "live"
+        val categoriaMonitor = categoriaNoMonitor(channel)
             Telemetria.falhou(categoriaMonitor, channel.name, channel.sources.getOrNull(sourceIndex)?.url.orEmpty(),
             sourceIndex + 1, "sem imagem em ${SOURCE_TIMEOUT_MS / 1000} s")
         if (sourceIndex + 1 < channel.sources.size) {
@@ -843,7 +851,7 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
     private fun avisarQueCaiu(channel: Channel) {
         if (caiuAvisado) return
         caiuAvisado = true
-        val categoriaMonitor = if (channel.name.contains("Rádio", ignoreCase = true)) "radio" else "live"
+        val categoriaMonitor = categoriaNoMonitor(channel)
         Telemetria.caiu(categoriaMonitor, channel.name, channel.sources.size)
     }
 
