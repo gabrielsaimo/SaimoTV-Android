@@ -24,8 +24,14 @@ import java.io.File
 object Generos {
 
     private const val ARQUIVO = "fichas.txt"
-    /// O acervo muda devagar; um dia em disco evita baixar 2 MB por abertura.
-    private const val VALIDADE_MS = 24 * 60 * 60 * 1000L
+    /// Seis horas em disco evitam baixar 4 MB a cada abertura. Era um dia, e
+    /// o título novo do acervo (a atualização roda todo dia às 11h) ficava até
+    /// 24 h sem capa nem ficha.
+    private const val VALIDADE_MS = 6 * 60 * 60 * 1000L
+    /// Título do acervo que as fichas não conhecem pede o arquivo novo, mas no
+    /// máximo uma vez nesse intervalo: título sem ficha nenhuma não pode virar
+    /// um download por rolagem.
+    private const val ESPERA_FALTA_MS = 30 * 60 * 1000L
 
     /**
      * O que se sabe de um título, compacto.
@@ -54,7 +60,28 @@ object Generos {
 
     private fun registro(titulo: String, serie: Boolean): Registro? {
         val mapa = if (serie) series else filmes
-        return mapa[titulo] ?: mapa[semAno(titulo)]
+        return mapa[titulo] ?: mapa[semAno(titulo)] ?: run { faltou(); null }
+    }
+
+    /// Para buscar o arquivo novo de onde não há Context (capa, id).
+    private var contexto: Context? = null
+    @Volatile
+    private var ultimaFalta = 0L
+
+    /**
+     * Um título que as fichas não conhecem: o arquivo em disco pode ser de
+     * antes da atualização que trouxe o título. Busca o novo (sem segurar a
+     * tela) e refaz os mapas; a capa aparece na próxima rolagem.
+     */
+    private fun faltou() {
+        val ctx = contexto ?: return
+        if (!prontos || baixando) return
+        val agora = System.currentTimeMillis()
+        if (agora - ultimaFalta < ESPERA_FALTA_MS) return
+        val local = arquivoLocal(ctx)
+        if (agora - local.lastModified() < ESPERA_FALTA_MS) return
+        ultimaFalta = agora
+        baixarDepois(ctx)
     }
 
     /**
@@ -98,6 +125,7 @@ object Generos {
      * mapas — a capa que faltava aparece sozinha na próxima rolagem.
      */
     suspend fun carregar(context: Context) = withContext(Dispatchers.IO) {
+        contexto = context.applicationContext
         if (prontos) return@withContext
         val local = arquivoLocal(context)
         if (local.exists() && local.length() > 0) {
