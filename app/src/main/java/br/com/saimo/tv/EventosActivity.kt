@@ -230,10 +230,35 @@ class EventosActivity : TelaComMenu() {
                 val inicio = iso.parse(o.getString("time_start"))?.time ?: return@runCatching null
                 val fim = o.optString("time_end").takeIf { it.isNotBlank() }?.let { iso.parse(it)?.time }
                     ?: (inicio + 2 * 3_600_000L)
-                Jogo(casa.getString("name"), fora.getString("name"), casa.optString("image"), fora.optString("image"),
-                    liga?.optString("name").orEmpty(), liga?.optString("image").orEmpty(), inicio, fim, canal)
+                Jogo(casa.getString("name"), fora.getString("name"),
+                    emAltaResolucao(casa.optString("image")), emAltaResolucao(fora.optString("image")),
+                    liga?.optString("name").orEmpty(), emAltaResolucao(liga?.optString("image").orEmpty()),
+                    inicio, fim, canal)
             }.getOrNull()
         }.distinctBy { "${it.titulo}|${it.inicio}" }
+    }
+
+    /**
+     * Escudos e logos da agenda vêm do CDN do 365scores pedidos em 24 ou 34 px
+     * (`w_24,h_24`, 48 px com `dpr_2`) e em qualidade econômica: borrados no
+     * cartão. O CDN monta a imagem pelo endereço, então pedir 256 px e
+     * qualidade máxima traz o original (350 a 415 px); `c_limit` nunca amplia
+     * além dele.
+     */
+    private fun emAltaResolucao(url: String): String {
+        val marca = "imagecache.365scores.com/image/upload/"
+        val pos = url.indexOf(marca).takeIf { it >= 0 } ?: return url
+        val inicio = pos + marca.length
+        val fim = url.indexOf('/', inicio).takeIf { it >= 0 } ?: url.length
+        val ajustes = url.substring(inicio, fim).split(',').joinToString(",") { p ->
+            when {
+                p.startsWith("w_") -> "w_256"
+                p.startsWith("h_") -> "h_256"
+                p == "q_auto:eco" -> "q_auto:best"
+                else -> p
+            }
+        }
+        return url.substring(0, inicio) + ajustes + url.substring(fim)
     }
 
     /** O canal pelo fim do endereço do player ("…/premiere-fc" → Premiere FC). */
