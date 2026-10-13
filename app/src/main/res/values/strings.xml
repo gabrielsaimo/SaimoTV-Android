@@ -174,11 +174,11 @@
     <string name="player_fonte_n">Fonte %1$d</string>
     <string name="player_fontes">Fontes</string>
     <string name="player_servidores_n">%1$d servidor(es)</string>
-    <string name="player_trocar_temporada">Temporada %1$d  ▸  trocar</string>
-    <string name="player_temporadas_n">%1$d temporadas</string>
-    <string name="player_temporadas">Temporadas</string>
     <string name="player_visto">Visto</string>
-    <string name="player_visto_pct">%1$d%% visto</string>
+    <string name="player_eps_assistindo">Assistindo</string>
+    <string name="player_eps_no_ar">Assistindo T%1$d E%2$d</string>
+    <string name="player_eps_dica">Esquerda e direita escolhem · em cima troca a temporada · OK assiste · VOLTAR fecha</string>
+    <string name="player_eps_dica_toque">Toque para assistir · toque fora para fechar</string>
     <string name="player_audio_item">Áudio: %1$s</string>
     <string name="player_legenda_item">Legenda: %1$s</string>
     <string name="player_sem_legenda">Sem legenda</string>

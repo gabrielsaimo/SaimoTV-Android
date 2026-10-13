@@ -823,6 +823,7 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun trocarEpisodio(alvoEp: Titulos.Ep) {
+        handler.removeCallbacks(contar)
         guardar()
         if (alvoEp.temporada != ep?.temporada) infoEpisodios = emptyMap()
         seguidosSozinhos = 0
@@ -1067,41 +1068,18 @@ class PlayerActivity : AppCompatActivity() {
 
     // MARK: - Painéis
 
-    private fun painelEpisodios(temporada: Int = ep?.temporada ?: 1) {
+    /**
+     * Os episódios com imagem, temporadas em pílulas (ver PainelEpisodios.kt).
+     * Escolher um troca pelo mesmo caminho do "Próximo": versão, legenda,
+     * pulos e progresso seguem valendo.
+     */
+    private fun painelEpisodios() {
         val r = resolvido ?: return
-        lifecycleScope.launch(semDerrubar) {
-            val info = if (temporada == ep?.temporada && infoEpisodios.isNotEmpty()) infoEpisodios
-                       else Detalhes.temporada(r.tmdbId, temporada).associateBy { it.numero }
-            val itens = mutableListOf<Painel.Item>()
-            if (r.temporadas.size > 1) {
-                itens += Painel.Item(getString(R.string.player_trocar_temporada, temporada),
-                    getString(R.string.player_temporadas_n, r.temporadas.size)) {
-                    Painel.mostrar(this@PlayerActivity, getString(R.string.player_temporadas),
-                        r.temporadas.map { t ->
-                            Painel.Item(getString(R.string.vod_temporada, t), marcado = t == temporada) {
-                                painelEpisodios(t)
-                            }
-                        })
-                }
-            }
-            for (e in r.episodios.filter { it.temporada == temporada }) {
-                val chave = r.chave(e)
-                val fracao = Progresso.fracao(this@PlayerActivity, chave)
-                val estado = when {
-                    fracao == null -> null
-                    fracao >= 1f -> getString(R.string.player_visto)
-                    else -> getString(R.string.player_visto_pct, (fracao * 100).toInt())
-                }
-                val nome = info[e.numero]?.nome?.takeIf { it.isNotBlank() }
-                itens += Painel.Item(
-                    listOfNotNull(getString(R.string.vod_episodio, e.numero), nome).joinToString(" · "),
-                    listOfNotNull(info[e.numero]?.duracao?.let { "$it min" }, estado,
-                        e.versoes.joinToString(" / ") { Titulos.rotulo(it) }).joinToString(" · "),
-                    marcado = e == ep) { trocarEpisodio(e) }
-            }
-            Painel.mostrar(this@PlayerActivity, Generos.semAno(alvo.titulo), itens,
-                getString(R.string.vod_temporada, temporada))
-        }
+        val atual = ep ?: return
+        // O cartão do episódio no ar mostra até onde ele foi agora, não na última pausa.
+        guardar()
+        esconderControles()
+        PainelEpisodios.mostrar(this, r, atual) { escolhido -> trocarEpisodio(escolhido) }
     }
 
     private fun painelVersao() {

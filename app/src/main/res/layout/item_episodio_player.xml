@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Um episódio no painel do player: imagem da cena em 16:9, o número por
+     baixo enquanto ela não chega, quanto já foi visto, e o selo no que está
+     tocando. Menor que o da ficha: cabem quatro na largura da TV. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="232dp"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="8dp"
+    android:background="@drawable/row_focus"
+    android:focusable="true"
+    android:clickable="true"
+    android:orientation="vertical"
+    android:padding="6dp">
+    <FrameLayout
+        android:id="@+id/epMoldura"
+        android:layout_width="match_parent"
+        android:layout_height="124dp"
+        android:background="@drawable/bg_logo">
+        <TextView
+            android:id="@+id/epNumeroGrande"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:textColor="@color/accent"
+            android:textSize="34sp" />
+        <ImageView
+            android:id="@+id/epImagem"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop" />
+        <TextView
+            android:id="@+id/epNoAr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|start"
+            android:layout_margin="6dp"
+            android:background="@drawable/bg_selo_no_ar"
+            android:drawablePadding="4dp"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center_vertical"
+            android:paddingStart="8dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="2dp"
+            android:text="@string/player_eps_assistindo"
+            android:textColor="@color/surface"
+            android:textSize="13sp"
+            android:visibility="gone"
+            app:drawableStartCompat="@drawable/ic_play"
+            app:drawableTint="@color/surface" />
+        <TextView
+            android:id="@+id/epVisto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_margin="6dp"
+            android:background="@drawable/bg_card"
+            android:drawablePadding="4dp"
+            android:gravity="center_vertical"
+            android:paddingStart="8dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="2dp"
+            android:text="@string/player_visto"
+            android:textColor="@color/accent"
+            android:textSize="13sp"
+            android:visibility="gone"
+            app:drawableStartCompat="@drawable/ic_check"
+            app:drawableTint="@color/accent" />
+        <ProgressBar
+            android:id="@+id/epProgresso"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_gravity="bottom"
+            android:max="1000"
+            android:progressDrawable="@drawable/progress_track"
+            android:visibility="gone" />
+    </FrameLayout>
+    <TextView
+        android:id="@+id/epTitulo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-medium"
+        android:maxLines="1"
+        android:textColor="@color/text_primary"
+        android:textSize="16sp" />
+    <TextView
+        android:id="@+id/epDetalhe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/text_secondary"
+        android:textSize="13sp" />
+</LinearLayout>

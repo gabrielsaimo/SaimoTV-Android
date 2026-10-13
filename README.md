@@ -68,6 +68,12 @@ versão nova sozinho e oferece a atualização na tela.
 - Player próprio: pula abertura e recapitulação com os tempos do
   [TheIntroDB](https://theintrodb.org), cartão do próximo episódio nos créditos,
   "ainda está assistindo?", continuar de onde parou.
+- **Episódios** dentro do player (botão, ou seta para baixo com a barra
+  escondida): faixa na parte de baixo com as temporadas em pílulas e os
+  episódios em cartões com a imagem da cena (TMDB w300; sem ela, a imagem da
+  série), quanto já foi visto e o selo "Assistindo". Abre no episódio no ar;
+  esquerda/direita nas pílulas já troca a temporada, para baixo volta aos
+  episódios, OK troca de episódio (no que está no ar só fecha), VOLTAR fecha.
 - Botão **Fonte N**: escolhe entre todas as fontes (versão e servidor) sem
   perder o ponto. Fonte que não abre em 15 s, ou que "termina" nos primeiros
   segundos, cai para a seguinte sozinha.
@@ -176,7 +182,7 @@ Detecção de "pouca memória" em `Aparelho.kt` (isLowRamDevice ou até 1,5 GB).
 | `EscolhaActivity` | tela inicial (fileiras) |
 | `MainActivity` | TV ao vivo |
 | `MultiTela` | segunda metade da multi tela (player, troca de fonte) |
-| `PlayerActivity` | player de filmes e séries |
+| `PlayerActivity`, `PainelEpisodios` | player de filmes e séries e a faixa de episódios |
 | `FichaActivity`, `AtorActivity` | ficha do título e do ator |
 | `PaginaActivity`, `GradeActivity` | páginas por tipo e grade A–Z |
 | `BuscaActivity`, `BuscaDoSistema` | busca do app e do Google TV |
