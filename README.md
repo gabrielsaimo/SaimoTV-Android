@@ -245,5 +245,5 @@ adb shell am start -a android.intent.action.VIEW -d "saimo://canal?n=Band"
 
 ```bash
 python3 scripts/gen_catalog.py   # lista de reserva: copia o catalogo.txt para src/main/resources/reserva
-python3 scripts/gen_icons.py     # ícone e banner a partir da arte do Mac
+python3 scripts/gen_icons.py     # ícone (legado e em camadas) e banner a partir da arte do Mac, com folga para o Fire TV
 ```
