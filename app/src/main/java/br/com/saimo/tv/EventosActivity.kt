@@ -205,11 +205,19 @@ class EventosActivity : TelaComMenu() {
                     ((mesmoTime(e.casa, jogo.casa) && mesmoTime(e.fora, jogo.fora)) ||
                         (mesmoTime(e.casa, jogo.fora) && mesmoTime(e.fora, jogo.casa)))
             } ?: return@map jogo
+            // A ESPN pode listar os times na ordem inversa da agenda: aí o
+            // escudo e os gols dela vão para o outro lado, senão o time mostrado
+            // ganha o escudo do adversário e o placar sai invertido.
+            val invertido = !(mesmoTime(par.casa, jogo.casa) && mesmoTime(par.fora, jogo.fora))
+            val (logoCasa, logoFora) = if (invertido) par.foraLogo to par.casaLogo else par.casaLogo to par.foraLogo
+            val (golsCasa, golsFora) = if (invertido) par.golsFora to par.golsCasa else par.golsCasa to par.golsFora
             jogo.copy(
-                casaLogo = par.casaLogo.ifEmpty { jogo.casaLogo },
-                foraLogo = par.foraLogo.ifEmpty { jogo.foraLogo },
+                casaLogo = logoCasa.ifEmpty { jogo.casaLogo },
+                foraLogo = logoFora.ifEmpty { jogo.foraLogo },
                 ligaLogo = jogo.ligaLogo.ifEmpty { par.ligaLogo },
-                estado = par.estado, placar = par.placar, tempo = par.tempo,
+                estado = par.estado,
+                placar = if (par.estado == "pre") "" else "$golsCasa x $golsFora",
+                tempo = par.tempo,
             )
         }
     }
@@ -271,7 +279,8 @@ class EventosActivity : TelaComMenu() {
 
     private data class Placar(
         val casa: String, val fora: String, val casaLogo: String, val foraLogo: String,
-        val ligaLogo: String, val inicio: Long, val estado: String, val placar: String, val tempo: String,
+        val ligaLogo: String, val inicio: Long, val estado: String, val golsCasa: String, val golsFora: String,
+        val tempo: String,
     )
 
     private fun lerEspn(corpo: String): List<Placar> = runCatching {
@@ -297,7 +306,7 @@ class EventosActivity : TelaComMenu() {
                     ca.getJSONObject("team").optString("name"), fo.getJSONObject("team").optString("name"),
                     ca.getJSONObject("team").optString("logo"), fo.getJSONObject("team").optString("logo"),
                     ligaLogo, data.parse(ev.optString("date"))?.time ?: 0L, estado,
-                    if (estado == "pre") "" else "${ca.optString("score")} x ${fo.optString("score")}",
+                    ca.optString("score"), fo.optString("score"),
                     if (estado == "in") status?.optString("shortDetail").orEmpty() else "",
                 )
             }.getOrNull()
