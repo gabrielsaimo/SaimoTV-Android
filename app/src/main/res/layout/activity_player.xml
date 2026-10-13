@@ -54,9 +54,22 @@
         android:paddingEnd="56dp"
         android:paddingBottom="70dp"
         android:visibility="gone">
+        <!-- A logo do filme ou da série, quando o TMDB tem; some sem ela. -->
+        <ImageView
+            android:id="@+id/playerLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="64dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="24dp"
+            android:adjustViewBounds="true"
+            android:importantForAccessibility="no"
+            android:maxWidth="240dp"
+            android:scaleType="fitCenter"
+            android:visibility="gone" />
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:orientation="vertical">
             <TextView

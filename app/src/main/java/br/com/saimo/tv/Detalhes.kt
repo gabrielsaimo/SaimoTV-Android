@@ -49,9 +49,25 @@ object Detalhes {
         val fundo: String? = null,
         /** Quantas temporadas a série tem, segundo o TMDB. */
         val temporadas: Int? = null,
+        /** A logo do título (PNG transparente), em português quando há. */
+        val logo: String? = null,
     ) {
         val vazia: Boolean
             get() = sinopse.isBlank() && elenco.isEmpty() && generos.isEmpty() && duracao == null
+    }
+
+    /**
+     * A logo do título: a em português, senão a em inglês, senão a sem
+     * língua. w300 basta para a altura em que aparece no player.
+     */
+    private fun logoDe(json: org.json.JSONObject): String? {
+        val logos = json.optJSONObject("images")?.optJSONArray("logos") ?: return null
+        val lista = (0 until logos.length()).mapNotNull { logos.optJSONObject(it) }
+        val escolhida = listOf("pt", "en", "").firstNotNullOfOrNull { lingua ->
+            lista.firstOrNull { it.optString("iso_639_1").let { l -> l == lingua || (lingua.isEmpty() && (l.isEmpty() || l == "null")) } }
+        } ?: return null
+        return escolhida.optString("file_path").takeIf { it.isNotBlank() && it != "null" }
+            ?.let { IMAGENS + "w300" + it }
     }
 
     private val guardadas = recentes<String, Ficha>(150)
@@ -82,8 +98,10 @@ object Detalhes {
 
     private fun baixar(id: Int, serie: Boolean): Ficha? {
         val tipo = if (serie) "tv" else "movie"
-        val extras = if (serie) "credits,content_ratings" else "credits,release_dates"
-        val json = pedir("$BASE/$tipo/$id?api_key=$CHAVE&language=pt-BR&append_to_response=$extras")
+        val extras = if (serie) "credits,content_ratings,images" else "credits,release_dates,images"
+        // Só as logos interessam das imagens, e só nas línguas que a tela usa.
+        val json = pedir("$BASE/$tipo/$id?api_key=$CHAVE&language=pt-BR&append_to_response=$extras" +
+            "&include_image_language=pt,en,null")
             ?: return null
 
         val creditos = json.optJSONObject("credits")
@@ -148,6 +166,7 @@ object Detalhes {
             fundo = json.optString("backdrop_path").takeIf { it.isNotBlank() && it != "null" }
                 ?.let { IMAGENS + "w780" + it },
             temporadas = if (serie) json.optInt("number_of_seasons").takeIf { it > 0 } else null,
+            logo = logoDe(json),
         )
     }
 

@@ -64,6 +64,8 @@ versão nova sozinho e oferece a atualização na tela.
   metade passa o som e a lista para ela.
 
 **Filmes e séries**
+- No topo do player, com a barra de progresso, a logo do filme ou da série
+  (a do TMDB, em português quando há) à esquerda do nome.
 - Ficha com sinopse, elenco, temporadas e episódios, e "Mais como este".
 - Player próprio: pula abertura e recapitulação com os tempos do
   [TheIntroDB](https://theintrodb.org), cartão do próximo episódio nos créditos,

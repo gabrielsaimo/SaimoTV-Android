@@ -228,6 +228,18 @@ class PlayerActivity : AppCompatActivity() {
 
     // MARK: - O que tocar
 
+    /** A logo do título à esquerda do nome, no topo; sem logo no TMDB, só o nome. */
+    private fun mostrarLogo(r: Titulos.Resolvido) {
+        lifecycleScope.launch(semDerrubar) {
+            val url = Detalhes.de(r.alvo.titulo, r.serie, r.tmdbId.takeIf { it > 0 })?.logo ?: return@launch
+            if (isFinishing || isDestroyed) return@launch
+            val logo = findViewById<ImageView>(R.id.playerLogo)
+            logo.load(url) {
+                listener(onSuccess = { _, _ -> logo.visibility = View.VISIBLE })
+            }
+        }
+    }
+
     private suspend fun preparar() {
         val r = Titulos.resolver(this, alvo)
         if (isFinishing || isDestroyed) return
@@ -236,6 +248,7 @@ class PlayerActivity : AppCompatActivity() {
             return
         }
         resolvido = r
+        mostrarLogo(r)
         val t = intent.getIntExtra(TEMPORADA, 0)
         val e = intent.getIntExtra(EPISODIO, 0)
         ep = if (r.serie) {

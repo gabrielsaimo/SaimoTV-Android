@@ -64,6 +64,14 @@ object PainelEpisodios {
         // Os pedidos ao TMDB vivem só enquanto o painel está aberto.
         val escopo = CoroutineScope(SupervisorJob() + Dispatchers.Main + semDerrubar)
 
+        // Tela baixa (celular deitado, ~390 dp): sem o respiro de cima e sem a
+        // dica, senão os cartões passam da borda e o nome do episódio some.
+        val metricas = activity.resources.displayMetrics
+        val telaBaixa = metricas.heightPixels / metricas.density < 480
+        if (telaBaixa) {
+            vista.setPadding(vista.paddingLeft, Vr.dp(activity, 12), vista.paddingRight, Vr.dp(activity, 8))
+            vista.findViewById<View>(R.id.peDica).visibility = View.GONE
+        }
         vista.findViewById<TextView>(R.id.peTitulo).text = Generos.semAno(r.alvo.titulo)
         vista.findViewById<TextView>(R.id.peSubtitulo).text =
             activity.getString(R.string.player_eps_no_ar, noAr.temporada, noAr.numero)
