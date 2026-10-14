@@ -13,4 +13,10 @@
     <style name="Theme.Saimo.Video">
         <item name="android:windowBackground">@android:color/black</item>
     </style>
+
+    <!-- A tela inicial abre no azul da abertura: com a imagem de fundo do app
+         na janela, ela piscava antes de o vídeo entrar. -->
+    <style name="Theme.Saimo.Abertura">
+        <item name="android:windowBackground">@color/abertura_fundo</item>
+    </style>
 </resources>

@@ -15,6 +15,13 @@ versão nova sozinho e oferece a atualização na tela.
 ## O que tem
 
 **Navegação**
+- Abertura animada na partida a frio pelo launcher: o logo montado peça por
+  peça (`res/raw/abertura_h.mp4`, e o 9:16 quando a tela está em pé), sem som,
+  cobrindo a tela, com fade de 250 ms para o Início, que carrega por baixo.
+  Qualquer tecla ou toque pula. Link `saimo://`, volta do segundo plano e
+  rotação não repetem. A janela e a tela do sistema (Android 12+) abrem no
+  mesmo azul (#0B0F2A), sem ícone. Se o vídeo falhar ou o primeiro quadro não
+  vier em 1,5 s, a abertura sai na hora (`Abertura.kt`).
 - Menu do topo em todas as telas — Início, Ao vivo, Filmes, Séries, Animes,
   Doramas, Favoritos, Buscar e Ajustes. Seta para cima chega nele de qualquer
   lugar; VOLTAR sempre leva à tela inicial.
@@ -185,6 +192,7 @@ Detecção de "pouca memória" em `Aparelho.kt` (isLowRamDevice ou até 1,5 GB).
 | Arquivo | Papel |
 |---|---|
 | `EscolhaActivity` | tela inicial (fileiras) |
+| `Abertura` | vídeo de abertura na partida a frio |
 | `MainActivity` | TV ao vivo |
 | `MultiTela` | segunda metade da multi tela (player, troca de fonte) |
 | `PlayerActivity`, `PainelEpisodios` | player de filmes e séries e a faixa de episódios |

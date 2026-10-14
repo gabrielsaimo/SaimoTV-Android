@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Android 12 em diante: a tela de abertura do sistema fica no mesmo azul,
+         sem o ícone no meio. O vídeo monta o logo logo em seguida, e o ícone
+         pronto antes dele estragaria a surpresa. -->
+    <style name="Theme.Saimo.Abertura">
+        <item name="android:windowBackground">@color/abertura_fundo</item>
+        <item name="android:windowSplashScreenBackground">@color/abertura_fundo</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@android:color/transparent</item>
+    </style>
+</resources>

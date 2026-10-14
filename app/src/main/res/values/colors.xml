@@ -16,4 +16,8 @@
     <color name="text_faint">#66FFFFFF</color>
 
     <color name="live">#FF4D4F</color>
+
+    <!-- O azul-marinho do primeiro quadro da abertura: a janela abre nele e o
+         vídeo entra sem clarão. -->
+    <color name="abertura_fundo">#0B0F2A</color>
 </resources>

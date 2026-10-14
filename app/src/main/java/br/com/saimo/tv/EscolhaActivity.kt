@@ -56,6 +56,8 @@ class EscolhaActivity : TelaComMenu() {
     private val handler = Handler(Looper.getMainLooper())
     private val hora = SimpleDateFormat("HH:mm", Locale("pt", "BR"))
     private var ultimoVoltar = 0L
+    private var abertura: Abertura? = null
+    private val depoisDaAbertura = mutableListOf<() -> Unit>()
 
     private val adaptador by lazy {
         Inicio.Adapter(escopo = lifecycleScope, capaDe = { t, s -> Generos.capa(t, s) },
@@ -77,6 +79,16 @@ class EscolhaActivity : TelaComMenu() {
         filas.setItemViewCacheSize(4)
         cabecalhoPadrao()
 
+        // A abertura entra antes de tudo e a tela carrega por baixo dela.
+        if (Abertura.deveMostrar(intent, savedInstanceState)) {
+            // Fica guardada depois de acabar: a soltura da tecla que pulou
+            // ainda passa por ela.
+            abertura = Abertura(this) {
+                depoisDaAbertura.toList().forEach { it() }
+                depoisDaAbertura.clear()
+            }.also { it.mostrar() }
+        }
+
         lifecycleScope.launch(semDerrubar) {
             // Ler 990 canais do disco leva segundos num TV Box fraco: fora da
             // linha da tela, para ela aparecer já.
@@ -89,7 +101,7 @@ class EscolhaActivity : TelaComMenu() {
         }
 
         // A versão nova é oferecida aqui, antes de qualquer vídeo começar.
-        filas.postDelayed({ if (!isFinishing) atualizacao.ofertar() }, 2_500)
+        filas.postDelayed({ quandoAberturaAcabar { if (!isFinishing) atualizacao.ofertar() } }, 2_500)
         lifecycleScope.launch(semDerrubar) { CanalNaTv.publicar(applicationContext) }
 
         val veioDeLink = intent?.action == Intent.ACTION_VIEW || intent?.action == Intent.ACTION_SEARCH
@@ -98,8 +110,13 @@ class EscolhaActivity : TelaComMenu() {
         // baixo, e VOLTAR do canal cai nela.
         if (savedInstanceState == null && !veioDeLink && Preferencias.abrirEm == "canal" &&
             Preferencias.ultimoCanal != null) {
-            startActivity(Intent(this, MainActivity::class.java))
+            quandoAberturaAcabar { if (!isFinishing) startActivity(Intent(this, MainActivity::class.java)) }
         }
+    }
+
+    /** Roda já, ou assim que a abertura sair de cena. */
+    private fun quandoAberturaAcabar(acao: () -> Unit) {
+        if (abertura?.ativa == true) depoisDaAbertura += acao else acao()
     }
 
     private fun cabecalhoPadrao() {
@@ -129,6 +146,7 @@ class EscolhaActivity : TelaComMenu() {
 
     override fun onDestroy() {
         handler.removeCallbacksAndMessages(null)
+        abertura?.liberar()
         super.onDestroy()
     }
 
@@ -281,6 +299,12 @@ class EscolhaActivity : TelaComMenu() {
     private fun mostrarDestaque(cartao: Inicio.Cartao) = painelDestaque.mostrar(cartao)
 
     // MARK: - Teclas
+
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        // Durante a abertura qualquer tecla pula, e nenhuma chega às fileiras.
+        if (abertura?.tecla(event) == true) return true
+        return super.dispatchKeyEvent(event)
+    }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         when (keyCode) {
