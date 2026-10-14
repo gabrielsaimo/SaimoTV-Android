@@ -60,6 +60,7 @@ versão nova sozinho e oferece a atualização na tela.
   seção; o app abre no último canal e LAST volta ao anterior.
 - Guia de programação, lembretes de programa e timer de sono.
 - Troca de fonte automática quando uma cai, e manual pela lista.
+- Série: o próximo episódio (automático, botão ou painel) começa pela mesma fonte do anterior: mesmo servidor, senão mesma posição; se não abrir, a troca automática segue normal.
 - Ao vivo não pausa: PLAY/PAUSE do controle e do Assistant não param o canal.
 - **Multi tela** (`MultiTela.kt`): dois canais lado a lado, em "Multi tela" nas
   opções (segurar OK ou MENU). A tela divide ao meio, a direita começa vazia e

@@ -119,6 +119,12 @@ class PlayerActivity : AppCompatActivity() {
     private var versao = Preferencias.versao
     private var opcoes: List<Titulos.Opcao> = emptyList()
     private var fonte = 0
+    /// Fontes já tentadas neste episódio (a automática pula as tentadas).
+    private val tentadas = mutableSetOf<Int>()
+    /// Fonte em que a série toca (servidor e posição na lista): o episódio
+    /// seguinte começa por uma parecida. Vive só nesta sessão de player.
+    private var preferidaServidor = ""
+    private var preferidaPosicao = -1
     private var retomadas = 0
     private var tocou = false
     private var tentativaDesde = 0L
@@ -258,13 +264,15 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     /** Começa o título/episódio atual do zero ou de onde parou. */
-    private fun comecar(pedirRetomada: Boolean) {
+    private fun comecar(pedirRetomada: Boolean, herdarFonte: Boolean = false) {
         val r = resolvido ?: return
         val fontes = ep?.fontes ?: r.filme?.fontes ?: return
         if (versao !in fontes.keys) versao = if (Preferencias.versao in fontes) Preferencias.versao
                                               else fontes.keys.first()
         opcoes = Titulos.ordem(fontes, versao)
-        fonte = 0
+        tentadas.clear()
+        fonte = if (herdarFonte && r.serie && preferidaPosicao >= 0)
+            Titulos.preferida(opcoes, preferidaServidor, preferidaPosicao) else 0
         marcas = null
         legendasExt = emptyList()
         legendaExt = null
@@ -453,6 +461,10 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun tocarFonte(inicio: Long, pausado: Boolean = false) {
         val opcao = opcoes.getOrNull(fonte) ?: run { desistir(); return }
+        if (ep != null) {
+            preferidaServidor = Titulos.servidor(opcao.url)
+            preferidaPosicao = opcoes.filter { it.versao == opcao.versao }.indexOf(opcao)
+        }
         val atual = player ?: novoPlayer().also {
             player = it
             video.player = it
@@ -461,9 +473,9 @@ class PlayerActivity : AppCompatActivity() {
         tocou = false
         retomadas = 0
         tentativaDesde = SystemClock.elapsedRealtime()
-        mostrarCarregando(if (fonte == 0) getString(R.string.player_abrindo)
+        mostrarCarregando(if (tentadas.isEmpty()) getString(R.string.player_abrindo)
                           else getString(R.string.player_outro_servidor))
-        Telemetria.comecou("vod", nomeTelemetria(), opcao.url, fonte + 1, nova = fonte == 0)
+        Telemetria.comecou("vod", nomeTelemetria(), opcao.url, fonte + 1, nova = tentadas.isEmpty())
         selecionarLegendaExt = legendaExt != null
         atual.setMediaSource(fonteAtual(opcao.url))
         if (inicio > 0) atual.seekTo(inicio)
@@ -489,8 +501,8 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun proximaFonte(posicao: Long) {
-        fonte++
-        if (fonte >= opcoes.size) { desistir(); return }
+        tentadas += fonte
+        fonte = opcoes.indices.firstOrNull { it !in tentadas } ?: run { desistir(); return }
         (botoes.findViewWithTag<TextView>("fonte"))?.let { b ->
             b.text = getString(R.string.player_fonte_n, fonte + 1)
             Icones.inicio(b, R.drawable.ic_swap)
@@ -827,12 +839,12 @@ class PlayerActivity : AppCompatActivity() {
         // Sete episódios sem ninguém tocar no controle: talvez a pessoa tenha
         // dormido. Pausar aqui economiza a internet de uma noite inteira.
         if (sozinho && !pausaAutoplayDesativada && seguidosSozinhos >= 7) {
-            comecar(pedirRetomada = false)
+            comecar(pedirRetomada = false, herdarFonte = true)
             player?.playWhenReady = false
             perguntarSeAindaAssiste()
             return
         }
-        comecar(pedirRetomada = false)
+        comecar(pedirRetomada = false, herdarFonte = true)
     }
 
     private fun trocarEpisodio(alvoEp: Titulos.Ep) {
@@ -841,7 +853,7 @@ class PlayerActivity : AppCompatActivity() {
         if (alvoEp.temporada != ep?.temporada) infoEpisodios = emptyMap()
         seguidosSozinhos = 0
         ep = alvoEp
-        comecar(pedirRetomada = true)
+        comecar(pedirRetomada = true, herdarFonte = true)
     }
 
     private fun guardar() {
@@ -888,7 +900,7 @@ class PlayerActivity : AppCompatActivity() {
         esconderCarregando()
         val acoes = mutableListOf<Pair<String, () -> Unit>>(
             getString(R.string.player_tentar_de_novo) to {
-                esconderAviso(); fonte = 0
+                esconderAviso(); fonte = 0; tentadas.clear()
                 if (resolvido == null) lifecycleScope.launch(semDerrubar) { preparar() }
                 else tocarFonte(Progresso.posicao(this, resolvido!!.chave(ep)))
             })
@@ -1106,6 +1118,7 @@ class PlayerActivity : AppCompatActivity() {
                 val ponto = player?.currentPosition ?: 0L
                 opcoes = Titulos.ordem(fontes, versao)
                 fonte = 0
+                tentadas.clear()
                 atualizarTitulos()
                 montarBotoes()
                 tocarFonte(ponto)
@@ -1130,6 +1143,8 @@ class PlayerActivity : AppCompatActivity() {
                 if (i == fonte) return@Item
                 val ponto = player?.currentPosition ?: 0L
                 fonte = i
+                // A automática segue dali para a frente, como sempre.
+                tentadas.clear(); tentadas += 0 until i
                 if (opcao.versao != versao) {
                     versao = opcao.versao
                     atualizarTitulos()

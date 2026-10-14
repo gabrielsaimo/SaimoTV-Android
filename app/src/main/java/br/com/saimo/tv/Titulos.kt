@@ -130,6 +130,25 @@ object Titulos {
         return out
     }
 
+    /** Servidor (host sem "www.") de uma url de fonte, ou vazio. */
+    fun servidor(url: String): String =
+        runCatching { java.net.URI(url).host }.getOrNull()?.removePrefix("www.")?.lowercase().orEmpty()
+
+    /**
+     * Fonte do episódio novo que mais se parece com a que tocava: a primeira do
+     * mesmo servidor, senão a de mesma posição, senão 0 (a ordem de hoje).
+     * Só olha a versão (dublado/legendado) que o episódio vai tocar, que é a
+     * primeira de [opcoes]; o resultado é um índice de [opcoes].
+     */
+    fun preferida(opcoes: List<Opcao>, servidor: String, posicao: Int): Int {
+        val versao = opcoes.firstOrNull()?.versao ?: return 0
+        val doGrupo = opcoes.indices.filter { opcoes[it].versao == versao }
+        if (servidor.isNotEmpty()) {
+            doGrupo.firstOrNull { servidor(opcoes[it].url) == servidor }?.let { return it }
+        }
+        return doGrupo.getOrNull(posicao) ?: 0
+    }
+
     fun rotulo(versao: String) = if (versao == "leg") "Legendado" else "Dublado"
 
     /** Episódio por onde uma série deve começar ou continuar. */
