@@ -31,9 +31,11 @@ import kotlin.math.abs
 /**
  * Os jogos de hoje e dos próximos dias que passam em algum canal da lista.
  *
- * Duas fontes: a agenda da embedtv diz em que canal cada jogo passa; os
- * placares da ESPN dizem se já começou, o placar e o tempo de jogo, e trazem
- * escudos melhores. Só entra jogo que tem canal — sem canal não há o que
+ * Três fontes: a agenda da embedtv diz em que canal cada jogo passa; a do
+ * monitor traz os jogos dos canais de streaming (CazéTV, Disney+, Prime,
+ * Paramount+, GOAT, ge tv, N Sports, SportyNet) que a embedtv não tem, no
+ * mesmo formato e com placar; os placares da ESPN dizem se já começou, o
+ * placar e o tempo de jogo, e trazem escudos melhores. Só entra jogo que tem canal — sem canal não há o que
  * assistir —, e jogo encerrado sai.
  *
  * As fileiras são por quando: ao vivo agora, começa em breve, hoje mais tarde,
@@ -53,7 +55,7 @@ class EventosActivity : TelaComMenu() {
         val inicio: Long,
         val fim: Long,
         val canal: Channel,
-        /// "pre", "in" ou "post", quando a ESPN conhece o jogo.
+        /// "pre", "in" ou "post", quando a ESPN ou a agenda do monitor conhece o jogo.
         val estado: String = "",
         val placar: String = "",
         val tempo: String = "",
@@ -192,12 +194,23 @@ class EventosActivity : TelaComMenu() {
 
     private suspend fun buscar(): List<Jogo>? = kotlinx.coroutines.coroutineScope {
         val agenda = async { texto(EMBED) }
+        val streaming = async { texto(STREAMING) }
         val placares = ESPN.map { liga ->
             async { texto("https://site.api.espn.com/apis/site/v2/sports/$liga/scoreboard") }
         }
         val corpo = agenda.await() ?: return@coroutineScope null
         val espn = placares.awaitAll().filterNotNull().flatMap { lerEspn(it) }
-        lerAgenda(corpo).map { jogo ->
+        val daEmbed = lerAgenda(corpo)
+        // Jogo do monitor que a embedtv já tem (mesmos times, começo a menos de
+        // meia hora) não entra de novo.
+        val extras = streaming.await()?.let { lerAgenda(it) }.orEmpty().filter { s ->
+            daEmbed.none { e ->
+                abs(e.inicio - s.inicio) < 1_800_000L &&
+                    ((mesmoTime(e.casa, s.casa) && mesmoTime(e.fora, s.fora)) ||
+                        (mesmoTime(e.casa, s.fora) && mesmoTime(e.fora, s.casa)))
+            }
+        }
+        (daEmbed + extras).map { jogo ->
             // O mesmo jogo na ESPN: mesmos times (em qualquer ordem) e começo
             // a menos de quatro horas um do outro.
             val par = espn.firstOrNull { e ->
@@ -222,7 +235,7 @@ class EventosActivity : TelaComMenu() {
         }
     }
 
-    /** A agenda da embedtv: só jogos cujo canal existe na nossa lista. */
+    /** A agenda (da embedtv ou do monitor): só jogos cujo canal existe na nossa lista. */
     private fun lerAgenda(corpo: String): List<Jogo> {
         val iso = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", Locale.US)
         val arr = runCatching { JSONArray(corpo) }.getOrNull() ?: return emptyList()
@@ -241,7 +254,9 @@ class EventosActivity : TelaComMenu() {
                 Jogo(casa.getString("name"), fora.getString("name"),
                     emAltaResolucao(casa.optString("image")), emAltaResolucao(fora.optString("image")),
                     liga?.optString("name").orEmpty(), emAltaResolucao(liga?.optString("image").orEmpty()),
-                    inicio, fim, canal)
+                    inicio, fim, canal,
+                    // Só a agenda do monitor manda o placar; a ESPN, quando acha o jogo, vale mais.
+                    o.optString("estado"), o.optString("placar"), o.optString("tempo"))
             }.getOrNull()
         }.distinctBy { "${it.titulo}|${it.inicio}" }
     }
@@ -334,6 +349,7 @@ class EventosActivity : TelaComMenu() {
         val ACENTOS = Regex("\\p{M}+")
         val SEPARADOR = Regex("[^a-z0-9]+")
         const val EMBED = "https://embedtv.cc/api/events"
+        const val STREAMING = "https://saimo-monitor.gabrielsaimo68.workers.dev/v1/eventos"
         val SIGLAS = setOf("fc", "ec", "sc", "ac", "afc", "cf", "cd", "club", "clube", "esporte", "sport",
             "futebol", "de", "do", "da", "sp", "rj", "mg", "rs", "pr", "ba", "pe", "ce", "go", "sad")
         val ESPN = listOf(

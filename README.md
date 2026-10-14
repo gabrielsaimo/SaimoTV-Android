@@ -31,7 +31,10 @@ versão nova sozinho e oferece a atualização na tela.
 - On Demand como a tela inicial: destaque, cartões das quatro categorias com
   colagem de capas, fileiras e o A a Z no fim.
 - Eventos em fileiras por horário (ao vivo agora, em breve, hoje, amanhã), com
-  os escudos, o placar ao vivo da ESPN e o canal de cada jogo.
+  os escudos, o placar ao vivo da ESPN e o canal de cada jogo. Além da agenda
+  da embedtv, os jogos dos canais de streaming (CazéTV, Disney+, Prime,
+  Paramount+, GOAT, ge tv, N Sports, SportyNet) vêm do monitor (`/v1/eventos`),
+  sem repetir os que a embedtv já tem.
 - Páginas de Filmes/Séries/Animes/Doramas com fileiras e um "Explorar" de A a Z
   com filtro de gênero e ordenação.
 - Busca única (canais, filmes, séries, atores) com teclado na tela, voz,
