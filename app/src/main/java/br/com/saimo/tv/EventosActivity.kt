@@ -187,8 +187,13 @@ class EventosActivity : TelaComMenu() {
 
     // MARK: - Dados
 
+    /** Prazo de 8 s: a embedtv às vezes não responde, e a tela não espera por ela. */
+    private val clienteEventos by lazy {
+        Playback.client.newBuilder().callTimeout(8, java.util.concurrent.TimeUnit.SECONDS).build()
+    }
+
     private fun texto(url: String): String? = runCatching {
-        Playback.client.newCall(Request.Builder().url(url).header("User-Agent", Playback.DEFAULT_USER_AGENT).build())
+        clienteEventos.newCall(Request.Builder().url(url).header("User-Agent", Playback.DEFAULT_USER_AGENT).build())
             .execute().use { r -> if (r.isSuccessful) r.body.string() else null }
     }.getOrNull()
 
@@ -198,12 +203,15 @@ class EventosActivity : TelaComMenu() {
         val placares = ESPN.map { liga ->
             async { texto("https://site.api.espn.com/apis/site/v2/sports/$liga/scoreboard") }
         }
-        val corpo = agenda.await() ?: return@coroutineScope null
+        val corpo = agenda.await()
+        val doMonitor = streaming.await()
+        // Sem a embedtv a tela continua com os jogos do monitor; só some se as duas caírem.
+        if (corpo == null && doMonitor == null) return@coroutineScope null
         val espn = placares.awaitAll().filterNotNull().flatMap { lerEspn(it) }
-        val daEmbed = lerAgenda(corpo)
+        val daEmbed = corpo?.let { lerAgenda(it) }.orEmpty()
         // Jogo do monitor que a embedtv já tem (mesmos times, começo a menos de
         // meia hora) não entra de novo.
-        val extras = streaming.await()?.let { lerAgenda(it) }.orEmpty().filter { s ->
+        val extras = doMonitor?.let { lerAgenda(it) }.orEmpty().filter { s ->
             daEmbed.none { e ->
                 abs(e.inicio - s.inicio) < 1_800_000L &&
                     ((mesmoTime(e.casa, s.casa) && mesmoTime(e.fora, s.fora)) ||
