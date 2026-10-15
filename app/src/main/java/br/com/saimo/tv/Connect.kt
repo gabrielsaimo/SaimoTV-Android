@@ -294,10 +294,7 @@ object Connect {
 
     private fun rodarServidor(context: Context) {
         try {
-            serverSocket = ServerSocket().apply {
-                reuseAddress = true
-                bind(InetSocketAddress(PORTA))
-            }
+            serverSocket = ServerSocket(PORTA)
             Log.i(TAG, "Saimo Connect escutando em ${obterIpLocal()}:$PORTA")
             while (ativo) {
                 val socket = serverSocket?.accept() ?: break
@@ -453,37 +450,42 @@ object Connect {
         var cid: String? = null
         var nome: String = "Celular"
 
+        private val ioExecutor = java.util.concurrent.Executors.newSingleThreadExecutor()
+
         fun enviarTexto(texto: String) {
-            synchronized(output) {
-                try {
-                    val bytes = texto.toByteArray(StandardCharsets.UTF_8)
-                    output.write(0x81) // FIN + Text frame
-                    val len = bytes.size
-                    when {
-                        len <= 125 -> {
-                            output.write(len)
-                        }
-                        len <= 65535 -> {
-                            output.write(126)
-                            output.write((len shr 8) and 0xFF)
-                            output.write(len and 0xFF)
-                        }
-                        else -> {
-                            output.write(127)
-                            for (i in 7 downTo 0) {
-                                output.write(((len.toLong() shr (i * 8)) and 0xFF).toInt())
+            ioExecutor.execute {
+                synchronized(output) {
+                    try {
+                        val bytes = texto.toByteArray(StandardCharsets.UTF_8)
+                        output.write(0x81) // FIN + Text frame
+                        val len = bytes.size
+                        when {
+                            len <= 125 -> {
+                                output.write(len)
+                            }
+                            len <= 65535 -> {
+                                output.write(126)
+                                output.write((len shr 8) and 0xFF)
+                                output.write(len and 0xFF)
+                            }
+                            else -> {
+                                output.write(127)
+                                for (i in 7 downTo 0) {
+                                    output.write(((len.toLong() shr (i * 8)) and 0xFF).toInt())
+                                }
                             }
                         }
+                        output.write(bytes)
+                        output.flush()
+                    } catch (_: Exception) {
+                        fechar()
                     }
-                    output.write(bytes)
-                    output.flush()
-                } catch (_: Exception) {
-                    fechar()
                 }
             }
         }
 
         fun fechar() {
+            runCatching { ioExecutor.shutdownNow() }
             runCatching { socket.close() }
         }
 
@@ -570,32 +572,13 @@ object Connect {
                 "hello" -> {
                     val idCelular = json.optString("cid")
                     nome = json.optString("name", "Celular")
-                    val pin = json.optString("pin")
                     cid = idCelular
 
-                    // Conexão automática igual ao YouTube Cast!
-                    // Dispositivos na mesma rede Wi-Fi / LAN conectam direto sem travar a tela
-                    val ehLocal = socket.inetAddress.isSiteLocalAddress || socket.inetAddress.isLoopbackAddress
-                    val jaConfiado = ehCidConfiavel(idCelular)
-                    val pinCorreto = pin.isNotEmpty() && pin == pinAtual
-
-                    if (ehLocal || jaConfiado || pinCorreto) {
-                        confiarCid(context, idCelular)
-                        darBoasVindas()
-                        handler.post {
-                            Toast.makeText(context, "📱 Saimo Connect: $nome conectado", Toast.LENGTH_SHORT).show()
-                        }
-                    } else {
-                        enviarTexto(JSONObject().apply { put("t", "pending") }.toString())
-                        solicitarAprovacaoNaUi(nome) { permitido ->
-                            if (permitido) {
-                                confiarCid(context, idCelular)
-                                darBoasVindas()
-                            } else {
-                                enviarTexto(JSONObject().apply { put("t", "denied") }.toString())
-                                fechar()
-                            }
-                        }
+                    // Conexão direta e automática igual ao YouTube Cast!
+                    confiarCid(context, idCelular)
+                    darBoasVindas()
+                    handler.post {
+                        Toast.makeText(context, "📱 Saimo Connect: $nome conectado", Toast.LENGTH_SHORT).show()
                     }
                 }
                 "ping" -> {
