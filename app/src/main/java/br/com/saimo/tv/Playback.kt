@@ -63,6 +63,19 @@ object Playback {
             .sslSocketFactory(Confianca.fabrica, Confianca.gerente)
             .dns(NomeValido.dns(Resolvedor(doh)))
             .addInterceptor(NomeValido.interceptor)
+            .addInterceptor { chain ->
+                val pedido = chain.request()
+                val host = pedido.url.host
+                if (host.contains("tiktokcdn.live") || host.contains("tiktokcdn.com")) {
+                    val ajustado = pedido.newBuilder()
+                        .header("Referer", "https://dadinhodetapioca.fun/")
+                        .header("Origin", "https://dadinhodetapioca.fun")
+                        .build()
+                    chain.proceed(ajustado)
+                } else {
+                    chain.proceed(pedido)
+                }
+            }
             .followRedirects(true)
             .followSslRedirects(true)
             .connectTimeout(15, java.util.concurrent.TimeUnit.SECONDS)
@@ -186,6 +199,10 @@ object Playback {
             cabecalhos["Referer"] = "https://embedplayer2.xyz/"
             cabecalhos["Origin"] = "https://embedplayer2.xyz"
         }
+        if (source.url.contains("dadinhodetapioca.fun", ignoreCase = true)) {
+            cabecalhos["Referer"] = "https://dadinhodetapioca.fun/"
+            cabecalhos["Origin"] = "https://dadinhodetapioca.fun"
+        }
         val upstream: DataSource.Factory = OkHttpDataSource.Factory(client)
             .setUserAgent(source.userAgent ?: DEFAULT_USER_AGENT)
             .apply {
@@ -194,7 +211,8 @@ object Playback {
             }
         val http: DataSource.Factory = ResolvingDataSource.Factory(upstream) { dataSpec ->
             val original = dataSpec.uri.toString()
-            val resolved = corrigirCaminhoDaPlaylist(source.url, original)
+            val comDadinho = resolverDadinho(original)
+            val resolved = corrigirCaminhoDaPlaylist(source.url, comDadinho)
             if (resolved == original) dataSpec else dataSpec.withUri(Uri.parse(resolved))
         }
 
@@ -262,6 +280,35 @@ object Playback {
             append(correctedPath)
             request.rawQuery?.let { append('?').append(it) }
             request.rawFragment?.let { append('#').append(it) }
+        }
+    }
+
+    private val cacheDadinho = java.util.concurrent.ConcurrentHashMap<String, Pair<Long, String>>()
+    private const val DADINHO_CACHE_TTL_MS = 90 * 60 * 1000L
+
+    internal fun resolverDadinho(url: String): String {
+        if (!url.contains("dadinhodetapioca.fun/play/", ignoreCase = true)) return url
+        val agora = android.os.SystemClock.elapsedRealtime()
+        cacheDadinho[url]?.let { (quando, resolvido) ->
+            if (agora - quando < DADINHO_CACHE_TTL_MS) return resolvido
+        }
+        return try {
+            val pedido = okhttp3.Request.Builder()
+                .url(url)
+                .header("Referer", "https://rdcanais.org/")
+                .header("User-Agent", DEFAULT_USER_AGENT)
+                .build()
+            client.newCall(pedido).execute().use { resposta ->
+                if (!resposta.isSuccessful) return url
+                val html = resposta.body?.string() ?: return url
+                val regex = """STREAM_URLS\s*=\s*\[\s*"([^"]+)"""".toRegex()
+                val match = regex.find(html) ?: return url
+                val m3u8 = match.groupValues[1].replace("\\/", "/")
+                cacheDadinho[url] = agora to m3u8
+                m3u8
+            }
+        } catch (_: Exception) {
+            url
         }
     }
 

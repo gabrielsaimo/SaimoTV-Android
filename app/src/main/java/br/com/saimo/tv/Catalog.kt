@@ -17,7 +17,8 @@ data class Source(
     val isDash: Boolean get() = url.contains(".mpd", ignoreCase = true)
     val isHls: Boolean get() =
         url.contains(".m3u8", ignoreCase = true) ||
-            url.substringBefore('?').endsWith(".txt", ignoreCase = true)
+            url.substringBefore('?').endsWith(".txt", ignoreCase = true) ||
+            url.contains("dadinhodetapioca.fun", ignoreCase = true)
 }
 
 data class Channel(
