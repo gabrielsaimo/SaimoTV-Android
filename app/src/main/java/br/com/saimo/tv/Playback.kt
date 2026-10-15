@@ -286,6 +286,12 @@ object Playback {
     private val cacheDadinho = java.util.concurrent.ConcurrentHashMap<String, Pair<Long, String>>()
     private const val DADINHO_CACHE_TTL_MS = 90 * 60 * 1000L
 
+    internal fun obterUrlResolvida(url: String): String? {
+        val agora = android.os.SystemClock.elapsedRealtime()
+        val entry = cacheDadinho[url] ?: return null
+        return if (agora - entry.first < DADINHO_CACHE_TTL_MS) entry.second else null
+    }
+
     internal fun resolverDadinho(url: String): String {
         if (!url.contains("dadinhodetapioca.fun/play/", ignoreCase = true)) return url
         val agora = android.os.SystemClock.elapsedRealtime()

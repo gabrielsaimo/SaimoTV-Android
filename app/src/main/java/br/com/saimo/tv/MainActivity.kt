@@ -1974,9 +1974,12 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
             s0Obj.put("sourceIndex", sourceIndex)
             val src0 = c0.sources.getOrNull(sourceIndex) ?: c0.sources.firstOrNull()
             if (src0 != null) {
+                val isDadinho0 = src0.url.contains("dadinhodetapioca.fun", ignoreCase = true)
+                val url0 = if (isDadinho0) (Playback.obterUrlResolvida(src0.url) ?: src0.url) else src0.url
+                val ref0 = if (isDadinho0) "https://dadinhodetapioca.fun/" else src0.referer
                 s0Obj.put("source", JSONObject().apply {
-                    put("url", src0.url)
-                    put("referer", src0.referer ?: JSONObject.NULL)
+                    put("url", url0)
+                    put("referer", ref0 ?: JSONObject.NULL)
                     put("userAgent", src0.userAgent ?: JSONObject.NULL)
                     put("keyId", src0.keyId ?: JSONObject.NULL)
                     put("key", src0.key ?: JSONObject.NULL)
@@ -1998,9 +2001,12 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
             s1Obj.put("sourceIndex", f1)
             val src1 = c1.sources.getOrNull(f1) ?: c1.sources.firstOrNull()
             if (src1 != null) {
+                val isDadinho1 = src1.url.contains("dadinhodetapioca.fun", ignoreCase = true)
+                val url1 = if (isDadinho1) (Playback.obterUrlResolvida(src1.url) ?: src1.url) else src1.url
+                val ref1 = if (isDadinho1) "https://dadinhodetapioca.fun/" else src1.referer
                 s1Obj.put("source", JSONObject().apply {
-                    put("url", src1.url)
-                    put("referer", src1.referer ?: JSONObject.NULL)
+                    put("url", url1)
+                    put("referer", ref1 ?: JSONObject.NULL)
                     put("userAgent", src1.userAgent ?: JSONObject.NULL)
                     put("keyId", src1.keyId ?: JSONObject.NULL)
                     put("key", src1.key ?: JSONObject.NULL)
