@@ -1414,22 +1414,34 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
     private fun ativarTela(qual: Int) {
         if (!multiTela) return
         telaAtiva = if (qual == 1 && segunda != null) 1 else 0
-        when (Connect.tvAudio) {
-            "0" -> {
-                player.volume = 1f
-                segunda?.comSom = false
-            }
-            "1" -> {
-                player.volume = 0f
-                segunda?.comSom = true
-            }
-            "mute" -> {
+        val celularOuvindo = Connect.temAudioNoCelular()
+        if (!celularOuvindo) {
+            if (Connect.tvAudio == "mute") {
                 player.volume = 0f
                 segunda?.comSom = false
-            }
-            else -> {
+            } else {
                 player.volume = if (telaAtiva == 0) 1f else 0f
-                segunda?.comSom = telaAtiva == 1
+                segunda?.comSom = (telaAtiva == 1)
+                Connect.tvAudio = if (telaAtiva == 0) "0" else "1"
+            }
+        } else {
+            when (Connect.tvAudio) {
+                "0" -> {
+                    player.volume = 1f
+                    segunda?.comSom = false
+                }
+                "1" -> {
+                    player.volume = 0f
+                    segunda?.comSom = true
+                }
+                "mute" -> {
+                    player.volume = 0f
+                    segunda?.comSom = false
+                }
+                else -> {
+                    player.volume = if (telaAtiva == 0) 1f else 0f
+                    segunda?.comSom = (telaAtiva == 1)
+                }
             }
         }
         findViewById<View>(R.id.multiTela1).setBackgroundResource(
@@ -2114,10 +2126,21 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
     override fun definirTvAudio(som: String) {
         Connect.tvAudio = som
         if (multiTela) {
-            when (som) {
-                "0" -> { player.volume = 1f; segunda?.comSom = false }
-                "1" -> { player.volume = 0f; segunda?.comSom = true }
-                "mute" -> { player.volume = 0f; segunda?.comSom = false }
+            if (!Connect.temAudioNoCelular()) {
+                when (som) {
+                    "0" -> ativarTela(0)
+                    "1" -> ativarTela(1)
+                    "mute" -> {
+                        player.volume = 0f
+                        segunda?.comSom = false
+                    }
+                }
+            } else {
+                when (som) {
+                    "0" -> { player.volume = 1f; segunda?.comSom = false }
+                    "1" -> { player.volume = 0f; segunda?.comSom = true }
+                    "mute" -> { player.volume = 0f; segunda?.comSom = false }
+                }
             }
         } else {
             when (som) {
@@ -2298,6 +2321,12 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
             showStatus("🎧 $nomes")
             handler.removeCallbacks(esconderStatus)
             handler.postDelayed(esconderStatus, 4000)
+        } else {
+            runOnUiThread {
+                if (multiTela) {
+                    ativarTela(telaAtiva)
+                }
+            }
         }
     }
 

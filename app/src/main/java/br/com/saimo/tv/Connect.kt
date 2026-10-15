@@ -196,8 +196,16 @@ object Connect {
             c.fechar()
         }
         clientes.clear()
+        phoneAudioMap.clear()
         desregistrarNsd()
     }
+
+    /** Retorna true se houver pelo menos um celular com áudio ativo ("0", "1" ou "both") */
+    fun temAudioNoCelular(): Boolean =
+        phoneAudioMap.values.any { it.src == "0" || it.src == "1" || it.src == "both" }
+
+    /** Retorna true se houver clientes conectados via WebSocket */
+    fun temClienteConectado(): Boolean = clientes.isNotEmpty()
 
     fun gerarNovoPin(): String {
         pinAtual = String.format("%06d", Random.nextInt(100000, 999999))
@@ -450,7 +458,14 @@ object Connect {
                     clientes.add(cliente)
                     cliente.rodarLoop()
                     clientes.remove(cliente)
-                    cliente.cid?.let { phoneAudioMap.remove(it) }
+                    cliente.cid?.let { cidRemovido ->
+                        phoneAudioMap.remove(cidRemovido)
+                        handler.post {
+                            val act = SaimoApp.atividadeAtual
+                            val lis = (act as? Listener) ?: listener
+                            lis?.onPhoneAudioChanged(phoneAudioMap.values.toList())
+                        }
+                    }
                     notificarMudancaDeEstado()
                     return
                 }
@@ -545,6 +560,17 @@ object Connect {
         }
 
         fun fechar() {
+            clientes.remove(this)
+            val id = cid
+            if (id != null) {
+                phoneAudioMap.remove(id)
+                handler.post {
+                    val act = SaimoApp.atividadeAtual
+                    val lis = (act as? Listener) ?: listener
+                    lis?.onPhoneAudioChanged(phoneAudioMap.values.toList())
+                }
+                notificarMudancaDeEstado()
+            }
             runCatching { ioExecutor.shutdownNow() }
             runCatching { socket.close() }
         }
