@@ -46,9 +46,13 @@ class BuscaActivity : TelaComMenu(), Connect.Listener {
     private var trabalho: Job? = null
     private val adaptador by lazy { Inicio.Adapter(escopo = lifecycleScope, capaDe = { t, s -> Generos.capa(t, s) }) }
 
+    private var tecladoMinimizado = false
+    private var ultimoFocoTeclado: View? = null
+
     private val voz = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { r ->
         val dito = r.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.firstOrNull() ?: return@registerForActivityResult
         digitado.clear(); digitado.append(dito)
+        if (tecladoMinimizado) expandirTeclado()
         atualizar(imediato = true)
     }
 
@@ -62,6 +66,27 @@ class BuscaActivity : TelaComMenu(), Connect.Listener {
         resultados.adapter = adaptador
         montarTeclado()
         intent.getStringExtra(TERMO)?.let { digitado.append(it) }
+
+        findViewById<View>(R.id.buscaVoltarTecladoDica)?.setOnClickListener {
+            expandirTeclado()
+            focarTeclado()
+        }
+
+        window.decorView.viewTreeObserver.addOnGlobalFocusChangeListener { oldFocus, newFocus ->
+            if (isFinishing || isDestroyed) return@addOnGlobalFocusChangeListener
+            val painelTeclado = findViewById<View>(R.id.buscaPainelTeclado) ?: return@addOnGlobalFocusChangeListener
+            if (newFocus != null) {
+                if (estaDentroDe(newFocus, resultados)) {
+                    if (oldFocus != null && estaDentroDe(oldFocus, painelTeclado)) {
+                        ultimoFocoTeclado = oldFocus
+                    }
+                    minimizarTeclado()
+                } else if (estaDentroDe(newFocus, painelTeclado)) {
+                    expandirTeclado()
+                }
+            }
+        }
+
         // Prepara o índice enquanto a pessoa ainda procura a primeira letra.
         lifecycleScope.launch(semDerrubar) { Generos.carregar(this@BuscaActivity); Vod.entradas(this@BuscaActivity) }
         atualizar(imediato = true)
@@ -171,14 +196,123 @@ class BuscaActivity : TelaComMenu(), Connect.Listener {
         }
     }
 
+    private fun minimizarTeclado() {
+        if (tecladoMinimizado) return
+        tecladoMinimizado = true
+        val raiz = findViewById<android.view.ViewGroup>(R.id.buscaRaiz)
+        if (raiz != null) {
+            android.transition.TransitionManager.beginDelayedTransition(
+                raiz,
+                android.transition.ChangeBounds().apply {
+                    duration = 200
+                    interpolator = android.view.animation.DecelerateInterpolator()
+                }
+            )
+        }
+        findViewById<View>(R.id.buscaPainelTeclado)?.visibility = View.GONE
+        findViewById<View>(R.id.buscaMiniHeader)?.visibility = View.VISIBLE
+        atualizarMiniHeader()
+    }
+
+    private fun expandirTeclado() {
+        if (!tecladoMinimizado) return
+        tecladoMinimizado = false
+        val raiz = findViewById<android.view.ViewGroup>(R.id.buscaRaiz)
+        if (raiz != null) {
+            android.transition.TransitionManager.beginDelayedTransition(
+                raiz,
+                android.transition.ChangeBounds().apply {
+                    duration = 200
+                    interpolator = android.view.animation.DecelerateInterpolator()
+                }
+            )
+        }
+        findViewById<View>(R.id.buscaPainelTeclado)?.visibility = View.VISIBLE
+        findViewById<View>(R.id.buscaMiniHeader)?.visibility = View.GONE
+    }
+
+    private fun focarTeclado() {
+        val grade = findViewById<GridLayout>(R.id.buscaTeclas)
+        val alvo = ultimoFocoTeclado?.takeIf { it.isAttachedToWindow && it.visibility == View.VISIBLE }
+            ?: grade?.getChildAt(0)
+        alvo?.post {
+            alvo.requestFocus()
+        }
+    }
+
+    private fun focarResultados(): Boolean {
+        val holder = resultados.findViewHolderForAdapterPosition(0) as? Inicio.Adapter.Holder
+        val primeiraCapa = holder?.capas?.layoutManager?.findViewByPosition(0)
+        if (primeiraCapa != null && primeiraCapa.requestFocus()) {
+            return true
+        }
+        val foco = resultados.focusSearch(View.FOCUS_DOWN) ?: resultados.focusSearch(View.FOCUS_RIGHT)
+        if (foco != null && foco !== resultados && estaDentroDe(foco, resultados)) {
+            return foco.requestFocus()
+        }
+        return false
+    }
+
+    private fun estaDentroDe(vista: View, container: View): Boolean {
+        var atual: View? = vista
+        while (atual != null) {
+            if (atual === container) return true
+            atual = atual.parent as? View
+        }
+        return false
+    }
+
+    private fun atualizarMiniHeader() {
+        val termo = digitado.toString().trim()
+        val campoMini = findViewById<TextView>(R.id.buscaTermoMini)
+        campoMini?.text = if (termo.isNotEmpty()) "Resultados para: \"$termo\"" else getString(R.string.busca_recentes)
+    }
+
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        if (event.action == KeyEvent.ACTION_DOWN) {
+            val painelTeclado = findViewById<View>(R.id.buscaPainelTeclado)
+            if (event.keyCode == KeyEvent.KEYCODE_DPAD_LEFT && tecladoMinimizado) {
+                val cur = currentFocus
+                if (cur != null && estaDentroDe(cur, resultados)) {
+                    val proximo = cur.focusSearch(View.FOCUS_LEFT)
+                    if (proximo == null || !estaDentroDe(proximo, resultados)) {
+                        expandirTeclado()
+                        focarTeclado()
+                        return true
+                    }
+                }
+            } else if (event.keyCode == KeyEvent.KEYCODE_BACK && tecladoMinimizado) {
+                val cur = currentFocus
+                if (cur != null && estaDentroDe(cur, resultados)) {
+                    expandirTeclado()
+                    focarTeclado()
+                    return true
+                }
+            } else if (event.keyCode == KeyEvent.KEYCODE_DPAD_RIGHT && !tecladoMinimizado && painelTeclado != null) {
+                val cur = currentFocus
+                if (cur != null && estaDentroDe(cur, painelTeclado)) {
+                    val proximo = cur.focusSearch(View.FOCUS_RIGHT)
+                    if (proximo == null || !estaDentroDe(proximo, painelTeclado)) {
+                        if (focarResultados()) {
+                            return true
+                        }
+                    }
+                }
+            }
+        }
+        return super.dispatchKeyEvent(event)
+    }
+
     private fun digitar(t: String) {
         if (digitado.length >= 40) return
         digitado.append(t)
+        if (tecladoMinimizado) expandirTeclado()
         atualizar()
     }
 
     private fun apagar() {
         if (digitado.isNotEmpty()) digitado.deleteCharAt(digitado.length - 1)
+        if (tecladoMinimizado) expandirTeclado()
         atualizar()
     }
 
@@ -203,6 +337,7 @@ class BuscaActivity : TelaComMenu(), Connect.Listener {
      */
     private fun atualizar(imediato: Boolean = false) {
         campo.text = digitado
+        atualizarMiniHeader()
         trabalho?.cancel()
         val termo = digitado.toString().trim()
         trabalho = lifecycleScope.launch(semDerrubar) {

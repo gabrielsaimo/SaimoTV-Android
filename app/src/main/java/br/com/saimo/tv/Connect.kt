@@ -764,6 +764,8 @@ object Connect {
                             "RIGHT" -> KeyEvent.KEYCODE_DPAD_RIGHT
                             "OK" -> KeyEvent.KEYCODE_DPAD_CENTER
                             "BACK" -> KeyEvent.KEYCODE_BACK
+                            "DEL" -> KeyEvent.KEYCODE_DEL
+                            "CLEAR" -> KeyEvent.KEYCODE_CLEAR
                             "HOME" -> KeyEvent.KEYCODE_HOME
                             "MENU" -> KeyEvent.KEYCODE_MENU
                             "CH_UP" -> KeyEvent.KEYCODE_CHANNEL_UP

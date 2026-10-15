@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Busca: teclado à esquerda, resultados em fileiras à direita, mudando a
-     cada letra. -->
+     cada letra. Teclado minimiza ao navegar para os catálogos. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/buscaRaiz"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/transparent"
     android:orientation="horizontal">
 
     <LinearLayout
+        android:id="@+id/buscaPainelTeclado"
         android:layout_width="400dp"
         android:layout_height="match_parent"
         android:background="#0FFFFFFF"
@@ -46,26 +48,74 @@
             android:textSize="14sp" />
     </LinearLayout>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1">
-        <br.com.saimo.tv.ListaSemFuga
-            android:id="@+id/buscaResultados"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <!-- Mini header exibido quando o teclado está minimizado -->
+        <LinearLayout
+            android:id="@+id/buscaMiniHeader"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipChildren="true"
-            android:clipToPadding="false"
-            android:paddingStart="16dp"
-            android:paddingTop="24dp"
-            android:paddingBottom="80dp" />
-        <TextView
-            android:id="@+id/buscaEstado"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:textColor="@color/text_secondary"
-            android:textSize="22sp" />
-    </FrameLayout>
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="24dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="24dp"
+            android:paddingBottom="4dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/buscaVoltarTecladoDica"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="◀ Teclado"
+                android:textColor="@color/accent"
+                android:textSize="15sp"
+                android:fontFamily="sans-serif-medium"
+                android:background="@drawable/item_painel"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp" />
+
+            <TextView
+                android:id="@+id/buscaTermoMini"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="16dp"
+                android:textColor="@color/text_secondary"
+                android:textSize="15sp"
+                android:ellipsize="end"
+                android:maxLines="1" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <br.com.saimo.tv.ListaSemFuga
+                android:id="@+id/buscaResultados"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipChildren="true"
+                android:clipToPadding="false"
+                android:paddingStart="16dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="80dp" />
+
+            <TextView
+                android:id="@+id/buscaEstado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="@color/text_secondary"
+                android:textSize="22sp" />
+        </FrameLayout>
+    </LinearLayout>
 </LinearLayout>

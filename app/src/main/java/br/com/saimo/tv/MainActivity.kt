@@ -683,6 +683,15 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
             // quem não tem MENU no controle (o da Xiaomi, por exemplo). A
             // decisão fica para quando o botão é solto (ver onKeyUp).
             KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER -> {
+                if (numpad.visibility == View.VISIBLE) {
+                    padCommit()
+                    return true
+                }
+                if (typed.isNotEmpty()) {
+                    handler.removeCallbacks(commitTyped)
+                    commitTyped.run()
+                    return true
+                }
                 if (listOpen) return super.onKeyDown(keyCode, event)
                 if (event != null && event.repeatCount == 0) {
                     event.startTracking()
@@ -756,6 +765,35 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
                 // Digitar o número é a busca que existe num controle remoto:
                 // teclado virtual para texto livre seria pior de usar.
                 typeDigit(keyCode - KeyEvent.KEYCODE_0); true
+            }
+            KeyEvent.KEYCODE_DEL -> {
+                if (numpad.visibility == View.VISIBLE) {
+                    if (typed.isNotEmpty()) typed.deleteCharAt(typed.length - 1)
+                    numpadValue.text = typed
+                    true
+                } else if (typed.isNotEmpty()) {
+                    typed.deleteCharAt(typed.length - 1)
+                    if (typed.isNotEmpty()) {
+                        showStatus(getString(R.string.channel_number, typed.toString()))
+                        handler.removeCallbacks(commitTyped)
+                        handler.postDelayed(commitTyped, 1_200)
+                    } else {
+                        status.visibility = View.GONE
+                        handler.removeCallbacks(commitTyped)
+                    }
+                    true
+                } else {
+                    super.onKeyDown(keyCode, event)
+                }
+            }
+            KeyEvent.KEYCODE_CLEAR -> {
+                typed = StringBuilder()
+                status.visibility = View.GONE
+                handler.removeCallbacks(commitTyped)
+                if (numpad.visibility == View.VISIBLE) {
+                    numpadValue.text = ""
+                }
+                true
             }
             KeyEvent.KEYCODE_MENU, KeyEvent.KEYCODE_SETTINGS -> {
                 if (listOpen && keyCode == KeyEvent.KEYCODE_MENU) {
@@ -1985,10 +2023,22 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
                     put("key", src0.key ?: JSONObject.NULL)
                 })
             }
-            val liveOffset0 = if (::player.isInitialized && player.currentLiveOffset != androidx.media3.common.C.TIME_UNSET) {
-                player.currentLiveOffset
+            val liveOffset0 = if (::player.isInitialized) {
+                if (player.currentLiveOffset != androidx.media3.common.C.TIME_UNSET && player.currentLiveOffset > 0) {
+                    player.currentLiveOffset
+                } else if (!player.currentTimeline.isEmpty) {
+                    val w = androidx.media3.common.Timeline.Window()
+                    player.currentTimeline.getWindow(player.currentMediaItemIndex, w)
+                    if (w.durationMs != androidx.media3.common.C.TIME_UNSET && w.durationMs > 0) {
+                        (w.durationMs - player.currentPosition).coerceAtLeast(0L)
+                    } else {
+                        12_000L
+                    }
+                } else {
+                    12_000L
+                }
             } else {
-                -1L
+                12_000L
             }
             s0Obj.put("liveOffset", liveOffset0)
             screens.put(s0Obj)
@@ -2123,6 +2173,32 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
             }
             return true
         }
+        if (keyCode == KeyEvent.KEYCODE_DEL) {
+            if (numpad.visibility == View.VISIBLE) {
+                if (typed.isNotEmpty()) typed.deleteCharAt(typed.length - 1)
+                numpadValue.text = typed
+            } else if (typed.isNotEmpty()) {
+                typed.deleteCharAt(typed.length - 1)
+                if (typed.isNotEmpty()) {
+                    showStatus(getString(R.string.channel_number, typed.toString()))
+                    handler.removeCallbacks(commitTyped)
+                    handler.postDelayed(commitTyped, 1_200)
+                } else {
+                    status.visibility = View.GONE
+                    handler.removeCallbacks(commitTyped)
+                }
+            }
+            return true
+        }
+        if (keyCode == KeyEvent.KEYCODE_CLEAR) {
+            typed = StringBuilder()
+            status.visibility = View.GONE
+            handler.removeCallbacks(commitTyped)
+            if (numpad.visibility == View.VISIBLE) {
+                numpadValue.text = ""
+            }
+            return true
+        }
         if (keyCode in KeyEvent.KEYCODE_0..KeyEvent.KEYCODE_9) {
             val digit = keyCode - KeyEvent.KEYCODE_0
             if (listPanel.visibility == View.VISIBLE) {
@@ -2140,6 +2216,15 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
                 KeyEvent.KEYCODE_DPAD_LEFT -> { openList(); return true }
                 KeyEvent.KEYCODE_DPAD_RIGHT -> { openGuide(); return true }
                 KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER -> {
+                    if (numpad.visibility == View.VISIBLE) {
+                        padCommit()
+                        return true
+                    }
+                    if (typed.isNotEmpty()) {
+                        handler.removeCallbacks(commitTyped)
+                        commitTyped.run()
+                        return true
+                    }
                     val faixaNaTela = banner.visibility == View.VISIBLE && banner.alpha > 0.5f
                     if (multiTela) {
                         if (faixaNaTela) openList() else revealBanner()

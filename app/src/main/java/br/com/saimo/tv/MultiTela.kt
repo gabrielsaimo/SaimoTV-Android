@@ -97,8 +97,20 @@ class SegundaTela(
     /** Se esta metade está mostrando imagem agora. */
     val tocando: Boolean get() = player?.isPlaying == true
 
-    /** O atraso em relação à borda do ao vivo em ms, ou -1 se não for ao vivo. */
-    val liveOffset: Long get() = player?.currentLiveOffset?.takeIf { it != androidx.media3.common.C.TIME_UNSET } ?: -1L
+    /** O atraso em relação à borda do ao vivo em ms, ou valor padrão de buffer da TV Box. */
+    val liveOffset: Long
+        get() {
+            val p = player ?: return 12_000L
+            if (p.currentLiveOffset != androidx.media3.common.C.TIME_UNSET && p.currentLiveOffset > 0) return p.currentLiveOffset
+            if (!p.currentTimeline.isEmpty) {
+                val w = androidx.media3.common.Timeline.Window()
+                p.currentTimeline.getWindow(p.currentMediaItemIndex, w)
+                if (w.durationMs != androidx.media3.common.C.TIME_UNSET && w.durationMs > 0) {
+                    return (w.durationMs - p.currentPosition).coerceAtLeast(0L)
+                }
+            }
+            return 12_000L
+        }
 
     /** Só a metade ativa tem som; a outra fica muda, mas continua tocando. */
     var comSom: Boolean = false

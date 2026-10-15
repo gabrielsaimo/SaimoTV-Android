@@ -1399,7 +1399,7 @@ class PlayerActivity : AppCompatActivity(), Connect.Listener {
                 put("keyId", JSONObject.NULL)
                 put("key", JSONObject.NULL)
             })
-            s0Obj.put("liveOffset", -1L)
+            s0Obj.put("liveOffset", 0L)
             screens.put(s0Obj)
         }
         root.put("screens", screens)
