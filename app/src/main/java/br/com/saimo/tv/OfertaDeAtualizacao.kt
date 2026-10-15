@@ -42,11 +42,12 @@ class OfertaDeAtualizacao(
             // fechou é BadTokenException.
             if (tela.isFinishing || tela.isDestroyed) return@launch
             ofertando = true
+            val notasLimpa = versao.notas.replace(Regex("^#+\\s*", RegexOption.MULTILINE), "").trim()
             android.app.AlertDialog.Builder(tela)
                 .setTitle(tela.getString(R.string.update_titulo, versao.numero))
                 .setMessage(
                     listOf(tela.getString(R.string.update_atual, BuildConfig.VERSION_NAME),
-                           versao.notas.take(400))
+                           notasLimpa.take(1500))
                         .filter { it.isNotBlank() }.joinToString("\n\n"))
                 .setPositiveButton(R.string.update_agora) { _, _ -> baixar(versao) }
                 .setNegativeButton(R.string.update_depois) { _, _ ->
