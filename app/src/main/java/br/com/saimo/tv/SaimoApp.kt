@@ -40,8 +40,33 @@ val semDerrubar = CoroutineExceptionHandler { _, erro ->
 @UnstableApi
 class SaimoApp : Application(), SingletonImageLoader.Factory {
 
+    companion object {
+        var atividadeAtual: android.app.Activity? = null
+            private set
+    }
+
     override fun onCreate() {
         super.onCreate()
+        registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
+            override fun onActivityCreated(activity: android.app.Activity, savedInstanceState: android.os.Bundle?) {}
+            override fun onActivityStarted(activity: android.app.Activity) {}
+            override fun onActivityResumed(activity: android.app.Activity) {
+                atividadeAtual = activity
+                Connect.notificarMudancaDeEstado()
+            }
+            override fun onActivityPaused(activity: android.app.Activity) {
+                if (atividadeAtual === activity) {
+                    atividadeAtual = null
+                }
+            }
+            override fun onActivityStopped(activity: android.app.Activity) {}
+            override fun onActivitySaveInstanceState(activity: android.app.Activity, outState: android.os.Bundle) {}
+            override fun onActivityDestroyed(activity: android.app.Activity) {
+                if (atividadeAtual === activity) {
+                    atividadeAtual = null
+                }
+            }
+        })
         Preferencias.iniciar(this)
         Vr.iniciar(this)
         Aparelho.conhecer(this)

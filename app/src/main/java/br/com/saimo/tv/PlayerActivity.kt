@@ -1356,8 +1356,32 @@ class PlayerActivity : AppCompatActivity(), Connect.Listener {
     }
 
     override fun simularTecla(keyCode: Int): Boolean {
-        val down = KeyEvent(KeyEvent.ACTION_DOWN, keyCode)
-        val up = KeyEvent(KeyEvent.ACTION_UP, keyCode)
+        when (keyCode) {
+            KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER,
+            KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> {
+                runOnUiThread { alternarPausa() }
+                return true
+            }
+            KeyEvent.KEYCODE_DPAD_LEFT -> {
+                avancarOuVoltarVod(0L, -10000L)
+                return true
+            }
+            KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                avancarOuVoltarVod(0L, 10000L)
+                return true
+            }
+            KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_DOWN -> {
+                runOnUiThread { mostrarControles(focarLinha = false) }
+                return true
+            }
+            KeyEvent.KEYCODE_BACK, KeyEvent.KEYCODE_ESCAPE -> {
+                finish()
+                return true
+            }
+        }
+        val now = SystemClock.uptimeMillis()
+        val down = KeyEvent(now, now, KeyEvent.ACTION_DOWN, keyCode, 0)
+        val up = KeyEvent(now, now + 10, KeyEvent.ACTION_UP, keyCode, 0)
         dispatchKeyEvent(down)
         dispatchKeyEvent(up)
         return true
@@ -1420,13 +1444,21 @@ class PlayerActivity : AppCompatActivity(), Connect.Listener {
     override fun onPhoneAudioChanged(phoneAudioList: List<Connect.PhoneAudioStatus>) {}
 
     override fun solicitarAprovacao(nomeDispositivo: String, aoResponder: (permitido: Boolean) -> Unit) {
-        android.app.AlertDialog.Builder(this)
-            .setTitle(R.string.connect_aprovar_titulo)
-            .setMessage(getString(R.string.connect_aprovar_msg, nomeDispositivo))
-            .setPositiveButton(R.string.connect_permitir) { _, _ -> aoResponder(true) }
-            .setNegativeButton(R.string.connect_recusar) { _, _ -> aoResponder(false) }
-            .setOnCancelListener { aoResponder(false) }
-            .show()
+        runOnUiThread {
+            try {
+                val dialog = android.app.AlertDialog.Builder(this)
+                    .setTitle(R.string.connect_aprovar_titulo)
+                    .setMessage(getString(R.string.connect_aprovar_msg, nomeDispositivo))
+                    .setPositiveButton(R.string.connect_permitir) { _, _ -> aoResponder(true) }
+                    .setNegativeButton(R.string.connect_recusar) { _, _ -> aoResponder(false) }
+                    .setOnCancelListener { aoResponder(false) }
+                    .create()
+                dialog.show()
+                dialog.getButton(android.app.AlertDialog.BUTTON_POSITIVE)?.requestFocus()
+            } catch (e: Exception) {
+                aoResponder(true)
+            }
+        }
     }
 
     private fun tempo(ms: Long): String {

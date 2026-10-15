@@ -2054,8 +2054,35 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
     }
 
     override fun simularTecla(keyCode: Int): Boolean {
-        val down = KeyEvent(KeyEvent.ACTION_DOWN, keyCode)
-        val up = KeyEvent(KeyEvent.ACTION_UP, keyCode)
+        val listOpen = listPanel.visibility == View.VISIBLE
+        if (!listOpen) {
+            when (keyCode) {
+                KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_CHANNEL_UP -> { zapear(-1); return true }
+                KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_CHANNEL_DOWN -> { zapear(1); return true }
+                KeyEvent.KEYCODE_DPAD_LEFT -> { openList(); return true }
+                KeyEvent.KEYCODE_DPAD_RIGHT -> { openGuide(); return true }
+                KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER -> {
+                    val faixaNaTela = banner.visibility == View.VISIBLE && banner.alpha > 0.5f
+                    if (multiTela) {
+                        if (faixaNaTela) openList() else revealBanner()
+                    } else if (faixaNaTela) {
+                        escolherFonte(current)
+                    } else {
+                        revealBanner()
+                    }
+                    return true
+                }
+                KeyEvent.KEYCODE_BACK, KeyEvent.KEYCODE_ESCAPE -> {
+                    if (multiTela) { sairDaMultiTela(); return true }
+                }
+                KeyEvent.KEYCODE_MENU, KeyEvent.KEYCODE_SETTINGS -> {
+                    opcoes(); return true
+                }
+            }
+        }
+        val now = SystemClock.uptimeMillis()
+        val down = KeyEvent(now, now, KeyEvent.ACTION_DOWN, keyCode, 0)
+        val up = KeyEvent(now, now + 10, KeyEvent.ACTION_UP, keyCode, 0)
         dispatchKeyEvent(down)
         dispatchKeyEvent(up)
         return true
@@ -2121,13 +2148,21 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
     }
 
     override fun solicitarAprovacao(nomeDispositivo: String, aoResponder: (permitido: Boolean) -> Unit) {
-        android.app.AlertDialog.Builder(this)
-            .setTitle(R.string.connect_aprovar_titulo)
-            .setMessage(getString(R.string.connect_aprovar_msg, nomeDispositivo))
-            .setPositiveButton(R.string.connect_permitir) { _, _ -> aoResponder(true) }
-            .setNegativeButton(R.string.connect_recusar) { _, _ -> aoResponder(false) }
-            .setOnCancelListener { aoResponder(false) }
-            .show()
+        runOnUiThread {
+            try {
+                val dialog = android.app.AlertDialog.Builder(this)
+                    .setTitle(R.string.connect_aprovar_titulo)
+                    .setMessage(getString(R.string.connect_aprovar_msg, nomeDispositivo))
+                    .setPositiveButton(R.string.connect_permitir) { _, _ -> aoResponder(true) }
+                    .setNegativeButton(R.string.connect_recusar) { _, _ -> aoResponder(false) }
+                    .setOnCancelListener { aoResponder(false) }
+                    .create()
+                dialog.show()
+                dialog.getButton(android.app.AlertDialog.BUTTON_POSITIVE)?.requestFocus()
+            } catch (e: Exception) {
+                aoResponder(true)
+            }
+        }
     }
 }
 

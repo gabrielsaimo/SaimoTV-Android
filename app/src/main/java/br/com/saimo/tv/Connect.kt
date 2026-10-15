@@ -1,21 +1,30 @@
 package br.com.saimo.tv
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
+import android.media.AudioManager
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import android.util.Base64
 import android.util.Log
 import android.view.KeyEvent
+import android.widget.Toast
 import androidx.media3.common.util.UnstableApi
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.InputStream
 import java.io.OutputStream
 import java.net.Inet4Address
+import java.net.InetSocketAddress
 import java.net.NetworkInterface
 import java.net.ServerSocket
 import java.net.Socket
@@ -181,21 +190,9 @@ object Connect {
     /** Dispara o estado atual da TV para todos os celulares conectados */
     fun notificarMudancaDeEstado() {
         if (clientes.isEmpty()) return
-        val lis = listener ?: return
         handler.post {
             try {
-                val estado = lis.obterEstado()
-                // Injeta tvAudio e phoneAudio consolidados
-                estado.put("tvAudio", tvAudio)
-                val audioArr = JSONArray()
-                for (status in phoneAudioMap.values) {
-                    audioArr.put(JSONObject().apply {
-                        put("cid", status.cid)
-                        put("name", status.name)
-                        put("src", status.src)
-                    })
-                }
-                estado.put("phoneAudio", audioArr)
+                val estado = obterEstadoAtual()
                 val payload = estado.toString()
                 for (c in clientes) {
                     if (c.autenticado) {
@@ -204,6 +201,78 @@ object Connect {
                 }
             } catch (e: Exception) {
                 Log.w(TAG, "erro ao enviar estado", e)
+            }
+        }
+    }
+
+    fun obterEstadoAtual(): JSONObject {
+        val lis = listener
+        val estado = if (lis != null) {
+            try {
+                lis.obterEstado()
+            } catch (e: Exception) {
+                JSONObject().apply {
+                    put("t", "state")
+                    put("mode", "live")
+                    put("playing", true)
+                }
+            }
+        } else {
+            JSONObject().apply {
+                put("t", "state")
+                val ativ = SaimoApp.atividadeAtual
+                put("mode", "idle")
+                put("screen", when (ativ) {
+                    is EscolhaActivity -> "home"
+                    is AjustesActivity -> "settings"
+                    is GradeActivity -> "guide"
+                    is BuscaActivity -> "search"
+                    else -> "idle"
+                })
+                put("channel", "")
+                put("playing", false)
+                put("multi", false)
+                put("active", 0)
+                put("screens", JSONArray())
+            }
+        }
+        estado.put("tvAudio", tvAudio)
+        val audioArr = JSONArray()
+        for (status in phoneAudioMap.values) {
+            audioArr.put(JSONObject().apply {
+                put("cid", status.cid)
+                put("name", status.name)
+                put("src", status.src)
+            })
+        }
+        estado.put("phoneAudio", audioArr)
+        return estado
+    }
+
+    fun solicitarAprovacaoNaUi(nomeDispositivo: String, aoResponder: (permitido: Boolean) -> Unit) {
+        handler.post {
+            val act = SaimoApp.atividadeAtual
+            if (act != null && !act.isFinishing && !act.isDestroyed) {
+                try {
+                    val dialog = AlertDialog.Builder(act)
+                        .setTitle(R.string.connect_aprovar_titulo)
+                        .setMessage(act.getString(R.string.connect_aprovar_msg, nomeDispositivo))
+                        .setPositiveButton(R.string.connect_permitir) { _, _ -> aoResponder(true) }
+                        .setNegativeButton(R.string.connect_recusar) { _, _ -> aoResponder(false) }
+                        .setOnCancelListener { aoResponder(false) }
+                        .create()
+                    dialog.show()
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.requestFocus()
+                    return@post
+                } catch (e: Exception) {
+                    Log.w(TAG, "erro ao exibir diálogo de aprovação", e)
+                }
+            }
+            val lis = listener
+            if (lis != null) {
+                lis.solicitarAprovacao(nomeDispositivo, aoResponder)
+            } else {
+                aoResponder(true)
             }
         }
     }
@@ -225,7 +294,10 @@ object Connect {
 
     private fun rodarServidor(context: Context) {
         try {
-            serverSocket = ServerSocket(PORTA)
+            serverSocket = ServerSocket().apply {
+                reuseAddress = true
+                bind(InetSocketAddress(PORTA))
+            }
             Log.i(TAG, "Saimo Connect escutando em ${obterIpLocal()}:$PORTA")
             while (ativo) {
                 val socket = serverSocket?.accept() ?: break
@@ -501,13 +573,21 @@ object Connect {
                     val pin = json.optString("pin")
                     cid = idCelular
 
-                    if (ehCidConfiavel(idCelular) || (pin.isNotEmpty() && pin == pinAtual)) {
+                    // Conexão automática igual ao YouTube Cast!
+                    // Dispositivos na mesma rede Wi-Fi / LAN conectam direto sem travar a tela
+                    val ehLocal = socket.inetAddress.isSiteLocalAddress || socket.inetAddress.isLoopbackAddress
+                    val jaConfiado = ehCidConfiavel(idCelular)
+                    val pinCorreto = pin.isNotEmpty() && pin == pinAtual
+
+                    if (ehLocal || jaConfiado || pinCorreto) {
                         confiarCid(context, idCelular)
                         darBoasVindas()
+                        handler.post {
+                            Toast.makeText(context, "📱 Saimo Connect: $nome conectado", Toast.LENGTH_SHORT).show()
+                        }
                     } else {
-                        // Solicita aprovação na tela da TV
                         enviarTexto(JSONObject().apply { put("t", "pending") }.toString())
-                        listener?.solicitarAprovacao(nome) { permitido ->
+                        solicitarAprovacaoNaUi(nome) { permitido ->
                             if (permitido) {
                                 confiarCid(context, idCelular)
                                 darBoasVindas()
@@ -542,26 +622,44 @@ object Connect {
         }
 
         private fun executarComando(tipo: String, json: JSONObject) {
-            val lis = listener ?: return
             handler.post {
+                val lis = listener
                 when (tipo) {
                     "tune" -> {
                         val canal = json.optString("channel")
                         val screen = if (json.has("screen")) json.optInt("screen") else null
-                        lis.sintonizarCanal(canal, screen)
+                        if (lis != null) {
+                            lis.sintonizarCanal(canal, screen)
+                        } else {
+                            val act = SaimoApp.atividadeAtual ?: context
+                            val intent = Intent(act, MainActivity::class.java).apply {
+                                putExtra(MainActivity.EXTRA_CANAL, canal)
+                                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                            }
+                            act.startActivity(intent)
+                        }
                     }
                     "multi" -> {
                         val on = json.optBoolean("on", false)
-                        lis.alternarMultiTela(on)
+                        if (lis != null) {
+                            lis.alternarMultiTela(on)
+                        } else {
+                            val act = SaimoApp.atividadeAtual ?: context
+                            val intent = Intent(act, MainActivity::class.java).apply {
+                                putExtra("EXTRA_MULTI", on)
+                                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                            }
+                            act.startActivity(intent)
+                        }
                     }
                     "activeScreen" -> {
                         val idx = json.optInt("idx", 0)
-                        lis.definirMetadeAtiva(idx)
+                        lis?.definirMetadeAtiva(idx)
                     }
                     "tvAudio" -> {
                         val src = json.optString("src", "0")
                         tvAudio = src
-                        lis.definirTvAudio(src)
+                        lis?.definirTvAudio(src)
                         notificarMudancaDeEstado()
                     }
                     "playVod" -> {
@@ -569,17 +667,31 @@ object Connect {
                         val temp = if (json.has("temporada")) json.optInt("temporada") else null
                         val ep = if (json.has("episodio")) json.optInt("episodio") else null
                         val fonte = if (json.has("fonte")) json.optInt("fonte") else null
-                        lis.abrirVod(key, temp, ep, fonte)
+                        if (lis != null) {
+                            lis.abrirVod(key, temp, ep, fonte)
+                        } else {
+                            val act = SaimoApp.atividadeAtual ?: context
+                            CoroutineScope(Dispatchers.Main).launch {
+                                val achado = Vod.buscar(act, key, 5).firstOrNull()
+                                if (achado != null) {
+                                    val alvo = Alvo(achado.titulo, achado.serie, achado.letra, achado.ano)
+                                    PlayerActivity.abrir(act, alvo, temp ?: 0, ep ?: 0)
+                                } else {
+                                    val alvo = Alvo(key, (temp ?: 0) > 0, "", "")
+                                    PlayerActivity.abrir(act, alvo, temp ?: 0, ep ?: 0)
+                                }
+                            }
+                        }
                     }
-                    "playPause" -> lis.pausarOuRetomarVod()
+                    "playPause" -> lis?.pausarOuRetomarVod()
                     "seek" -> {
                         val ms = json.optLong("ms", -1L)
                         val delta = if (json.has("delta")) json.optLong("delta") else null
-                        lis.avancarOuVoltarVod(ms, delta)
+                        lis?.avancarOuVoltarVod(ms, delta)
                     }
                     "fonte" -> {
                         val delta = json.optInt("delta", 1)
-                        lis.trocarFonte(delta)
+                        lis?.trocarFonte(delta)
                     }
                     "key" -> {
                         val code = json.optString("code")
@@ -596,23 +708,62 @@ object Connect {
                             "CH_DOWN" -> KeyEvent.KEYCODE_CHANNEL_DOWN
                             else -> 0
                         }
-                        if (keyEvent != 0) lis.simularTecla(keyEvent)
+                        if (code == "HOME") {
+                            val act = SaimoApp.atividadeAtual ?: context
+                            if (act !is EscolhaActivity) {
+                                val intent = Intent(act, EscolhaActivity::class.java).apply {
+                                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                }
+                                act.startActivity(intent)
+                            }
+                        } else if (keyEvent != 0) {
+                            if (lis != null) {
+                                lis.simularTecla(keyEvent)
+                            } else {
+                                val act = SaimoApp.atividadeAtual
+                                if (act != null) {
+                                    val now = SystemClock.uptimeMillis()
+                                    val down = KeyEvent(now, now, KeyEvent.ACTION_DOWN, keyEvent, 0)
+                                    val up = KeyEvent(now, now + 10, KeyEvent.ACTION_UP, keyEvent, 0)
+                                    act.dispatchKeyEvent(down)
+                                    act.dispatchKeyEvent(up)
+                                }
+                            }
+                        }
                     }
                     "volume" -> {
                         val delta = if (json.has("delta")) json.optInt("delta") else null
                         val set = if (json.has("set")) json.optDouble("set").toFloat() else null
                         val mute = if (json.has("mute")) json.optBoolean("mute") else null
-                        lis.ajustarVolume(delta, set, mute)
+                        if (lis != null) {
+                            lis.ajustarVolume(delta, set, mute)
+                        } else {
+                            val audioMgr = context.getSystemService(Context.AUDIO_SERVICE) as? AudioManager
+                            if (audioMgr != null) {
+                                if (delta != null) {
+                                    val dir = if (delta > 0) AudioManager.ADJUST_RAISE else AudioManager.ADJUST_LOWER
+                                    audioMgr.adjustStreamVolume(AudioManager.STREAM_MUSIC, dir, AudioManager.FLAG_SHOW_UI)
+                                } else if (set != null) {
+                                    val maxVol = audioMgr.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+                                    val novoVol = (set * maxVol).toInt().coerceIn(0, maxVol)
+                                    audioMgr.setStreamVolume(AudioManager.STREAM_MUSIC, novoVol, AudioManager.FLAG_SHOW_UI)
+                                } else if (mute != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                    val dir = if (mute) AudioManager.ADJUST_MUTE else AudioManager.ADJUST_UNMUTE
+                                    audioMgr.adjustStreamVolume(AudioManager.STREAM_MUSIC, dir, AudioManager.FLAG_SHOW_UI)
+                                }
+                            }
+                            notificarMudancaDeEstado()
+                        }
                     }
                     "text" -> {
                         val valor = json.optString("value", "")
-                        lis.preencherTexto(valor)
+                        lis?.preencherTexto(valor)
                     }
                     "phoneAudio" -> {
                         val id = cid ?: return@post
                         val src = json.optString("src", "none")
                         phoneAudioMap[id] = PhoneAudioStatus(id, nome, src)
-                        lis.onPhoneAudioChanged(phoneAudioMap.values.toList())
+                        lis?.onPhoneAudioChanged(phoneAudioMap.values.toList())
                         notificarMudancaDeEstado()
                     }
                 }
