@@ -700,6 +700,9 @@ object Connect {
                         val idx = json.optInt("idx", 0)
                         lis?.definirMetadeAtiva(idx)
                     }
+                    "sync", "getState" -> {
+                        notificarMudancaDeEstado()
+                    }
                     "tvAudio" -> {
                         val src = json.optString("src", "0")
                         tvAudio = src

@@ -1985,6 +1985,12 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
                     put("key", src0.key ?: JSONObject.NULL)
                 })
             }
+            val liveOffset0 = if (::player.isInitialized && player.currentLiveOffset != androidx.media3.common.C.TIME_UNSET) {
+                player.currentLiveOffset
+            } else {
+                -1L
+            }
+            s0Obj.put("liveOffset", liveOffset0)
             screens.put(s0Obj)
         }
 
@@ -2012,6 +2018,8 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
                     put("key", src1.key ?: JSONObject.NULL)
                 })
             }
+            val liveOffset1 = segunda?.liveOffset ?: -1L
+            s1Obj.put("liveOffset", liveOffset1)
             screens.put(s1Obj)
         }
 

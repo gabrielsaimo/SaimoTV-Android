@@ -97,6 +97,9 @@ class SegundaTela(
     /** Se esta metade está mostrando imagem agora. */
     val tocando: Boolean get() = player?.isPlaying == true
 
+    /** O atraso em relação à borda do ao vivo em ms, ou -1 se não for ao vivo. */
+    val liveOffset: Long get() = player?.currentLiveOffset?.takeIf { it != androidx.media3.common.C.TIME_UNSET } ?: -1L
+
     /** Só a metade ativa tem som; a outra fica muda, mas continua tocando. */
     var comSom: Boolean = false
         set(valor) {
