@@ -363,4 +363,12 @@
     <string name="vr_ver_programacao">Toque de novo para assistir</string>
     <string name="menu_on_demand">On Demand</string>
     <string name="menu_radios">Rádios</string>
+
+    <!-- Saimo Connect -->
+    <string name="connect_titulo">Conectar Celular</string>
+    <string name="connect_aprovar_titulo">Saimo Connect</string>
+    <string name="connect_aprovar_msg">%1$s quer se conectar a esta TV.\nDeseja permitir?</string>
+    <string name="connect_permitir">Permitir</string>
+    <string name="connect_recusar">Recusar</string>
+    <string name="connect_ip_pin">No celular, toque no ícone de Cast ou digite o IP: %1$s | PIN: %2$s</string>
 </resources>

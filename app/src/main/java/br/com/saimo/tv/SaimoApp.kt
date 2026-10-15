@@ -47,6 +47,7 @@ class SaimoApp : Application(), SingletonImageLoader.Factory {
         Aparelho.conhecer(this)
         Telemetria.iniciar(this)
         Lembretes.iniciar(this)
+        Connect.iniciar(this)
         // As raízes de certificado e o cliente de rede ficam prontos numa
         // thread à parte, enquanto a primeira tela desenha: montados na hora
         // do primeiro pedido, eram até 300 ms na thread da tela num TV Box lento.

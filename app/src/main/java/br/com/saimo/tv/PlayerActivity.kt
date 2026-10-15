@@ -47,6 +47,10 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import android.media.AudioManager
+import android.os.Build
+import org.json.JSONObject
+import org.json.JSONArray
 
 /**
  * O player de filmes e séries.
@@ -63,7 +67,7 @@ import java.util.Locale
  * - avançar e voltar acelerando enquanto a seta fica apertada.
  */
 @UnstableApi
-class PlayerActivity : AppCompatActivity() {
+class PlayerActivity : AppCompatActivity(), Connect.Listener {
 
     companion object {
         /// Altura da legenda (fração da tela, de baixo) com a barra e os botões à vista.
@@ -1260,8 +1264,15 @@ class PlayerActivity : AppCompatActivity() {
         return super.onKeyDown(keyCode, event)
     }
 
+    override fun onStart() {
+        super.onStart()
+        Connect.listener = this
+        Connect.notificarMudancaDeEstado()
+    }
+
     override fun onStop() {
         super.onStop()
+        if (Connect.listener === this) Connect.listener = null
         guardar()
         player?.playWhenReady = false
         // Relógio da barra, pulos e próximo episódio: nada disso aparece fora da tela.
@@ -1281,6 +1292,141 @@ class PlayerActivity : AppCompatActivity() {
         player?.release()
         player = null
         super.onDestroy()
+    }
+
+    // MARK: - Connect.Listener
+
+    override fun obterEstado(): JSONObject {
+        val root = JSONObject()
+        root.put("t", "state")
+        root.put("mode", "vod")
+        val p = player
+        val tocando = p != null && p.isPlaying
+        root.put("playing", tocando)
+        root.put("multi", false)
+        root.put("active", 0)
+
+        val vod = JSONObject()
+        vod.put("title", titulo.text?.toString() ?: (alvo.nomeCompleto))
+        vod.put("subtitle", subtitulo.text?.toString() ?: "")
+        vod.put("pos", p?.currentPosition ?: 0L)
+        vod.put("dur", (p?.duration?.takeIf { it > 0 && it != C.TIME_UNSET } ?: 0L))
+        vod.put("key", alvo.titulo)
+        root.put("vod", vod)
+
+        val audioMgr = getSystemService(Context.AUDIO_SERVICE) as? AudioManager
+        val maxVol = audioMgr?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 15
+        val curVol = audioMgr?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 10
+        root.put("volume", curVol.toFloat() / maxVol.toFloat().coerceAtLeast(1f))
+        root.put("muted", curVol == 0)
+
+        return root
+    }
+
+    override fun sintonizarCanal(nome: String, metade: Int?) {
+        startActivity(Intent(this, MainActivity::class.java).apply {
+            putExtra(MainActivity.EXTRA_CANAL, nome)
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        })
+        finish()
+    }
+
+    override fun alternarMultiTela(ligar: Boolean) {
+        if (ligar) {
+            startActivity(Intent(this, MainActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            })
+            finish()
+        }
+    }
+
+    override fun definirMetadeAtiva(metade: Int) {}
+    override fun definirTvAudio(som: String) {}
+
+    override fun trocarFonte(delta: Int) {
+        runOnUiThread {
+            if (opcoes.size > 1) {
+                val prox = (fonte + delta + opcoes.size) % opcoes.size
+                tentadas.clear()
+                fonte = prox
+                tocarFonte(inicio = player?.currentPosition ?: 0L, pausado = false)
+                Connect.notificarMudancaDeEstado()
+            }
+        }
+    }
+
+    override fun simularTecla(keyCode: Int): Boolean {
+        val down = KeyEvent(KeyEvent.ACTION_DOWN, keyCode)
+        val up = KeyEvent(KeyEvent.ACTION_UP, keyCode)
+        dispatchKeyEvent(down)
+        dispatchKeyEvent(up)
+        return true
+    }
+
+    override fun abrirVod(chave: String, temp: Int?, ep: Int?, fonte: Int?) {
+        lifecycleScope.launch(semDerrubar) {
+            val achado = Vod.buscar(this@PlayerActivity, chave, 5).firstOrNull()
+            if (achado != null) {
+                val novoAlvo = Alvo(achado.titulo, achado.serie, achado.letra, achado.ano)
+                PlayerActivity.abrir(this@PlayerActivity, novoAlvo, temp ?: 0, ep ?: 0)
+                finish()
+            }
+        }
+    }
+
+    override fun pausarOuRetomarVod() {
+        runOnUiThread {
+            alternarPausa()
+            Connect.notificarMudancaDeEstado()
+        }
+    }
+
+    override fun avancarOuVoltarVod(ms: Long, delta: Long?) {
+        runOnUiThread {
+            val p = player ?: return@runOnUiThread
+            val dur = p.duration.takeIf { it > 0 && it != C.TIME_UNSET } ?: return@runOnUiThread
+            if (delta != null) {
+                val novo = (p.currentPosition + delta).coerceIn(0L, dur - 1000L)
+                p.seekTo(novo)
+            } else {
+                val novo = ms.coerceIn(0L, dur - 1000L)
+                p.seekTo(novo)
+            }
+            mostrarControles(focarLinha = false)
+            Connect.notificarMudancaDeEstado()
+        }
+    }
+
+    override fun ajustarVolume(delta: Int?, set: Float?, mute: Boolean?) {
+        val audioMgr = getSystemService(Context.AUDIO_SERVICE) as? AudioManager ?: return
+        if (delta != null) {
+            val dir = if (delta > 0) AudioManager.ADJUST_RAISE else AudioManager.ADJUST_LOWER
+            audioMgr.adjustStreamVolume(AudioManager.STREAM_MUSIC, dir, AudioManager.FLAG_SHOW_UI)
+        } else if (set != null) {
+            val maxVol = audioMgr.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+            val novoVol = (set * maxVol).toInt().coerceIn(0, maxVol)
+            audioMgr.setStreamVolume(AudioManager.STREAM_MUSIC, novoVol, AudioManager.FLAG_SHOW_UI)
+        } else if (mute != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                val dir = if (mute) AudioManager.ADJUST_MUTE else AudioManager.ADJUST_UNMUTE
+                audioMgr.adjustStreamVolume(AudioManager.STREAM_MUSIC, dir, AudioManager.FLAG_SHOW_UI)
+            }
+        }
+        Connect.notificarMudancaDeEstado()
+    }
+
+    override fun preencherTexto(texto: String) {}
+
+    override fun onPhoneAudioChanged(phoneAudioList: List<Connect.PhoneAudioStatus>) {}
+
+    override fun solicitarAprovacao(nomeDispositivo: String, aoResponder: (permitido: Boolean) -> Unit) {
+        android.app.AlertDialog.Builder(this)
+            .setTitle(R.string.connect_aprovar_titulo)
+            .setMessage(getString(R.string.connect_aprovar_msg, nomeDispositivo))
+            .setPositiveButton(R.string.connect_permitir) { _, _ -> aoResponder(true) }
+            .setNegativeButton(R.string.connect_recusar) { _, _ -> aoResponder(false) }
+            .setOnCancelListener { aoResponder(false) }
+            .show()
     }
 
     private fun tempo(ms: Long): String {

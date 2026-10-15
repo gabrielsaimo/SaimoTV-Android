@@ -19,6 +19,10 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import org.json.JSONArray
+import org.json.JSONObject
+import android.content.Context
+import android.media.AudioManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
@@ -87,7 +91,7 @@ private const val CONGELADO_MS = 12_000L
  * and leaves on its own.
  */
 @UnstableApi
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), Connect.Listener {
 
     companion object {
         /** Nome do canal a sintonizar ao abrir (link saimo://canal). */
@@ -459,6 +463,7 @@ class MainActivity : AppCompatActivity() {
         if (multiTela) atualizarRotulo()
         updateBanner()
         revealBanner()
+        Connect.notificarMudancaDeEstado()
     }
 
     
@@ -1070,6 +1075,9 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
                     }
                 })
             },
+            Painel.Item(getString(R.string.connect_titulo),
+                getString(R.string.connect_ip_pin, Connect.obterIpLocal(), Connect.pinAtual),
+                icone = R.drawable.ic_cast) { mostrarDialogoConectar() },
             Painel.Item(getString(R.string.opcoes_inicio), icone = R.drawable.ic_home) { finish() },
         )
         Painel.mostrar(this, canal.name, itens, Epg.nowNext(canal.name)?.first?.title)
@@ -1288,6 +1296,7 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
         mostrarDica()
         // A metade nova começa vazia: a lista já abre para escolher o canal dela.
         openList()
+        Connect.notificarMudancaDeEstado()
     }
 
     /**
@@ -1303,6 +1312,7 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
         segunda?.soltar()
         segunda = null
         player.volume = 1f
+        Connect.tvAudio = "0"
         limiteAntes?.let { player.trackSelectionParameters = it }
         limiteAntes = null
         handler.removeCallbacks(esconderDica)
@@ -1310,6 +1320,7 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
         val indice = daDireita?.let { n -> ordered.indexOfFirst { it.name == n } } ?: -1
         if (indice >= 0) play(indice) else { adapter.select(current); revealBanner() }
         if (semSuporte) avisarSemSuporte()
+        Connect.notificarMudancaDeEstado()
     }
 
     /** TV Box, celular e tablet; nos óculos não (ver opcoes). */
@@ -1349,14 +1360,31 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
     private fun ativarTela(qual: Int) {
         if (!multiTela) return
         telaAtiva = if (qual == 1 && segunda != null) 1 else 0
-        player.volume = if (telaAtiva == 0) 1f else 0f
-        segunda?.comSom = telaAtiva == 1
+        when (Connect.tvAudio) {
+            "0" -> {
+                player.volume = 1f
+                segunda?.comSom = false
+            }
+            "1" -> {
+                player.volume = 0f
+                segunda?.comSom = true
+            }
+            "mute" -> {
+                player.volume = 0f
+                segunda?.comSom = false
+            }
+            else -> {
+                player.volume = if (telaAtiva == 0) 1f else 0f
+                segunda?.comSom = telaAtiva == 1
+            }
+        }
         findViewById<View>(R.id.multiTela1).setBackgroundResource(
             if (telaAtiva == 0) R.drawable.bg_tela_ativa else R.drawable.bg_tela_inativa)
         findViewById<View>(R.id.multiTela2).setBackgroundResource(
             if (telaAtiva == 1) R.drawable.bg_tela_ativa else R.drawable.bg_tela_inativa)
         adapter.select(indiceAtivo())
         posicionarBanner()
+        Connect.notificarMudancaDeEstado()
     }
 
     /// O recuo lateral da faixa em tela cheia, lido do layout na primeira vez.
@@ -1422,6 +1450,9 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
         Painel.mostrar(this, getString(R.string.multi_tela), listOf(
             Painel.Item(getString(R.string.opcoes_canais), icone = R.drawable.ic_list) { openList() },
             Painel.Item(getString(R.string.multi_tela_sair), icone = R.drawable.ic_close) { sairDaMultiTela() },
+            Painel.Item(getString(R.string.connect_titulo),
+                getString(R.string.connect_ip_pin, Connect.obterIpLocal(), Connect.pinAtual),
+                icone = R.drawable.ic_cast) { mostrarDialogoConectar() },
             Painel.Item(getString(R.string.opcoes_inicio), icone = R.drawable.ic_home) { finish() },
         ), nome)
     }
@@ -1743,6 +1774,7 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
 
     override fun onStop() {
         super.onStop()
+        if (Connect.listener === this) Connect.listener = null
         // Fora da tela, o segundo player só gastaria memória e rede. Volta com
         // o canal da metade ativa em tela cheia, como no Mac ao abrir o acervo.
         sairDaMultiTela()
@@ -1754,6 +1786,8 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
 
     override fun onStart() {
         super.onStart()
+        Connect.listener = this
+        Connect.notificarMudancaDeEstado()
         emSegundoPlano = false
         handler.removeCallbacks(soltarPlayerParado)
         if (jaIniciou) {
@@ -1889,6 +1923,212 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
             .lowercase()
             .replace(Regex("[^a-z0-9]+"), " ")
             .trim()
+
+    // MARK: - Saimo Connect (Controle Remoto e Celular)
+
+    private fun mostrarDialogoConectar() {
+        val ip = Connect.obterIpLocal()
+        val pin = Connect.pinAtual
+        android.app.AlertDialog.Builder(this)
+            .setTitle(R.string.connect_titulo)
+            .setMessage(getString(R.string.connect_ip_pin, ip, pin))
+            .setPositiveButton("OK", null)
+            .show()
+    }
+
+    override fun obterEstado(): JSONObject {
+        val root = JSONObject()
+        root.put("t", "state")
+        root.put("mode", if (isModoRadio) "radio" else "live")
+        root.put("playing", ::player.isInitialized && player.isPlaying)
+        root.put("multi", multiTela)
+        root.put("active", telaAtiva)
+
+        val screens = JSONArray()
+
+        // Tela 0 (Principal / Esquerda)
+        val c0 = ordered.getOrNull(current)
+        if (c0 != null) {
+            val s0Obj = JSONObject()
+            s0Obj.put("idx", 0)
+            s0Obj.put("channel", c0.name)
+            s0Obj.put("num", numeroDe(c0))
+            s0Obj.put("logo", c0.logo ?: "")
+            s0Obj.put("program", Epg.nowNext(c0.name)?.first?.title ?: "")
+            s0Obj.put("sourceIndex", sourceIndex)
+            val src0 = c0.sources.getOrNull(sourceIndex) ?: c0.sources.firstOrNull()
+            if (src0 != null) {
+                s0Obj.put("source", JSONObject().apply {
+                    put("url", src0.url)
+                    put("referer", src0.referer ?: JSONObject.NULL)
+                    put("userAgent", src0.userAgent ?: JSONObject.NULL)
+                    put("keyId", src0.keyId ?: JSONObject.NULL)
+                    put("key", src0.key ?: JSONObject.NULL)
+                })
+            }
+            screens.put(s0Obj)
+        }
+
+        // Tela 1 (Segunda Tela / Direita)
+        val c1 = segunda?.canal
+        if (multiTela && c1 != null) {
+            val s1Obj = JSONObject()
+            s1Obj.put("idx", 1)
+            s1Obj.put("channel", c1.name)
+            s1Obj.put("num", numeroDe(c1))
+            s1Obj.put("logo", c1.logo ?: "")
+            s1Obj.put("program", Epg.nowNext(c1.name)?.first?.title ?: "")
+            val f1 = segunda?.fonteAtual ?: 0
+            s1Obj.put("sourceIndex", f1)
+            val src1 = c1.sources.getOrNull(f1) ?: c1.sources.firstOrNull()
+            if (src1 != null) {
+                s1Obj.put("source", JSONObject().apply {
+                    put("url", src1.url)
+                    put("referer", src1.referer ?: JSONObject.NULL)
+                    put("userAgent", src1.userAgent ?: JSONObject.NULL)
+                    put("keyId", src1.keyId ?: JSONObject.NULL)
+                    put("key", src1.key ?: JSONObject.NULL)
+                })
+            }
+            screens.put(s1Obj)
+        }
+
+        root.put("screens", screens)
+
+        // Volume atual do sistema
+        val audioMgr = getSystemService(Context.AUDIO_SERVICE) as? AudioManager
+        val maxVol = audioMgr?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 15
+        val curVol = audioMgr?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 10
+        root.put("volume", curVol.toFloat() / maxVol.toFloat().coerceAtLeast(1f))
+        root.put("muted", curVol == 0)
+
+        return root
+    }
+
+    override fun sintonizarCanal(nome: String, metade: Int?) {
+        val idx = ordered.indexOfFirst { it.name.equals(nome, ignoreCase = true) }
+        if (idx < 0) return
+        if (metade != null && multiTela && metade == 1) {
+            ativarTela(1)
+            sintonizar(idx)
+        } else {
+            if (multiTela && (metade == 0 || telaAtiva == 0)) {
+                ativarTela(0)
+            }
+            sintonizar(idx)
+        }
+        Connect.notificarMudancaDeEstado()
+    }
+
+    override fun alternarMultiTela(ligar: Boolean) {
+        if (ligar && !multiTela) entrarNaMultiTela()
+        else if (!ligar && multiTela) sairDaMultiTela()
+        Connect.notificarMudancaDeEstado()
+    }
+
+    override fun definirMetadeAtiva(metade: Int) {
+        if (multiTela) ativarTela(metade)
+        Connect.notificarMudancaDeEstado()
+    }
+
+    override fun definirTvAudio(som: String) {
+        Connect.tvAudio = som
+        if (multiTela) {
+            when (som) {
+                "0" -> { player.volume = 1f; segunda?.comSom = false }
+                "1" -> { player.volume = 0f; segunda?.comSom = true }
+                "mute" -> { player.volume = 0f; segunda?.comSom = false }
+            }
+        }
+        Connect.notificarMudancaDeEstado()
+    }
+
+    override fun trocarFonte(delta: Int) {
+        val c = ordered.getOrNull(current) ?: return
+        val novasFontes = c.sources.size
+        if (novasFontes > 1) {
+            val prox = (sourceIndex + delta + novasFontes) % novasFontes
+            play(current, prox)
+        }
+        Connect.notificarMudancaDeEstado()
+    }
+
+    override fun simularTecla(keyCode: Int): Boolean {
+        val down = KeyEvent(KeyEvent.ACTION_DOWN, keyCode)
+        val up = KeyEvent(KeyEvent.ACTION_UP, keyCode)
+        dispatchKeyEvent(down)
+        dispatchKeyEvent(up)
+        return true
+    }
+
+    override fun abrirVod(chave: String, temp: Int?, ep: Int?, fonte: Int?) {
+        lifecycleScope.launch(semDerrubar) {
+            val achado = Vod.buscar(this@MainActivity, chave, 5).firstOrNull()
+            if (achado != null) {
+                val alvo = Alvo(achado.titulo, achado.serie, achado.letra, achado.ano)
+                PlayerActivity.abrir(this@MainActivity, alvo, temp ?: 0, ep ?: 0)
+            } else {
+                val alvo = Alvo(chave, (temp ?: 0) > 0, "", "")
+                PlayerActivity.abrir(this@MainActivity, alvo, temp ?: 0, ep ?: 0)
+            }
+        }
+    }
+
+    override fun pausarOuRetomarVod() {}
+    override fun avancarOuVoltarVod(ms: Long, delta: Long?) {}
+
+    override fun ajustarVolume(delta: Int?, set: Float?, mute: Boolean?) {
+        val audioMgr = getSystemService(Context.AUDIO_SERVICE) as? AudioManager ?: return
+        if (delta != null) {
+            val dir = if (delta > 0) AudioManager.ADJUST_RAISE else AudioManager.ADJUST_LOWER
+            audioMgr.adjustStreamVolume(AudioManager.STREAM_MUSIC, dir, AudioManager.FLAG_SHOW_UI)
+        } else if (set != null) {
+            val maxVol = audioMgr.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+            val novoVol = (set * maxVol).toInt().coerceIn(0, maxVol)
+            audioMgr.setStreamVolume(AudioManager.STREAM_MUSIC, novoVol, AudioManager.FLAG_SHOW_UI)
+        } else if (mute != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                val dir = if (mute) AudioManager.ADJUST_MUTE else AudioManager.ADJUST_UNMUTE
+                audioMgr.adjustStreamVolume(AudioManager.STREAM_MUSIC, dir, AudioManager.FLAG_SHOW_UI)
+            }
+        }
+        Connect.notificarMudancaDeEstado()
+    }
+
+    override fun preencherTexto(texto: String) {
+        val focused = currentFocus
+        if (focused is android.widget.EditText) {
+            focused.setText(texto)
+            focused.setSelection(texto.length)
+        }
+    }
+
+    override fun onPhoneAudioChanged(phoneAudioList: List<Connect.PhoneAudioStatus>) {
+        val ativos = phoneAudioList.filter { it.src == "0" || it.src == "1" || it.src == "both" }
+        if (ativos.isNotEmpty()) {
+            val nomes = ativos.joinToString(", ") { a ->
+                val qual = when (a.src) {
+                    "0" -> "Canal 1"
+                    "1" -> "Canal 2"
+                    else -> "os dois canais"
+                }
+                "${a.name} ouvindo $qual"
+            }
+            showStatus("🎧 $nomes")
+            handler.removeCallbacks(esconderStatus)
+            handler.postDelayed(esconderStatus, 4000)
+        }
+    }
+
+    override fun solicitarAprovacao(nomeDispositivo: String, aoResponder: (permitido: Boolean) -> Unit) {
+        android.app.AlertDialog.Builder(this)
+            .setTitle(R.string.connect_aprovar_titulo)
+            .setMessage(getString(R.string.connect_aprovar_msg, nomeDispositivo))
+            .setPositiveButton(R.string.connect_permitir) { _, _ -> aoResponder(true) }
+            .setNegativeButton(R.string.connect_recusar) { _, _ -> aoResponder(false) }
+            .setOnCancelListener { aoResponder(false) }
+            .show()
+    }
 }
 
 /// Marca de atualização parcial: só o que está no ar mudou, não o canal.
