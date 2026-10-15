@@ -31,6 +31,7 @@ import java.net.InetSocketAddress
 import java.net.NetworkInterface
 import java.net.ServerSocket
 import java.net.Socket
+import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
 import java.util.UUID
@@ -107,6 +108,62 @@ object Connect {
     var listener: Listener? = null
 
     private val phoneAudioMap = java.util.concurrent.ConcurrentHashMap<String, PhoneAudioStatus>()
+
+    fun abrirVodOuMidia(
+        context: Context,
+        key: String,
+        url: String? = null,
+        title: String? = null,
+        letter: String? = null,
+        year: String? = null,
+        isSeries: Boolean? = null,
+        temp: Int? = null,
+        ep: Int? = null,
+        fonte: Int? = null,
+        startTime: Long? = null,
+    ) {
+        var pSeries: Boolean? = null
+        var pLetter: String? = null
+        var pTitle: String? = null
+        var pYear: String? = null
+        if (key.startsWith("saimo|")) {
+            val parts = key.split("|")
+            if (parts.size > 1) pSeries = parts[1] == "s"
+            if (parts.size > 2) pLetter = runCatching { URLDecoder.decode(parts[2], "UTF-8") }.getOrNull()
+            if (parts.size > 3) pTitle = runCatching { URLDecoder.decode(parts[3], "UTF-8") }.getOrNull()
+            if (parts.size > 4) pYear = runCatching { URLDecoder.decode(parts[4], "UTF-8") }.getOrNull()
+        }
+
+        val finalTitle = title ?: pTitle ?: (if (!key.startsWith("saimo|") && key.isNotBlank()) key else "Vídeo")
+        val finalLetter = (letter ?: pLetter).orEmpty()
+        val finalYear = (year ?: pYear).orEmpty()
+        val finalSeries = isSeries ?: pSeries ?: ((temp ?: 0) > 0)
+
+        val act = SaimoApp.atividadeAtual
+        val targetAct = act ?: context
+
+        CoroutineScope(Dispatchers.Main).launch {
+            val achado = Vod.achar(targetAct, finalTitle, finalSeries)
+                ?: (if (finalYear.isNotBlank()) Vod.achar(targetAct, "$finalTitle ($finalYear)", finalSeries) else null)
+                ?: Vod.buscar(targetAct, finalTitle, 5).firstOrNull()
+
+            val alvo = if (achado != null) {
+                Alvo(achado.titulo, achado.serie, achado.letra, achado.ano)
+            } else {
+                val let = if (finalLetter.isNotBlank()) finalLetter else Vod.gavetaDaLetra(finalTitle)
+                Alvo(finalTitle, finalSeries, let, finalYear)
+            }
+
+            PlayerActivity.abrir(
+                context = targetAct,
+                alvo = alvo,
+                temporada = temp ?: 0,
+                episodio = ep ?: 0,
+                directUrl = url,
+                startTime = startTime
+            )
+        }
+    }
 
     fun iniciar(context: Context) {
         if (ativo) return
@@ -649,26 +706,31 @@ object Connect {
                         lis?.definirTvAudio(src)
                         notificarMudancaDeEstado()
                     }
-                    "playVod" -> {
+                    "playVod", "playMedia" -> {
                         val key = json.optString("key")
+                        val url = json.optString("url").takeIf { it.isNotBlank() }
+                        val title = json.optString("title").takeIf { it.isNotBlank() }
+                        val letter = json.optString("letter").takeIf { it.isNotBlank() }
+                        val year = json.optString("year").takeIf { it.isNotBlank() }
+                        val isSeries = if (json.has("isSeries")) json.optBoolean("isSeries") else null
                         val temp = if (json.has("temporada")) json.optInt("temporada") else null
                         val ep = if (json.has("episodio")) json.optInt("episodio") else null
                         val fonte = if (json.has("fonte")) json.optInt("fonte") else null
-                        if (lis != null) {
-                            lis.abrirVod(key, temp, ep, fonte)
-                        } else {
-                            val targetAct = act ?: context
-                            CoroutineScope(Dispatchers.Main).launch {
-                                val achado = Vod.buscar(targetAct, key, 5).firstOrNull()
-                                if (achado != null) {
-                                    val alvo = Alvo(achado.titulo, achado.serie, achado.letra, achado.ano)
-                                    PlayerActivity.abrir(targetAct, alvo, temp ?: 0, ep ?: 0)
-                                } else {
-                                    val alvo = Alvo(key, (temp ?: 0) > 0, "", "")
-                                    PlayerActivity.abrir(targetAct, alvo, temp ?: 0, ep ?: 0)
-                                }
-                            }
-                        }
+                        val startTime = if (json.has("startTime")) json.optLong("startTime") else null
+
+                        abrirVodOuMidia(
+                            context = context,
+                            key = key,
+                            url = url,
+                            title = title,
+                            letter = letter,
+                            year = year,
+                            isSeries = isSeries,
+                            temp = temp,
+                            ep = ep,
+                            fonte = fonte,
+                            startTime = startTime,
+                        )
                     }
                     "playPause" -> lis?.pausarOuRetomarVod()
                     "seek" -> {

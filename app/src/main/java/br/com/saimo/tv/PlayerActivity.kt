@@ -1,5 +1,6 @@
 package br.com.saimo.tv
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -84,11 +85,36 @@ class PlayerActivity : AppCompatActivity(), Connect.Listener {
         private const val ICONE_PLAY = "\u0000play"
         private const val ICONE_REPLAY = "\u0000replay"
 
-        fun abrir(context: Context, alvo: Alvo, temporada: Int = 0, episodio: Int = 0,
-                  versao: String? = null, doInicio: Boolean = false) {
-            context.startActivity(alvo.em(Intent(context, PlayerActivity::class.java))
-                .putExtra(TEMPORADA, temporada).putExtra(EPISODIO, episodio)
-                .putExtra(VERSAO, versao).putExtra(DO_INICIO, doInicio))
+        const val EXTRA_DIRECT_URL = "player.direct_url"
+        const val EXTRA_START_TIME = "player.start_time"
+
+        fun abrir(
+            context: Context,
+            alvo: Alvo,
+            temporada: Int = 0,
+            episodio: Int = 0,
+            versao: String? = null,
+            doInicio: Boolean = false,
+            directUrl: String? = null,
+            startTime: Long? = null,
+        ) {
+            val intent = alvo.em(Intent(context, PlayerActivity::class.java))
+                .putExtra(TEMPORADA, temporada)
+                .putExtra(EPISODIO, episodio)
+                .putExtra(VERSAO, versao)
+                .putExtra(DO_INICIO, doInicio)
+            if (!directUrl.isNullOrBlank()) {
+                intent.putExtra(EXTRA_DIRECT_URL, directUrl)
+            }
+            if (startTime != null && startTime > 0) {
+                intent.putExtra(EXTRA_START_TIME, startTime)
+            }
+            if (context !is Activity) {
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            } else {
+                intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+            }
+            context.startActivity(intent)
         }
     }
 
@@ -201,6 +227,22 @@ class PlayerActivity : AppCompatActivity(), Connect.Listener {
         handler.post(tique)
     }
 
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        val novoAlvo = Alvo.de(intent) ?: return
+        alvo = novoAlvo
+        titulo.text = Generos.semAno(alvo.titulo)
+        intent.getStringExtra(VERSAO)?.let { versao = it }
+        status.text = getString(R.string.player_abrindo)
+        carregando.visibility = View.VISIBLE
+        mostrarCarregando(getString(R.string.player_abrindo))
+        player?.stop()
+        resolvido = null
+        ep = null
+        lifecycleScope.launch(semDerrubar) { preparar() }
+    }
+
 
     // MARK: - Óculos de VR
 
@@ -251,7 +293,27 @@ class PlayerActivity : AppCompatActivity(), Connect.Listener {
     }
 
     private suspend fun preparar() {
-        val r = Titulos.resolver(this, alvo)
+        var r = Titulos.resolver(this, alvo)
+        if (r == null && alvo.letra.isBlank()) {
+            val achado = Vod.achar(this, alvo.titulo, alvo.serie)
+                ?: Vod.buscar(this, alvo.titulo, 5).firstOrNull()
+            if (achado != null) {
+                alvo = Alvo(achado.titulo, achado.serie, achado.letra, achado.ano, alvo.colecao, alvo.tmdbId)
+                r = Titulos.resolver(this, alvo)
+            }
+        }
+        val directUrl = intent.getStringExtra(EXTRA_DIRECT_URL)
+        if (r == null && !directUrl.isNullOrBlank()) {
+            val filme = Filme(alvo.titulo, mapOf("dub" to listOf(directUrl)))
+            r = Titulos.Resolvido(
+                alvo = alvo,
+                nomeChave = alvo.titulo,
+                filme = filme,
+                episodios = emptyList(),
+                tmdbId = alvo.tmdbId,
+                reservado = true
+            )
+        }
         if (isFinishing || isDestroyed) return
         if (r == null) {
             mostrarErro(getString(R.string.player_sumiu_titulo), getString(R.string.player_sumiu_texto))
@@ -264,11 +326,12 @@ class PlayerActivity : AppCompatActivity(), Connect.Listener {
         ep = if (r.serie) {
             (if (t > 0) r.episodio(t, e) else null) ?: Titulos.ondeContinuar(this, r)
         } else null
-        comecar(pedirRetomada = !intent.getBooleanExtra(DO_INICIO, false))
+        val castStart = intent.getLongExtra(EXTRA_START_TIME, 0L)
+        comecar(pedirRetomada = castStart <= 0 && !intent.getBooleanExtra(DO_INICIO, false), startTime = castStart)
     }
 
     /** Começa o título/episódio atual do zero ou de onde parou. */
-    private fun comecar(pedirRetomada: Boolean, herdarFonte: Boolean = false) {
+    private fun comecar(pedirRetomada: Boolean, herdarFonte: Boolean = false, startTime: Long = 0L) {
         val r = resolvido ?: return
         val fontes = ep?.fontes ?: r.filme?.fontes ?: return
         if (versao !in fontes.keys) versao = if (Preferencias.versao in fontes) Preferencias.versao
@@ -294,9 +357,9 @@ class PlayerActivity : AppCompatActivity(), Connect.Listener {
         carregarMarcas()
         carregarLegendas()
 
-        val retomar = if (pedirRetomada) Progresso.posicao(this, r.chave(ep)) else 0L
-        tocarFonte(inicio = retomar, pausado = retomar > 0)
-        if (retomar > 0) perguntarRetomada(retomar)
+        val retomar = if (startTime > 0) startTime * 1000L else if (pedirRetomada) Progresso.posicao(this, r.chave(ep)) else 0L
+        tocarFonte(inicio = retomar, pausado = (startTime <= 0 && retomar > 0))
+        if (startTime <= 0 && retomar > 0) perguntarRetomada(retomar)
     }
 
     private fun atualizarTitulos() {
@@ -1388,14 +1451,7 @@ class PlayerActivity : AppCompatActivity(), Connect.Listener {
     }
 
     override fun abrirVod(chave: String, temp: Int?, ep: Int?, fonte: Int?) {
-        lifecycleScope.launch(semDerrubar) {
-            val achado = Vod.buscar(this@PlayerActivity, chave, 5).firstOrNull()
-            if (achado != null) {
-                val novoAlvo = Alvo(achado.titulo, achado.serie, achado.letra, achado.ano)
-                PlayerActivity.abrir(this@PlayerActivity, novoAlvo, temp ?: 0, ep ?: 0)
-                finish()
-            }
-        }
+        Connect.abrirVodOuMidia(this@PlayerActivity, chave, temp = temp, ep = ep, fonte = fonte)
     }
 
     override fun pausarOuRetomarVod() {

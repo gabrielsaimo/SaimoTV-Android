@@ -436,6 +436,15 @@ object Vod {
         runCatching { marca.writeText(VERSAO_CACHE) }
     }
 
+    fun gavetaDaLetra(titulo: String): String {
+        val limpo = Generos.semAno(titulo).trim()
+            .removePrefix("O ").removePrefix("A ")
+            .removePrefix("Os ").removePrefix("As ")
+            .removePrefix("The ").trim()
+        val c = limpo.firstOrNull()?.uppercaseChar() ?: return "#"
+        return if (c in 'A'..'Z') c.toString() else "#"
+    }
+
     private fun gaveta(letra: String) = if (letra == "#") "%23" else letra
 
     /**

@@ -402,10 +402,23 @@ class MainActivity : AppCompatActivity(), Connect.Listener {
     private var ultimaImagem = 0L
     private var ultimaPosicao = -1L
 
+    private fun encontrarIndiceCanal(nome: String): Int {
+        var idx = ordered.indexOfFirst { it.name.equals(nome, ignoreCase = true) }
+        if (idx >= 0) return idx
+        val limpo = nome.lowercase().replace(" ", "").replace("-", "").replace("hd", "")
+        if (limpo.isNotBlank()) {
+            idx = ordered.indexOfFirst {
+                val itLimpo = it.name.lowercase().replace(" ", "").replace("-", "").replace("hd", "")
+                itLimpo == limpo || itLimpo.contains(limpo) || limpo.contains(itLimpo)
+            }
+        }
+        return idx
+    }
+
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         val nome = intent.getStringExtra(EXTRA_CANAL) ?: return
-        val indice = ordered.indexOfFirst { it.name == nome }
+        val indice = encontrarIndiceCanal(nome)
         if (indice >= 0) play(indice)
     }
 
@@ -2009,7 +2022,7 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
     }
 
     override fun sintonizarCanal(nome: String, metade: Int?) {
-        val idx = ordered.indexOfFirst { it.name.equals(nome, ignoreCase = true) }
+        val idx = encontrarIndiceCanal(nome)
         if (idx < 0) return
         if (metade != null && multiTela && metade == 1) {
             ativarTela(1)
@@ -2101,16 +2114,7 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
     }
 
     override fun abrirVod(chave: String, temp: Int?, ep: Int?, fonte: Int?) {
-        lifecycleScope.launch(semDerrubar) {
-            val achado = Vod.buscar(this@MainActivity, chave, 5).firstOrNull()
-            if (achado != null) {
-                val alvo = Alvo(achado.titulo, achado.serie, achado.letra, achado.ano)
-                PlayerActivity.abrir(this@MainActivity, alvo, temp ?: 0, ep ?: 0)
-            } else {
-                val alvo = Alvo(chave, (temp ?: 0) > 0, "", "")
-                PlayerActivity.abrir(this@MainActivity, alvo, temp ?: 0, ep ?: 0)
-            }
-        }
+        Connect.abrirVodOuMidia(this@MainActivity, chave, temp = temp, ep = ep, fonte = fonte)
     }
 
     override fun pausarOuRetomarVod() {}
