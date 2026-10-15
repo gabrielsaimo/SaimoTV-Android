@@ -2069,6 +2069,11 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
                 "1" -> { player.volume = 0f; segunda?.comSom = true }
                 "mute" -> { player.volume = 0f; segunda?.comSom = false }
             }
+        } else {
+            when (som) {
+                "mute" -> { player.volume = 0f }
+                else -> { player.volume = 1f }
+            }
         }
         Connect.notificarMudancaDeEstado()
     }
@@ -2198,7 +2203,7 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
         val ativos = phoneAudioList.filter { it.src == "0" || it.src == "1" || it.src == "both" }
         if (ativos.isNotEmpty()) {
             val nomes = ativos.joinToString(", ") { a ->
-                val qual = when (a.src) {
+                val qual = if (!multiTela) "a TV" else when (a.src) {
                     "0" -> "Canal 1"
                     "1" -> "Canal 2"
                     else -> "os dois canais"

@@ -1023,6 +1023,7 @@ class PlayerActivity : AppCompatActivity(), Connect.Listener {
     private fun esconderCarregando() {
         carregando.visibility = View.GONE
     }
+    private val esconderCarregandoRunnable = Runnable { esconderCarregando() }
 
     // MARK: - Barra de controle
 
@@ -1376,7 +1377,32 @@ class PlayerActivity : AppCompatActivity(), Connect.Listener {
         vod.put("pos", p?.currentPosition ?: 0L)
         vod.put("dur", (p?.duration?.takeIf { it > 0 && it != C.TIME_UNSET } ?: 0L))
         vod.put("key", alvo.titulo)
+        val opcaoAtual = opcoes.getOrNull(fonte)
+        if (opcaoAtual != null) {
+            vod.put("url", opcaoAtual.url)
+        }
         root.put("vod", vod)
+
+        val screens = JSONArray()
+        if (opcaoAtual != null) {
+            val s0Obj = JSONObject()
+            s0Obj.put("idx", 0)
+            s0Obj.put("channel", titulo.text?.toString() ?: alvo.nomeCompleto)
+            s0Obj.put("num", 0)
+            s0Obj.put("logo", "")
+            s0Obj.put("program", subtitulo.text?.toString() ?: "")
+            s0Obj.put("sourceIndex", fonte)
+            s0Obj.put("source", JSONObject().apply {
+                put("url", opcaoAtual.url)
+                put("referer", JSONObject.NULL)
+                put("userAgent", JSONObject.NULL)
+                put("keyId", JSONObject.NULL)
+                put("key", JSONObject.NULL)
+            })
+            s0Obj.put("liveOffset", -1L)
+            screens.put(s0Obj)
+        }
+        root.put("screens", screens)
 
         val audioMgr = getSystemService(Context.AUDIO_SERVICE) as? AudioManager
         val maxVol = audioMgr?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 15
@@ -1405,7 +1431,16 @@ class PlayerActivity : AppCompatActivity(), Connect.Listener {
     }
 
     override fun definirMetadeAtiva(metade: Int) {}
-    override fun definirTvAudio(som: String) {}
+    override fun definirTvAudio(som: String) {
+        Connect.tvAudio = som
+        runOnUiThread {
+            when (som) {
+                "mute" -> { player?.volume = 0f }
+                else -> { player?.volume = 1f }
+            }
+        }
+        Connect.notificarMudancaDeEstado()
+    }
 
     override fun trocarFonte(delta: Int) {
         runOnUiThread {
@@ -1532,7 +1567,17 @@ class PlayerActivity : AppCompatActivity(), Connect.Listener {
 
     override fun preencherTexto(texto: String) {}
 
-    override fun onPhoneAudioChanged(phoneAudioList: List<Connect.PhoneAudioStatus>) {}
+    override fun onPhoneAudioChanged(phoneAudioList: List<Connect.PhoneAudioStatus>) {
+        val ativos = phoneAudioList.filter { it.src == "0" || it.src == "1" || it.src == "both" }
+        if (ativos.isNotEmpty()) {
+            val nomes = ativos.joinToString(", ") { "${it.name} ouvindo no celular" }
+            runOnUiThread {
+                mostrarCarregando("🎧 $nomes")
+                handler.removeCallbacks(esconderCarregandoRunnable)
+                handler.postDelayed(esconderCarregandoRunnable, 4000)
+            }
+        }
+    }
 
     override fun solicitarAprovacao(nomeDispositivo: String, aoResponder: (permitido: Boolean) -> Unit) {
         runOnUiThread {
