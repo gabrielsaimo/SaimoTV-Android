@@ -559,6 +559,7 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
                 handler.removeCallbacks(sourceTimeout)
                 status.visibility = View.GONE
                 startGuide()
+                Connect.notificarMudancaDeEstado()
             }
         }
         
@@ -1256,9 +1257,11 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
             if (tela2.canal?.name != canal.name || !tela2.tocando) tela2.tocar(canal)
             adapter.select(index)
             revealBanner()
+            Connect.notificarMudancaDeEstado()
         } else if (index == current && ::player.isInitialized && player.isPlaying) {
             adapter.select(index)
             revealBanner()
+            Connect.notificarMudancaDeEstado()
         } else {
             play(index)
         }
@@ -2054,6 +2057,15 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
     }
 
     override fun simularTecla(keyCode: Int): Boolean {
+        if (keyCode in KeyEvent.KEYCODE_0..KeyEvent.KEYCODE_9) {
+            val digit = keyCode - KeyEvent.KEYCODE_0
+            if (listPanel.visibility == View.VISIBLE) {
+                padDigit(digit)
+            } else {
+                typeDigit(digit)
+            }
+            return true
+        }
         val listOpen = listPanel.visibility == View.VISIBLE
         if (!listOpen) {
             when (keyCode) {

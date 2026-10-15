@@ -13,7 +13,10 @@ import android.os.Looper
 import android.os.SystemClock
 import android.util.Base64
 import android.util.Log
+import android.view.FocusFinder
 import android.view.KeyEvent
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.media3.common.util.UnstableApi
 import kotlinx.coroutines.CoroutineScope
@@ -79,19 +82,19 @@ object Connect {
     /** Interface que a Activity em primeiro plano (ex: MainActivity) implementa */
     interface Listener {
         fun obterEstado(): JSONObject
-        fun sintonizarCanal(nome: String, metade: Int?)
-        fun alternarMultiTela(ligar: Boolean)
-        fun definirMetadeAtiva(metade: Int)
-        fun definirTvAudio(som: String)
-        fun trocarFonte(delta: Int)
-        fun simularTecla(keyCode: Int): Boolean
-        fun abrirVod(chave: String, temp: Int?, ep: Int?, fonte: Int?)
-        fun pausarOuRetomarVod()
-        fun avancarOuVoltarVod(ms: Long, delta: Long?)
-        fun ajustarVolume(delta: Int?, set: Float?, mute: Boolean?)
-        fun preencherTexto(texto: String)
-        fun onPhoneAudioChanged(phoneAudioList: List<PhoneAudioStatus>)
-        fun solicitarAprovacao(nomeDispositivo: String, aoResponder: (permitido: Boolean) -> Unit)
+        fun sintonizarCanal(nome: String, metade: Int?) {}
+        fun alternarMultiTela(ligar: Boolean) {}
+        fun definirMetadeAtiva(metade: Int) {}
+        fun definirTvAudio(som: String) {}
+        fun trocarFonte(delta: Int) {}
+        fun simularTecla(keyCode: Int): Boolean = false
+        fun abrirVod(chave: String, temp: Int?, ep: Int?, fonte: Int?) {}
+        fun pausarOuRetomarVod() {}
+        fun avancarOuVoltarVod(ms: Long, delta: Long?) {}
+        fun ajustarVolume(delta: Int?, set: Float?, mute: Boolean?) {}
+        fun preencherTexto(texto: String) {}
+        fun onPhoneAudioChanged(phoneAudioList: List<PhoneAudioStatus>) {}
+        fun solicitarAprovacao(nomeDispositivo: String, aoResponder: (permitido: Boolean) -> Unit) {}
     }
 
     data class PhoneAudioStatus(
@@ -606,7 +609,8 @@ object Connect {
 
         private fun executarComando(tipo: String, json: JSONObject) {
             handler.post {
-                val lis = listener
+                val act = SaimoApp.atividadeAtual
+                val lis = (act as? Listener) ?: listener
                 when (tipo) {
                     "tune" -> {
                         val canal = json.optString("channel")
@@ -614,12 +618,12 @@ object Connect {
                         if (lis != null) {
                             lis.sintonizarCanal(canal, screen)
                         } else {
-                            val act = SaimoApp.atividadeAtual ?: context
-                            val intent = Intent(act, MainActivity::class.java).apply {
+                            val targetAct = act ?: context
+                            val intent = Intent(targetAct, MainActivity::class.java).apply {
                                 putExtra(MainActivity.EXTRA_CANAL, canal)
                                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP
                             }
-                            act.startActivity(intent)
+                            targetAct.startActivity(intent)
                         }
                     }
                     "multi" -> {
@@ -627,12 +631,12 @@ object Connect {
                         if (lis != null) {
                             lis.alternarMultiTela(on)
                         } else {
-                            val act = SaimoApp.atividadeAtual ?: context
-                            val intent = Intent(act, MainActivity::class.java).apply {
+                            val targetAct = act ?: context
+                            val intent = Intent(targetAct, MainActivity::class.java).apply {
                                 putExtra("EXTRA_MULTI", on)
                                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP
                             }
-                            act.startActivity(intent)
+                            targetAct.startActivity(intent)
                         }
                     }
                     "activeScreen" -> {
@@ -653,15 +657,15 @@ object Connect {
                         if (lis != null) {
                             lis.abrirVod(key, temp, ep, fonte)
                         } else {
-                            val act = SaimoApp.atividadeAtual ?: context
+                            val targetAct = act ?: context
                             CoroutineScope(Dispatchers.Main).launch {
-                                val achado = Vod.buscar(act, key, 5).firstOrNull()
+                                val achado = Vod.buscar(targetAct, key, 5).firstOrNull()
                                 if (achado != null) {
                                     val alvo = Alvo(achado.titulo, achado.serie, achado.letra, achado.ano)
-                                    PlayerActivity.abrir(act, alvo, temp ?: 0, ep ?: 0)
+                                    PlayerActivity.abrir(targetAct, alvo, temp ?: 0, ep ?: 0)
                                 } else {
                                     val alvo = Alvo(key, (temp ?: 0) > 0, "", "")
-                                    PlayerActivity.abrir(act, alvo, temp ?: 0, ep ?: 0)
+                                    PlayerActivity.abrir(targetAct, alvo, temp ?: 0, ep ?: 0)
                                 }
                             }
                         }
@@ -679,6 +683,16 @@ object Connect {
                     "key" -> {
                         val code = json.optString("code")
                         val keyEvent = when (code) {
+                            "0" -> KeyEvent.KEYCODE_0
+                            "1" -> KeyEvent.KEYCODE_1
+                            "2" -> KeyEvent.KEYCODE_2
+                            "3" -> KeyEvent.KEYCODE_3
+                            "4" -> KeyEvent.KEYCODE_4
+                            "5" -> KeyEvent.KEYCODE_5
+                            "6" -> KeyEvent.KEYCODE_6
+                            "7" -> KeyEvent.KEYCODE_7
+                            "8" -> KeyEvent.KEYCODE_8
+                            "9" -> KeyEvent.KEYCODE_9
                             "UP" -> KeyEvent.KEYCODE_DPAD_UP
                             "DOWN" -> KeyEvent.KEYCODE_DPAD_DOWN
                             "LEFT" -> KeyEvent.KEYCODE_DPAD_LEFT
@@ -692,24 +706,40 @@ object Connect {
                             else -> 0
                         }
                         if (code == "HOME") {
-                            val act = SaimoApp.atividadeAtual ?: context
-                            if (act !is EscolhaActivity) {
-                                val intent = Intent(act, EscolhaActivity::class.java).apply {
+                            val targetAct = act ?: context
+                            if (targetAct !is EscolhaActivity) {
+                                val intent = Intent(targetAct, EscolhaActivity::class.java).apply {
                                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
                                 }
-                                act.startActivity(intent)
+                                targetAct.startActivity(intent)
                             }
                         } else if (keyEvent != 0) {
+                            var tratou = false
                             if (lis != null) {
-                                lis.simularTecla(keyEvent)
-                            } else {
-                                val act = SaimoApp.atividadeAtual
-                                if (act != null) {
-                                    val now = SystemClock.uptimeMillis()
-                                    val down = KeyEvent(now, now, KeyEvent.ACTION_DOWN, keyEvent, 0)
-                                    val up = KeyEvent(now, now + 10, KeyEvent.ACTION_UP, keyEvent, 0)
-                                    act.dispatchKeyEvent(down)
-                                    act.dispatchKeyEvent(up)
+                                tratou = lis.simularTecla(keyEvent)
+                            }
+                            if (!tratou && act != null) {
+                                val now = SystemClock.uptimeMillis()
+                                val down = KeyEvent(now, now, KeyEvent.ACTION_DOWN, keyEvent, 0)
+                                val up = KeyEvent(now, now + 10, KeyEvent.ACTION_UP, keyEvent, 0)
+                                val consumiu = act.dispatchKeyEvent(down)
+                                act.dispatchKeyEvent(up)
+                                if (!consumiu) {
+                                    val direction = when (keyEvent) {
+                                        KeyEvent.KEYCODE_DPAD_UP -> View.FOCUS_UP
+                                        KeyEvent.KEYCODE_DPAD_DOWN -> View.FOCUS_DOWN
+                                        KeyEvent.KEYCODE_DPAD_LEFT -> View.FOCUS_LEFT
+                                        KeyEvent.KEYCODE_DPAD_RIGHT -> View.FOCUS_RIGHT
+                                        else -> 0
+                                    }
+                                    if (direction != 0) {
+                                        val decor = act.window?.decorView as? ViewGroup
+                                        val current = act.currentFocus ?: decor?.findFocus()
+                                        val next = current?.focusSearch(direction) ?: decor?.let {
+                                            FocusFinder.getInstance().findNextFocus(it, current, direction)
+                                        }
+                                        next?.requestFocus(direction)
+                                    }
                                 }
                             }
                         }

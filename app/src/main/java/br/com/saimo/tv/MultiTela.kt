@@ -151,6 +151,7 @@ class SegundaTela(
         preencherRotulo(nome, logo, inicial, novo, numero(novo))
         rotulo.visibility = View.VISIBLE
         abrir(0, retomando = false)
+        Connect.notificarMudancaDeEstado()
     }
 
     /** Tira o canal (ex.: ele sumiu da lista) e volta a pedir um. */
@@ -161,6 +162,7 @@ class SegundaTela(
         player?.clearMediaItems()
         rotulo.visibility = View.GONE
         mostrarAviso(tela.getString(R.string.multi_tela_escolha))
+        Connect.notificarMudancaDeEstado()
     }
 
     /** Solta o player e tudo o que ele segura. Pode ser chamado mais de uma vez. */
@@ -186,6 +188,7 @@ class SegundaTela(
         p.setMediaSource(Playback.mediaSource(tela, origem))
         p.prepare()
         p.playWhenReady = true
+        Connect.notificarMudancaDeEstado()
     }
 
     /** A fonte não serviu: vai para a seguinte, ou desiste com um aviso. */
@@ -218,6 +221,7 @@ class SegundaTela(
                     falhasDeDecodificador = 0
                     handler.removeCallbacks(prazo)
                     aviso.visibility = View.GONE
+                    Connect.notificarMudancaDeEstado()
                 }
                 // Ao vivo não termina: fim de arquivo é a conexão que fechou
                 // sem erro. Reabre a mesma fonte.

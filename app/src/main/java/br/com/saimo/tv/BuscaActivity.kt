@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
  * capa, com o microfone para quem tem e o teclado físico para quem tem.
  */
 @UnstableApi
-class BuscaActivity : TelaComMenu() {
+class BuscaActivity : TelaComMenu(), Connect.Listener {
 
     override val aba = Aba.BUSCAR
 
@@ -65,6 +65,71 @@ class BuscaActivity : TelaComMenu() {
         // Prepara o índice enquanto a pessoa ainda procura a primeira letra.
         lifecycleScope.launch(semDerrubar) { Generos.carregar(this@BuscaActivity); Vod.entradas(this@BuscaActivity) }
         atualizar(imediato = true)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Connect.listener = this
+        Connect.notificarMudancaDeEstado()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (Connect.listener === this) Connect.listener = null
+        Connect.notificarMudancaDeEstado()
+    }
+
+    override fun obterEstado(): org.json.JSONObject = org.json.JSONObject().apply {
+        put("t", "state")
+        put("mode", "idle")
+        put("screen", "search")
+        put("channel", "")
+        put("playing", false)
+        put("multi", false)
+        put("active", 0)
+        put("screens", org.json.JSONArray())
+        put("searchText", digitado.toString())
+    }
+
+    override fun preencherTexto(texto: String) {
+        digitado.clear()
+        digitado.append(texto)
+        atualizar(imediato = true)
+        Connect.notificarMudancaDeEstado()
+    }
+
+    override fun sintonizarCanal(nome: String, metade: Int?) {
+        startActivity(Intent(this, MainActivity::class.java).putExtra(MainActivity.EXTRA_CANAL, nome))
+    }
+
+    override fun simularTecla(keyCode: Int): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_DEL) {
+            apagar()
+            Connect.notificarMudancaDeEstado()
+            return true
+        }
+        val now = android.os.SystemClock.uptimeMillis()
+        val down = KeyEvent(now, now, KeyEvent.ACTION_DOWN, keyCode, 0)
+        val up = KeyEvent(now, now + 10, KeyEvent.ACTION_UP, keyCode, 0)
+        val consumed = dispatchKeyEvent(down)
+        dispatchKeyEvent(up)
+        if (!consumed) {
+            val direction = when (keyCode) {
+                KeyEvent.KEYCODE_DPAD_UP -> View.FOCUS_UP
+                KeyEvent.KEYCODE_DPAD_DOWN -> View.FOCUS_DOWN
+                KeyEvent.KEYCODE_DPAD_LEFT -> View.FOCUS_LEFT
+                KeyEvent.KEYCODE_DPAD_RIGHT -> View.FOCUS_RIGHT
+                else -> 0
+            }
+            if (direction != 0) {
+                val current = currentFocus ?: window.decorView.findFocus()
+                val next = current?.focusSearch(direction) ?: (window.decorView as? android.view.ViewGroup)?.let {
+                    android.view.FocusFinder.getInstance().findNextFocus(it, current, direction)
+                }
+                next?.requestFocus(direction)
+            }
+        }
+        return true
     }
 
     private fun montarTeclado() {

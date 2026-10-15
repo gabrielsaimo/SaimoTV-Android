@@ -38,7 +38,7 @@ import java.util.Locale
  * TV e da busca por voz.
  */
 @UnstableApi
-class EscolhaActivity : TelaComMenu() {
+class EscolhaActivity : TelaComMenu(), Connect.Listener {
 
     override val aba = Aba.INICIO
     override fun aoFocarMenu() = cabecalhoPadrao()
@@ -142,6 +142,101 @@ class EscolhaActivity : TelaComMenu() {
             }
         }
         jaIniciou = true
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Connect.listener = this
+        Connect.notificarMudancaDeEstado()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (Connect.listener === this) Connect.listener = null
+    }
+
+    override fun obterEstado(): org.json.JSONObject = org.json.JSONObject().apply {
+        put("t", "state")
+        put("mode", "idle")
+        put("screen", "home")
+        put("channel", "")
+        put("playing", false)
+        put("multi", false)
+        put("active", 0)
+        put("screens", org.json.JSONArray())
+    }
+
+    override fun sintonizarCanal(nome: String, metade: Int?) {
+        startActivity(Intent(this, MainActivity::class.java).putExtra(MainActivity.EXTRA_CANAL, nome))
+    }
+
+    override fun simularTecla(keyCode: Int): Boolean {
+        when (keyCode) {
+            KeyEvent.KEYCODE_DPAD_UP -> {
+                val focado = currentFocus
+                if (focado == null || !filas.hasFocus()) {
+                    MenuGlobal.focar(barraMenu, Aba.INICIO)
+                    return true
+                }
+                val proximo = focado.focusSearch(View.FOCUS_UP)
+                if (proximo != null && proximo !== focado) {
+                    proximo.requestFocus(View.FOCUS_UP)
+                    return true
+                }
+                MenuGlobal.focar(barraMenu, Aba.INICIO)
+                return true
+            }
+            KeyEvent.KEYCODE_DPAD_DOWN -> {
+                val focado = currentFocus
+                if (focado == null || MenuGlobal.temFoco(barraMenu)) {
+                    focarPrimeiro()
+                    return true
+                }
+                val proximo = focado.focusSearch(View.FOCUS_DOWN)
+                if (proximo != null && proximo !== focado) {
+                    proximo.requestFocus(View.FOCUS_DOWN)
+                    return true
+                }
+                filas.smoothScrollBy(0, 250)
+                return true
+            }
+            KeyEvent.KEYCODE_DPAD_LEFT -> {
+                val focado = currentFocus ?: return false
+                val proximo = focado.focusSearch(View.FOCUS_LEFT)
+                if (proximo != null && proximo !== focado) {
+                    proximo.requestFocus(View.FOCUS_LEFT)
+                    return true
+                }
+                return false
+            }
+            KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                val focado = currentFocus ?: return false
+                val proximo = focado.focusSearch(View.FOCUS_RIGHT)
+                if (proximo != null && proximo !== focado) {
+                    proximo.requestFocus(View.FOCUS_RIGHT)
+                    return true
+                }
+                return false
+            }
+            KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER -> {
+                val focado = currentFocus
+                if (focado != null) {
+                    focado.performClick()
+                    return true
+                }
+                return false
+            }
+            KeyEvent.KEYCODE_BACK, KeyEvent.KEYCODE_ESCAPE -> {
+                val now = android.os.SystemClock.uptimeMillis()
+                val event = KeyEvent(now, now, KeyEvent.ACTION_DOWN, keyCode, 0)
+                onKeyDown(keyCode, event)
+                return true
+            }
+        }
+        val now = android.os.SystemClock.uptimeMillis()
+        dispatchKeyEvent(KeyEvent(now, now, KeyEvent.ACTION_DOWN, keyCode, 0))
+        dispatchKeyEvent(KeyEvent(now, now + 10, KeyEvent.ACTION_UP, keyCode, 0))
+        return true
     }
 
     override fun onDestroy() {
