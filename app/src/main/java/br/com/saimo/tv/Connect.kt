@@ -776,31 +776,71 @@ object Connect {
                                 targetAct.startActivity(intent)
                             }
                         } else if (keyEvent != 0) {
-                            var tratou = false
-                            if (lis != null) {
-                                tratou = lis.simularTecla(keyEvent)
-                            }
-                            if (!tratou && act != null) {
-                                val now = SystemClock.uptimeMillis()
-                                val down = KeyEvent(now, now, KeyEvent.ACTION_DOWN, keyEvent, 0)
-                                val up = KeyEvent(now, now + 10, KeyEvent.ACTION_UP, keyEvent, 0)
-                                val consumiu = act.dispatchKeyEvent(down)
-                                act.dispatchKeyEvent(up)
-                                if (!consumiu) {
-                                    val direction = when (keyEvent) {
-                                        KeyEvent.KEYCODE_DPAD_UP -> View.FOCUS_UP
-                                        KeyEvent.KEYCODE_DPAD_DOWN -> View.FOCUS_DOWN
-                                        KeyEvent.KEYCODE_DPAD_LEFT -> View.FOCUS_LEFT
-                                        KeyEvent.KEYCODE_DPAD_RIGHT -> View.FOCUS_RIGHT
-                                        else -> 0
-                                    }
-                                    if (direction != 0) {
-                                        val decor = act.window?.decorView as? ViewGroup
-                                        val current = act.currentFocus ?: decor?.findFocus()
-                                        val next = current?.focusSearch(direction) ?: decor?.let {
-                                            FocusFinder.getInstance().findNextFocus(it, current, direction)
+                            val dialogoAtivo = Painel.dialogVisivel()
+                            if (dialogoAtivo != null) {
+                                val targetAct = act ?: dialogoAtivo.ownerActivity
+                                val acao = Runnable {
+                                    if (keyEvent == KeyEvent.KEYCODE_BACK || keyEvent == KeyEvent.KEYCODE_ESCAPE) {
+                                        dialogoAtivo.dismiss()
+                                    } else {
+                                        val now = SystemClock.uptimeMillis()
+                                        val down = KeyEvent(now, now, KeyEvent.ACTION_DOWN, keyEvent, 0)
+                                        val up = KeyEvent(now, now + 10, KeyEvent.ACTION_UP, keyEvent, 0)
+                                        val consumiu = dialogoAtivo.dispatchKeyEvent(down)
+                                        dialogoAtivo.dispatchKeyEvent(up)
+                                        if (!consumiu) {
+                                            val direction = when (keyEvent) {
+                                                KeyEvent.KEYCODE_DPAD_UP -> View.FOCUS_UP
+                                                KeyEvent.KEYCODE_DPAD_DOWN -> View.FOCUS_DOWN
+                                                KeyEvent.KEYCODE_DPAD_LEFT -> View.FOCUS_LEFT
+                                                KeyEvent.KEYCODE_DPAD_RIGHT -> View.FOCUS_RIGHT
+                                                else -> 0
+                                            }
+                                            if (direction != 0) {
+                                                val decor = dialogoAtivo.window?.decorView as? ViewGroup
+                                                val current = dialogoAtivo.currentFocus ?: decor?.findFocus()
+                                                val next = current?.focusSearch(direction) ?: decor?.let {
+                                                    FocusFinder.getInstance().findNextFocus(it, current, direction)
+                                                }
+                                                next?.requestFocus(direction)
+                                            } else if (keyEvent == KeyEvent.KEYCODE_DPAD_CENTER || keyEvent == KeyEvent.KEYCODE_ENTER) {
+                                                dialogoAtivo.currentFocus?.performClick()
+                                            }
                                         }
-                                        next?.requestFocus(direction)
+                                    }
+                                }
+                                if (targetAct != null) {
+                                    targetAct.runOnUiThread(acao)
+                                } else {
+                                    Handler(Looper.getMainLooper()).post(acao)
+                                }
+                            } else {
+                                var tratou = false
+                                if (lis != null) {
+                                    tratou = lis.simularTecla(keyEvent)
+                                }
+                                if (!tratou && act != null) {
+                                    val now = SystemClock.uptimeMillis()
+                                    val down = KeyEvent(now, now, KeyEvent.ACTION_DOWN, keyEvent, 0)
+                                    val up = KeyEvent(now, now + 10, KeyEvent.ACTION_UP, keyEvent, 0)
+                                    val consumiu = act.dispatchKeyEvent(down)
+                                    act.dispatchKeyEvent(up)
+                                    if (!consumiu) {
+                                        val direction = when (keyEvent) {
+                                            KeyEvent.KEYCODE_DPAD_UP -> View.FOCUS_UP
+                                            KeyEvent.KEYCODE_DPAD_DOWN -> View.FOCUS_DOWN
+                                            KeyEvent.KEYCODE_DPAD_LEFT -> View.FOCUS_LEFT
+                                            KeyEvent.KEYCODE_DPAD_RIGHT -> View.FOCUS_RIGHT
+                                            else -> 0
+                                        }
+                                        if (direction != 0) {
+                                            val decor = act.window?.decorView as? ViewGroup
+                                            val current = act.currentFocus ?: decor?.findFocus()
+                                            val next = current?.focusSearch(direction) ?: decor?.let {
+                                                FocusFinder.getInstance().findNextFocus(it, current, direction)
+                                            }
+                                            next?.requestFocus(direction)
+                                        }
                                     }
                                 }
                             }

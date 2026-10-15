@@ -52,6 +52,10 @@ import kotlinx.coroutines.launch
 @UnstableApi
 object PainelEpisodios {
 
+    @Volatile
+    var dialogAtivo: Dialog? = null
+        internal set
+
     fun mostrar(
         activity: AppCompatActivity,
         r: Titulos.Resolvido,
@@ -60,6 +64,7 @@ object PainelEpisodios {
     ): Dialog? {
         if (activity.isFinishing || activity.isDestroyed || r.episodios.isEmpty()) return null
         val dialogo = Dialog(activity, android.R.style.Theme_Translucent_NoTitleBar)
+        dialogAtivo = dialogo
         val vista = LayoutInflater.from(activity).inflate(R.layout.painel_episodios, null)
         // Os pedidos ao TMDB vivem só enquanto o painel está aberto.
         val escopo = CoroutineScope(SupervisorJob() + Dispatchers.Main + semDerrubar)
@@ -188,6 +193,7 @@ object PainelEpisodios {
         }
         if (Vr.ativo) dialogo.setCanceledOnTouchOutside(true)
         dialogo.setOnDismissListener {
+            if (dialogAtivo == dialogo) dialogAtivo = null
             escopo.cancel()
             // Solta as imagens: o Coil guarda no cache dele o que valer a pena.
             for (i in 0 until lista.childCount) {

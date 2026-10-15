@@ -2076,6 +2076,40 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
     }
 
     override fun simularTecla(keyCode: Int): Boolean {
+        val dialogo = Painel.dialogVisivel()
+        if (dialogo != null) {
+            runOnUiThread {
+                if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ESCAPE) {
+                    dialogo.dismiss()
+                } else {
+                    val now = SystemClock.uptimeMillis()
+                    val down = KeyEvent(now, now, KeyEvent.ACTION_DOWN, keyCode, 0)
+                    val up = KeyEvent(now, now + 10, KeyEvent.ACTION_UP, keyCode, 0)
+                    val consumiu = dialogo.dispatchKeyEvent(down)
+                    dialogo.dispatchKeyEvent(up)
+                    if (!consumiu) {
+                        val direction = when (keyCode) {
+                            KeyEvent.KEYCODE_DPAD_UP -> View.FOCUS_UP
+                            KeyEvent.KEYCODE_DPAD_DOWN -> View.FOCUS_DOWN
+                            KeyEvent.KEYCODE_DPAD_LEFT -> View.FOCUS_LEFT
+                            KeyEvent.KEYCODE_DPAD_RIGHT -> View.FOCUS_RIGHT
+                            else -> 0
+                        }
+                        if (direction != 0) {
+                            val decor = dialogo.window?.decorView as? ViewGroup
+                            val current = dialogo.currentFocus ?: decor?.findFocus()
+                            val next = current?.focusSearch(direction) ?: decor?.let {
+                                android.view.FocusFinder.getInstance().findNextFocus(it, current, direction)
+                            }
+                            next?.requestFocus(direction)
+                        } else if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER) {
+                            dialogo.currentFocus?.performClick()
+                        }
+                    }
+                }
+            }
+            return true
+        }
         if (keyCode in KeyEvent.KEYCODE_0..KeyEvent.KEYCODE_9) {
             val digit = keyCode - KeyEvent.KEYCODE_0
             if (listPanel.visibility == View.VISIBLE) {

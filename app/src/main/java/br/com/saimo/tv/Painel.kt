@@ -34,6 +34,13 @@ object Painel {
         val acao: () -> Unit,
     )
 
+    @Volatile
+    var dialogAtivo: Dialog? = null
+        internal set
+
+    fun dialogVisivel(): Dialog? =
+        dialogAtivo?.takeIf { it.isShowing } ?: PainelEpisodios.dialogAtivo?.takeIf { it.isShowing }
+
     fun mostrar(
         activity: Activity,
         titulo: String,
@@ -43,6 +50,7 @@ object Painel {
     ): Dialog? {
         if (activity.isFinishing || activity.isDestroyed || itens.isEmpty()) return null
         val dialogo = Dialog(activity, android.R.style.Theme_Translucent_NoTitleBar)
+        dialogAtivo = dialogo
         val vista = LayoutInflater.from(activity).inflate(R.layout.painel_lateral, null)
         vista.findViewById<TextView>(R.id.painelTitulo).text = titulo
         vista.findViewById<TextView>(R.id.painelSubtitulo).apply {
@@ -69,7 +77,10 @@ object Painel {
             setWindowAnimations(android.R.style.Animation_Translucent)
         }
         if (Vr.ativo) dialogo.setCanceledOnTouchOutside(true)
-        dialogo.setOnDismissListener { aoFechar?.invoke() }
+        dialogo.setOnDismissListener {
+            if (dialogAtivo == dialogo) dialogAtivo = null
+            aoFechar?.invoke()
+        }
         dialogo.show()
         Vr.telaCheia(dialogo.window)
         // O foco começa no que já está marcado: abrir a lista de fontes com o
