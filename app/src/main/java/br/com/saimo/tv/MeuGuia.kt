@@ -31,7 +31,7 @@ object MeuGuia {
         "SporTV 3" to "SP3", "TNT" to "TNT",
         "TNT Séries" to "TBS", "Telecine Action" to "TC2", "Telecine Pipoca" to "TC4",
         "Telecine Premium" to "TC1", "Universal TV" to "USA", "Warner" to "WBT",
-    "AXN" to "AXN", "canal-brasil" to "CBR", "Discovery Channel" to "DIS", "Discovery Home & Health" to "HEA", "Discovery Science" to "DSC", "Discovery Turbo" to "DTU", "E!" to "EET", "Sony Channel" to "SET", "Studio Universal" to "HAL", "Band Sports" to "BSP", "ESPN 3" to "ES3", "ESPN 5" to "ES5", "canal-off" to "OFF", "Premiere Clubes" to "121", "Multishow" to "MSH", "Viva" to "VIV", "Arte 1" to "BQ5", "TLC" to "TRV")
+    "AXN" to "AXN", "canal-brasil" to "CBR", "Canal Brasil" to "CBR", "canal brasil" to "CBR", "Discovery Channel" to "DIS", "Discovery Home & Health" to "HEA", "Discovery Science" to "DSC", "Discovery Turbo" to "DTU", "E!" to "EET", "Sony Channel" to "SET", "Studio Universal" to "HAL", "Band Sports" to "BSP", "ESPN 3" to "ES3", "ESPN 5" to "ES5", "canal-off" to "OFF", "Premiere Clubes" to "121", "Multishow" to "MSH", "Viva" to "VIV", "Arte 1" to "BQ5", "TLC" to "TRV")
 
     /// Seis por vez. Trinta e três downloads de uma vez roubam a banda do vídeo
     /// que acabou de abrir, e o canal engasga logo nos primeiros segundos.
@@ -40,7 +40,7 @@ object MeuGuia {
 
     suspend fun fetch(names: List<String>, from: Long, to: Long): Map<String, List<Programme>> =
         coroutineScope {
-            names.mapNotNull { name -> CODES[name]?.let { name to it } }
+            names.mapNotNull { name -> (CODES[name] ?: CODES[Epg.normalise(name)])?.let { name to it } }
                 .map { (name, code) ->
                     async(Dispatchers.IO) {
                         // O parse dentro da vez: fora dela, as páginas baixadas

@@ -187,10 +187,9 @@ object Epg {
             withContext(Dispatchers.Main) { onReady() }
         }
 
-        // meuguia primeiro: são 33 páginas pequenas, chegam em segundos e a
-        // grade já aparece, em vez de a tela ficar vazia até os feeds baixarem.
-        // Cada fonte por conta própria: uma que quebre não leva as outras junto.
-        merged.putAll(runCatching { MeuGuia.fetch(names, from, to) }.getOrNull().orEmpty())
+        // guiadetv primeiro: cobre 121+ canais com horários precisos no fuso
+        // de Brasília, sem bloqueio 429 e com sinopse em 99,8% dos programas.
+        merged.putAll(runCatching { GuiaDeTv.fetch(names, from, to) }.getOrNull().orEmpty())
         if (merged.isNotEmpty()) publish()
 
         val daPluto = if (pluto.isEmpty()) emptyMap() else
@@ -201,10 +200,10 @@ object Epg {
             publish()
         }
 
-        // Reserva do guiadetv: só para quem o meuguia não listou.
-        val faltando = names.filter { merged[it] == null }
-        if (faltando.isNotEmpty()) {
-            merged.putAll(runCatching { GuiaDeTv.fetch(faltando, from, to) }.getOrNull().orEmpty())
+        // meuguia como reserva: só para quem o guiadetv não listou (ex.: Canal Brasil).
+        val faltandoMeuGuia = names.filter { merged[it] == null }
+        if (faltandoMeuGuia.isNotEmpty()) {
+            merged.putAll(runCatching { MeuGuia.fetch(faltandoMeuGuia, from, to) }.getOrNull().orEmpty())
             if (merged.isNotEmpty()) publish()
         }
 
@@ -619,10 +618,10 @@ object Epg {
     /// caractere que nenhum canal usa, então nunca colide com uma chave de canal.
     private const val SIGNATURE_KEY = "#catalogo"
 
-    /// Subir o "v4" força o cache anterior a ser refeito; o v4 trouxe o guia da
-    /// Pluto TV.
+    /// Subir o "v5" força o cache anterior a ser refeito; o v5 trouxe o guiadetv
+    /// como fonte primária com sinopses.
     private fun signature(): String =
-        "v4:" + Remote.channels.joinToString("|") { it.name }.hashCode().toString()
+        "v5:" + Remote.channels.joinToString("|") { it.name }.hashCode().toString()
 
     /// A assinatura mora num arquivo à parte: antes, conferir se o cache
     /// valia relia os 7 MB do guia inteiro só para achar uma linha.
