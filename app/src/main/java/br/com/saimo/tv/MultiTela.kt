@@ -151,6 +151,7 @@ class SegundaTela(
         novo.volume = if (comSom) 1f else 0f
         novo.playWhenReady = true
         novo.addListener(ouvinte)
+        Upscaling.aplicar(novo)
         player = novo
         vista.player = novo
         canal = null

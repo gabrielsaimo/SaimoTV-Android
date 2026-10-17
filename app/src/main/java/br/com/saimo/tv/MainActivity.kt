@@ -1872,7 +1872,8 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
                 startGuide()
             }
         }
-        if (playerSolto) {
+        val mudouUpscaling = ::player.isInitialized && Upscaling.aplicar(player)
+        if (playerSolto || mudouUpscaling) {
             playerSolto = false
             play(current, sourceIndex)
         } else if (::player.isInitialized) {

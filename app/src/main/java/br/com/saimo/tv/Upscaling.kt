@@ -41,12 +41,12 @@ object Upscaling {
 
     private val aplicado = java.util.WeakHashMap<ExoPlayer, String>()
 
-    /** Aplica (ou remove) o shader de Super Resolução no ExoPlayer quando o modo muda. */
-    fun aplicar(player: ExoPlayer) {
-        runCatching {
+    /** Aplica (ou remove) o shader de Super Resolução no ExoPlayer quando o modo muda. Retorna true se mudou. */
+    fun aplicar(player: ExoPlayer): Boolean {
+        return runCatching {
             val modo = Preferencias.upscaling
             val anterior = aplicado[player] ?: DESLIGADO
-            if (modo == anterior) return
+            if (modo == anterior) return false
             aplicado[player] = modo
             val efeitos: List<Effect> = when (modo) {
                 NITIDEZ_HD -> listOf(CasGlEffect(intensidade = 0.65f, ultra4k = false))
@@ -54,7 +54,8 @@ object Upscaling {
                 else -> emptyList()
             }
             player.setVideoEffects(efeitos)
-        }
+            true
+        }.getOrDefault(false)
     }
 
     private class CasGlEffect(
