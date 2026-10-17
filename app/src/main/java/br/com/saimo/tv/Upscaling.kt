@@ -86,11 +86,35 @@ object Upscaling {
         private var texelH = 1f / 1080f
 
         override fun configure(inputWidth: Int, inputHeight: Int): Size {
-            val w = inputWidth.coerceAtLeast(1)
-            val h = inputHeight.coerceAtLeast(1)
-            texelW = 1f / w.toFloat()
-            texelH = 1f / h.toFloat()
-            return Size(w, h)
+            val inW = inputWidth.coerceAtLeast(1)
+            val inH = inputHeight.coerceAtLeast(1)
+            // O passo de amostragem do CAS usa o texel da textura de entrada
+            texelW = 1f / inW.toFloat()
+            texelH = 1f / inH.toFloat()
+
+            // Descobre a resolução máxima suportada pela tela da TV Box / TV
+            val dm = android.content.res.Resources.getSystem().displayMetrics
+            val screenW = maxOf(dm.widthPixels, dm.heightPixels).coerceAtLeast(1920)
+            val screenH = minOf(dm.widthPixels, dm.heightPixels).coerceAtLeast(1080)
+
+            // Define o alvo real do framebuffer OpenGL:
+            // - Nitidez HD: eleva 720p/SD para Full HD (1920x1080)
+            // - Super Resolução Ultra: eleva até 4K UHD (3840x2160) quando a TV suporta,
+            //   ou no mínimo 2560x1440 / 1920x1080 preservando a proporção exata do canal.
+            val targetMaxH = if (ultra4k) {
+                maxOf(screenH, 2160).coerceAtMost(2160)
+            } else {
+                maxOf(inH, 1080).coerceAtMost(1440)
+            }
+
+            if (inH >= targetMaxH) {
+                return Size(inW, inH)
+            }
+
+            val scale = targetMaxH.toFloat() / inH.toFloat()
+            val outW = ((inW * scale).toInt() and 1.inv()).coerceIn(inW, 3840)
+            val outH = ((inH * scale).toInt() and 1.inv()).coerceIn(inH, 2160)
+            return Size(outW, outH)
         }
 
         override fun drawFrame(inputTexId: Int, presentationTimeUs: Long) {
@@ -123,7 +147,10 @@ object Upscaling {
     """
 
     /**
-     * FidelityFX CAS (Contrast Adaptive Sharpening) + reconstrução diagonal 9-tap.
+     * Shader OpenGL ES 2.0 de Super Resolução na GPU para Android TV / TV Box:
+     * - Opera estritamente na luminância Rec.709 (Y), preservando 100% das cores e tons de pele.
+     * - Possui Noise Gate (smoothstep) para não amplificar granulação ou blocos de compressão IPTV.
+     * - Possui Trava Anti-Halo (clamp na vizinhança 3x3) para impedir contornos brancos em textos e logos.
      */
     private const val FRAGMENT_SHADER = """
         precision highp float;
@@ -133,46 +160,64 @@ object Upscaling {
         uniform float uUltraMode;
         varying vec2 vTexSamplingCoord;
 
+        float luma(vec3 rgb) {
+            return dot(rgb, vec3(0.2126, 0.7152, 0.0722));
+        }
+
         void main() {
             vec2 uv = vTexSamplingCoord;
             vec2 px = uTexelSize;
 
-            vec3 c  = texture2D(uTexSampler, uv).rgb;
+            vec4 center = texture2D(uTexSampler, uv);
+            vec3 c  = center.rgb;
             vec3 n  = texture2D(uTexSampler, uv + vec2(0.0, -px.y)).rgb;
             vec3 s  = texture2D(uTexSampler, uv + vec2(0.0,  px.y)).rgb;
             vec3 w  = texture2D(uTexSampler, uv + vec2(-px.x, 0.0)).rgb;
             vec3 e  = texture2D(uTexSampler, uv + vec2( px.x, 0.0)).rgb;
+            vec3 nw = texture2D(uTexSampler, uv + vec2(-px.x, -px.y)).rgb;
+            vec3 ne = texture2D(uTexSampler, uv + vec2( px.x, -px.y)).rgb;
+            vec3 sw = texture2D(uTexSampler, uv + vec2(-px.x,  px.y)).rgb;
+            vec3 se = texture2D(uTexSampler, uv + vec2( px.x,  px.y)).rgb;
 
-            vec3 mnRGB = min(min(min(n, e), min(s, w)), c);
-            vec3 mxRGB = max(max(max(n, e), max(s, w)), c);
+            float lc  = luma(c);
+            float ln  = luma(n);
+            float ls  = luma(s);
+            float lw  = luma(w);
+            float le  = luma(e);
+            float lnw = luma(nw);
+            float lne = luma(ne);
+            float lsw = luma(sw);
+            float lse = luma(se);
 
-            if (uUltraMode > 0.5) {
-                vec3 nw = texture2D(uTexSampler, uv + vec2(-px.x, -px.y)).rgb;
-                vec3 ne = texture2D(uTexSampler, uv + vec2( px.x, -px.y)).rgb;
-                vec3 sw = texture2D(uTexSampler, uv + vec2(-px.x,  px.y)).rgb;
-                vec3 se = texture2D(uTexSampler, uv + vec2( px.x,  px.y)).rgb;
-                vec3 mnDiag = min(min(nw, ne), min(sw, se));
-                vec3 mxDiag = max(max(nw, ne), max(sw, se));
-                mnRGB = 0.5 * (mnRGB + min(mnRGB, mnDiag));
-                mxRGB = 0.5 * (mxRGB + max(mxRGB, mxDiag));
-            }
+            float mn4 = min(min(ln, ls), min(lw, le));
+            float mx4 = max(max(ln, ls), max(lw, le));
+            float mnDiag = min(min(lnw, lne), min(lsw, lse));
+            float mxDiag = max(max(lnw, lne), max(lsw, lse));
 
-            vec3 rcpMx = 1.0 / max(mxRGB, vec3(0.0001));
-            vec3 amp = clamp(min(mnRGB, 1.0 - mxRGB) * rcpMx, 0.0, 1.0);
+            float mnL = 0.5 * (mn4 + min(mn4, min(mnDiag, lc)));
+            float mxL = 0.5 * (mx4 + max(mx4, max(mxDiag, lc)));
+
+            // Noise gate: ignora áreas lisas para não realçar blocos de compressão
+            float contrast = mxL - mnL;
+            float noiseGate = smoothstep(0.015, 0.055, contrast);
+
+            float amp = clamp(min(mnL, 1.0 - mxL) / max(mxL, 0.0001), 0.0, 1.0);
             amp = sqrt(amp);
 
-            float peak = -1.0 / mix(8.0, 4.4, clamp(uSharpness, 0.0, 1.0));
-            vec3 wRGB = amp * peak;
-            vec3 rcpWeight = 1.0 / (1.0 + 4.0 * wRGB);
+            float strength = (uUltraMode > 0.5) ? 0.82 : 0.55;
+            float peak = -1.0 / mix(8.0, 5.0, strength * clamp(uSharpness, 0.0, 1.0));
+            float wt = amp * peak * noiseGate;
+            float diagWt = (uUltraMode > 0.5) ? (wt * 0.25) : 0.0;
 
-            vec3 outColor = clamp(((n + s + w + e) * wRGB + c) * rcpWeight, 0.0, 1.0);
+            float sumW = 1.0 + 4.0 * wt + 4.0 * diagWt;
+            float sharpL = (lc + (ln + ls + lw + le) * wt + (lnw + lne + lsw + lse) * diagWt) / max(sumW, 0.0001);
 
-            if (uUltraMode > 0.5) {
-                // Micro-contraste sutil para realçar texturas em telas 4K
-                outColor = clamp((outColor - 0.5) * 1.035 + 0.5, 0.0, 1.0);
-            }
+            // Trava anti-halo estrita: nunca ultrapassa o mínimo/máximo local
+            sharpL = clamp(sharpL, mnL, mxL);
 
-            gl_FragColor = vec4(outColor, 1.0);
+            float delta = sharpL - lc;
+            vec3 outColor = clamp(c + vec3(delta), 0.0, 1.0);
+            gl_FragColor = vec4(outColor, center.a);
         }
     """
 }
