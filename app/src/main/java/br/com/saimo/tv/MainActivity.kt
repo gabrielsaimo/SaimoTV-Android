@@ -267,6 +267,7 @@ class MainActivity : AppCompatActivity(), Connect.Listener {
                 addListener(playerListener)
                 addAnalyticsListener(analyticsListener)
                 Telemetria.observar(this)
+                Upscaling.aplicar(this)
             }
         playerView.player = player
         playerView.useController = false
@@ -468,6 +469,7 @@ class MainActivity : AppCompatActivity(), Connect.Listener {
         showStatus(getString(if (apósFalha) R.string.loading_outra else R.string.loading))
         handler.removeCallbacks(sourceTimeout)
         handler.postDelayed(sourceTimeout, SOURCE_TIMEOUT_MS)
+        Upscaling.aplicar(player)
         player.setMediaSource(Playback.mediaSource(this, chosen))
         player.prepare()
         player.playWhenReady = true
@@ -502,6 +504,7 @@ class MainActivity : AppCompatActivity(), Connect.Listener {
                             if (bitrateDinâmicoBps > 0) {
                                 rotulo += String.format(java.util.Locale.US, " · %.1f Mbps", bitrateDinâmicoBps / 1_000_000f)
                             }
+                            if (rotulo.isNotEmpty()) rotulo += Upscaling.sufixoResolucao()
                             bannerResolution.text = rotulo
                             bannerResolution.visibility = if (rotulo.isEmpty() || faixaDaSegunda()) android.view.View.GONE else android.view.View.VISIBLE
                         }
@@ -540,6 +543,7 @@ override fun onVideoSizeChanged(videoSize: VideoSize) {
             if (bitrateFinal > 0) {
                 rotulo += String.format(java.util.Locale.US, " · %.1f Mbps", bitrateFinal / 1_000_000f)
             }
+            if (rotulo.isNotEmpty()) rotulo += Upscaling.sufixoResolucao()
             
             bannerResolution.text = rotulo
             bannerResolution.visibility = if (rotulo.isEmpty() || faixaDaSegunda()) android.view.View.GONE else android.view.View.VISIBLE

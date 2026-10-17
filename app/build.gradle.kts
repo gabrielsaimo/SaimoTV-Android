@@ -28,8 +28,8 @@ android {
         // Até a 2.0.2 era o 5 (21); quem ainda tem Android 5 fica na 2.0.2.
         minSdk = 23
         targetSdk = 37
-        versionCode = 20204
-        versionName = "2.2.4"
+        versionCode = 20205
+        versionName = "2.2.5"
     }
 
     signingConfigs {
@@ -88,6 +88,7 @@ dependencies {
     implementation("androidx.media3:media3-exoplayer:$media3")
     implementation("androidx.media3:media3-exoplayer-hls:$media3")
     implementation("androidx.media3:media3-exoplayer-dash:$media3")
+    implementation("androidx.media3:media3-effect:$media3")
     implementation("androidx.media3:media3-ui:$media3")
     // A sessão de mídia é o que o Assistant (Mi Box) e a Alexa (Fire TV) usam
     // para "próximo/anterior canal" e "abrir X" por voz enquanto o app está na

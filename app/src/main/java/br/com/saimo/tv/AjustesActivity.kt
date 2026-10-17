@@ -58,6 +58,14 @@ class AjustesActivity : TelaComMenu() {
 
     private fun simNao(v: Boolean) = getString(if (v) R.string.ajustes_ligado else R.string.ajustes_desligado)
 
+    private fun rotuloUpscaling(modo: String) = getString(
+        when (modo) {
+            Upscaling.NITIDEZ_HD -> R.string.ajustes_upscaling_hd
+            Upscaling.SUPER_4K -> R.string.ajustes_upscaling_4k
+            else -> R.string.ajustes_upscaling_off
+        }
+    )
+
     private fun linhas(): List<Linha> = listOf(
         Secao(getString(R.string.ajustes_reproducao)),
         Opcao(getString(R.string.ajustes_versao), { Titulos.rotulo(Preferencias.versao) }) {
@@ -81,6 +89,14 @@ class AjustesActivity : TelaComMenu() {
         },
         Opcao(getString(R.string.ajustes_economia), { simNao(Preferencias.economia) }) {
             Preferencias.economia = !Preferencias.economia; redesenhar()
+        },
+        Opcao(getString(R.string.ajustes_upscaling), { rotuloUpscaling(Preferencias.upscaling) }) {
+            escolher(
+                getString(R.string.ajustes_upscaling),
+                Upscaling.modos,
+                Preferencias.upscaling,
+                { rotuloUpscaling(it) }
+            ) { Preferencias.upscaling = it }
         },
 
         Secao(getString(R.string.ajustes_geral)),

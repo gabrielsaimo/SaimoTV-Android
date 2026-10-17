@@ -219,6 +219,10 @@
     <string name="ajustes_pular">Pular abertura sozinho</string>
     <string name="ajustes_legenda_fundo">Fundo escuro na legenda</string>
     <string name="ajustes_economia">Economizar internet (até 720p)</string>
+    <string name="ajustes_upscaling">Super Resolução (Upscaling)</string>
+    <string name="ajustes_upscaling_off">Desligado</string>
+    <string name="ajustes_upscaling_hd">Nitidez HD (720p → Full HD)</string>
+    <string name="ajustes_upscaling_4k">Super Resolução Ultra (Full HD → 4K)</string>
     <string name="ajustes_geral">Geral</string>
     <string name="ajustes_abrir_em">Ao abrir o app</string>
     <string name="ajustes_abrir_inicio">Mostrar a tela inicial</string>

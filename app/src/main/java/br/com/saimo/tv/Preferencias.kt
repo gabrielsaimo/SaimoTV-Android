@@ -62,6 +62,11 @@ object Preferencias {
         get() = prefs.getBoolean("economia", false)
         set(valor) = prefs.edit().putBoolean("economia", valor).apply()
 
+    /** Super Resolução (Upscaling): "off" (padrão), "hd" (HD -> Full HD) ou "4k" (Full HD -> 4K). */
+    var upscaling: String
+        get() = prefs.getString("upscaling", "off") ?: "off"
+        set(valor) = prefs.edit().putString("upscaling", valor).apply()
+
     /** Onde o app abre: "inicio" ou "canal" (o último canal assistido). */
     var abrirEm: String
         get() = prefs.getString("abrirEm", "inicio") ?: "inicio"

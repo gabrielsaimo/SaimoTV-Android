@@ -501,6 +501,7 @@ class PlayerActivity : AppCompatActivity(), Connect.Listener {
         novo.addListener(ouvinte)
         Telemetria.observar(novo)
         if (Preferencias.economia || reduziu) limitarQualidade(novo)
+        Upscaling.aplicar(novo)
         aplicarLegendaPreferida(novo)
         return novo
     }
@@ -589,7 +590,8 @@ class PlayerActivity : AppCompatActivity(), Connect.Listener {
 
     private val ouvinte = object : Player.Listener {
         override fun onVideoSizeChanged(videoSize: VideoSize) {
-            val rotulo = rotuloResolucao(videoSize.width, videoSize.height).substringAfter(" · ")
+            var rotulo = rotuloResolucao(videoSize.width, videoSize.height).substringAfter(" · ")
+            if (rotulo.isNotBlank()) rotulo += Upscaling.sufixoResolucao()
             resolucao.text = rotulo
             resolucao.visibility = if (rotulo.isBlank()) View.GONE else View.VISIBLE
         }

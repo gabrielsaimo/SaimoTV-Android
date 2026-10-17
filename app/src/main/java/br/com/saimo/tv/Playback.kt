@@ -73,7 +73,12 @@ object Playback {
                         .build()
                     chain.proceed(ajustado)
                 } else {
-                    chain.proceed(pedido)
+                    val resposta = chain.proceed(pedido)
+                    if (host.contains("s1001604.lat") && pedido.url.encodedPath.endsWith(".png", ignoreCase = true)) {
+                        resposta.newBuilder().header("Content-Type", "video/mp2t").build()
+                    } else {
+                        resposta
+                    }
                 }
             }
             .followRedirects(true)
